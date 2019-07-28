@@ -15,19 +15,19 @@ import Detail from "./Detail";
 function BuildSchedule({ history }) {
   const auth = useSelector(state => state.auth);
   const isMobile = useSelector(state => state.appState.isMobile);
-  const [isDetailOpened, setDetailOpened] = useState(false);
+  const [detailData, setDetailData] = useState(null);
 
   const dispatch = useDispatch();
 
   const [courses, setCourses] = useState(null);
-  const [isDetail, setIsDetail] = useState(null);
+  const [isCoursesDetail, setCoursesDetail] = useState(null);
 
   const fetchCourses = useCallback(
     async majorId => {
       dispatch(setLoading(true));
       const { data } = await getCourses(majorId);
       setCourses(data.courses);
-      setIsDetail(data.is_detail);
+      setCoursesDetail(data.is_detail);
       dispatch(reduxSetCourses(data.courses));
       setTimeout(() => dispatch(setLoading(false)), 1000);
     },
@@ -44,7 +44,7 @@ function BuildSchedule({ history }) {
       <Helmet title="Buat Jadwal" />
       <CoursePickerContainer isMobile={isMobile}>
         <h1>Buat Jadwal</h1>
-        {!isDetail && (
+        {!isCoursesDetail && (
           <InfoContent>
             Halo! Jadwal kamu belum detail nih, kalo kamu ingin membantu kami
             agar jadwal ini detail, kamu dapat mengubungi Ristek Fasilkom UI di
@@ -63,9 +63,18 @@ function BuildSchedule({ history }) {
       )}
       <Checkout
         isMobile={isMobile}
-        onClickDetail={() => setDetailOpened(true)}
+        onClickDetail={isConflict =>
+          setDetailData({ opened: true, isConflict: isConflict })
+        }
       />
-      {isDetailOpened && <Detail closeDetail={() => setDetailOpened(false)} />}
+      {detailData && detailData.opened && (
+        <Detail
+          closeDetail={() =>
+            setDetailData({ opened: false, isConflict: detailData.isConflict })
+          }
+          isConflict={detailData && detailData.isConflict}
+        />
+      )}
     </Container>
   );
 }

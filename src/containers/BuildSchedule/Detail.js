@@ -23,7 +23,7 @@ function transformSchedules(schedules) {
     .reduce((prev, now) => [...prev, ...now], []);
 }
 
-function Detail({ closeDetail }) {
+function Detail({ closeDetail, isConflict }) {
   const schedules = useSelector(state => state.schedules);
 
   function performCloseDetail() {
@@ -34,14 +34,17 @@ function Detail({ closeDetail }) {
     <Container>
       <ImageButton src={backImg} onClick={performCloseDetail} />
       <HideBodyOverflow />
-      <Schedule
-        schedule={{ schedule_items: transformSchedules(schedules) }}
-        pxPerMinute={0.3}
-        width="100%"
-        startHour={7}
-        endHour={21}
-        mobile
-      />
+      {console.log(isConflict)}
+      {!isConflict && (
+        <Schedule
+          schedule={{ schedule_items: transformSchedules(schedules) }}
+          pxPerMinute={0.3}
+          width="100%"
+          startHour={7}
+          endHour={21}
+          mobile
+        />
+      )}
       <SelectedCourses />
     </Container>
   );

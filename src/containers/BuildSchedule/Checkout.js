@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { isScheduleConflict } from "containers/SelectedCourses/utils";
 
 function Checkout({ onClickDetail }) {
-  //TODO: Account for agenda tambahan
   const isMobile = useSelector(state => state.appState.isMobile);
   const schedules = useSelector(state => state.schedules);
   if (!isMobile || schedules.length === 0) {
@@ -17,9 +16,7 @@ function Checkout({ onClickDetail }) {
   );
 
   function goToDetail() {
-    if (!conflict) {
-      onClickDetail();
-    }
+    onClickDetail(conflict);
   }
   return (
     <CheckoutContainer conflict={conflict} onClick={goToDetail}>
@@ -33,11 +30,9 @@ function Checkout({ onClickDetail }) {
             : "Tidak ada konflik jadwal."}
         </p>
       </div>
-      {!conflict && (
-        <div>
-          <h2>Lihat</h2>
-        </div>
-      )}
+      <div>
+        <h2>Lihat</h2>
+      </div>
     </CheckoutContainer>
   );
 }
