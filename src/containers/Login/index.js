@@ -79,7 +79,7 @@ function Login({ history, location }) {
       <div className="broughtToYou center">
         <p>
           <span>Brought to you by</span>
-          <img className="broughtToYouLogo" src={Logoset} alt="Logoset" />
+          <a href="https://ristek.cs.ui.ac.id/" target="_blank"><img className="broughtToYouLogo" src={Logoset} alt="Logoset" /></a>
         </p>
       </div>
     );
@@ -90,7 +90,7 @@ function Login({ history, location }) {
       <div className="gojek center">
         <span>Official Learning Partner</span>
         <p className="center">Official Learning Partner</p>
-        <img className="gojekLogo" src={GojekLogo} alt="Gojek Logo" />
+        <a href="https://www.gojek.com/" target="_blank"><img className="gojekLogo" src={GojekLogo} alt="Gojek Logo" /></a>
       </div>
     );
   }
