@@ -92,7 +92,6 @@ function ScheduleList() {
                 pxPerMinute={isMobile ? 0.3 : 0.7}
                 width="100%"
                 showRoom
-                mobile={isMobile}
               />
             </Card>
           ))}

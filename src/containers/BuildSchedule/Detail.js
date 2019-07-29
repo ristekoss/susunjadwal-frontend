@@ -42,7 +42,6 @@ function Detail({ closeDetail, isConflict }) {
           width="100%"
           startHour={7}
           endHour={21}
-          mobile
         />
       )}
       <SelectedCourses />

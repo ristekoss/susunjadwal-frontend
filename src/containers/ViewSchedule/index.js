@@ -61,7 +61,6 @@ function ViewSchedule({ match }) {
         showHeader
         showLabel
         showRoom
-        mobile={isMobile}
       />
     </React.Fragment>
   );

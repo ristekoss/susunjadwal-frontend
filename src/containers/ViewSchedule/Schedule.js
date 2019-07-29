@@ -1,5 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
+import { useSelector } from "react-redux";
 
 const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
@@ -15,9 +16,10 @@ function Schedule({
   width,
   showLabel,
   showHeader,
-  showRoom,
-  mobile
+  showRoom
 }) {
+  const isMobile = useSelector(state => state.appState.isMobile);
+
   const rowToDisplay = minute => {
     const hour = Math.floor(minute / 60) + startHour;
     return `${pad(hour)}.${pad(minute % 60)}`;
@@ -72,7 +74,7 @@ function Schedule({
             end={displayToMinute(end)}
             day={dayToColumn(day)}
           >
-            {!mobile && (
+            {!isMobile && (
               <div className="header">
                 <span>
                   {start} - {end}
@@ -82,7 +84,7 @@ function Schedule({
             )}
             <div className="content">
               <span>{name}</span>
-              {showRoom && mobile && <span>{room}</span>}
+              {showRoom && isMobile && <span>{room}</span>}
             </div>
           </ScheduleItem>
         ))}
@@ -106,15 +108,13 @@ const Container = styled.div`
 const TimeLabel = styled.div`
   place-self: center;
   grid-area: ${({ row }) => row + 30} / 1 / ${({ row }) => row + 90} / 1;
-  font-size: ${props => (props.theme.mobile ? "12px" : "16px")};
+  font-size: ${isMobile => (isMobile ? "12px" : "16px")};
 `;
 
 const TimeMarker = styled.div`
   grid-area: ${({ row }) => row} / ${({ showLabel }) => (showLabel ? "2" : "1")} /
     ${({ row }) => row + 60 + 1} / ${({ showLabel }) => (showLabel ? "8" : "7")};
   border: 1px solid rgba(48, 128, 119, 0.2);
-  border-left: none;
-  border-top: none;
   z-index: 0;
   padding-left: 30px;
 `;
@@ -130,7 +130,7 @@ const Header = styled.div`
   grid-row: 1 / 60;
   z-index: 2;
 
-  font-size: ${props => (props.theme.mobile ? "12px" : "16px")};
+  font-size: ${isMobile => (isMobile ? "12px" : "16px")};
 `;
 
 const ScheduleItem = styled.div`
@@ -163,8 +163,8 @@ const ScheduleItem = styled.div`
     padding: 2px 4px;
     font-weight: ${({ mobile }) => (mobile ? "bold" : "bold")};
 
-    ${props =>
-      props.theme.mobile &&
+    ${isMobile =>
+      isMobile &&
       css`
         display: flex;
         flex-direction: column;
@@ -176,7 +176,7 @@ const ScheduleItem = styled.div`
         }
       `}
 
-    font-size: ${props => (props.theme.mobile ? "10px" : "14px")};
+    font-size: ${isMobile => (isMobile ? "10px" : "14px")};
   }
 `;
 
