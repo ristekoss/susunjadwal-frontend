@@ -98,9 +98,7 @@ function ScheduleList() {
           ))}
         </CardContainer>
       ) : (
-        <PageInfo mobile={isMobile}>
-          You haven't created any schedules.
-        </PageInfo>
+        <PageInfo mobile={isMobile}>Kamu belum pernah membuat jadwal.</PageInfo>
       )}
     </div>
   );
