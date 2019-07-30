@@ -4,7 +4,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@welldone-software/why-did-you-render": "^3.2.3",
     "axios": "^0.19.0",
     "query-string": "^6.8.1",
     "react": "^16.8.6",
