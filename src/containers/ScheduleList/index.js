@@ -60,7 +60,7 @@ function ScheduleList() {
   return (
     <div>
       <Helmet
-        title="Jadwal"
+        title="Daftar Jadwal"
         meta={[{ name: "description", content: "Description of Jadwal" }]}
       />
       <PageTitle mobile={isMobile}>Daftar Jadwal</PageTitle>
