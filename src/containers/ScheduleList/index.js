@@ -125,14 +125,13 @@ const Card = styled.div`
     justify-content: space-between;
   }
   ${props =>
-    props.theme.mobile
-      ? "margin: 1rem;"
-      : css`
-          width: 49%;
-          &:nth-child(even) {
-            margin-left: 2%;
-          }
-        `}
+    !props.theme.mobile &&
+    css`
+      width: 49%;
+      &:nth-child(even) {
+        margin-left: 2%;
+      }
+    `}
   margin-bottom: 32px;
 `;
 

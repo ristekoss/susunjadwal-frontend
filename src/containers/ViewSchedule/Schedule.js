@@ -101,14 +101,14 @@ const Container = styled.div`
       6,
       calc(${getContainerWidth} / 6)
     );
-  grid-template-rows: repeat(930, ${({ pxPerMinute }) => pxPerMinute}px);
+  grid-template-rows: repeat(990, ${({ pxPerMinute }) => pxPerMinute}px);
   width: ${({ width }) => width};
 `;
 
 const TimeLabel = styled.div`
   place-self: center;
   grid-area: ${({ row }) => row + 30} / 1 / ${({ row }) => row + 90} / 1;
-  font-size: ${isMobile => (isMobile ? "12px" : "16px")};
+  font-size: ${props => (props.theme.mobile ? "12px" : "16px")};
 `;
 
 const TimeMarker = styled.div`
@@ -130,7 +130,7 @@ const Header = styled.div`
   grid-row: 1 / 60;
   z-index: 2;
 
-  font-size: ${isMobile => (isMobile ? "12px" : "16px")};
+  font-size: ${props => (props.theme.mobile ? "12px" : "16px")};
 `;
 
 const ScheduleItem = styled.div`
