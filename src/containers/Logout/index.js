@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
 import { persistAuth } from "utils/auth";
-import { SSO_UI_LOGOUT_URL } from "config";
+import { redirectToSSOLogout } from "services/sso";
 import { setAuth } from "redux/modules/auth";
 import { setLoading } from "redux/modules/appState";
 
@@ -14,7 +14,7 @@ function Logout() {
     dispatch(setAuth(null));
     dispatch(setLoading(true));
     persistAuth(null);
-    window.location.replace(SSO_UI_LOGOUT_URL);
+    redirectToSSOLogout();
   }, [dispatch]);
 
   return (

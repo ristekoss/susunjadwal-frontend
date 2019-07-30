@@ -9,12 +9,10 @@ import Loading from "containers/Loading";
 import Routes from "./routes";
 import store from "./redux/store";
 
-import { BASE_URL } from "config";
+import config from "config";
 import "./app.css";
 
-const history = createBrowserHistory({
-  basename: BASE_URL
-});
+const history = createBrowserHistory({ basename: config.BASE_URL });
 
 function App() {
   return (

@@ -1,13 +1,13 @@
 import axios from "axios";
-import { API_BASE_URL } from "config";
+import config from "config";
 
 let instance = axios.create({
-  baseURL: API_BASE_URL
+  baseURL: config.API_BASE_URL
 });
 
 export function setupAxiosInstance(token) {
   instance = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: config.API_BASE_URL,
     headers: { Authorization: `Bearer ${token}` }
   });
 }

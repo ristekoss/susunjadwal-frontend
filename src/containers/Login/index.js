@@ -2,29 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { parse } from "query-string";
 
-import { postAuthTicket } from "services/api";
-import { SSO_UI_LOGIN_URL, SSO_UI_LOGOUT_URL } from "config";
-import { persistAuth } from "utils/auth";
-import { makeAtLeastMs } from "utils/promise";
-import { setAuth } from "redux/modules/auth";
-
 import Logoset from "assets/LogosetColored.png";
 import Accent from "assets/Accent.png";
 import GojekLogo from "assets/GojekLogo.png";
 import Tagline from "assets/Tagline.png";
+import { setAuth } from "redux/modules/auth";
 import { setLoading } from "redux/modules/appState";
+import { postAuthTicket } from "services/api";
+import { redirectToSSOLogin, redirectToSSOLogout } from "services/sso";
+import { persistAuth } from "utils/auth";
+import { makeAtLeastMs } from "utils/promise";
+
 import "./styles.css";
 
 function getServiceUrl() {
   return window.location.href.split("?")[0];
-}
-
-function redirectToSSOLogin() {
-  window.location.replace(SSO_UI_LOGIN_URL);
-}
-
-function redirectToSSOLogout() {
-  window.location.replace(SSO_UI_LOGOUT_URL);
 }
 
 function Login({ history, location }) {
@@ -79,7 +71,9 @@ function Login({ history, location }) {
       <div className="broughtToYou center">
         <p>
           <span>Brought to you by</span>
-          <a href="https://ristek.cs.ui.ac.id/" target="_blank"><img className="broughtToYouLogo" src={Logoset} alt="Logoset" /></a>
+          <a href="https://ristek.cs.ui.ac.id/" target="_blank">
+            <img className="broughtToYouLogo" src={Logoset} alt="Logoset" />
+          </a>
         </p>
       </div>
     );
@@ -90,7 +84,9 @@ function Login({ history, location }) {
       <div className="gojek center">
         <span>Official Learning Partner</span>
         <p className="center">Official Learning Partner</p>
-        <a href="https://www.gojek.com/" target="_blank"><img className="gojekLogo" src={GojekLogo} alt="Gojek Logo" /></a>
+        <a href="https://www.gojek.com/" target="_blank">
+          <img className="gojekLogo" src={GojekLogo} alt="Gojek Logo" />
+        </a>
       </div>
     );
   }
