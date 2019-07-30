@@ -17,9 +17,10 @@ function ViewSchedule({ match }) {
 
   const [schedule, setSchedule] = useState(null);
 
-  function onRename(slug, value) {
+  async function onRename(slug, value) {
     if (auth) {
-      postRenameSchedule(auth.userId, slug, value);
+      await postRenameSchedule(auth.userId, slug, value);
+      setSchedule({ ...schedule, name: value });
     }
   }
 
@@ -35,10 +36,12 @@ function ViewSchedule({ match }) {
     fetchSchedule();
   }, [match, dispatch]);
 
+  const scheduleName = schedule && schedule.name;
+
   return (
     <React.Fragment>
       <Helmet
-        title="Jadwal"
+        title={scheduleName ? `Jadwal ${scheduleName}` : `Memuat jadwal ...`}
         meta={[{ name: "description", content: "Description of Jadwal" }]}
       />
 
