@@ -165,8 +165,13 @@ const TableHeader = styled.div`
 const TableContentRow = styled.div`
   display: flex;
   font-size: 0.75rem;
-  background-color: ${({ inverted }) => (inverted ? "#C74550" : "#0000")};
   min-height: 70px;
+  :nth-child(odd) {
+    background-color: ${({ inverted }) => (inverted ? "#C74550" : "#0000")};;
+  }
+  :nth-child(even) {
+    background-color: ${({ inverted }) => (inverted ? "#C74550" : "#3C2E18")};;
+  }
 
   div {
     padding: 0.5rem 0;
