@@ -9,6 +9,7 @@ import { setLoading } from "redux/modules/appState";
 
 import Schedule from "./Schedule";
 import ControlledInput from "./ControlledInput";
+import { decodeHtmlEntity } from "utils/string";
 
 function ViewSchedule({ match }) {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ function ViewSchedule({ match }) {
       {schedule && (
         <Container>
           <ControlledInput
-            name={schedule.name}
+            name={decodeHtmlEntity(schedule.name)}
             slug={match.params.scheduleId}
             rename={onRename}
           />

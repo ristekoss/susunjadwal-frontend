@@ -12,6 +12,7 @@ import { makeAtLeastMs } from "utils/promise";
 import Schedule from "containers/ViewSchedule/Schedule";
 import clipboardImg from "assets/Clipboard.svg";
 import deleteImg from "assets/Delete.svg";
+import { decodeHtmlEntity } from 'utils/string'
 
 function ScheduleList() {
   const auth = useSelector(state => state.auth);
@@ -70,7 +71,7 @@ function ScheduleList() {
             <Card key={`${schedule.name}-${idx}`}>
               <div className="header">
                 <Link to={`/jadwal/${schedule.id}`}>
-                  <h2>{schedule.name || "Untitled"}</h2>
+                  <h2>{decodeHtmlEntity(schedule.name) || "Untitled"}</h2>
                 </Link>
                 <div>
                   <CopyToClipboard
