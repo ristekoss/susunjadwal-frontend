@@ -34,10 +34,39 @@ function renderHeaderLink() {
 function Header() {
   const isMobile = useSelector(state => state.appState.isMobile);
   const [isOpened, setOpen] = useState(false);
+  const auth = useSelector(state => state.auth);
 
   function toggleMenu() {
     setOpen(!isOpened);
   }
+
+  // JSX code for menu and the checking for isMobile are included to a variable named menuPage
+  
+  const menuPage = isMobile ? (
+    <Menu
+      isOpen={isOpened}
+      burgerButtonClassName="menu"
+      right
+      onStateChange={({ isOpen }) => setOpen(isOpen)}
+      styles={{
+        bmMenuWrap: {
+          height: "calc(100vh - 64px)"
+        },
+        bmItemList: {
+          height: "none"
+        }
+      }}
+    >
+      {isOpened && <HideBodyOverflow />}
+      {LINKS.map(({ to, label }) => (
+        <MenuLink key={to} to={to} onClick={toggleMenu}>
+          {label}
+        </MenuLink>
+      ))}
+    </Menu>
+  ) : (
+    renderHeaderLink()
+  );
 
   return (
     <Container>
@@ -46,33 +75,10 @@ function Header() {
           Susun<span>Jadwal</span>
         </h1>
       </LogoLink>
-      {isMobile ? (
-        <Menu
-          isOpen={isOpened}
-          burgerButtonClassName="menu"
-          right
-          onStateChange={({ isOpen }) => setOpen(isOpen)}
-          styles={{
-            bmMenuWrap: {
-              height: "calc(100vh - 64px)"
-            },
-            bmItemList: {
-              height: "none"
-            }
-          }}
-        >
-          {isOpened && <HideBodyOverflow />}
-          {LINKS.map(({ to, label }) => (
-            <MenuLink key={to} to={to} onClick={toggleMenu}>
-              {label}
-            </MenuLink>
-          ))}
-        </Menu>
-      ) : (
-        renderHeaderLink()
-      )}
+      {auth ? menuPage : null}
     </Container>
   );
+  // The checking above is added for auth only
 }
 
 export default Header;
