@@ -83,6 +83,8 @@ export default BuildSchedule;
 
 const Container = styled.div`
   display: flex;
+  background-color: #1a1a1a;
+  color: white;
 `;
 
 const InfoContent = styled.div`
@@ -98,6 +100,7 @@ const CoursePickerContainer = styled.div`
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 16px;
+    color: white;
   }
 `;
 

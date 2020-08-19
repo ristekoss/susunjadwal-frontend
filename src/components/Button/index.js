@@ -2,12 +2,12 @@ import styled from "styled-components";
 
 const intentStyle = {
   primary: {
-    backgroundColor: "#ce9d4d",
+    backgroundColor: "#F2994A",
     color: "white"
   },
   secondary: {
     backgroundColor: "#0000",
-    color: "#ce9d4d"
+    color: "#F2994A"
   }
 };
 
@@ -15,20 +15,20 @@ const Button = styled.button`
   height: 40px;
   background-color: ${({ intent }) =>
     intentStyle[intent || "primary"].backgroundColor};
-  border: 2px solid #ce9d4d;
+  border: 2px solid #F2994A;
   padding: 8px 16px;
   color: ${({ intent }) => intentStyle[intent || "primary"].color};
   font-weight: bold;
 
   &:hover {
-    background-color: #ce9d4d;
+    background-color: #F2994A;
     color: white;
   }
 
   &:disabled {
-    background-color: #aaa;
+    background-color: #333333;
     color: white;
-    border-color: #aaa;
+    border-color: #333333;
   }
 
   width: ${({ width }) => (width ? `${width}px` : "100%")};

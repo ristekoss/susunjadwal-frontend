@@ -38,12 +38,12 @@ function Course({ course }) {
 }
 
 const CourseContainer = styled.div`
-  border: 1px solid #308077;
+  border: 1px solid #333333;
   margin-bottom: 32px;
 `;
 
 const Header = styled.div`
-  background-color: #308077;
+  background-color: #333333;
   font-family: Proxima Nova;
   font-weight: 400;
   color: white;
@@ -73,7 +73,7 @@ const Header = styled.div`
 
 const CourseTitle = styled.h2`
   font-size: 1.5rem;
-  color: #ce9d4d;
+  color: #F2994A;
   font-weight: bold;
 
 
@@ -81,7 +81,7 @@ const CourseTitle = styled.h2`
     display: inline;
     // ${({ isMobile }) => isMobile && `margin-left: 0.5rem;`}
 
-    color: #222;
+    color: white;
     font-weight: 400;
     font-size: 1rem;
   }

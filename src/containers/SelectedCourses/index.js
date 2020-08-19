@@ -127,7 +127,7 @@ const Container = styled.div`
 
   h3 {
     font-size: 1.5rem;
-    color: #ce9d4d;
+    color: #F2994A;
     font-weight: bold;
     margin-bottom: 16px;
   }
@@ -141,7 +141,7 @@ const Container = styled.div`
 
 const TableHeader = styled.div`
   display: flex;
-  border-bottom: 2px solid #308077;
+  border-bottom: 2px solid #333333;
   font-weight: bold;
   align-items: center;
 
@@ -203,7 +203,7 @@ const TableCreditSum = styled.div`
   font-size: 16px;
   font-weight: bold;
   color: white;
-  background-color: #308077;
+  background-color: #333333;
   padding: 4px 12px;
   margin-top: 8px;
 
@@ -232,7 +232,7 @@ const DeleteButton = styled.button`
 `;
 
 const MessageContainer = styled.div`
-  background-color: #c74550;
+  background-color: #F2994A;
   font-size: 0.75rem;
   padding: 4px;
   text-align: center;
