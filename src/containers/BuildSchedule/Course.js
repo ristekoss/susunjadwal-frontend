@@ -44,7 +44,7 @@ const CourseContainer = styled.div`
 
 const Header = styled.div`
   background-color: #333333;
-  font-family: Proxima Nova;
+  font-family: Avenir;
   font-weight: 400;
   color: white;
   display: flex;

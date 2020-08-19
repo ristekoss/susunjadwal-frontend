@@ -2059,6 +2059,20 @@ p + .stat {
 }
 
 @font-face {
+  font-family: "Avenir Black";
+  src: url("./assets/fonts/avenir-black.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Avenir Light";
+  src: url("./assets/fonts/avenir-light.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* @font-face {
   font-family: "Proxima Nova";
   src: url("./assets/PNovaRegular.ttf");
   font-weight: normal;
@@ -2077,11 +2091,16 @@ p + .stat {
   src: url("./assets/PNovaBold.ttf");
   font-weight: bold;
   font-style: normal;
-}
+} */
+
+/* body {
+  background: #ffffff;
+  font-family: "Proxima Nova", Helvetica, Arial, sans-serif;
+} */
 
 body {
   background: #ffffff;
-  font-family: "Proxima Nova", Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
 }
 
 ::-moz-selection {

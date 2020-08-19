@@ -48,7 +48,7 @@ function BuildSchedule({ history }) {
           <InfoContent>
             Halo! Jadwal kamu belum detail nih, kalo kamu ingin membantu kami
             agar jadwal ini detail, kamu dapat mengubungi Ristek Fasilkom UI di
-            LINE (@ristekfasilkomui). Terima kasih :D
+            LINE (@rye2953f). Terima kasih :D
           </InfoContent>
         )}
         {courses &&
