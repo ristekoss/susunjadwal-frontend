@@ -48,11 +48,17 @@ function ViewSchedule({ match }) {
 
       {schedule && (
         <Container>
-          <ControlledInput
-            name={decodeHtmlEntity(schedule.name)}
-            slug={match.params.scheduleId}
-            rename={onRename}
-          />
+          {schedule.has_edit_access ? (
+            <ControlledInput
+              name={decodeHtmlEntity(schedule.name)}
+              slug={match.params.scheduleId}
+              rename={onRename}
+            />
+          ) : (
+            <div style={{ fontSize: 32 }}>
+              {decodeHtmlEntity(schedule.name)}
+            </div>
+          )}
         </Container>
       )}
 
