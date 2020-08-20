@@ -6,6 +6,21 @@
   max-width: 100vw;
   justify-content: space-between;
   height: 100vh;
+  background-color: #191919;
+  color: white;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  margin-top: 20vh;
+}
+
+.gojekLogo {
+  width: 20rem;
 }
 
 @media screen and (max-width: 900px) {
@@ -44,11 +59,11 @@
   margin-bottom: 2rem;
   font-weight: 700;
   display: inline-block;
-  color: #ce9d4d;
+  color:white;
 }
 
 .center h1 span {
-  color: #308077;
+  color: #F2994A;
 }
 
 .center .broughtToYouLogo {
@@ -59,7 +74,7 @@
   padding: 0.75rem 10rem;
   margin: 1rem 0 0;
   color: #ffffff;
-  background: #ce9d4d;
+  background: #F2994A;
   font-weight: 700;
   text-transform: uppercase;
   transition: 0.25s background ease;

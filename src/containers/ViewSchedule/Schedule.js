@@ -103,18 +103,20 @@ const Container = styled.div`
     );
   grid-template-rows: repeat(990, ${({ pxPerMinute }) => pxPerMinute}px);
   width: ${({ width }) => width};
+  background-color: #1a1a1a;
 `;
 
 const TimeLabel = styled.div`
   place-self: center;
   grid-area: ${({ row }) => row + 30} / 1 / ${({ row }) => row + 90} / 1;
   font-size: ${props => (props.theme.mobile ? "12px" : "16px")};
+  color: white
 `;
 
 const TimeMarker = styled.div`
   grid-area: ${({ row }) => row} / ${({ showLabel }) => (showLabel ? "2" : "1")} /
     ${({ row }) => row + 60 + 1} / ${({ showLabel }) => (showLabel ? "8" : "7")};
-  border: 1px solid rgba(48, 128, 119, 0.2);
+  border: 0.95px solid #4F4F4F;
   z-index: 0;
   padding-left: 30px;
 `;
@@ -124,7 +126,7 @@ const Header = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #308077;
+  background-color: #333333;
   color: white;
   flex-direction: row;
   grid-row: 1 / 60;
@@ -136,11 +138,12 @@ const Header = styled.div`
 const ScheduleItem = styled.div`
   z-index: 1;
   width: 95%
-  background-color: #308077;
+  background-color: #333333;
   color: white;
   grid-area: ${({ start }) => start} /
     ${({ day }) => day} / ${({ end }) => end} /
     ${({ day }) => day + 1};
+  border-radius: 8px;
 
   .header {
     padding: 0 4px !important;
@@ -148,8 +151,8 @@ const ScheduleItem = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    font-size: 12px;
-    border-bottom: 1px solid #fff;
+    font-size: 13px;
+    font-weight: lighter;
 
     .room {
       overflow: hidden;
@@ -176,7 +179,7 @@ const ScheduleItem = styled.div`
         }
       `}
 
-    font-size: ${isMobile => (isMobile ? "10px" : "14px")};
+    font-size: ${isMobile => (isMobile ? "14px" : "1rem")};
   }
 `;
 

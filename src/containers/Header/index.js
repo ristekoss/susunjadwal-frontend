@@ -87,13 +87,20 @@ const Container = styled.div`
   width: 100%;
   height: 64px;
   padding: 0.5rem 0 0.5rem 0;
-  background: #ffffff;
+  background-color: #333333;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   z-index: 5;
   position: fixed;
+  a {
+    color: white;
+  }
+
+  a:hover {
+    color: #828282;
+  }
 
   a.active {
-    color: #308077 !important;
+    color: #F2994A !important;
   }
 `;
 
@@ -118,10 +125,10 @@ const LogoLink = styled(Link)`
     font-size: 2rem;
     font-weight: 700;
     display: inline-block;
-    color: #ce9d4d;
+    color: #ffffff;
 
     span {
-      color: #308077;
+      color: #F2994A;
     }
   }
 `;

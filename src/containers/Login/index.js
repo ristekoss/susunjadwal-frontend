@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { parse } from "query-string";
 
-import Logoset from "assets/LogosetColored.png";
-import Accent from "assets/Accent.png";
-import GojekLogo from "assets/GojekLogo.png";
-import Tagline from "assets/Tagline.png";
+import Logoset from "assets/ristek_logo_with_motto.svg";
+import GojekLogo from "assets/gojek_logo.svg";
+import Tagline from "assets/tagline.svg";
 import { setAuth } from "redux/modules/auth";
 import { setLoading } from "redux/modules/appState";
 import { postAuthTicket } from "services/api";
@@ -70,12 +69,8 @@ function Login({ history, location }) {
     return (
       <div className="broughtToYou center">
         <p>
-          <span>Brought to you by</span>
-          <a
-            href="https://ristek.cs.ui.ac.id/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <span>Brought to you by</span><br/><br/>
+          <a href="https://ristek.cs.ui.ac.id/" target="_blank" rel="noopener noreferrer">
             <img className="broughtToYouLogo" src={Logoset} alt="Logoset" />
           </a>
         </p>
@@ -88,11 +83,7 @@ function Login({ history, location }) {
       <div className="gojek center">
         <span>Official Learning Partner</span>
         <p className="center">Official Learning Partner</p>
-        <a
-          href="https://www.gojek.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href="https://www.gojek.com/" target="_blank" rel="noopener noreferrer">
           <img className="gojekLogo" src={GojekLogo} alt="Gojek Logo" />
         </a>
       </div>
@@ -101,14 +92,14 @@ function Login({ history, location }) {
 
   return (
     <div className="landingPage">
-      <div className="tagline">
+      {/* <div className="tagline">
         <img src={Tagline} alt="Tagline" />
-      </div>
+      </div> */}
       <div className={"login"}>
         <div className={"center"}>
           <h1>
             Susun<span>Jadwal</span>
-          </h1>
+          </h1><br/>
         </div>
         {renderBroughtToYouBy()}
         {error ? (
@@ -125,16 +116,16 @@ function Login({ history, location }) {
             </div>
           </React.Fragment>
         ) : (
-          <div className={"center loginButtonWrapper"}>
-            <button className={"loginButton"} onClick={redirectToSSOLogin}>
-              LOGIN WITH SSO
+            <div className={"center loginButtonWrapper"}>
+              <button className={"loginButton"} onClick={redirectToSSOLogin}>
+                LOGIN WITH SSO
             </button>
-          </div>
-        )}
+            </div>
+          )}
         {renderGojekLogo()}
       </div>
       <div className={"display-logo"}>
-        <img src={Accent} alt="Accent" />
+        <img src={Tagline} alt="tagline" />
         {renderBroughtToYouBy()}
         {renderGojekLogo()}
       </div>

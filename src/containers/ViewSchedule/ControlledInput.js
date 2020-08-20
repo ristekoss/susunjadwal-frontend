@@ -63,7 +63,7 @@ class ControlledInput extends React.Component {
               this.changeScheduleName("blur");
             }
           }}
-          inputStyle={{ fontSize: 32, borderColor: "#0000" }}
+          inputStyle={{ fontSize: 32, backgroundColor: "#1a1a1a", border: "none" }}
         />
         <button
           className={this.state.editing ? "hide" : ""}
@@ -85,5 +85,8 @@ class ControlledInput extends React.Component {
 const Container = styled.div`
   display: flex;
   align-items: center;
+  color: white;
+  background-color: #1a1a1a;
+
 `;
 export default ControlledInput;

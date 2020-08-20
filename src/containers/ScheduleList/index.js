@@ -59,7 +59,7 @@ function ScheduleList() {
   }
 
   return (
-    <div>
+    <div style={{backgroundColor: "#1a1a1a"}}>
       <Helmet
         title="Daftar Jadwal"
         meta={[{ name: "description", content: "Description of Jadwal" }]}
@@ -107,7 +107,9 @@ function ScheduleList() {
 const PageTitle = styled.h1`
   font-size: 1.5rem;
   font-weight: bold;
-  margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 16px 48px")};
+  color: white;
+  margin: ${({ mobile }) => (mobile ? "1rem" : "0")};
+  padding: 2rem 2rem;
 `;
 
 const PageInfo = styled.h2`
@@ -116,9 +118,11 @@ const PageInfo = styled.h2`
 `;
 
 const Card = styled.div`
-  border: 0.05rem solid rgba(48, 128, 119, 0.5);
+  border: 0.05px solid #4F4F4F;
   border-radius: 4;
-
+  h2 {
+    color: #F2994A;
+  }
   .header {
     padding: 1rem;
     display: flex;
@@ -142,6 +146,7 @@ const CardContainer = styled.div`
   width: 100%;
   flex-direction: ${props => (props.theme.mobile ? "column" : "row")};
   padding: ${props => (props.theme.mobile ? "1rem" : "0 48px")};
+  background-color: #1a1a1a;
 `;
 
 const ImageButton = styled.button`

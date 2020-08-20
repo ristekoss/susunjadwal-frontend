@@ -158,7 +158,7 @@ const Container = styled.div`
   height: 100%;
   z-index: 1001;
   overflow: auto;
-  background: rgba(0, 0, 0, 0.5);
+  color: white;
   display: ${({ visible }) => (visible ? "block" : "none")};
 `;
 
@@ -189,29 +189,28 @@ const FormContainer = styled.div`
   transform: translate(-50%, -50%);
   width: 100%;
   max-width: 600px;
-  background: #fff;
+  background: #222222;
   padding: 2rem;
-
   display: flex;
   align-items: center;
+  opacity: 200;
   flex-direction: column;
 
-  color: black;
+  color: white;
 
   h1 {
     font-size: 16px;
-    color: black;
+    color: white;
     font-weight: bold;
     text-transform: uppercase;
   }
 
   input,
   select {
-    background-color: white;
+    background-color: #333333;
     width: 100%;
     padding: 8px 16px;
     border: none;
-    border-bottom: 2px solid #ce9d4d;
     height: 40px;
     margin-bottom: 16px;
   }

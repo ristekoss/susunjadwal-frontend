@@ -48,7 +48,7 @@ function BuildSchedule({ history }) {
           <InfoContent>
             Halo! Jadwal kamu belum detail nih, kalo kamu ingin membantu kami
             agar jadwal ini detail, kamu dapat mengubungi Ristek Fasilkom UI di
-            LINE (@ristekfasilkomui). Terima kasih :D
+            LINE (@rye2953f). Terima kasih :D
           </InfoContent>
         )}
         {courses &&
@@ -83,6 +83,8 @@ export default BuildSchedule;
 
 const Container = styled.div`
   display: flex;
+  background-color: #1a1a1a;
+  color: white;
 `;
 
 const InfoContent = styled.div`
@@ -98,6 +100,7 @@ const CoursePickerContainer = styled.div`
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 16px;
+    color: white;
   }
 `;
 

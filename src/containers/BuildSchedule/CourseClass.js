@@ -79,6 +79,7 @@ function CourseClass({ course, courseClass }) {
 const CourseClassContainer = styled.div`
   display: flex;
   flex-direction: row;
+  color: white;
   cursor: pointer;
 
   &:hover {
@@ -94,14 +95,14 @@ const CourseClassItem = styled.div`
 `;
 
 const Radio = styled.div`
-  border: 1px solid #308077;
+  border: 1px solid #333333;
   height: 24px;
   width: 24px;
 
   &:before {
     content: "";
     display: block;
-    background-color: ${({ active }) => (active ? "#308077" : "#0000")};
+    background-color: ${({ active }) => (active ? "#F2994A" : "#0000")};
     margin: 4px;
     width: 14px;
     height: 14px;
@@ -132,7 +133,7 @@ const CouseClassMobileContainer = styled.div`
   }
 
   & + & {
-    border-top: 1px solid #308077;
+    border-top: 1px solid #333333;
   }
 `;
 export default CourseClass;
