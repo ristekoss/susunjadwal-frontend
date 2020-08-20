@@ -2099,15 +2099,15 @@ p + .stat {
 } */
 
 body {
-  background: #ffffff;
+  background: #1a1a1a;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
 }
 
 ::-moz-selection {
-  background: #308077;
+  background: #222;
 }
 ::selection {
-  background: #308077;
+  background: #222;
 }
 
 .container {

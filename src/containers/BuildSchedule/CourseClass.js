@@ -83,7 +83,7 @@ const CourseClassContainer = styled.div`
   cursor: pointer;
 
   &:hover {
-    background-color: rgba(48, 128, 119, 0.1);
+    background-color: #222;
   }
 `;
 
