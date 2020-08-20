@@ -1972,7 +1972,7 @@ p + .stat {
 .entryJadwal {
   position: absolute;
   width: calc((100% / 6) - 0.5rem);
-  background: #308077;
+  background: #F2994A;
   color: #222222;
 }
 

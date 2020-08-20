@@ -55,9 +55,9 @@ function ViewSchedule({ match }) {
               rename={onRename}
             />
           ) : (
-            <div style={{ fontSize: 32 }}>
+            <ScheduleName>
               {decodeHtmlEntity(schedule.name)}
-            </div>
+            </ScheduleName>
           )}
         </Container>
       )}
@@ -81,5 +81,10 @@ const Container = styled.div`
   padding-bottom: 16px;
   background-color: #1a1a1a;
 `;
+
+const ScheduleName = styled.div`
+  font-size: 32px;
+  color: white;
+`
 
 export default ViewSchedule;
