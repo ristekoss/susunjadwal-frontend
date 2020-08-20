@@ -109,12 +109,13 @@ const PageTitle = styled.h1`
   font-weight: bold;
   color: white;
   margin: ${({ mobile }) => (mobile ? "1rem" : "0")};
-  padding: 2rem 2rem;
+  margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 16px 48px")};
 `;
 
 const PageInfo = styled.h2`
   font-size: 1.1rem;
   margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 16px 48px")};
+  color: white;
 `;
 
 const Card = styled.div`

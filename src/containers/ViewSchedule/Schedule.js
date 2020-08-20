@@ -110,7 +110,7 @@ const TimeLabel = styled.div`
   place-self: center;
   grid-area: ${({ row }) => row + 30} / 1 / ${({ row }) => row + 90} / 1;
   font-size: ${props => (props.theme.mobile ? "12px" : "16px")};
-  color: white
+  color: white;
 `;
 
 const TimeMarker = styled.div`
@@ -137,7 +137,7 @@ const Header = styled.div`
 
 const ScheduleItem = styled.div`
   z-index: 1;
-  width: 95%
+  width: 95%;
   background-color: #333333;
   color: white;
   grid-area: ${({ start }) => start} /
@@ -151,9 +151,9 @@ const ScheduleItem = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: lighter;
-
+    margin-top: 5px;
     .room {
       overflow: hidden;
       white-space: nowrap;
@@ -165,7 +165,6 @@ const ScheduleItem = styled.div`
   .content {
     padding: 2px 4px;
     font-weight: ${({ mobile }) => (mobile ? "bold" : "bold")};
-
     ${isMobile =>
       isMobile &&
       css`

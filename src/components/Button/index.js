@@ -26,9 +26,9 @@ const Button = styled.button`
   }
 
   &:disabled {
-    background-color: #333333;
+    background-color: #4f4f4f;
     color: white;
-    border-color: #333333;
+    border-color: #4f4f4f;
   }
 
   width: ${({ width }) => (width ? `${width}px` : "100%")};
