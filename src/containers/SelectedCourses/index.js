@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-
+import { putUpdateSchedule } from "services/api";
 import Button from "components/Button";
 import { postSaveSchedule } from "services/api";
 import { isScheduleConflict } from "./utils";
@@ -11,6 +11,8 @@ import TrashWhiteIcon from "assets/TrashWhite.png";
 import Agenda from "./Agenda";
 import { setLoading } from "redux/modules/appState";
 import { removeSchedule, clearSchedule } from "redux/modules/schedules";
+import { makeAtLeastMs } from "utils/promise";
+import { deleteSchedule } from "services/api";
 
 function transformSchedules(schedules) {
   return schedules
@@ -23,7 +25,7 @@ function transformSchedules(schedules) {
     .reduce((prev, now) => [...prev, ...now], []);
 }
 
-function SelectedCourses({ history }) {
+function SelectedCourses({ history, scheduleId, isEditing }) {
   const schedules = useSelector(state => state.schedules);
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
@@ -44,6 +46,30 @@ function SelectedCourses({ history }) {
     }
     setTimeout(() => dispatch(setLoading(false)), 1000);
   }
+
+
+  async function updateSchedule() {
+    dispatch(setLoading(true));
+    try {
+      await makeAtLeastMs(putUpdateSchedule(auth.userId, scheduleId, transformSchedules(schedules)), 1000);
+      dispatch(clearSchedule());
+      history.push(`/jadwal/${scheduleId}`);
+    } catch (e) {
+      // TODO: handle error
+    }
+    setTimeout(() => dispatch(setLoading(false)), 1000);
+  }
+
+  const handleDeleteSchedule = async () => {
+    dispatch(setLoading(true));
+    await makeAtLeastMs(deleteSchedule(auth.userId, scheduleId), 1000);
+    dispatch(clearSchedule());
+    history.push("/jadwal")
+    setTimeout(() => dispatch(setLoading(false)), 1000);
+  }
+
+
+
 
   let isConflict = false;
   const items = schedules.map((schedule, idx) => {
@@ -109,10 +135,11 @@ function SelectedCourses({ history }) {
           Tambah Agenda
         </Button>
         <Button
-          onClick={saveSchedule}
-          disabled={isConflict || totalCredits > 24 || schedules.length === 0}
+          onClick={() => !isEditing ? saveSchedule() : schedules.length === 0 ? handleDeleteSchedule() : updateSchedule()}
+          disabled={isConflict || totalCredits > 24}
+          intent={schedules.length === 0 && isEditing && 'danger'}
         >
-          Simpan Jadwal
+          {schedules.length === 0 ? "Hapus Jadwal" : "Simpan Jadwal"}
         </Button>
       </Container>
     </React.Fragment>

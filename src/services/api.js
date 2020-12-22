@@ -47,3 +47,7 @@ export function postRenameSchedule(userId, scheduleId, name) {
 export function deleteSchedule(userId, scheduleId) {
   return instance.delete(`/users/${userId}/user_schedules/${scheduleId}`);
 }
+
+
+export const putUpdateSchedule = (userId, scheduleId, scheduleItems) =>
+  instance.put(`/users/${userId}/user_schedules/${scheduleId}`, { schedule_items: scheduleItems });

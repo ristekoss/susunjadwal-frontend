@@ -11,6 +11,7 @@ import { setCourses as reduxSetCourses } from "redux/modules/courses";
 import Course from "./Course";
 import Checkout from "./Checkout";
 import Detail from "./Detail";
+import { clearSchedule } from "redux/modules/schedules";
 
 function BuildSchedule({ history }) {
   const auth = useSelector(state => state.auth);
@@ -35,9 +36,12 @@ function BuildSchedule({ history }) {
   );
 
   useEffect(() => {
+    dispatch(clearSchedule());
     const majorId = auth.majorId;
     fetchCourses(majorId);
-  }, [auth, fetchCourses]);
+  }, [auth.majorId, dispatch, fetchCourses]);
+
+
 
   return (
     <Container>

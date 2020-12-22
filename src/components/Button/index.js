@@ -3,11 +3,18 @@ import styled from "styled-components";
 const intentStyle = {
   primary: {
     backgroundColor: "#F2994A",
-    color: "white"
+    color: "white",
+    border: "2px solid #F2994A"
   },
   secondary: {
     backgroundColor: "#0000",
-    color: "#F2994A"
+    color: "#F2994A",
+    border: '2px solid #F2994A'
+  },
+  danger: {
+    backgroundColor: "#F04444",
+    color: 'white',
+    border: '#F04444'
   }
 };
 
@@ -15,7 +22,7 @@ const Button = styled.button`
   height: 40px;
   background-color: ${({ intent }) =>
     intentStyle[intent || "primary"].backgroundColor};
-  border: 2px solid #F2994A;
+  border: ${({ intent }) => intentStyle[intent || "primary"].border};
   padding: 8px 16px;
   color: ${({ intent }) => intentStyle[intent || "primary"].color};
   font-weight: bold;

@@ -23,7 +23,7 @@ function transformSchedules(schedules) {
     .reduce((prev, now) => [...prev, ...now], []);
 }
 
-function Detail({ closeDetail, isConflict }) {
+function Detail({ closeDetail, isConflict, isEditing = false, scheduleId }) {
   const schedules = useSelector(state => state.schedules);
 
   function performCloseDetail() {
@@ -44,7 +44,7 @@ function Detail({ closeDetail, isConflict }) {
           endHour={21}
         />
       )}
-      <SelectedCourses />
+      <SelectedCourses isEditing={isEditing} scheduleId={scheduleId} />
     </Container>
   );
 }

@@ -10,11 +10,15 @@ import { setLoading } from "redux/modules/appState";
 import Schedule from "./Schedule";
 import ControlledInput from "./ControlledInput";
 import { decodeHtmlEntity } from "utils/string";
+import Button from '../../components/Button';
+import { Link } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 function ViewSchedule({ match }) {
   const dispatch = useDispatch();
   const isMobile = useSelector(state => state.appState.isMobile);
   const auth = useSelector(state => state.auth);
+  const { scheduleId } = useParams();
 
   const [schedule, setSchedule] = useState(null);
 
@@ -55,10 +59,15 @@ function ViewSchedule({ match }) {
               rename={onRename}
             />
           ) : (
-            <ScheduleName>
-              {decodeHtmlEntity(schedule.name)}
-            </ScheduleName>
-          )}
+              <ScheduleName>
+                {decodeHtmlEntity(schedule.name)}
+              </ScheduleName>
+            )}
+          <Link to={`/edit/${scheduleId}`} >
+            <Button intent="primary" onClick={() => null} >
+              Edit
+          </Button>
+          </Link>
         </Container>
       )}
 
@@ -80,6 +89,10 @@ const Container = styled.div`
   padding: 32px 48px;
   padding-bottom: 16px;
   background-color: #1a1a1a;
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
 `;
 
 const ScheduleName = styled.div`

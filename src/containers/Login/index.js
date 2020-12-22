@@ -37,6 +37,7 @@ function Login({ history, location }) {
           }
         } = await makeAtLeastMs(postAuthTicket(ticket, serviceUrl), 1000);
 
+
         if (err) {
           dispatch(setLoading(false));
           setError({
@@ -69,7 +70,7 @@ function Login({ history, location }) {
     return (
       <div className="broughtToYou center">
         <p>
-          <span>Brought to you by</span><br/><br/>
+          <span>Brought to you by</span><br /><br />
           <a href="https://ristek.cs.ui.ac.id/" target="_blank" rel="noopener noreferrer">
             <img className="broughtToYouLogo" src={Logoset} alt="Logoset" />
           </a>
@@ -99,7 +100,7 @@ function Login({ history, location }) {
         <div className={"center"}>
           <h1>
             Susun<span>Jadwal</span>
-          </h1><br/>
+          </h1><br />
         </div>
         {renderBroughtToYouBy()}
         {error ? (

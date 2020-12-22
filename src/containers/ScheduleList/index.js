@@ -4,6 +4,8 @@ import Helmet from "react-helmet";
 import { Link } from "react-router-dom";
 import styled, { css } from "styled-components";
 
+import { useHistory } from 'react-router';
+
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import { getSchedules, deleteSchedule } from "services/api";
@@ -13,6 +15,7 @@ import Schedule from "containers/ViewSchedule/Schedule";
 import clipboardImg from "assets/Clipboard.svg";
 import deleteImg from "assets/Delete.svg";
 import { decodeHtmlEntity } from 'utils/string'
+import EditIcon from "assets/EditSchedule/EditIcon";
 
 function ScheduleList() {
   const auth = useSelector(state => state.auth);
@@ -21,6 +24,8 @@ function ScheduleList() {
   const dispatch = useDispatch();
 
   const [schedules, setSchedules] = useState();
+
+  const history = useHistory();
 
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -58,8 +63,12 @@ function ScheduleList() {
     );
   }
 
+  const handleClickEditJadwal = (idJadwal) => {
+    history.push(`/edit/${idJadwal}`);
+  }
+
   return (
-    <div style={{backgroundColor: "#1a1a1a"}}>
+    <div style={{ backgroundColor: "#1a1a1a" }}>
       <Helmet
         title="Daftar Jadwal"
         meta={[{ name: "description", content: "Description of Jadwal" }]}
@@ -73,7 +82,7 @@ function ScheduleList() {
                 <Link to={`/jadwal/${schedule.id}`}>
                   <h2>{decodeHtmlEntity(schedule.name) || "Untitled"}</h2>
                 </Link>
-                <div>
+                <CardActionContainer>
                   <CopyToClipboard
                     text={`${window.location.href}/${schedule.id}`}
                     onCopy={showAlertCopy}
@@ -84,7 +93,8 @@ function ScheduleList() {
                     src={deleteImg}
                     onClick={() => confirmDeleteSchedule(schedule.id)}
                   />
-                </div>
+                  <EditIcon className="editIcon" onClick={() => handleClickEditJadwal(schedule.id)} />
+                </CardActionContainer>
               </div>
               <Schedule
                 startHour={7}
@@ -98,11 +108,23 @@ function ScheduleList() {
           ))}
         </CardContainer>
       ) : (
-        <PageInfo mobile={isMobile}>Kamu belum pernah membuat jadwal.</PageInfo>
-      )}
+          <PageInfo mobile={isMobile}>Kamu belum pernah membuat jadwal.</PageInfo>
+        )}
     </div>
   );
 }
+
+const CardActionContainer = styled.div`
+display:flex;
+flex-direction:'row';
+justify-content: center;
+align-items:center;
+
+.editIcon{
+  margin-left:8px;
+  cursor:pointer;
+}
+`
 
 const PageTitle = styled.h1`
   font-size: 1.5rem;

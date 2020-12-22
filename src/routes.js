@@ -11,12 +11,14 @@ import ViewSchedule from "./containers/ViewSchedule";
 import NotFoundPage from "./containers/NotFoundPage";
 import Logout from "./containers/Logout";
 import ScheduleList from "./containers/ScheduleList";
+import EditSchedule from './containers/EditSchedule';
 
 const ROUTES = [
   { path: "/susun", component: BuildSchedule, auth: true },
   { path: "/jadwal/:scheduleId", component: ViewSchedule, auth: false },
   { path: "/jadwal", component: ScheduleList, auth: true },
-  { path: "/logout", component: Logout, auth: true }
+  { path: "/logout", component: Logout, auth: true },
+  { path: "/edit/:scheduleId", component: EditSchedule, auth: true }
 ];
 
 function Routes() {
@@ -58,8 +60,8 @@ function PrivateRoute({ component: Component, ...rest }) {
         auth ? (
           <Component {...props} />
         ) : (
-          <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-        )
+            <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+          )
       }
     />
   );
