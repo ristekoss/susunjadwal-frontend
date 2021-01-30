@@ -51,9 +51,12 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
   async function updateSchedule() {
     dispatch(setLoading(true));
     try {
-      await makeAtLeastMs(putUpdateSchedule(auth.userId, scheduleId, transformSchedules(schedules)), 1000);
+      const { data } = await makeAtLeastMs(
+        putUpdateSchedule(auth.userId, scheduleId, transformSchedules(schedules)),
+        1000
+      );
       dispatch(clearSchedule());
-      history.push(`/jadwal/${scheduleId}`);
+      history.push(`/jadwal/${data.user_schedule.id}`);
     } catch (e) {
       // TODO: handle error
     }
