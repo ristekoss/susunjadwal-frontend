@@ -63,11 +63,13 @@ function ViewSchedule({ match }) {
                 {decodeHtmlEntity(schedule.name)}
               </ScheduleName>
             )}
-          <Link to={`/edit/${scheduleId}`} >
-            <Button intent="primary" onClick={() => null} >
-              Edit
+          {schedule.has_edit_access && (
+            <Link to={`/edit/${scheduleId}`} >
+              <Button intent="primary" onClick={() => null} >
+                Edit
           </Button>
-          </Link>
+            </Link>
+          )}
         </Container>
       )}
 

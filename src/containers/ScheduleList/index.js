@@ -93,7 +93,7 @@ function ScheduleList() {
                     src={deleteImg}
                     onClick={() => confirmDeleteSchedule(schedule.id)}
                   />
-                  {schedule.has_edit_access && (<EditIcon className="editIcon" onClick={() => handleClickEditJadwal(schedule.id)} />)}
+                  <EditIcon className="editIcon" onClick={() => handleClickEditJadwal(schedule.id)} />
                 </CardActionContainer>
               </div>
               <Schedule
