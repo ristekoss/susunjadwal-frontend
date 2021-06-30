@@ -10,7 +10,7 @@ const SocialContainer = () => {
     let list = importAll(
       require.context("assets/Beta/icons", false, /\.(svg)$/)
     );
-    console.log(list);
+    
     list = list.map((img, idx) => ({
       image: img,
       link: ListIcon[idx].url,

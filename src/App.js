@@ -11,7 +11,6 @@ import store from "./redux/store";
 
 import config from "config";
 import "./app.css";
-import "@fontsource/poppins"
 
 const history = createBrowserHistory({ basename: config.BASE_URL });
 

@@ -7,7 +7,7 @@ import decorLandingTop from "assets/Beta/decor1.svg";
 const Landing = () => {
   return (
     <Box>
-      <Image 
+      {/* <Image 
         objectFit="contain"
         position='absolute'
         zIndex='1000'
@@ -15,23 +15,24 @@ const Landing = () => {
         left='0'
         src={decorLandingTop}
         alt="decor"
-        display={{base: 'block', sm:'none'}}
+        display={{base: 'block', semiMd:'none'}}
         w='full'
-      />
+      /> */}
       <Image 
         objectFit="contain"
         m='auto'
         src={RistekBetaLogo}
         alt="ristek beta"
         sx={{transform: 'translate(0, 20px)'}}
-        w={{base: '178px', lg:'initial'}}
+        w={{base: '178px', semiMd:'initial'}}
       />
       <Image
         objectFit="contain"
         m='auto'
         src={SunjadBetaLogo}
+        // maxW='447px'
         alt="sunjad beta"
-        w={{base: '307px', md:'initial'}}
+        maxW={{base: '280px', semiMd:'380px', lg:'initial'}}
       />
       <Button variant="solid" >Jadi Beta Tester</Button>
       <Button variant="solid" >Daftar</Button>

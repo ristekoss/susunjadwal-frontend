@@ -2,6 +2,7 @@
 import { extendTheme } from "@chakra-ui/react";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
 import Button from './Button'
+import "@fontsource/poppins"
 
 const styles = {
   global: {
@@ -14,9 +15,10 @@ const styles = {
 
 const breakpoints = createBreakpoints({
   sm: "376px",
+  semiMd: '480px',
   md: "768px",
   lg: "900px",
-  xl: "1200px",
+  xl: "1024px",
 });
 
 // 2. Extend the theme to include custom colors, fonts, etc

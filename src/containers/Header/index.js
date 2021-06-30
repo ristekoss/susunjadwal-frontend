@@ -1,81 +1,46 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
-import { createGlobalStyle } from "styled-components";
-import { Link, NavLink } from "react-router-dom";
-import { slide as Menu } from "react-burger-menu";
+import React from "react";
+import { Link } from "react-router-dom";
 
 import "./styles.css";
+import { Box, Drawer, DrawerBody, DrawerContent, DrawerOverlay, Image, useDisclosure } from "@chakra-ui/react";
+import LogoSunjad from 'assets/Beta/LogoSunjad.svg'
+import { Container, HamburgerIcon, HeaderLink, NavLinkWrapper, SignOutLink, WrapperHamburger } from "./styles";
+import { useSelector } from "react-redux";
 
-const HideBodyOverflow = createGlobalStyle`
-  body {
-    overflow: hidden;
-  }
-`;
 
 const LINKS = [
   { to: "/susun", label: "Buat Jadwal" },
   { to: "/jadwal", label: "Daftar Jadwal" },
-  { to: "/logout", label: "Logout" }
+  { to: "/update", label: "Update Matkul" },
+  { to: "/kontributor", label: "Kontributor" },
+  
 ];
 
-function renderHeaderLink() {
-  return (
-    <React.Fragment>
-      {LINKS.map(({ to, label }) => (
-        <HeaderLink key={to} to={to}>
-          {label}
-        </HeaderLink>
-      )).reverse()}
-    </React.Fragment>
-  );
-}
-
 function Header() {
-  const isMobile = useSelector(state => state.appState.isMobile);
-  const [isOpened, setOpen] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const auth = useSelector(state => state.auth);
 
   function toggleMenu() {
-    setOpen(!isOpened);
+    return isOpen ? onClose() : onOpen()
   }
-
-  // JSX code for menu and the checking for isMobile are included to a variable named menuPage
-  
-  const menuPage = isMobile ? (
-    <Menu
-      isOpen={isOpened}
-      burgerButtonClassName="menu"
-      right
-      onStateChange={({ isOpen }) => setOpen(isOpen)}
-      styles={{
-        bmMenuWrap: {
-          height: "calc(100vh - 64px)"
-        },
-        bmItemList: {
-          height: "none"
-        }
-      }}
-    >
-      {isOpened && <HideBodyOverflow />}
-      {LINKS.map(({ to, label }) => (
-        <MenuLink key={to} to={to} onClick={toggleMenu}>
-          {label}
-        </MenuLink>
-      ))}
-    </Menu>
-  ) : (
-    renderHeaderLink()
-  );
 
   return (
     <Container>
-      <LogoLink to="/">
-        <h1>
-          Susun<span>Jadwal</span>
-        </h1>
-      </LogoLink>
-      {auth ? menuPage : null}
+      <Box mr='auto'>
+        <Link to="/">
+          <Image 
+            src={LogoSunjad}
+            alt='logo'
+            objectFit='contain'
+            w={{base:'140px',lg:'initial'}}
+          />
+        </Link>
+      </Box>
+      <WrapperHamburger open={isOpen} onClick={toggleMenu}>
+        <HamburgerIcon />
+      </WrapperHamburger>
+      {auth ? <NavLinks /> : null}
+      <SideBar onClose={onClose} isOpen={isOpen} />
     </Container>
   );
   // The checking above is added for auth only
@@ -83,52 +48,39 @@ function Header() {
 
 export default Header;
 
-const Container = styled.div`
-  width: 100%;
-  height: 64px;
-  padding: 0.5rem 0 0.5rem 0;
-  background-color: #333333;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  z-index: 5;
-  position: fixed;
-  a {
-    color: white;
-  }
+const NavLinks = () => {
+  return (
+    <NavLinkWrapper>
+      {LINKS.map(({ to, label }) => (
+        <HeaderLink key={to} to={to}>
+          {label}
+        </HeaderLink>
+      ))}
+      <SignOutLink to="/logout">
+        Sign Out  
+      </SignOutLink>
+    </NavLinkWrapper>
+  )
+}
 
-  a:hover {
-    color: #828282;
-  }
+const SideBar = ({onClose, isOpen}) => {
+  const firstField = React.useRef()
+  return (
+    <Drawer initialFocusRef={firstField} onClose={onClose} isOpen={isOpen} size='full'>
+      <DrawerOverlay bg='transparent' />
+      <DrawerContent maxW='undefined' px='1.5rem'>
+        <DrawerBody d='contents' dir='col' textAlign='left'>
+          {LINKS.map(({ to, label }) => (
+            <HeaderLink onClick={onClose} key={to} to={to}>
+              {label}
+            </HeaderLink>
+          ))}
+          <SignOutLink to="/logout">
+            Sign Out  
+          </SignOutLink>
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
+  )
+}
 
-  a.active {
-    color: #F2994A !important;
-  }
-`;
-
-const MenuLink = styled(NavLink)`
-  font-weight: 700;
-  color: #fff;
-  margin-right: 2rem;
-`;
-
-const HeaderLink = styled(NavLink)`
-  float: right;
-  line-height: 3rem;
-  font-weight: 700;
-  color: #222222;
-  margin-right: 2rem;
-`;
-
-const LogoLink = styled(Link)`
-  h1 {
-    margin: 0 0 0 ${props => (props.theme.mobile ? "1rem" : "3rem")};
-    line-height: 3rem;
-    font-size: 2rem;
-    font-weight: 700;
-    display: inline-block;
-    color: #ffffff;
-
-    span {
-      color: #F2994A;
-    }
-  }
-`;
