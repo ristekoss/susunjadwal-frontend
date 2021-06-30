@@ -1,6 +1,5 @@
 {
   "name": "frontend",
-  "homepage": "https://ristek.cs.ui.ac.id/susunjadwal",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
