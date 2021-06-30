@@ -30,7 +30,7 @@ function Routes() {
 
   return (
     <ThemeProvider theme={{ mobile: isMobile }}>
-      <Box pt="120px" px={{ base: 6, lg: "122px" }}>
+      <Box pt="120px" mb='120px' px={{ base: 6, lg: "122px" }}>
         <Switch>
           <Route path="/" name="home" component={Landing} exact />
           <Route path="/beta-form" name="beta-form" component={BetaForm} />
