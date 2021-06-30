@@ -1,9 +1,0 @@
-[build]
-  base = "frontend/"
-  publish = "build/" # create-react-app builds to this folder, Netlify should serve all these files statically
-  command = "npm install && npm run build" # the command you run to build this file
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
