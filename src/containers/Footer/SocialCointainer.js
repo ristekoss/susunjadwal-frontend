@@ -13,8 +13,8 @@ const SocialContainer = () => {
     console.log(list);
     list = list.map((img, idx) => ({
       image: img,
-      link: ListIcon[idx].url
-    }))
+      link: ListIcon[idx].url,
+    }));
     setListOfIcons(list);
   }, []);
 
@@ -24,12 +24,18 @@ const SocialContainer = () => {
   return (
     <StyledIconWrapper>
       {listOfIcons.map((item, id) => (
-        <a target="_blank" key={id} href={item.link}>
-          <Image objectFit="contain" w="6" mx="5" src={item.image} alt={"image"} />
+        <a target="_blank" rel="noopener noreferrer" key={id} href={item.link}>
+          <Image
+            objectFit="contain"
+            w="6"
+            mx="5"
+            src={item.image}
+            alt={"image"}
+          />
         </a>
       ))}
     </StyledIconWrapper>
   );
 };
 
-export default SocialContainer
+export default SocialContainer;
