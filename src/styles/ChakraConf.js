@@ -2,7 +2,6 @@
 import { extendTheme } from "@chakra-ui/react";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
 import Button from './Button'
-import Input from './Input'
 
 const styles = {
   global: {
