@@ -4,7 +4,7 @@ import { Route, Switch, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 
-import Login from "./containers/Login";
+// import Login from "./containers/Login";
 import BuildSchedule from "./containers/BuildSchedule";
 import Header from "./containers/Header";
 import ViewSchedule from "./containers/ViewSchedule";

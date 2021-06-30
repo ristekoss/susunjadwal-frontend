@@ -1,6 +1,5 @@
-/* eslint-disable react/jsx-no-target-blank */
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   StyledFooterContainer,
   StyledFooterDesc,
@@ -15,11 +14,14 @@ import MapPoint from "assets/Beta/MapPoint.svg";
 import RistekBetaLogo from "assets/Beta/Beta_Logo.svg";
 import SocialContainer from "./SocialCointainer";
 
-
 const Footer = () => {
   return (
     <StyledFooterContainer>
-      <Flex justify="space-between" direction={{base:'column',lg:'row'}} textAlign={{base:'center',lg:'left'}}>
+      <Flex
+        justify="space-between"
+        direction={{ base: "column", lg: "row" }}
+        textAlign={{ base: "center", lg: "left" }}
+      >
         <Image
           src={RistekBetaLogo}
           alt=""
@@ -47,7 +49,11 @@ const Footer = () => {
 
         <StyledPartner>
           <StyledSpanWrapper>
-            <a target="_blank" href="https://www.gojek.com/en-id/">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.gojek.com/en-id/"
+            >
               <StyledPartnerTitle>Official Learning Partner</StyledPartnerTitle>
               <Image
                 objectFit="contain"
@@ -64,6 +70,7 @@ const Footer = () => {
                 marginLeft: "1rem",
               }}
               target="_blank"
+              rel="noopener noreferrer"
               href="https://hackplus.io/"
             >
               <StyledPartnerTitle>Accelerated by</StyledPartnerTitle>
@@ -85,7 +92,11 @@ const Footer = () => {
         flexDir={{ base: "column-reverse", lg: "row" }}
         alignItems="center"
       >
-        <Text mt={{base:'6',lg:'0'}} fontSize="sm" color='secondary.MineShaft'>
+        <Text
+          mt={{ base: "6", lg: "0" }}
+          fontSize="sm"
+          color="secondary.MineShaft"
+        >
           © 2021 RISTEK Fasilkom
         </Text>
         <SocialContainer />
@@ -93,7 +104,5 @@ const Footer = () => {
     </StyledFooterContainer>
   );
 };
-
-
 
 export default Footer;
