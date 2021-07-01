@@ -103,6 +103,7 @@ export const InputPassword = ({
       <FormLabel  htmlFor={name}>{label}</FormLabel>
       <InputGroup size="md">
         <Input
+          id={name}
           pr="4.5rem"
           bg={errors[name] ? "state.ErrorGhost" : "secondary.InputGray"}
           type={show ? "text" : "password"}
