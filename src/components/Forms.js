@@ -10,7 +10,7 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { WarningIcon } from "@chakra-ui/icons";
-import { BsFillEyeFill,BsFillEyeSlashFill } from "react-icons/bs";
+import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 
 const Warning = () => {
   return (
@@ -56,12 +56,11 @@ export const InputEmail = ({
   name,
   label,
   validator,
-  isSSO,
   placeholder,
   ...props
 }) => {
   validator["pattern"] = {
-    value: isSSO ? /^[a-z.]*@ui\.ac\.id$/g :
+    value:
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     message: "Email yang anda masukkan tidak valid",
   };
@@ -100,7 +99,7 @@ export const InputPassword = ({
 
   return (
     <FormControl {...props} isInvalid={errors[name]}>
-      <FormLabel  htmlFor={name}>{label}</FormLabel>
+      <FormLabel htmlFor={name}>{label}</FormLabel>
       <InputGroup size="md">
         <Input
           id={name}
@@ -113,7 +112,6 @@ export const InputPassword = ({
         <InputRightElement mr={3}>
           <Button h="1.75rem" size="sm" onClick={handleClick}>
             <Icon h={4} w={4} as={show ? BsFillEyeSlashFill : BsFillEyeFill} />
-            {/* {show ? "Hide" : "Show"} */}
           </Button>
         </InputRightElement>
       </InputGroup>

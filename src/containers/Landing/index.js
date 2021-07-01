@@ -1,10 +1,12 @@
-import { Box, Button, Image, Select } from "@chakra-ui/react";
+import { Box, Button, Image, Select, useToast } from "@chakra-ui/react";
 import React from "react";
 import RistekBetaLogo from "assets/Beta/Beta_Logo.svg";
 import SunjadBetaLogo from "assets/Beta/Sunjad_Beta.svg";
 import { InputEmail, InputPassword, InputText } from "components/Forms";
 // import decorLandingTop from "assets/Beta/decor1.svg";
 import { useForm } from "react-hook-form";
+import { ContributorCard } from "components/Cards";
+import { InfoToast, SuccessToast } from "components/Toast";
 
 const Landing = () => {
   const {
@@ -14,7 +16,12 @@ const Landing = () => {
   } = useForm();
 
   function onSubmit(values) {
-    alert(JSON.stringify(values, null, 2));
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        alert(JSON.stringify(values, null, 2));
+        resolve();
+      }, 1000);
+    });
   }
 
   return (
@@ -64,7 +71,7 @@ const Landing = () => {
         <InputEmail
           label="Email"
           name="email"
-          placeholder='Masukkan Email'
+          placeholder="Masukkan Email"
           register={register}
           validator={{
             required: `Email tidak boleh kosong`,
@@ -75,7 +82,7 @@ const Landing = () => {
         <InputPassword
           label="Password"
           name="password"
-          placeholder='Masukkan password'
+          placeholder="Masukkan password"
           register={register}
           validator={{
             required: `Password tidak boleh kosong`,
@@ -83,7 +90,11 @@ const Landing = () => {
           errors={errors}
         />
 
-        <Select bg='secondary.InputGray' variant='filled' placeholder="Select option">
+        <Select
+          bg="secondary.InputGray"
+          variant="filled"
+          placeholder="Select option"
+        >
           <option value="option1">Option 1</option>
           <option value="option2">Option 2</option>
           <option value="option3">Option 3</option>
@@ -98,6 +109,15 @@ const Landing = () => {
           Submit
         </Button>
       </form>
+
+      <ContributorCard />
+
+      <Button onClick={()=>SuccessToast("Jadwal berhasil diperbaharui")}>
+        success toast
+      </Button>
+      <Button onClick={()=>InfoToast("Sedang memperbaharui jadwal")}>
+        info toast
+      </Button>
     </Box>
   );
 };

@@ -45,6 +45,7 @@ export const colors = {
     ErrorGhost: "#EB57571A",
     Warning: "#F7B500",
     Success: "#27AE60",
+    Info: "#2D9CDB"
   },
 };
 
