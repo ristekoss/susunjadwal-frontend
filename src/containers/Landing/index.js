@@ -56,7 +56,7 @@ const Landing = () => {
           placeholder="Nama lengkap"
           validator={{
             required: `Nama lengkap tidak boleh kosong`,
-            minLength: { value: 3, message: "Minimum length should be 3" },
+            // minLength: { value: 3, message: "Minimum length should be 3" },
           }}
           errors={errors}
         />
@@ -67,7 +67,7 @@ const Landing = () => {
           register={register}
           placeholder="Email"
           validator={{
-            // required: `Email tidak boleh kosong`,
+            required: `Email tidak boleh kosong`,
           }}
           errors={errors}
         />

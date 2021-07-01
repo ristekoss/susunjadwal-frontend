@@ -22,21 +22,21 @@ export const InputText = ({
   validator,
   ...props
 }) => {
+  validator["pattern"] = {
+    value:
+    /[A-Za-z]/g,
+    message: "Masukkan harus berupa string",
+  };
   return (
     <FormControl {...props} isInvalid={errors[name]}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Input
         bg={errors[name] ? "state.ErrorGhost" : "secondary.InputGray"}
-        variant="filled"
-        _focus={{
-          borderColor: "primary.Purple",
-          backgroundColor: "primary.White",
-        }}
         id={name}
         placeholder={placeholder ? placeholder : ""}
         {...register(name, validator)}
       />
-      <FormErrorMessage fontWeight="semibold">
+      <FormErrorMessage>
         {errors[name] && (
           <span>
             <Warning /> {errors[name].message}
@@ -66,11 +66,6 @@ export const InputEmail = ({
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Input
         bg={errors[name] ? "state.ErrorGhost" : "secondary.InputGray"}
-        variant="filled"
-        _focus={{
-          borderColor: "primary.Purple",
-          backgroundColor: "primary.White",
-        }}
         id={name}
         placeholder={placeholder ? placeholder : ""}
         {...register(name, validator)}
