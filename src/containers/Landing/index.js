@@ -2,7 +2,7 @@ import { Box, Button, Image, Select } from "@chakra-ui/react";
 import React from "react";
 import RistekBetaLogo from "assets/Beta/Beta_Logo.svg";
 import SunjadBetaLogo from "assets/Beta/Sunjad_Beta.svg";
-import { InputEmail, InputText } from "components/Forms";
+import { InputEmail, InputPassword, InputText } from "components/Forms";
 // import decorLandingTop from "assets/Beta/decor1.svg";
 import { useForm } from "react-hook-form";
 
@@ -56,7 +56,7 @@ const Landing = () => {
           placeholder="Nama lengkap"
           validator={{
             required: `Nama lengkap tidak boleh kosong`,
-            // minLength: { value: 3, message: "Minimum length should be 3" },
+            minLength: { value: 3, message: "Minimum length should be 3" },
           }}
           errors={errors}
         />
@@ -65,9 +65,18 @@ const Landing = () => {
           label="Email"
           name="email"
           register={register}
-          placeholder="Email"
           validator={{
             required: `Email tidak boleh kosong`,
+          }}
+          errors={errors}
+        />
+
+        <InputPassword
+          label="Password"
+          name="password"
+          register={register}
+          validator={{
+            required: `Password tidak boleh kosong`,
           }}
           errors={errors}
         />
