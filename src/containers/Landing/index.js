@@ -1,4 +1,4 @@
-import { Box, Button, Image, Select, useToast } from "@chakra-ui/react";
+import { Box, Button, Image, Select } from "@chakra-ui/react";
 import React from "react";
 import RistekBetaLogo from "assets/Beta/Beta_Logo.svg";
 import SunjadBetaLogo from "assets/Beta/Sunjad_Beta.svg";
