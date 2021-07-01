@@ -2,7 +2,7 @@ import { Box, Button, Image, Input } from '@chakra-ui/react'
 import React from 'react'
 import RistekBetaLogo from "assets/Beta/Beta_Logo.svg";
 import SunjadBetaLogo from "assets/Beta/Sunjad_Beta.svg";
-import decorLandingTop from "assets/Beta/decor1.svg";
+// import decorLandingTop from "assets/Beta/decor1.svg";
 
 const Landing = () => {
   return (
@@ -30,7 +30,6 @@ const Landing = () => {
         objectFit="contain"
         m='auto'
         src={SunjadBetaLogo}
-        // maxW='447px'
         alt="sunjad beta"
         maxW={{base: '280px', semiMd:'380px', lg:'initial'}}
       />

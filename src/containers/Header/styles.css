@@ -1,7 +1,7 @@
 .menu {
   display: inline-block;
   position: fixed;
-  float: right;
+  /* float: right; */
   
 }
 .chakra-slide {

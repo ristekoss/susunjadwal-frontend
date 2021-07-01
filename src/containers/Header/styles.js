@@ -3,11 +3,11 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 export const WrapperHamburger = styled(Box).attrs({
-  d: {base:'flex',xl:'none'},
-  justifyContent: 'center',
-  alignItems: 'center',
-  w: 9,
-  h: 9
+  display: { base: "flex", xl: "none" },
+  justifyContent: "center",
+  alignItems: "center",
+  width: 9,
+  height: 9,
 })`
   transition: all 0.5s ease-in-out;
   ${(props) =>
@@ -28,10 +28,10 @@ export const WrapperHamburger = styled(Box).attrs({
 `;
 
 export const HamburgerIcon = styled(Box).attrs({
-  w: 6,
-  h:1,
-  bg: 'primary.Purple',
-  borderRadius: '10px'
+  weidth: 6,
+  height: 1,
+  bg: "primary.Purple",
+  borderRadius: "10px",
 })`
   transition: all 0.5s ease-in-out;
   &:before,
@@ -52,12 +52,11 @@ export const HamburgerIcon = styled(Box).attrs({
   }
 `;
 
-
 export const NavLinkWrapper = styled(Box).attrs({
-  d:'flex',
-  flexDir:{base:'column',lg:'row'},
-  justifyContent: {base:'start',lg:'end'},
-  alignItems: 'center'
+  display: "flex",
+  flexDir: { base: "column", lg: "row" },
+  justifyContent: { base: "start", lg: "end" },
+  alignItems: "center",
 })`
   @media only screen and (max-width: 1024px) {
     position: absolute;
@@ -67,42 +66,38 @@ export const NavLinkWrapper = styled(Box).attrs({
 `;
 
 export const Container = styled(Box).attrs({
-  bg: 'primary.White',
-  py: {base:'14px',lg:'18px'},
-  px: {base:'1.5rem',lg:'5rem'},
-  d:'flex',
-  alignItems: 'center'
+  bg: "primary.White",
+  py: { base: "14px", lg: "18px" },
+  px: { base: "1.5rem", lg: "5rem" },
+  display: "flex",
+  alignItems: "center",
 })`
   width: 100%;
   box-shadow: 0px 0px 5px 0px #00000026;
   z-index: 5;
   position: fixed;
-  a {
-    color: var(--chakra-colors-secondary-Gray);
-  }
-
-  a:hover {
-    color: var(--chakra-colors-primary-Purple);
-  }
-
-  a:focus {
-    color: var(--chakra-colors-primary-Purple);
-    font-weight: 600;
-  }
 `;
 
 export const HeaderLink = styled(NavLink)`
   float: right;
   line-height: 3rem;
   font-size: 18px;
-  font-weight: 400;
+  font-weight: ${(props) => (props.isCurrent ? "700" : "400")};
   margin-right: 2rem;
   white-space: nowrap;
+  color: ${(props) =>
+    props.isCurrent
+      ? "var(--chakra-colors-primary-Purple)"
+      : "var(--chakra-colors-secondary-Gray)"};
+
   &:hover {
     color: var(--chakra-colors-primary-Purple);
   }
   &:focus {
-    color: inherit;
+    color: ${(props) =>
+      props.isCurrent
+        ? "var(--chakra-colors-primary-Purple)"
+        : "var(--chakra-colors-secondary-Gray)"};
     outline: none;
   }
   @media only screen and (max-width: 1024px) {
@@ -119,4 +114,4 @@ export const SignOutLink = styled(NavLink)`
     font-size: 14px;
     line-height: 3rem;
   }
-`
+`;

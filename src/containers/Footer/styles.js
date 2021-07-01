@@ -9,7 +9,7 @@ export const StyledFooterContainer = styled(Box).attrs({
 })``;
 
 export const StyledFooterDesc = styled(Box).attrs({
-  w: "full",
+  width: "full",
   mx: { base: "auto", lg: 10 },
   textAlign: "center",
   mb: { base: 8, lg: 16 },
@@ -18,7 +18,7 @@ export const StyledFooterDesc = styled(Box).attrs({
 
 export const StyledLocation = styled(Text).attrs({
   fontWeight: "semibold",
-  w:'fit-content',
+  width:'fit-content',
   mx: { base: "auto", md: "0" },
   justify: {base:"center",lg:'start'},
   mb: 4,
@@ -28,7 +28,7 @@ export const StyledLocation = styled(Text).attrs({
 })``;
 
 export const StyledPartner = styled(Box).attrs({
-  w: 'full',
+  width: 'full',
   maxW: '350px',
   mb: {base:8,lg:16},
   textAlign: {base:'center', lg:'left'},
@@ -52,7 +52,7 @@ export const StyledPartnerTitle = styled(Text).attrs({
 
 
 export const StyledIconWrapper = styled(Box).attrs({
-  w:'full',
+  width:'full',
   display: 'flex',
   justifyContent: 'between',
   maxW: '351px'
