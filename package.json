@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@chakra-ui/icons": "^1.0.13",
     "@chakra-ui/react": "^1.6.4",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
@@ -15,6 +16,7 @@
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.6",
     "react-helmet": "^5.2.1",
+    "react-hook-form": "^7.9.0",
     "react-input-autosize": "^2.2.1",
     "react-media": "^1.9.2",
     "react-notification-badge": "^1.5.1",

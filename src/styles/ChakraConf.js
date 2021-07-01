@@ -1,7 +1,7 @@
 // 1. Import the extendTheme function
 import { extendTheme } from "@chakra-ui/react";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
-import Button from './Button'
+import Button from '../components/Button'
 import "@fontsource/poppins"
 
 const styles = {
@@ -34,12 +34,14 @@ export const colors = {
     DarkPurple: "#402D99",
     LightPurple: "#5038BC1A",
     LigthGray: "#F5F5F5",
+    InputGray: "#F2F2F2",
     Golden: "#FFD668",
     Cerise: "#C424A3",
     MineShaft: "#333333",
   },
   state: {
     Error: "#EB5757",
+    ErrorGhost: "#EB57571A",
     Warning: "#F7B500",
     Success: "#27AE60",
   },
