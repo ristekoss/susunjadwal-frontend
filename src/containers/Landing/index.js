@@ -64,6 +64,7 @@ const Landing = () => {
         <InputEmail
           label="Email"
           name="email"
+          placeholder='Masukkan Email'
           register={register}
           validator={{
             required: `Email tidak boleh kosong`,
@@ -74,6 +75,7 @@ const Landing = () => {
         <InputPassword
           label="Password"
           name="password"
+          placeholder='Masukkan password'
           register={register}
           validator={{
             required: `Password tidak boleh kosong`,

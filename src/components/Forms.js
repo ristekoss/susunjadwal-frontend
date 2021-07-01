@@ -37,7 +37,7 @@ export const InputText = ({
       <Input
         bg={errors[name] ? "state.ErrorGhost" : "secondary.InputGray"}
         id={name}
-        placeholder={placeholder ? placeholder : ""}
+        placeholder={placeholder}
         {...register(name, validator)}
       />
       <FormErrorMessage>
@@ -57,6 +57,7 @@ export const InputEmail = ({
   label,
   validator,
   isSSO,
+  placeholder,
   ...props
 }) => {
   validator["pattern"] = {
@@ -69,9 +70,9 @@ export const InputEmail = ({
     <FormControl {...props} isInvalid={errors[name]}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Input
+        placeholder={placeholder}
         bg={errors[name] ? "state.ErrorGhost" : "secondary.InputGray"}
         id={name}
-        placeholder="Masukkan Email"
         {...register(name, validator)}
       />
       <FormErrorMessage>
@@ -91,6 +92,7 @@ export const InputPassword = ({
   name,
   label,
   validator,
+  placeholder,
   ...props
 }) => {
   const [show, setShow] = React.useState(false);
@@ -104,7 +106,7 @@ export const InputPassword = ({
           pr="4.5rem"
           bg={errors[name] ? "state.ErrorGhost" : "secondary.InputGray"}
           type={show ? "text" : "password"}
-          placeholder="Masukkan password"
+          placeholder={placeholder}
           {...register(name, validator)}
         />
         <InputRightElement mr={3}>
