@@ -1,6 +1,6 @@
 import React from 'react'
-import { Box, Text, Button, Select } from '@chakra-ui/react';
-import { InputEmail, InputText } from 'components/Forms';
+import { Box, Text, Button } from '@chakra-ui/react';
+import { InputEmail, InputSelect, InputText } from 'components/Forms';
 import { useForm } from 'react-hook-form';
 import { postBetaTesterData } from 'services/api';
 
@@ -53,11 +53,18 @@ const BetaForm = () => {
           errors={errors}
         />
 
-        <Select bg='secondary.InputGray' variant='filled' placeholder="Reguler / Pararel" {...register("reguler_pararel")}>
+        <InputSelect
+          label="Fakultas"
+          name="fakultas"
+          register={register}
+          validator={{
+            required: `Harap Pilih`
+          }}
+          errors={errors}
+        >
           <option value="Reguler">Reguler</option>
           <option value="Pararel">Pararel</option>
-          <option value="Internasional">Internasional</option>
-        </Select>
+        </InputSelect>
 
         <Button
           mt={4}

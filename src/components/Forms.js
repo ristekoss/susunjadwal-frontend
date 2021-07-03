@@ -4,6 +4,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  Select
 } from "@chakra-ui/react";
 import { WarningIcon } from "@chakra-ui/icons";
 
@@ -85,4 +86,38 @@ export const InputEmail = ({
     </FormControl>
   );
 };
+export const InputSelect = ({
+  register,
+  errors,
+  name,
+  label,
+  placeholder,
+  validator,
+  children,
+  ...props
+}) => (
+  <FormControl {...props} isInvalid={errors[name]}>
+      <FormLabel htmlFor={name}>{label}</FormLabel>
+      <Select
+        bg={errors[name] ? "state.ErrorGhost" : "secondary.InputGray"}
+        variant="filled"
+        _focus={{
+          borderColor: "primary.Purple",
+          backgroundColor: "primary.White",
+        }}
+        id={name}
+        placeholder={placeholder ? placeholder : ""}
+        {...register(name, validator)}
+      >
+        {children}
+      </Select>
+      <FormErrorMessage fontWeight="semibold">
+        {errors[name] && (
+          <span>
+            <Warning /> {errors[name].message}
+          </span>
+        )}
+      </FormErrorMessage>
+    </FormControl>
+)
 // export const InputSelection = () => {};
