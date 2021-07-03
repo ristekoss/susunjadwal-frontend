@@ -4,32 +4,41 @@ import { Route, Switch, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 
-import Login from "./containers/Login";
+// import Login from "./containers/Login";
 import BuildSchedule from "./containers/BuildSchedule";
 import Header from "./containers/Header";
 import ViewSchedule from "./containers/ViewSchedule";
 import NotFoundPage from "./containers/NotFoundPage";
 import Logout from "./containers/Logout";
 import ScheduleList from "./containers/ScheduleList";
-import EditSchedule from './containers/EditSchedule';
+import EditSchedule from "./containers/EditSchedule";
+import Footer from "containers/Footer";
+import Landing from "containers/Landing";
+import BetaForm from "containers/BetaForm";
+import { Box } from "@chakra-ui/react";
 
 const ROUTES = [
   { path: "/susun", component: BuildSchedule, auth: true },
   { path: "/jadwal/:scheduleId", component: ViewSchedule, auth: false },
   { path: "/jadwal", component: ScheduleList, auth: true },
   { path: "/logout", component: Logout, auth: true },
-  { path: "/edit/:scheduleId", component: EditSchedule, auth: true }
+  { path: "/edit/:scheduleId", component: EditSchedule, auth: true },
 ];
 
 function Routes() {
-  const isMobile = useSelector(state => state.appState.isMobile);
+  const isMobile = useSelector((state) => state.appState.isMobile);
 
   return (
     <ThemeProvider theme={{ mobile: isMobile }}>
-      <Switch>
-        <Route path="/" name="home" component={Login} exact />
-        <Route component={RoutesWithNavbar} />
-      </Switch>
+      <Header />
+      <Box pt="120px" mb={{base:16,md:'108px'}} px={{ base: 6, lg: "122px" }}>
+        <Switch>
+          <Route path="/" name="home" component={Landing} exact />
+          <Route path="/beta-form" name="beta-form" component={BetaForm} />
+          <Route component={RoutesWithNavbar} />
+        </Switch>
+      </Box>
+      <Footer />
     </ThemeProvider>
   );
 }
@@ -40,7 +49,7 @@ function RoutesWithNavbar() {
       <Header />
       <ComponentWrapper>
         <Switch>
-          {ROUTES.map(route => {
+          {ROUTES.map((route) => {
             const Component = route.auth ? PrivateRoute : Route;
             return <Component key={route.path} {...route} />;
           })}
@@ -51,17 +60,17 @@ function RoutesWithNavbar() {
   );
 }
 function PrivateRoute({ component: Component, ...rest }) {
-  const auth = useSelector(state => state.auth);
+  const auth = useSelector((state) => state.auth);
 
   return (
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         auth ? (
           <Component {...props} />
         ) : (
-            <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-          )
+          <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+        )
       }
     />
   );

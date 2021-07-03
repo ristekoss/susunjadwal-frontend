@@ -5,7 +5,7 @@ const config = {
   },
   production: {
     API_BASE_URL: "https://ristek.cs.ui.ac.id/susunjadwal/api",
-    BASE_URL: "/susunjadwal/"
+    BASE_URL: "/"
   },
   development: {
     API_BASE_URL: "http://localhost:5000/susunjadwal/api",

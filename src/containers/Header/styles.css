@@ -1,10 +1,12 @@
 .menu {
   display: inline-block;
   position: fixed;
-  float: right;
+  /* float: right; */
   
 }
-
+.chakra-slide {
+  top: 63px !important;
+}
 /* Individual item */
 .bm-item {
   display: inline-block;
