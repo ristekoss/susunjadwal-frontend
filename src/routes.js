@@ -15,6 +15,7 @@ import EditSchedule from "./containers/EditSchedule";
 import Footer from "containers/Footer";
 import Landing from "containers/Landing";
 import BetaForm from "containers/BetaForm";
+import BetaLanding from "containers/BetaLanding";
 import { Box } from "@chakra-ui/react";
 
 const ROUTES = [
@@ -30,10 +31,10 @@ function Routes() {
 
   return (
     <ThemeProvider theme={{ mobile: isMobile }}>
-      <Header />
       <Box pt="120px" mb={{base:16,md:'108px'}} px={{ base: 6, lg: "122px" }}>
         <Switch>
           <Route path="/" name="home" component={Landing} exact />
+          <Route path="/beta-landing" name="beta-landing" component={BetaLanding} />
           <Route path="/beta-form" name="beta-form" component={BetaForm} />
           <Route component={RoutesWithNavbar} />
         </Switch>
@@ -59,6 +60,7 @@ function RoutesWithNavbar() {
     </div>
   );
 }
+
 function PrivateRoute({ component: Component, ...rest }) {
   const auth = useSelector((state) => state.auth);
 
