@@ -24,7 +24,7 @@ const BetaForm = ({history}) => {
       SuccessToast('Terima Kasih sudah menjadi Beta Tester kami. Tim kami akan segera menghubungi Kamu.');
       history.push('/');
     } catch (error) {
-      InfoToast('Maaf ada sedikit kesalahan nih, silakan hubungi contact person');
+      InfoToast('Maaf ada sedikit kesalahan nih, silakan coba beberapa saat lagi atau hubungi contact person');
       throw error;
     }
   }
