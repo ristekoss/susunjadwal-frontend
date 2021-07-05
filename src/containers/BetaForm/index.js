@@ -6,8 +6,9 @@ import { postBetaTesterData } from 'services/api';
 import FACULTIES from 'utils/faculty-base.json';
 import { Link } from 'react-router-dom';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
+import { InfoToast, SuccessToast } from 'components/Toast';
 
-const BetaForm = () => {
+const BetaForm = ({history}) => {
   const {
     handleSubmit,
     register,
@@ -20,8 +21,10 @@ const BetaForm = () => {
   async function onSubmit(values) {
     try {
       await postBetaTesterData(values);
+      SuccessToast('Terima Kasih sudah menjadi Beta Tester kami. Tim kami akan segera menghubungi Kamu.');
+      history.push('/');
     } catch (error) {
-      alert('Maaf ada sedikit kesalahan nih, silakan hubungi contact person')
+      InfoToast('Maaf ada sedikit kesalahan nih, silakan hubungi contact person');
       throw error;
     }
   }
@@ -115,11 +118,6 @@ const BetaForm = () => {
         >
           Submit
         </Button>
-        {isSubmitSuccessful &&
-          <Text color="var(--chakra-colors-primary-Purple)" mt="4">
-            Terima Kasih sudah menjadi Beta Tester kami. Tim kami akan segera menghubungi Kamu.
-          </Text>
-        }
       </form>
     </Box>
   )
