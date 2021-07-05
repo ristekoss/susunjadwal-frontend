@@ -26,17 +26,6 @@ const Landing = () => {
 
   return (
     <Box>
-      {/* <Image 
-        objectFit="contain"
-        position='absolute'
-        zIndex='1000'
-        top='0'
-        left='0'
-        src={decorLandingTop}
-        alt="decor"
-        display={{base: 'block', semiMd:'none'}}
-        w='full'
-      /> */}
       <Image
         objectFit="contain"
         m="auto"
