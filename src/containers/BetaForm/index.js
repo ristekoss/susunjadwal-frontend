@@ -27,9 +27,9 @@ const BetaForm = () => {
   }
 
   return (
-    <Box>
+    <Box width={{lg:'80%', xl: '70%'}}>
       <Link to="/">
-        <Text color="var(--chakra-colors-primary-Purple)" fontSize="lg">
+        <Text color="var(--chakra-colors-primary-Purple)" fontSize="lg" ml='-9px'>
           <ChevronLeftIcon w={8} h={8} />
           Kembali ke Halaman Utama
         </Text>
