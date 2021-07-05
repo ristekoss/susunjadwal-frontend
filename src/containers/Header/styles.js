@@ -28,7 +28,7 @@ export const WrapperHamburger = styled(Box).attrs({
 `;
 
 export const HamburgerIcon = styled(Box).attrs({
-  weidth: 6,
+  width: 6,
   height: 1,
   bg: "primary.Purple",
   borderRadius: "10px",

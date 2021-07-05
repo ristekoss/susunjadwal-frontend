@@ -2,6 +2,7 @@
 import { extendTheme } from "@chakra-ui/react";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
 import Button from '../components/Button'
+import Input from '../components/Input'
 import "@fontsource/poppins"
 
 const styles = {
@@ -44,6 +45,7 @@ export const colors = {
     ErrorGhost: "#EB57571A",
     Warning: "#F7B500",
     Success: "#27AE60",
+    Info: "#2D9CDB"
   },
 };
 
@@ -51,7 +53,7 @@ const theme = extendTheme({
   breakpoints,
   styles,
   colors,
-  components: { Button },
+  components: { Button, Input },
 });
 
 export default theme;
