@@ -94,6 +94,7 @@ export const InputSelect = ({
   placeholder,
   validator,
   children,
+  disabled,
   ...props
 }) => (
   <FormControl {...props} isInvalid={errors[name]}>
@@ -107,6 +108,7 @@ export const InputSelect = ({
         }}
         id={name}
         placeholder={placeholder ? placeholder : ""}
+        disabled={disabled}
         {...register(name, validator)}
       >
         {children}
