@@ -1,9 +1,10 @@
 import React from "react";
+import styled from "styled-components";
 import { Route, Switch, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 
-import Login from "./containers/Login";
+// import Login from "./containers/Login";
 import BuildSchedule from "./containers/BuildSchedule";
 import Header from "./containers/Header";
 import ViewSchedule from "./containers/ViewSchedule";
@@ -17,7 +18,7 @@ import BetaForm from "containers/BetaForm";
 import BetaLanding from "containers/BetaLanding";
 import { Box } from "@chakra-ui/react";
 
-const PROTECTED_ROUTES = [
+const ROUTES = [
   { path: "/susun", component: BuildSchedule, auth: true },
   { path: "/jadwal/:scheduleId", component: ViewSchedule, auth: false },
   { path: "/jadwal", component: ScheduleList, auth: true },
@@ -25,32 +26,20 @@ const PROTECTED_ROUTES = [
   { path: "/edit/:scheduleId", component: EditSchedule, auth: true },
 ];
 
-const NonProtectedRoute = ({ path, name, component, exact=false }) => (
-  <Box
-    pt="120px"
-    mb={{base:16,md:'108px'}}
-    px={{ base: 6, lg: "122px" }}
-  >
-    <Route
-      path={path}
-      name={name}
-      component={component}
-      exact={exact}
-    />
-  </Box>
-)
 
 function Routes() {
   const isMobile = useSelector((state) => state.appState.isMobile);
 
   return (
     <ThemeProvider theme={{ mobile: isMobile }}>
+      <Box pt="120px" mb={{base:16,md:'108px'}} px={{ base: 6, lg: "122px" }}>
         <Switch>
-          <NonProtectedRoute path="/" name="login" component={Login} exact />
-          <NonProtectedRoute path="/beta" name="beta" component={BetaLanding} />
-          <NonProtectedRoute path="/beta-form" name="beta-form" component={BetaForm} />
+          <Route path="/" name="home" component={Landing} exact />
+          <Route path="/beta" name="beta" component={BetaLanding} />
+          <Route path="/beta-form" name="beta-form" component={BetaForm} />
           <Route component={RoutesWithNavbar} />
         </Switch>
+      </Box>
       <Footer />
     </ThemeProvider>
   );
@@ -60,21 +49,15 @@ function RoutesWithNavbar() {
   return (
     <div>
       <Header />
+      <ComponentWrapper>
         <Switch>
-          {PROTECTED_ROUTES.map((route) => {
+          {ROUTES.map((route) => {
             const Component = route.auth ? PrivateRoute : Route;
-            return (
-              <Box
-                pt="120px"
-                mb={{base:16,md:'108px'}}
-                px={{ base: 6, lg: "122px" }}
-              >
-                <Component key={route.path} {...route} />
-              </Box>
-            )
+            return <Component key={route.path} {...route} />;
           })}
           <Route component={NotFoundPage} />
         </Switch>
+      </ComponentWrapper>
     </div>
   );
 }
@@ -95,5 +78,9 @@ function PrivateRoute({ component: Component, ...rest }) {
     />
   );
 }
+
+const ComponentWrapper = styled.div`
+  padding-top: 64px;
+`;
 
 export default Routes;

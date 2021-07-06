@@ -71,6 +71,8 @@ export const Container = styled(Box).attrs({
   px: { base: "1.5rem", lg: "5rem" },
   display: "flex",
   alignItems: "center",
+  position: "absolute",
+  top: "0", left: "0"
 })`
   width: 100%;
   box-shadow: 0px 0px 5px 0px #00000026;
