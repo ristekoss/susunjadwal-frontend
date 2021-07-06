@@ -1,51 +1,47 @@
-import React from "react"
+import React from "react";
 import {
   Box,
   Image,
-  Text
-} from "@chakra-ui/react"
+} from "@chakra-ui/react";
 
+import Bauhaus from "assets/Beta/decor1.svg";
 import RistekBetaLogo from "assets/Beta/Beta_Logo.svg";
 import SunjadBetaLogo from "assets/Beta/Sunjad_Beta.svg";
 import BetaAssetA from "assets/Beta/beta-landing-asset-1.svg";
-import BetaAssetB from "assets/Beta/beta-landing-asset-2.png";
-import Bauhaus from "assets/Beta/decor1.svg";
+import BetaAssetB from "assets/Beta/beta-landing-asset-2.svg";
+import {
+  Title,
+  GapBox,
+  FlexBox,
+  Paragraph,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  AssetBauhaus,
+  LogoRistek,
+  LogoSunjadBeta
+} from "./styles";
 
 const BetaLanding = () => {
   return (
     <>
-      <Image
-        objectFit="contain"
-        m="auto"
+      <AssetBauhaus
         src={Bauhaus}
-        alt="bauhaus-decor"
-        sx={{ transform: "translate(0, -120px)" }}
-        w="100%"
-        display={{ base: "block", semiMd: "none" }}
-        position="absolute"
-        margin="0 -24px"
+        alt="bauhaus"
       />
       <Box>
-        <Image
-          objectFit="contain"
-          m="auto"
+        <LogoRistek
           src={RistekBetaLogo}
-          alt="ristek beta"
-          sx={{ transform: "translate(0, 20px)" }}
-          w={{ base: "178px", semiMd: "initial" }}
+          alt="ristek-logo"
         />
-        <Image
-          objectFit="contain"
-          m="auto"
+        <LogoSunjadBeta
           src={SunjadBetaLogo}
-          alt="sunjad beta"
-          maxW={{ base: "280px", semiMd: "380px", lg: "initial" }}
+          alt="sunjad-beta-logo"
         />
       </Box>
-      <Box
-        display="flex"
-        flexDir={{ base: "column", semiMd: "row" }}
-      >
+      <FlexBox>
         <Box
           minW={{ base: "100%", semiMd: "50%" }}
           textAlign={{ base: "center", semiMd: "left" }}
@@ -53,12 +49,12 @@ const BetaLanding = () => {
           alignItems="center"
         >
           <Box>
-            <Text>Apa itu SusunJadwal?</Text>
-            <Text>
+            <Title>Apa itu SusunJadwal?</Title>
+            <Paragraph>
               SusunJadwal merupakan situs untuk membantu kamu menentukan jadwal kuliah
               yang akan kamu ambil dalam suatu semester. Dengan SusunJadwal, peluang
               kamu menang SIAK War akan lebih besar, loh!
-            </Text>
+            </Paragraph>
           </Box>
         </Box>
         <Box
@@ -72,15 +68,12 @@ const BetaLanding = () => {
             alt="beta-landing-asset-1"
           />
         </Box>
-      </Box>
-      <Box
-        display="flex"
-        flexDir={{ base: "column", semiMd: "row" }}
-      >
+      </FlexBox>
+      <FlexBox>
         <Box
           minW={{ base: "100%", semiMd: "50%" }}
           display="flex"
-          justifyContent="center"
+          justifyContent="flex-start"
           alignItems="center"
         >
           <Image
@@ -95,16 +88,50 @@ const BetaLanding = () => {
           alignItems="center"
         >
           <Box>
-            <Text>Jadilah beta tester SusunJadwal!</Text>
-            <Text>
+            <Title>Jadilah beta tester SusunJadwal!</Title>
+            <Paragraph>
               Mau membantu kami meningkatkan kualitas SusunJadwal? Jadilah beta tester kami
               untuk mencobafitur-fitur yang ada pada SusunJadwal sebelum SIAK War dimulai!
-            </Text>
+            </Paragraph>
           </Box>
         </Box>
-      </Box>
+      </FlexBox>
+      <GapBox>
+        <Title>Beta Testing FAQs</Title>
+        <Accordion>
+          <AccordionItem>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                Section 1 title
+              </Box>
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+              veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+              commodo consequat.
+            </AccordionPanel>
+          </AccordionItem>
+
+          <AccordionItem>
+            <AccordionButton>
+              <Box flex="1" textAlign="left">
+                Section 2 title
+              </Box>
+              <AccordionIcon color="purple" />
+            </AccordionButton>
+            <AccordionPanel>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+              veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+              commodo consequat.
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      </GapBox>
     </>
   )
-}
+};
 
-export default BetaLanding
+export default BetaLanding;

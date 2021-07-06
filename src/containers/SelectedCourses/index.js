@@ -47,7 +47,6 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     setTimeout(() => dispatch(setLoading(false)), 1000);
   }
 
-
   async function updateSchedule() {
     dispatch(setLoading(true));
     try {
@@ -70,9 +69,6 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     history.push("/jadwal")
     setTimeout(() => dispatch(setLoading(false)), 1000);
   }
-
-
-
 
   let isConflict = false;
   const items = schedules.map((schedule, idx) => {
