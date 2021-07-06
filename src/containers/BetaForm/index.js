@@ -37,7 +37,7 @@ const BetaForm = ({history}) => {
           Kembali ke Halaman Utama
         </Text>
       </Link>
-      <Text fontSize="3xl" fontWeight="bold" mt="4">Lengkapi Formulir untuk Menjadi Beta Tester</Text>
+      <Text fontSize="3xl" fontWeight="bold" mt="4" textAlign={{sm: 'center', lg: 'left'}}>Lengkapi Formulir untuk Menjadi Beta Tester</Text>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputText
           label="Nama lengkap"
@@ -115,6 +115,7 @@ const BetaForm = ({history}) => {
           isLoading={isSubmitting}
           type="submit"
           disabled={isSubmitSuccessful}
+          w={{sm: '100%', lg: 'unset'}}
         >
           Submit
         </Button>
