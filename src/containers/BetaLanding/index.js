@@ -1,5 +1,6 @@
 import React from "react";
-import { Box } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import { Box, Button } from "@chakra-ui/react";
 
 import {
   Title,
@@ -59,6 +60,15 @@ const BetaLanding = () => {
             Mau membantu kami meningkatkan kualitas SusunJadwal? Jadilah beta tester kami
             untuk mencobafitur-fitur yang ada pada SusunJadwal sebelum SIAK War dimulai!
           </Paragraph>
+          <Link to="/beta-form" >
+            <Button
+              variant="solid"
+              mt={{ base: "1rem", lg: "1.75rem" }}
+              w="fit-content"
+            >
+              Jadi Beta Tester
+            </Button>
+          </Link>
         </TextBox>
       </FlexBox>
 
@@ -105,7 +115,7 @@ const BetaLanding = () => {
             <AccordionPanel>
               Jawaban singkatnya, karena kami tidak diberikan akses jadwal oleh Universitas Indonesia,
               sehingga kami harus melakukan scraping. Untuk jawaban lengkapnya kamu dapat mengunjungi
-              laman ini.
+              <u>halaman ini</u>.
             </AccordionPanel>
           </AccordionItem>
 

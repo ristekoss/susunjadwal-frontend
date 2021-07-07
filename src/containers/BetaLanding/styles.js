@@ -76,6 +76,7 @@ export const FlexItem = styled(Box).attrs({
 export const TextBox = styled(FlexItem).attrs({
   display: "flex",
   flexDir: "column",
+  alignItems: { base: "center", lg: "initial"},
   justifyContent: "center"
 })``
 
