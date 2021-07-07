@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { withRouter } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { putUpdateSchedule } from "services/api";
-import Button from "components/Button";
+import { Button } from "@chakra-ui/react";
 import { postSaveSchedule } from "services/api";
 import { isScheduleConflict } from "./utils";
 import TrashIcon from "assets/Trash.png";

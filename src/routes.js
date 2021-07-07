@@ -34,7 +34,7 @@ function Routes() {
     <ThemeProvider theme={{ mobile: isMobile }}>
       <Box pt="120px" mb={{base:16,md:'108px'}} px={{ base: 6, lg: "122px" }}>
         <Switch>
-          <Route path="/" name="home" component={Landing} exact />
+          <Route path="/" name="home" component={Login} exact />
           <Route path="/beta" name="beta" component={BetaLanding} />
           <Route path="/beta-form" name="beta-form" component={BetaForm} />
           <Route component={RoutesWithNavbar} />

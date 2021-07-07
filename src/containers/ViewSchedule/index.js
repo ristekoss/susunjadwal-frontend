@@ -10,7 +10,7 @@ import { setLoading } from "redux/modules/appState";
 import Schedule from "./Schedule";
 import ControlledInput from "./ControlledInput";
 import { decodeHtmlEntity } from "utils/string";
-import Button from '../../components/Button';
+import { Button } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router';
 
