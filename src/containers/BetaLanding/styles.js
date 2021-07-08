@@ -119,7 +119,7 @@ export const AccordionItem = styled(ChakraAccordionItem).attrs({
 
 export const AccordionButton = styled(ChakraAccordionButton).attrs({
   p: "0",
-  fontWeight: "bold",
+  fontWeight: "600",
   outline: "0 !important",
   boxShadow: "none !important",
   _hover: { background: "initial" }
