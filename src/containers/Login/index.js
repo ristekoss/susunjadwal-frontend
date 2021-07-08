@@ -11,18 +11,19 @@ import { setAuth } from "redux/modules/auth";
 import { persistAuth } from "utils/auth";
 import Bauhaus from "components/Bauhaus";
 
-import { Box, Button } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import {
-  HeroSection,
-  LogoRistek,
   Header,
+  LinkBox,
+  LogoRistek,
+  HeroSection,
   AssetChevron,
 } from "./styles";
 import {
   Title,
   FlexBox,
-  FlexItem,
   TextBox,
+  FlexItem,
   Paragraph,
   AssetBetaA,
   AssetBetaB,
@@ -91,7 +92,6 @@ function Login({ history, location }) {
         <LogoRistek src={RistekLogo} alt="ristek-logo" />
         <Header>Susun<span>Jadwal</span></Header>
         <Button mt={{ base: "4rem", lg: "4.5rem" }}>Masuk dengan SSO</Button>
-
         <AssetChevron src={ChevronArrow} alt="chevron-down" />
       </HeroSection>
 
@@ -119,32 +119,14 @@ function Login({ history, location }) {
             Bantu kami dengan menjadi kontributor untuk meningkatkan kualitas SusunJadwal.
             Dengan ini, kamu ikut berperan dalam membantu mahasiswa Universitas Indonesia!
           </Paragraph>
-          <Box
-            display="flex"
-            flexDir={{ base: "column", lg: "row" }}
-            mt={{ base: "1.25rem ", lg: "3rem " }}
-          >
-            <a
-              href="https://discord.com/"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <Button
-                m={{ base: "0 0 1rem 0", lg: "0 1rem 0 0" }}
-                w="fit-content"
-              >
-                Gabung Discord
-              </Button>
+          <LinkBox>
+            <a href="https://discord.com/" rel="noopener noreferrer" target="_blank">
+              <Button m={{ base: "0 0 1rem 0", lg: "0 1rem 0 0" }} w="fit-content">Gabung Discord</Button>
             </a>
             <Link to="/beta-form" >
-              <Button
-                variant="outline"
-                w="fit-content"
-              >
-                Lihat kontributor
-              </Button>
+              <Button variant="outline" w="fit-content">Lihat kontributor</Button>
             </Link>
-          </Box>
+          </LinkBox>
         </TextBox>
       </FlexBox>
     </>

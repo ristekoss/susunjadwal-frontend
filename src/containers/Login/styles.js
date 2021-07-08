@@ -31,3 +31,9 @@ export const AssetChevron = styled(Image).attrs({
   bottom: "15%",
   m: "auto"
 })``
+
+export const LinkBox = styled(Box).attrs({
+  display: "flex",
+  flexDir: { base: "column", lg: "row" },
+  mt: { base: "1.25rem ", lg: "3rem " }
+})``
