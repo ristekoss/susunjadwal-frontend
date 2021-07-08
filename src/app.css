@@ -2105,13 +2105,6 @@ body {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
 }
 
-::-moz-selection {
-  background: #222;
-}
-::selection {
-  background: #222;
-}
-
 .container {
   display: block;
   font-family: "Proxima Nova", Helvetica, Arial, sans-serif;
