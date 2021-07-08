@@ -18,7 +18,12 @@ const Bauhaus = () => {
   return (
     <>
       {isMobile ? (
-        <AssetBauhaus src={BauhausMobile} alt="bauhaus-sm" w="100%" />
+        <AssetBauhaus
+          display={{ base: "block", semiMd: "none" }}
+          src={BauhausMobile}
+          alt="bauhaus-sm"
+          w="100%"
+        />
       ) : (
         <AssetBauhaus src={BauhausDesktop} alt="bauhaus-lg" />
       )}
