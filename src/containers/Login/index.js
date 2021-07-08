@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { parse } from "query-string";
 
@@ -11,7 +12,6 @@ import { setAuth } from "redux/modules/auth";
 import { persistAuth } from "utils/auth";
 import Bauhaus from "components/Bauhaus";
 
-import { Button } from "@chakra-ui/react";
 import {
   Header,
   LinkBox,
@@ -114,10 +114,12 @@ function Login({ history, location }) {
             Masuk dengan SSO
           </Button>
         )}
-        <AssetChevron src={ChevronArrow} alt="chevron-down" />
+        <a href="#content">
+          <AssetChevron src={ChevronArrow} alt="chevron-down" />
+        </a>
       </HeroSection>
 
-      <FlexBox flexDir={{ base: "column-reverse", lg: "row" }}>
+      <FlexBox id="content" flexDir={{ base: "column-reverse", lg: "row" }}>
         <TextBox>
           <Title>Apa itu SusunJadwal?</Title>
           <Paragraph>

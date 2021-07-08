@@ -11,6 +11,8 @@ html {
   /* 2 */
   -webkit-text-size-adjust: 100%;
   /* 2 */
+
+  scroll-behavior: smooth;
 }
 
 /**

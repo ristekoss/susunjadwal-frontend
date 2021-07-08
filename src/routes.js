@@ -4,6 +4,7 @@ import { Route, Switch, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 
+// import Landing from "containers/Landing"; // uncheck to see component examples
 import Login from "./containers/Login";
 import BuildSchedule from "./containers/BuildSchedule";
 import Header from "./containers/Header";
@@ -13,7 +14,6 @@ import Logout from "./containers/Logout";
 import ScheduleList from "./containers/ScheduleList";
 import EditSchedule from "./containers/EditSchedule";
 import Footer from "containers/Footer";
-import Landing from "containers/Landing";
 import BetaForm from "containers/BetaForm";
 import BetaLanding from "containers/BetaLanding";
 import { Box } from "@chakra-ui/react";

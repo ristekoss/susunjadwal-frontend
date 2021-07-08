@@ -1,9 +1,5 @@
+import { Text, Box } from "@chakra-ui/react";
 import styled from "styled-components";
-import {
-  Image,
-  Text,
-  Box,
-} from "@chakra-ui/react";
 
 export const HeroSection = styled(Box).attrs({
   minW: "100%",
@@ -15,22 +11,26 @@ export const HeroSection = styled(Box).attrs({
   pt: { base: "20%", lg: "0%" }
 })``
 
-export const LogoRistek = styled(Image).attrs({
-  w: { base: "178px", semiMd: "initial" },
-  mb: "12.2px"
-})``
+export const LogoRistek = styled.img`
+  margin-bottom: 12.2px;
+  width: 178px;
+
+  @media (min-width: 480px) {
+    width: initial;
+  }
+`
 
 export const Header = styled(Text).attrs({
   fontWeight: "700",
   fontSize: { base: "2.75rem", lg: "4rem" }
 })`span { color: #5038BC; }`
 
-export const AssetChevron = styled(Image).attrs({
-  position: "absolute",
-  left: "calc(50% - 19px)",
-  bottom: "15%",
-  m: "auto"
-})``
+export const AssetChevron = styled.img`
+  position: absolute;
+  left: calc(50% - 19px);
+  bottom: 15%;
+  margin: auto;
+`;
 
 export const LinkBox = styled(Box).attrs({
   display: "flex",

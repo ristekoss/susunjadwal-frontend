@@ -2,7 +2,6 @@ import styled from "styled-components";
 import {
   Box,
   Text,
-  Image,
   Accordion as ChakraAccordion,
   AccordionItem as ChakraAccordionItem,
   AccordionButton as ChakraAccordionButton,
@@ -10,41 +9,65 @@ import {
   AccordionPanel as ChakraAccordionPanel
 } from "@chakra-ui/react"
 
-export const LogoRistek = styled(Image).attrs({
-  m: "auto",
-  objectFit: "contain",
-  sx: { transform: "translate(0, 20px)" },
-  w: { base: "178px", semiMd: "initial" },
-})``
+export const LogoRistek = styled.img`
+  transform: translate(0, 20px);
+  margin: auto;
+  width: 178px;
 
-export const LogoSunjadBeta = styled(Image).attrs({
-  m: "auto",
-  objectFit: "contain",
-  pl: { base: "1rem", md: "0px" },
-  maxW: { base: "280px", semiMd: "380px", lg: "initial" },
-})``
+  @media (min-width: 480px) {
+    width: initial;
+  }
+`
 
-export const AssetBauhaus = styled(Image).attrs({
-  m: "auto",
-  w: "100%",
-  objectFit: "contain",
-  sx: { transform: "translate(0, -120px)" },
-  display: { base: "block", semiMd: "none" },
-  position: "absolute",
-  margin: "0 -24px",
-})``
+export const LogoSunjadBeta = styled.img`
+  padding-left: 1rem;
+  max-width: 280px;
+  margin: auto;
 
-export const AssetBeta = styled(Image).attrs({
-  mb: { base: "2rem", lg: "0rem" }
-})``
+  @media (min-width: 480px) {
+    max-width: 380px;
+  }
 
-export const AssetBetaA = styled(AssetBeta).attrs({
-  w: { base: "50%", lg: "60%" }
-})``
+  @media (min-width: 768px) {
+    max-width: initial;
+  }
+`
 
-export const AssetBetaB = styled(AssetBeta).attrs({
-  w: { base: "75%", lg: "85%" }
-})``
+export const AssetBauhaus = styled.img`
+  transform: translate(0, -120px);
+  position: absolute;
+  margin: 0 -24px;
+  display: block;
+  width: 100%;
+
+  @media (min-width: 480px) {
+    display: none;
+  }
+`
+
+export const AssetBeta = styled.img`
+  margin-bottom: 2rem;
+
+  @media (min-width: 900px) {
+    margin-bottom: 0rem;
+  }
+`
+
+export const AssetBetaA = styled(AssetBeta)`
+  width: 50%;
+
+  @media (min-width: 900px) {
+    width: 60%;
+  }
+`
+
+export const AssetBetaB = styled(AssetBeta)`
+  width: 75%;
+
+  @media (min-width: 900px) {
+    width: 85%;
+  }
+`
 
 export const Title = styled(Text).attrs({
   mb: "1rem",
