@@ -1,29 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { parse } from "query-string";
 
+import { redirectToSSOLogin, redirectToSSOLogout } from "services/sso";
+import { setLoading } from "redux/modules/appState";
+import { makeAtLeastMs } from "utils/promise";
+import { postAuthTicket } from "services/api";
+import { setAuth } from "redux/modules/auth";
+import { persistAuth } from "utils/auth";
 import Bauhaus from "components/Bauhaus";
 
-import Logoset from "assets/ristek_logo_with_motto.svg";
-import GojekLogo from "assets/gojek_logo.svg";
-import Tagline from "assets/tagline.svg";
-import { setAuth } from "redux/modules/auth";
-import { setLoading } from "redux/modules/appState";
-import { postAuthTicket } from "services/api";
-import { redirectToSSOLogin, redirectToSSOLogout } from "services/sso";
-import { persistAuth } from "utils/auth";
-import { makeAtLeastMs } from "utils/promise";
+import { Box, Button } from "@chakra-ui/react";
+import {
+  HeroSection,
+  LogoRistek,
+  Header,
+  AssetChevron,
+} from "./styles";
+import {
+  Title,
+  FlexBox,
+  FlexItem,
+  TextBox,
+  Paragraph,
+  AssetBetaA,
+  AssetBetaB,
+} from "containers/BetaLanding/styles";
 
-import "./styles.css";
+import RistekLogo from "assets/Beta/Beta_Logo.svg";
+import ChevronArrow from "assets/Beta/chevron-down.svg";
+import BetaAssetA from "assets/Beta/beta-landing-asset-1.svg";
+import BetaAssetB from "assets/Beta/beta-landing-asset-2.svg";
 
 function getServiceUrl() {
   return window.location.href.split("?")[0];
 }
 
 function Login({ history, location }) {
-  const [error, setError] = useState(null);
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
+
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function authenticate(ticket, serviceUrl) {
@@ -38,7 +56,6 @@ function Login({ history, location }) {
             major_name: majorName
           }
         } = await makeAtLeastMs(postAuthTicket(ticket, serviceUrl), 1000);
-
 
         if (err) {
           dispatch(setLoading(false));
@@ -60,81 +77,76 @@ function Login({ history, location }) {
       const serviceUrl = getServiceUrl();
       authenticate(ticket, serviceUrl);
     }
+
   }, [location, dispatch, history]);
 
   useEffect(() => {
-    if (auth) {
-      history.push("/susun");
-    }
+    if (auth) history.push("/susun");
   }, [auth, history]);
-
-  function renderBroughtToYouBy() {
-    return (
-      <div className="broughtToYou center">
-        <p>
-          <span>Brought to you by</span><br /><br />
-          <a href="https://ristek.cs.ui.ac.id/" target="_blank" rel="noopener noreferrer">
-            <img className="broughtToYouLogo" src={Logoset} alt="Logoset" />
-          </a>
-        </p>
-      </div>
-    );
-  }
-
-  function renderGojekLogo() {
-    return (
-      <div className="gojek center">
-        <span>Official Learning Partner</span>
-        <p className="center">Official Learning Partner</p>
-        <a href="https://www.gojek.com/" target="_blank" rel="noopener noreferrer">
-          <img className="gojekLogo" src={GojekLogo} alt="Gojek Logo" />
-        </a>
-      </div>
-    );
-  }
 
   return (
     <>
       <Bauhaus />
-      <div className="landingPage">
-        {/* <div className="tagline">
-          <img src={Tagline} alt="Tagline" />
-        </div> */}
-        <div className={"login"}>
-          <div className={"center"}>
-            <h1>
-              Susun<span>Jadwal</span>
-            </h1><br />
-          </div>
-          {renderBroughtToYouBy()}
-          {error ? (
-            <React.Fragment>
-              <p className="center">
-                Maaf, fakultas {error.majorName} belum didukung nih. Bila kamu
-                tertarik membantu kami, kamu bisa menghubungi Ristek Fasilkom UI
-                di LINE (@ristekfasilkomui).
-              </p>
-              <div className={"center loginButtonWrapper"}>
-                <button className={"loginButton"} onClick={redirectToSSOLogout}>
-                  LOG OUT
-                </button>
-              </div>
-            </React.Fragment>
-          ) : (
-              <div className={"center loginButtonWrapper"}>
-                <button className={"loginButton"} onClick={redirectToSSOLogin}>
-                  LOGIN WITH SSO
-              </button>
-              </div>
-            )}
-          {renderGojekLogo()}
-        </div>
-        <div className={"display-logo"}>
-          <img src={Tagline} alt="tagline" />
-          {renderBroughtToYouBy()}
-          {renderGojekLogo()}
-        </div>
-      </div>
+      <HeroSection>
+        <LogoRistek src={RistekLogo} alt="ristek-logo" />
+        <Header>Susun<span>Jadwal</span></Header>
+        <Button mt={{ base: "4rem", lg: "4.5rem" }}>Masuk dengan SSO</Button>
+
+        <AssetChevron src={ChevronArrow} alt="chevron-down" />
+      </HeroSection>
+
+      <FlexBox flexDir={{ base: "column-reverse", lg: "row" }}>
+        <TextBox>
+          <Title>Apa itu SusunJadwal?</Title>
+          <Paragraph>
+            SusunJadwal merupakan situs untuk membantu kamu menentukan jadwal kuliah
+            yang akan kamu ambil dalam suatu semester. Dengan SusunJadwal, peluang
+            kamu menang SIAK War akan lebih besar, loh!
+          </Paragraph>
+        </TextBox>
+        <FlexItem display="flex" justifyContent="center">
+          <AssetBetaA src={BetaAssetA} alt="beta-landing-asset-1" />
+        </FlexItem>
+      </FlexBox>
+
+      <FlexBox flexDir={{ base: "column", lg: "row" }} mb={{ base: "6rem", lg: "10rem" }}>
+        <FlexItem display="flex" justifyContent={{ base: "center", lg: "flex-start" }} >
+          <AssetBetaB src={BetaAssetB} alt="beta-landing-asset-2" />
+        </FlexItem>
+        <TextBox>
+          <Title>Bergabung dengan Komunitas SusunJadwal di Discord. <span>Soon!</span></Title>
+          <Paragraph>
+            Bantu kami dengan menjadi kontributor untuk meningkatkan kualitas SusunJadwal.
+            Dengan ini, kamu ikut berperan dalam membantu mahasiswa Universitas Indonesia!
+          </Paragraph>
+          <Box
+            display="flex"
+            flexDir={{ base: "column", lg: "row" }}
+            mt={{ base: "1.25rem ", lg: "3rem " }}
+          >
+            <a
+              href="https://discord.com/"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <Button
+                m={{ base: "0 0 1rem 0", lg: "0 1rem 0 0" }}
+                w="fit-content"
+              >
+                Gabung Discord
+              </Button>
+            </a>
+            <Link to="/beta-form" >
+              <Button
+                variant="outline"
+                w="fit-content"
+              >
+                Lihat kontributor
+              </Button>
+            </Link>
+          </Box>
+        </TextBox>
+      </FlexBox>
     </>
   );
 }

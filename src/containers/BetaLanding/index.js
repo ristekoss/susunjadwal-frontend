@@ -62,7 +62,6 @@ const BetaLanding = () => {
           </Paragraph>
           <Link to="/beta-form" >
             <Button
-              variant="solid"
               mt={{ base: "1rem", lg: "1.75rem" }}
               w="fit-content"
             >

@@ -51,7 +51,7 @@ export const Title = styled(Text).attrs({
   fontWeight: "900",
   fontSize: { base: "1.5rem", lg: "2rem" },
   textAlign: { base: "center", lg: "left" }
-})``
+})`span { color: #5038BC; }`
 
 export const Paragraph = styled(Text).attrs({
   width: { base: "100%", lg: "90%" },
