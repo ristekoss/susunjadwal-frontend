@@ -5,6 +5,7 @@ import SunjadBetaLogo from "assets/Beta/Sunjad_Beta.svg";
 import { InputEmail, InputPassword, InputText } from "components/Forms";
 // import decorLandingTop from "assets/Beta/decor1.svg";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { ContributorCard } from "components/Cards";
 import { InfoToast, SuccessToast } from "components/Toast";
 
@@ -43,7 +44,9 @@ const Landing = () => {
       />
       <Button variant="solid">Jadi Beta Tester</Button>
       <Button variant="solid">Daftar</Button>
-      <Button variant="ghost">Jadi Beta Tester</Button>
+      <Link to="/beta-form" >
+        <Button variant="ghost">Jadi Beta Tester</Button>
+      </Link>
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputText
           label="Nama lengkap"
