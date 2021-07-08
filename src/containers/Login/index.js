@@ -88,10 +88,32 @@ function Login({ history, location }) {
   return (
     <>
       <Bauhaus />
+
       <HeroSection>
         <LogoRistek src={RistekLogo} alt="ristek-logo" />
         <Header>Susun<span>Jadwal</span></Header>
-        <Button mt={{ base: "4rem", lg: "4.5rem" }}>Masuk dengan SSO</Button>
+        {error ? (
+          /**
+           * TODO: handle error for conditions below:
+           * - when sso return data is incomplete
+           *   -> redirect to sso creds form
+           * - when user's major currently does not have active period schedule saved
+           *   -> redirect to update jadwal (check if user is beta tester first)
+           */
+          <Button
+            mt={{ base: "4rem", lg: "4.5rem" }}
+            onClick={redirectToSSOLogout}
+          >
+            Log out dari SSO
+          </Button>
+        ) : (
+          <Button
+            mt={{ base: "4rem", lg: "4.5rem" }}
+            onClick={redirectToSSOLogin}
+          >
+            Masuk dengan SSO
+          </Button>
+        )}
         <AssetChevron src={ChevronArrow} alt="chevron-down" />
       </HeroSection>
 
