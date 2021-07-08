@@ -9,6 +9,15 @@ const AssetBauhaus = styled.img`
   position: absolute;
   right: 0;
   top: 0;
+
+  ${props => props.isMobile && (`
+    width: 100%;
+    display: block;
+
+    @media (min-width: 480px) {
+      display: none;
+    }
+  `)}
 `;
 
 const Bauhaus = () => {
@@ -18,17 +27,16 @@ const Bauhaus = () => {
     <>
       {isMobile ? (
         <AssetBauhaus
-          display={{ base: "block", semiMd: "none" }}
+          isMobile={isMobile}
           src={BauhausMobile}
           alt="bauhaus-sm"
-          w="100%"
         />
       ) : (
         <AssetBauhaus src={BauhausDesktop} alt="bauhaus-lg" />
       )}
     </>
   )
-}
+};
 
 export default Bauhaus;
 
