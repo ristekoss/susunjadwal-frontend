@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { parse } from "query-string";
 
+import Bauhaus from "components/Bauhaus";
+
 import Logoset from "assets/ristek_logo_with_motto.svg";
 import GojekLogo from "assets/gojek_logo.svg";
 import Tagline from "assets/tagline.svg";
@@ -92,45 +94,48 @@ function Login({ history, location }) {
   }
 
   return (
-    <div className="landingPage">
-      {/* <div className="tagline">
-        <img src={Tagline} alt="Tagline" />
-      </div> */}
-      <div className={"login"}>
-        <div className={"center"}>
-          <h1>
-            Susun<span>Jadwal</span>
-          </h1><br />
-        </div>
-        {renderBroughtToYouBy()}
-        {error ? (
-          <React.Fragment>
-            <p className="center">
-              Maaf, fakultas {error.majorName} belum didukung nih. Bila kamu
-              tertarik membantu kami, kamu bisa menghubungi Ristek Fasilkom UI
-              di LINE (@ristekfasilkomui).
-            </p>
-            <div className={"center loginButtonWrapper"}>
-              <button className={"loginButton"} onClick={redirectToSSOLogout}>
-                LOG OUT
+    <>
+      <Bauhaus />
+      <div className="landingPage">
+        {/* <div className="tagline">
+          <img src={Tagline} alt="Tagline" />
+        </div> */}
+        <div className={"login"}>
+          <div className={"center"}>
+            <h1>
+              Susun<span>Jadwal</span>
+            </h1><br />
+          </div>
+          {renderBroughtToYouBy()}
+          {error ? (
+            <React.Fragment>
+              <p className="center">
+                Maaf, fakultas {error.majorName} belum didukung nih. Bila kamu
+                tertarik membantu kami, kamu bisa menghubungi Ristek Fasilkom UI
+                di LINE (@ristekfasilkomui).
+              </p>
+              <div className={"center loginButtonWrapper"}>
+                <button className={"loginButton"} onClick={redirectToSSOLogout}>
+                  LOG OUT
+                </button>
+              </div>
+            </React.Fragment>
+          ) : (
+              <div className={"center loginButtonWrapper"}>
+                <button className={"loginButton"} onClick={redirectToSSOLogin}>
+                  LOGIN WITH SSO
               </button>
-            </div>
-          </React.Fragment>
-        ) : (
-            <div className={"center loginButtonWrapper"}>
-              <button className={"loginButton"} onClick={redirectToSSOLogin}>
-                LOGIN WITH SSO
-            </button>
-            </div>
-          )}
-        {renderGojekLogo()}
+              </div>
+            )}
+          {renderGojekLogo()}
+        </div>
+        <div className={"display-logo"}>
+          <img src={Tagline} alt="tagline" />
+          {renderBroughtToYouBy()}
+          {renderGojekLogo()}
+        </div>
       </div>
-      <div className={"display-logo"}>
-        <img src={Tagline} alt="tagline" />
-        {renderBroughtToYouBy()}
-        {renderGojekLogo()}
-      </div>
-    </div>
+    </>
   );
 }
 

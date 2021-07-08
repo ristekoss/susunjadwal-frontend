@@ -21,7 +21,7 @@ import {
   LogoSunjadBeta
 } from "./styles";
 
-import Bauhaus from "assets/Beta/decor1.svg";
+import Bauhaus from "assets/Beta/bauhaus-sm.svg";
 import RistekBetaLogo from "assets/Beta/Beta_Logo.svg";
 import SunjadBetaLogo from "assets/Beta/Sunjad_Beta.svg";
 import BetaAssetA from "assets/Beta/beta-landing-asset-1.svg";
@@ -115,7 +115,7 @@ const BetaLanding = () => {
             <AccordionPanel>
               Jawaban singkatnya, karena kami tidak diberikan akses jadwal oleh Universitas Indonesia,
               sehingga kami harus melakukan scraping. Untuk jawaban lengkapnya kamu dapat mengunjungi
-              <u>halaman ini</u>.
+              halaman ini.
             </AccordionPanel>
           </AccordionItem>
 
