@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { withRouter } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { putUpdateSchedule } from "services/api";
-import Button from "components/Button";
+import { Button } from "@chakra-ui/react";
 import { postSaveSchedule } from "services/api";
 import { isScheduleConflict } from "./utils";
 import TrashIcon from "assets/Trash.png";
@@ -47,7 +47,6 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     setTimeout(() => dispatch(setLoading(false)), 1000);
   }
 
-
   async function updateSchedule() {
     dispatch(setLoading(true));
     try {
@@ -70,9 +69,6 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     history.push("/jadwal")
     setTimeout(() => dispatch(setLoading(false)), 1000);
   }
-
-
-
 
   let isConflict = false;
   const items = schedules.map((schedule, idx) => {

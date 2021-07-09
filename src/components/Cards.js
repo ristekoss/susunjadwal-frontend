@@ -1,5 +1,5 @@
-import { Box, Image, LinkBox, LinkOverlay, Text } from "@chakra-ui/react";
 import React from "react";
+import { Box, Image, LinkBox, LinkOverlay, Text } from "@chakra-ui/react";
 
 export const ContributorCard = () => {
   return (
