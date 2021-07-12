@@ -30,7 +30,7 @@ import BetaAssetB from "assets/Beta/beta-landing-asset-2.svg";
 
 const BetaLanding = () => {
   return (
-    <>
+    <Box px={{ base: "0px", lg: "40px" }}>
       <AssetBauhaus src={Bauhaus} alt="bauhaus" />
       <Box>
         <LogoRistek src={RistekBetaLogo} alt="ristek-logo" />
@@ -81,7 +81,7 @@ const BetaLanding = () => {
           ))}
         </Accordion>
       </GapBox>
-    </>
+    </Box>
   )
 };
 

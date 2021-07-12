@@ -39,7 +39,7 @@ function Checkout({ onClickDetail }) {
 
 const CheckoutContainer = styled.div`
   background: ${props => (props.conflict ? "#C74550" : "#333333")};
-  color: #ffffff;
+  color: red;
   position: fixed;
   justify-content: space-between;
   float: bottom;

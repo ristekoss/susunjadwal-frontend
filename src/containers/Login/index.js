@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button } from "@chakra-ui/react";
+import { Button, Box } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { parse } from "query-string";
 
@@ -86,7 +86,7 @@ function Login({ history, location }) {
   }, [auth, history]);
 
   return (
-    <>
+    <Box px={{ base: "0px", lg: "40px" }}>
       <Bauhaus />
 
       <HeroSection>
@@ -153,7 +153,7 @@ function Login({ history, location }) {
           </LinkBox>
         </TextBox>
       </FlexBox>
-    </>
+    </Box>
   );
 }
 

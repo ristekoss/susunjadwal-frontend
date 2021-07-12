@@ -32,7 +32,7 @@ function Routes() {
 
   return (
     <ThemeProvider theme={{ mobile: isMobile }}>
-      <Box pt="120px" mb={{base:16,md:'108px'}} px={{ base: 6, lg: "122px" }}>
+      <Box pt="120px" mb={{ base: 16 , md: '108px'}} px={{ base: 6, lg: "80px" }}>
         <Switch>
           <Route path="/" name="home" component={Login} exact />
           <Route path="/beta" name="beta" component={BetaLanding} />
@@ -80,7 +80,6 @@ function PrivateRoute({ component: Component, ...rest }) {
 }
 
 const ComponentWrapper = styled.div`
-  padding-top: 64px;
 `;
 
 export default Routes;

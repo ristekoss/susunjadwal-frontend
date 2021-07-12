@@ -33,7 +33,10 @@ const BetaForm = ({history}) => {
   return (
     <>
       <Bauhaus />
-      <Box width={{lg:'80%', xl: '70%'}}>
+      <Box
+        width={{ base: '100%', lg: '60%' }}
+        mt={{ base: "0px", lg: "-40px" }}
+      >
         <Link to="/">
           <Text color="var(--chakra-colors-primary-Purple)" fontSize="lg" ml='-9px'>
             <ChevronLeftIcon w={8} h={8} />
