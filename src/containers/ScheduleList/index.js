@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Button, Box } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import Helmet from "react-helmet";
 import { Link } from "react-router-dom";
@@ -68,17 +69,17 @@ function ScheduleList() {
   }
 
   return (
-    <div style={{ backgroundColor: "#1a1a1a" }}>
+    <div style={{ backgroundColor: "#ffffff" }}>
       <Helmet
         title="Daftar Jadwal"
         meta={[{ name: "description", content: "Description of Jadwal" }]}
       />
       <PageTitle mobile={isMobile}>Daftar Jadwal</PageTitle>
-      {schedules && schedules.length > 0 ? (
+      {schedules && schedules.length < 0 ? (
         <CardContainer>
           {schedules.map((schedule, idx) => (
             <Card key={`${schedule.name}-${idx}`}>
-              <div className="header">
+              <div className="headerInfo">
                 <Link to={`/jadwal/${schedule.id}`}>
                   <h2>{decodeHtmlEntity(schedule.name) || "Untitled"}</h2>
                 </Link>
@@ -108,7 +109,14 @@ function ScheduleList() {
           ))}
         </CardContainer>
       ) : (
-          <PageInfo mobile={isMobile}>Kamu belum pernah membuat jadwal.</PageInfo>
+        <>
+          <Box>
+              <PageInfo mobile={isMobile}>Anda belum pernah membuat jadwal. Mulai susun jadwal anda sekarang!</PageInfo>
+              <Link to={`/susun`}>
+                <Button height="57px" width="194px" ml={12}>Buat Jadwal</Button>
+              </Link>
+          </Box>
+        </>
         )}
     </div>
   );
@@ -127,30 +135,33 @@ align-items:center;
 `
 
 const PageTitle = styled.h1`
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
-  color: white;
+  color: #5038BC;
   margin: ${({ mobile }) => (mobile ? "1rem" : "0")};
   margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 16px 48px")};
 `;
 
 const PageInfo = styled.h2`
   font-size: 1.1rem;
-  margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 16px 48px")};
-  color: white;
+  margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 70px 48px")};
+  color: #333333;
 `;
 
 const Card = styled.div`
-  border: 0.05px solid #4F4F4F;
-  border-radius: 4;
+  border: 0.05px solid #E5E5E5;
+  border-radius: 8px;
   h2 {
-    color: #F2994A;
+    color: #333333;
+    font-weight: bold;
+    font-size: 1.2rem;
   }
-  .header {
-    padding: 1rem;
+  .headerInfo {
+    padding: 1.2rem;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    background-color: #F5F5F5;
   }
   ${props =>
     !props.theme.mobile &&
@@ -169,7 +180,7 @@ const CardContainer = styled.div`
   width: 100%;
   flex-direction: ${props => (props.theme.mobile ? "column" : "row")};
   padding: ${props => (props.theme.mobile ? "1rem" : "0 48px")};
-  background-color: #1a1a1a;
+  background-color: #ffffff;
 `;
 
 const ImageButton = styled.button`

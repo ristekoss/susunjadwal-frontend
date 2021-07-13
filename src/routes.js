@@ -4,7 +4,7 @@ import { Route, Switch, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 
-// import Login from "./containers/Login";
+import Login from "./containers/Login";
 import BuildSchedule from "./containers/BuildSchedule";
 import Header from "./containers/Header";
 import ViewSchedule from "./containers/ViewSchedule";
@@ -31,13 +31,14 @@ function Routes() {
   return (
     <ThemeProvider theme={{ mobile: isMobile }}>
       <Header />
-      <Box pt="120px" mb={{base:16,md:'108px'}} px={{ base: 6, lg: "122px" }}>
+      {/* <Box pt="120px" mb={{base:16,md:'108px'}} px={{ base: 6, lg: "122px" }}> */}
         <Switch>
-          <Route path="/" name="home" component={Landing} exact />
-          <Route path="/beta-form" name="beta-form" component={BetaForm} />
+          {/* <Route path="/" name="home" component={Landing} exact />
+          <Route path="/beta-form" name="beta-form" component={BetaForm} /> */}
+          <Route path="/" name="home" component={Login} exact />
           <Route component={RoutesWithNavbar} />
         </Switch>
-      </Box>
+      {/* </Box> */}
       <Footer />
     </ThemeProvider>
   );
@@ -46,7 +47,7 @@ function Routes() {
 function RoutesWithNavbar() {
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <ComponentWrapper>
         <Switch>
           {ROUTES.map((route) => {

@@ -103,7 +103,7 @@ const Container = styled.div`
     );
   grid-template-rows: repeat(990, ${({ pxPerMinute }) => pxPerMinute}px);
   width: ${({ width }) => width};
-  background-color: #1a1a1a;
+  background-color: #ffffff;
 `;
 
 const TimeLabel = styled.div`
@@ -116,7 +116,7 @@ const TimeLabel = styled.div`
 const TimeMarker = styled.div`
   grid-area: ${({ row }) => row} / ${({ showLabel }) => (showLabel ? "2" : "1")} /
     ${({ row }) => row + 60 + 1} / ${({ showLabel }) => (showLabel ? "8" : "7")};
-  border: 0.95px solid #4F4F4F;
+  border: 0.95px solid #E5E5E5;
   z-index: 0;
   padding-left: 30px;
 `;
@@ -138,7 +138,7 @@ const Header = styled.div`
 const ScheduleItem = styled.div`
   z-index: 1;
   width: 95%;
-  background-color: #333333;
+  background-color: #5038BC;
   color: white;
   grid-area: ${({ start }) => start} /
     ${({ day }) => day} / ${({ end }) => end} /
@@ -151,7 +151,7 @@ const ScheduleItem = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: lighter;
     margin-top: 5px;
     .room {
@@ -164,7 +164,7 @@ const ScheduleItem = styled.div`
 
   .content {
     padding: 2px 4px;
-    font-weight: ${({ mobile }) => (mobile ? "bold" : "bold")};
+    font-weight: ${({ mobile }) => (mobile ? "lighter" : "lighter")};
     ${isMobile =>
       isMobile &&
       css`
@@ -173,7 +173,7 @@ const ScheduleItem = styled.div`
 
         span {
           &:last-child {
-            font-weight: 400;
+            font-size: 14px;
           }
         }
       `}
