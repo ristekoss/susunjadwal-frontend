@@ -51,3 +51,10 @@ export function deleteSchedule(userId, scheduleId) {
 
 export const putUpdateSchedule = (userId, scheduleId, scheduleItems) =>
   instance.put(`/users/${userId}/user_schedules/${scheduleId}`, { schedule_items: scheduleItems });
+
+export const postBetaTesterData = async function (data) { 
+  await axios.post(`https://api.airtable.com/v0/${config.AIRTABLE_BASE_ID}/${config.AIRTABLE_TABLE_NAME}`, 
+    {records: [ { fields: data } ]}, 
+    {headers: { Authorization: `Bearer ${config.AIRTABLE_API_KEY}`}}
+  );
+}

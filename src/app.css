@@ -11,6 +11,8 @@ html {
   /* 2 */
   -webkit-text-size-adjust: 100%;
   /* 2 */
+
+  scroll-behavior: smooth;
 }
 
 /**
@@ -2101,13 +2103,6 @@ p + .stat {
 body {
   /* background: #1a1a1a; */
   font-family: "Avenir", Helvetica, Arial, sans-serif;
-}
-
-::-moz-selection {
-  background: #222;
-}
-::selection {
-  background: #222;
 }
 
 .container {

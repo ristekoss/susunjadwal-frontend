@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 
-import Button from "components/Button";
+import { Button } from "@chakra-ui/react";
 import { addSchedule } from "redux/modules/schedules";
 
 const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
