@@ -14,7 +14,7 @@ import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
 
-function BuildSchedule({ history }) {
+function BuildSchedule() {
   const auth = useSelector(state => state.auth);
   const isMobile = useSelector(state => state.appState.isMobile);
   const [detailData, setDetailData] = useState(null);
@@ -93,7 +93,11 @@ const Container = styled.div`
   display: flex;
   background-color: ${props => props.theme.color.primaryWhite};
   color: ${props => props.theme.color.secondaryMineShaft};
-  margin-top: 0px;
+  margin-top: -40px;
+
+  @media (min-width: 900px) {
+    margin-top: 8px;
+  }
 `;
 
 const InfoContent = styled.div`
@@ -109,15 +113,26 @@ const CoursePickerContainer = styled.div`
     margin-bottom: 16px;
     font-weight: bold;
     font-size: 24px;
+    text-align: center;
+  }
+
+  @media (min-width: 900px) {
+    h1 {
+      font-size: 32px;
+      text-align: left;
+    }
   }
 `;
 
 const SelectedCoursesContainer = styled.div`
   background-color: ${props => props.theme.color.primaryWhite};
-  height: calc(100vh - 64px);
-  padding: 48px 32px;
+  height: 100vh;
+  padding: 128px 32px;
   overflow-y: auto;
   position: fixed;
   width: 25%;
   right: 0;
+  top: 0;
+
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
 `;
