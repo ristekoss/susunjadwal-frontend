@@ -5,6 +5,9 @@ import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { Box, Text } from '@chakra-ui/react';
 import { InputPassword, InputText } from 'components/Forms';
 import { useForm } from 'react-hook-form';
+import Info from './Info';
+
+import './styles.css';
 
 const LoginSso = ({ history }) => {
 
@@ -36,12 +39,14 @@ const LoginSso = ({ history }) => {
         <Text 
           fontSize="3xl" 
           fontWeight="bold" 
-          mt="4" 
+          mt="4"
+          mb="20"
           textAlign={{sm: 'center', lg: 'left'}}
         >
           Daftarkan SSO untuk Update Jadwal
         </Text>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <Info />
+        <form className="form-container" onSubmit={handleSubmit(onSubmit)} >
           <InputText 
             label="User Name"
             name="username"
