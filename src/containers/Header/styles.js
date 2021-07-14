@@ -6,8 +6,9 @@ export const WrapperHamburger = styled(Box).attrs({
   display: { base: "flex", xl: "none" },
   justifyContent: "center",
   alignItems: "center",
-  width: 9,
+  overflowX: "hidden",
   height: 9,
+  width: 9,
 })`
   transition: all 0.5s ease-in-out;
   ${(props) =>
@@ -69,6 +70,7 @@ export const Container = styled(Box).attrs({
   bg: "primary.White",
   py: { base: "14px", lg: "18px" },
   px: { base: "1.5rem", lg: "5rem" },
+  overflow: "hidden",
   display: "flex",
   alignItems: "center",
   position: "absolute",
