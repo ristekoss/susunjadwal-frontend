@@ -4,6 +4,7 @@ import { Route, Switch, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 
+// import Landing from "containers/Landing"; // uncheck to see component examples
 import Login from "./containers/Login";
 import BuildSchedule from "./containers/BuildSchedule";
 import Header from "./containers/Header";
@@ -13,8 +14,8 @@ import Logout from "./containers/Logout";
 import ScheduleList from "./containers/ScheduleList";
 import EditSchedule from "./containers/EditSchedule";
 import Footer from "containers/Footer";
-import Landing from "containers/Landing";
 import BetaForm from "containers/BetaForm";
+import BetaLanding from "containers/BetaLanding";
 import { Box } from "@chakra-ui/react";
 
 const ROUTES = [
@@ -25,20 +26,20 @@ const ROUTES = [
   { path: "/edit/:scheduleId", component: EditSchedule, auth: true },
 ];
 
+
 function Routes() {
   const isMobile = useSelector((state) => state.appState.isMobile);
 
   return (
     <ThemeProvider theme={{ mobile: isMobile }}>
-      <Header />
-      {/* <Box pt="120px" mb={{base:16,md:'108px'}} px={{ base: 6, lg: "122px" }}> */}
+      <Box pt="120px" mb={{base:16,md:'108px'}} px={{ base: 6, lg: "122px" }}>
         <Switch>
-          {/* <Route path="/" name="home" component={Landing} exact />
-          <Route path="/beta-form" name="beta-form" component={BetaForm} /> */}
           <Route path="/" name="home" component={Login} exact />
+          <Route path="/beta" name="beta" component={BetaLanding} />
+          <Route path="/beta-form" name="beta-form" component={BetaForm} />
           <Route component={RoutesWithNavbar} />
         </Switch>
-      {/* </Box> */}
+      </Box>
       <Footer />
     </ThemeProvider>
   );
@@ -47,7 +48,7 @@ function Routes() {
 function RoutesWithNavbar() {
   return (
     <div>
-      {/* <Header /> */}
+      <Header />
       <ComponentWrapper>
         <Switch>
           {ROUTES.map((route) => {
@@ -60,6 +61,7 @@ function RoutesWithNavbar() {
     </div>
   );
 }
+
 function PrivateRoute({ component: Component, ...rest }) {
   const auth = useSelector((state) => state.auth);
 
@@ -76,7 +78,9 @@ function PrivateRoute({ component: Component, ...rest }) {
     />
   );
 }
+
 const ComponentWrapper = styled.div`
   padding-top: 64px;
 `;
+
 export default Routes;

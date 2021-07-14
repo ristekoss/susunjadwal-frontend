@@ -25,12 +25,11 @@ export const CustomToast = ({ message, type }) => {
       border="1px"
       borderColor={ToastType[type].color}
       d="flex"
-      overflowWrap='break-word'
-      maxW='300px'
+      overflowWrap="break-word"
+      maxW="300px"
       mt={{ base: "70px", lg: "90px" }}
       mr={{ base: 4, lg: 20 }}
       minH={{ base: "40px", lg: "50px" }}
-      // h='fit-content'
       bg="var(--chakra-colors-primary-Alabaster)"
     >
       <Box

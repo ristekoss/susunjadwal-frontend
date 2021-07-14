@@ -17,6 +17,7 @@ import clipboardImg from "assets/Clipboard.svg";
 import deleteImg from "assets/Delete.svg";
 import { decodeHtmlEntity } from 'utils/string'
 import EditIcon from "assets/EditSchedule/EditIcon";
+import Bauhaus from 'components/Bauhaus';
 
 function ScheduleList() {
   const auth = useSelector(state => state.auth);
@@ -74,8 +75,9 @@ function ScheduleList() {
         title="Daftar Jadwal"
         meta={[{ name: "description", content: "Description of Jadwal" }]}
       />
-      <PageTitle mobile={isMobile}>Daftar Jadwal</PageTitle>
-      {schedules && schedules.length < 0 ? (
+      {schedules && schedules.length > 0? (
+        <PageTitle mobile={isMobile}>Daftar Jadwal</PageTitle>): ""}
+      {schedules && schedules.length > 0 ? (
         <CardContainer>
           {schedules.map((schedule, idx) => (
             <Card key={`${schedule.name}-${idx}`}>
@@ -97,6 +99,7 @@ function ScheduleList() {
                   <EditIcon className="editIcon" onClick={() => handleClickEditJadwal(schedule.id)} />
                 </CardActionContainer>
               </div>
+              <ScheduleCreatedInfo>Dibuat pada {schedule.created_at}</ScheduleCreatedInfo>
               <Schedule
                 startHour={7}
                 endHour={21}
@@ -110,7 +113,9 @@ function ScheduleList() {
         </CardContainer>
       ) : (
         <>
-          <Box>
+          <Bauhaus />
+          <Box pt="90px" mb={{base:16,md:'160px'}} ml={8}>
+              <PageTitleNoSchedule mobile={isMobile}>Daftar Jadwal</PageTitleNoSchedule>
               <PageInfo mobile={isMobile}>Anda belum pernah membuat jadwal. Mulai susun jadwal anda sekarang!</PageInfo>
               <Link to={`/susun`}>
                 <Button height="57px" width="194px" ml={12}>Buat Jadwal</Button>
@@ -134,8 +139,23 @@ align-items:center;
 }
 `
 
+const ScheduleCreatedInfo = styled.h4`
+  font-size: 14px;
+  background-color: #F5F5F5;
+  margin: ${({ mobile }) => (mobile ? "1rem" : "0")};
+  padding: ${({ mobile }) => (mobile ? "1rem" : "0 0 0.4rem 1.2rem")};
+`;
+
 const PageTitle = styled.h1`
   font-size: 2rem;
+  font-weight: bold;
+  color: #5038BC;
+  margin: ${({ mobile }) => (mobile ? "1rem" : "0")};
+  margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 16px 48px")};
+`;
+
+const PageTitleNoSchedule = styled.h1`
+  font-size: 3rem;
   font-weight: bold;
   color: #5038BC;
   margin: ${({ mobile }) => (mobile ? "1rem" : "0")};

@@ -6,6 +6,7 @@ import {
   FormLabel,
   Icon,
   Input,
+  Select,
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
@@ -125,3 +126,40 @@ export const InputPassword = ({
     </FormControl>
   );
 };
+
+export const InputSelect = ({
+  register,
+  errors,
+  name,
+  label,
+  placeholder,
+  validator,
+  children,
+  disabled,
+  ...props
+}) => (
+  <FormControl {...props} isInvalid={errors[name]}>
+      <FormLabel htmlFor={name}>{label}</FormLabel>
+      <Select
+        bg={errors[name] ? "state.ErrorGhost" : "secondary.InputGray"}
+        variant="filled"
+        _focus={{
+          borderColor: "primary.Purple",
+          backgroundColor: "primary.White",
+        }}
+        id={name}
+        placeholder={placeholder ? placeholder : ""}
+        disabled={disabled}
+        {...register(name, validator)}
+      >
+        {children}
+      </Select>
+      <FormErrorMessage fontWeight="semibold">
+        {errors[name] && (
+          <span>
+            <Warning /> {errors[name].message}
+          </span>
+        )}
+      </FormErrorMessage>
+    </FormControl>
+)
