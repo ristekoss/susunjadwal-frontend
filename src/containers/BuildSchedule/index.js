@@ -105,7 +105,7 @@ const CoursePickerContainer = styled.div`
   color: #333333;
 
   h1 {
-    color: ${props => props.theme.color.secondaryMineShaft};
+    color: ${props => props.theme.color.primaryPurple};
     margin-bottom: 16px;
     font-weight: bold;
     font-size: 24px;
