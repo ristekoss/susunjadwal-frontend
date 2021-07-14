@@ -69,7 +69,7 @@ const LoginSso = ({ history }) => {
             register={register}
             placeholder="password"
             validator={{
-              required: `User name tidak boleh kosong`,
+              required: `Password tidak boleh kosong`,
             }}
             errors={errors}
           />
