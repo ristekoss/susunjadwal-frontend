@@ -1,12 +1,14 @@
 import React from 'react';
-import Bauhaus from 'components/Bauhaus';
 import { Link } from 'react-router-dom';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { Box, Text } from '@chakra-ui/react';
-import { InputPassword, InputText } from 'components/Forms';
 import { useForm } from 'react-hook-form';
+
+import Bauhaus from 'components/Bauhaus';
+import { InputPassword, InputText } from 'components/Forms';
 import Info from './Info';
 
+import alert from '../../assets/alert.png';
 import './styles.css';
 
 const LoginSso = ({ history }) => {
@@ -71,6 +73,12 @@ const LoginSso = ({ history }) => {
             errors={errors}
           />
         </form>
+        <div className="alert-container">
+          <div className="alert">
+            <img src={alert} alt="alert"/>
+          </div>
+          <Text fontSize="sm">Dengan menekan tombol ini, Anda setuju bahwa SusunJadwal akan menggunakan data SSO Anda untuk melakukan scraping ke website SIAK-NG untuk mengumpulkan kelas yang dapat Anda ambil.</Text>
+        </div>
       </Box>
     </>
   );
