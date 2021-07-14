@@ -1,0 +1,10 @@
+.alert-container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 1rem;
+}
+
+.alert {
+  margin-top: 0.3rem;
+  margin-right: 0.5rem;
+}

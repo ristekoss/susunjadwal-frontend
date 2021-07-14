@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Button, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
 import Bauhaus from 'components/Bauhaus';
@@ -10,6 +10,7 @@ import Info from './Info';
 
 import alert from '../../assets/alert.png';
 import './styles.css';
+import Alert from './Alert';
 
 const LoginSso = ({ history }) => {
 
@@ -72,13 +73,18 @@ const LoginSso = ({ history }) => {
             }}
             errors={errors}
           />
+          <Alert />
+          <Button
+            mt={8}
+            colorScheme="teal"
+            isLoading={isSubmitting}
+            type="submit"
+            disabled={isSubmitSuccessful}
+            w={{sm: '100%', lg: 'unset'}}
+          >
+            Update Jadwal
+          </Button>
         </form>
-        <div className="alert-container">
-          <div className="alert">
-            <img src={alert} alt="alert"/>
-          </div>
-          <Text fontSize="sm">Dengan menekan tombol ini, Anda setuju bahwa SusunJadwal akan menggunakan data SSO Anda untuk melakukan scraping ke website SIAK-NG untuk mengumpulkan kelas yang dapat Anda ambil.</Text>
-        </div>
       </Box>
     </>
   );
