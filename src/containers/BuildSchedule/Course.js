@@ -73,7 +73,7 @@ const Header = styled.div`
 
 const CourseTitle = styled.h2`
   font-size: 1.5rem;
-  color: #F2994A;
+  color: #333333;
   font-weight: bold;
 
 
@@ -81,7 +81,7 @@ const CourseTitle = styled.h2`
     display: inline;
     // ${({ isMobile }) => isMobile && `margin-left: 0.5rem;`}
 
-    color: white;
+    color: red;
     font-weight: 400;
     font-size: 1rem;
   }

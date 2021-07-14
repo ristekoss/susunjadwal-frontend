@@ -79,11 +79,11 @@ function CourseClass({ course, courseClass }) {
 const CourseClassContainer = styled.div`
   display: flex;
   flex-direction: row;
-  color: white;
+  color: #333333;
   cursor: pointer;
 
   &:hover {
-    background-color: #222;
+    background-color: #ffffff;
   }
 `;
 

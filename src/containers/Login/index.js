@@ -10,7 +10,8 @@ import { makeAtLeastMs } from "utils/promise";
 import { postAuthTicket } from "services/api";
 import { setAuth } from "redux/modules/auth";
 import { persistAuth } from "utils/auth";
-import Bauhaus from "components/Bauhaus";
+
+import { Bauhaus } from 'components/Bauhaus';
 
 import {
   Header,

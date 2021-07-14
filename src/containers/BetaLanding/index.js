@@ -21,8 +21,8 @@ import {
   LogoSunjadBeta
 } from "./styles";
 import { FAQS } from "./data";
+import { Bauhaus } from 'components/Bauhaus';
 
-import Bauhaus from "assets/Beta/bauhaus-sm.svg";
 import RistekBetaLogo from "assets/Beta/Beta_Logo.svg";
 import SunjadBetaLogo from "assets/Beta/Sunjad_Beta.svg";
 import BetaAssetA from "assets/Beta/beta-landing-asset-1.svg";

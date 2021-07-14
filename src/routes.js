@@ -1,8 +1,8 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { Route, Switch, Redirect } from "react-router";
 import { useSelector } from "react-redux";
-import { ThemeProvider } from "styled-components";
+import { Box } from "@chakra-ui/react";
 
 // import Landing from "containers/Landing"; // uncheck to see component examples
 import Login from "./containers/Login";
@@ -16,7 +16,8 @@ import EditSchedule from "./containers/EditSchedule";
 import Footer from "containers/Footer";
 import BetaForm from "containers/BetaForm";
 import BetaLanding from "containers/BetaLanding";
-import { Box } from "@chakra-ui/react";
+import { theme } from "styles/StyledTheme";
+
 
 const ROUTES = [
   { path: "/susun", component: BuildSchedule, auth: true },
@@ -26,12 +27,11 @@ const ROUTES = [
   { path: "/edit/:scheduleId", component: EditSchedule, auth: true },
 ];
 
-
 function Routes() {
   const isMobile = useSelector((state) => state.appState.isMobile);
 
   return (
-    <ThemeProvider theme={{ mobile: isMobile }}>
+    <ThemeProvider theme={{ mobile: isMobile, ...theme }}>
       <Box pt="120px" mb={{ base: 16 , md: '108px'}} px={{ base: 6, lg: "80px" }}>
         <Switch>
           <Route path="/" name="home" component={Login} exact />

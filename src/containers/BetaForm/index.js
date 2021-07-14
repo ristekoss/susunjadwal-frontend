@@ -7,7 +7,7 @@ import FACULTIES from 'utils/faculty-base.json';
 import { Link } from 'react-router-dom';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { InfoToast, SuccessToast } from 'components/Toast';
-import Bauhaus from 'components/Bauhaus';
+import { Bauhaus } from 'components/Bauhaus';
 
 const BetaForm = ({history}) => {
   const {

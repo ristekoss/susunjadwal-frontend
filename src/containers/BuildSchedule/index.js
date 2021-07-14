@@ -3,15 +3,16 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Helmet from "react-helmet";
 
-import { getCourses } from "services/api";
-import SelectedCourses from "containers/SelectedCourses";
-import { setLoading } from "redux/modules/appState";
 import { setCourses as reduxSetCourses } from "redux/modules/courses";
-
-import Course from "./Course";
-import Checkout from "./Checkout";
-import Detail from "./Detail";
 import { clearSchedule } from "redux/modules/schedules";
+import { setLoading } from "redux/modules/appState";
+import { getCourses } from "services/api";
+
+import SelectedCourses from "containers/SelectedCourses";
+import { BauhausSide } from "components/Bauhaus";
+import Checkout from "./Checkout";
+import Course from "./Course";
+import Detail from "./Detail";
 
 function BuildSchedule({ history }) {
   const auth = useSelector(state => state.auth);
@@ -25,7 +26,7 @@ function BuildSchedule({ history }) {
 
   const fetchCourses = useCallback(
     async majorId => {
-      dispatch(setLoading(true));
+      // dispatch(setLoading(true));
       const { data } = await getCourses(majorId);
       setCourses(data.courses);
       setCoursesDetail(data.is_detail);
@@ -41,10 +42,13 @@ function BuildSchedule({ history }) {
     fetchCourses(majorId);
   }, [auth.majorId, dispatch, fetchCourses]);
 
-
+  useEffect(() => {
+    console.log(courses)
+  }, [courses])
 
   return (
     <Container>
+      <BauhausSide />
       <Helmet title="Buat Jadwal" />
       <CoursePickerContainer isMobile={isMobile}>
         <h1>Buat Jadwal</h1>
@@ -87,8 +91,9 @@ export default BuildSchedule;
 
 const Container = styled.div`
   display: flex;
-  background-color: #1a1a1a;
-  color: white;
+  background-color: ${props => props.theme.color.primaryWhite};
+  color: ${props => props.theme.color.secondaryMineShaft};
+  margin-top: 0px;
 `;
 
 const InfoContent = styled.div`
@@ -96,24 +101,23 @@ const InfoContent = styled.div`
 `;
 
 const CoursePickerContainer = styled.div`
-  padding: ${({ isMobile }) =>
-    isMobile ? "1rem 1rem 3rem 1rem" : "32px 48px"};
   width: ${({ isMobile }) => (isMobile ? "100%" : "75%;")};
+  color: #333333;
 
   h1 {
-    font-size: 24px;
-    font-weight: bold;
+    color: ${props => props.theme.color.secondaryMineShaft};
     margin-bottom: 16px;
-    color: white;
+    font-weight: bold;
+    font-size: 24px;
   }
 `;
 
 const SelectedCoursesContainer = styled.div`
-  width: 25%;
-  position: fixed;
-  right: 0;
-  padding: 48px 32px;
-  background-color: #222222;
+  background-color: ${props => props.theme.color.primaryWhite};
   height: calc(100vh - 64px);
+  padding: 48px 32px;
   overflow-y: auto;
+  position: fixed;
+  width: 25%;
+  right: 0;
 `;

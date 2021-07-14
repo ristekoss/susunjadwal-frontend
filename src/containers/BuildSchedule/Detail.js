@@ -55,7 +55,7 @@ const Container = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #222;
+  background-color: #ffffff;
   z-index: 322;
   padding: 1rem;
   overflow: auto;

@@ -149,11 +149,11 @@ export default withRouter(SelectedCourses);
 
 const Container = styled.div`
   width: 100%;
-  color: white;
+  color: #333333;
 
   h3 {
     font-size: 1.5rem;
-    color: #F2994A;
+    color: #333333;
     font-weight: bold;
     margin-bottom: 16px;
   }
@@ -193,10 +193,10 @@ const TableContentRow = styled.div`
   font-size: 0.75rem;
   min-height: 70px;
   :nth-child(odd) {
-    background-color: ${({ inverted }) => (inverted ? "#C74550" : "#0000")};;
+    background-color: ${({ inverted }) => (inverted ? "#C74550" : "#ffffff")};;
   }
   :nth-child(even) {
-    background-color: ${({ inverted }) => (inverted ? "#C74550" : "#3C2E18")};;
+    background-color: ${({ inverted }) => (inverted ? "#C74550" : "#ffffff")};;
   }
 
   div {
