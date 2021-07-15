@@ -1,8 +1,17 @@
-import { useSelector, useDispatch } from "react-redux";
-import { Button } from "@chakra-ui/react";
-import { withRouter } from "react-router";
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import { withRouter } from "react-router";
+import { Button } from "@chakra-ui/react";
+import { useSelector, useDispatch } from "react-redux";
+
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent as ChakraModalContent,
+  ModalFooter as ChakraModalFooter,
+  ModalBody,
+  useDisclosure
+} from "@chakra-ui/react"
 
 import { removeSchedule, clearSchedule } from "redux/modules/schedules";
 import { setLoading } from "redux/modules/appState";
@@ -28,6 +37,7 @@ function transformSchedules(schedules) {
 
 function SelectedCourses({ history, scheduleId, isEditing }) {
   const schedules = useSelector(state => state.schedules);
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
@@ -100,7 +110,35 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
   });
 
   return (
-    <React.Fragment>
+    <>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalBody>
+            Apakah kamu yakin ingin menyimpan jadwal?
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              onClick={onClose}
+              variant="outline"
+            >
+              Batal
+            </Button>
+            <Button
+              onClick={() => !isEditing
+                ? saveSchedule()
+                : schedules.length === 0
+                ? handleDeleteSchedule()
+                : updateSchedule()}
+              variant="solid"
+            >
+              Simpan
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <Container>
         <h3>Kelas Pilihan</h3>
 
@@ -136,22 +174,35 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         )}
 
         <Button
-          onClick={() => !isEditing
-            ? saveSchedule()
-            : schedules.length === 0
-              ? handleDeleteSchedule()
-              : updateSchedule()}
+          onClick={onOpen}
           disabled={isConflict || totalCredits > 24 || schedules.length === 0}
           intent={schedules.length === 0 && isEditing && 'danger'}
         >
           Simpan Jadwal
         </Button>
       </Container>
-    </React.Fragment>
+    </>
   );
 }
 
 export default withRouter(SelectedCourses);
+
+const ModalContent = styled(ChakraModalContent).attrs({
+  padding: { base: "16px 24px", lg: "20px 24px" },
+  width: { base: "90%", lg: "initial" },
+  textAlign: "center"
+})``
+
+const ModalFooter = styled(ChakraModalFooter).attrs({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  marginTop: { base: "12px", lg: "16px" }
+})`
+  button {
+    margin: 0px 4px;
+  }
+`
 
 const Container = styled.div`
   width: 100%;
