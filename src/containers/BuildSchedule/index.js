@@ -26,7 +26,7 @@ function BuildSchedule() {
 
   const fetchCourses = useCallback(
     async majorId => {
-      // dispatch(setLoading(true));
+      dispatch(setLoading(true));
       const { data } = await getCourses(majorId);
       setCourses(data.courses);
       setCoursesDetail(data.is_detail);
