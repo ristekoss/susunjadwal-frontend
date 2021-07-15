@@ -12,7 +12,6 @@ import { deleteSchedule } from "services/api";
 import { makeAtLeastMs } from "utils/promise";
 
 import { isScheduleConflict } from "./utils";
-import Agenda from "./Agenda";
 
 import TrashIcon from "assets/Trash.svg";
 
@@ -32,7 +31,6 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
-  const [isAgendaModalVisible, setAgendaModalVisibility] = useState(false);
   const totalCredits = schedules.reduce((prev, { credit }) => prev + credit, 0);
 
   async function saveSchedule() {
@@ -103,10 +101,6 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
   return (
     <React.Fragment>
-      <Agenda
-        visible={isAgendaModalVisible}
-        onClose={() => setAgendaModalVisibility(false)}
-      />
       <Container>
         <h3>Kelas Pilihan</h3>
 
