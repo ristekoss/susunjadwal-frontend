@@ -3,17 +3,18 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Helmet from "react-helmet";
 
-import { getCourses } from "services/api";
-import SelectedCourses from "containers/SelectedCourses";
-import { setLoading } from "redux/modules/appState";
 import { setCourses as reduxSetCourses } from "redux/modules/courses";
-
-import Course from "./Course";
-import Checkout from "./Checkout";
-import Detail from "./Detail";
 import { clearSchedule } from "redux/modules/schedules";
+import { setLoading } from "redux/modules/appState";
+import { getCourses } from "services/api";
 
-function BuildSchedule({ history }) {
+import SelectedCourses from "containers/SelectedCourses";
+import { BauhausSide } from "components/Bauhaus";
+import Checkout from "./Checkout";
+import Course from "./Course";
+import Detail from "./Detail";
+
+function BuildSchedule() {
   const auth = useSelector(state => state.auth);
   const isMobile = useSelector(state => state.appState.isMobile);
   const [detailData, setDetailData] = useState(null);
@@ -41,11 +42,15 @@ function BuildSchedule({ history }) {
     fetchCourses(majorId);
   }, [auth.majorId, dispatch, fetchCourses]);
 
-
+  useEffect(() => {
+    console.log(courses)
+  }, [courses])
 
   return (
     <Container>
+      <BauhausSide />
       <Helmet title="Buat Jadwal" />
+
       <CoursePickerContainer isMobile={isMobile}>
         <h1>Buat Jadwal</h1>
         {!isCoursesDetail && (
@@ -60,17 +65,20 @@ function BuildSchedule({ history }) {
             <Course key={`${course.name}-${idx}`} course={course} />
           ))}
       </CoursePickerContainer>
+
       {!isMobile && (
         <SelectedCoursesContainer>
           <SelectedCourses />
         </SelectedCoursesContainer>
       )}
+
       <Checkout
         isMobile={isMobile}
         onClickDetail={isConflict =>
           setDetailData({ opened: true, isConflict: isConflict })
         }
       />
+
       {detailData && detailData.opened && (
         <Detail
           closeDetail={() =>
@@ -87,8 +95,13 @@ export default BuildSchedule;
 
 const Container = styled.div`
   display: flex;
-  background-color: #1a1a1a;
-  color: white;
+  background-color: ${props => props.theme.color.primaryWhite};
+  color: ${props => props.theme.color.secondaryMineShaft};
+  margin-top: -40px;
+
+  @media (min-width: 900px) {
+    margin-top: 8px;
+  }
 `;
 
 const InfoContent = styled.div`
@@ -96,24 +109,34 @@ const InfoContent = styled.div`
 `;
 
 const CoursePickerContainer = styled.div`
-  padding: ${({ isMobile }) =>
-    isMobile ? "1rem 1rem 3rem 1rem" : "32px 48px"};
   width: ${({ isMobile }) => (isMobile ? "100%" : "75%;")};
+  color: #333333;
 
   h1 {
-    font-size: 24px;
-    font-weight: bold;
+    color: ${props => props.theme.color.primaryPurple};
     margin-bottom: 16px;
-    color: white;
+    font-weight: bold;
+    font-size: 24px;
+    text-align: center;
+  }
+
+  @media (min-width: 900px) {
+    h1 {
+      font-size: 32px;
+      text-align: left;
+    }
   }
 `;
 
 const SelectedCoursesContainer = styled.div`
-  width: 25%;
-  position: fixed;
-  right: 0;
-  padding: 48px 32px;
-  background-color: #222222;
-  height: calc(100vh - 64px);
+  background-color: ${props => props.theme.color.primaryWhite};
+  height: 100vh;
+  padding: 128px 32px;
   overflow-y: auto;
+  position: fixed;
+  width: 25%;
+  right: 0;
+  top: 0;
+
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
 `;

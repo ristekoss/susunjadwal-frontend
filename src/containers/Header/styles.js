@@ -6,8 +6,9 @@ export const WrapperHamburger = styled(Box).attrs({
   display: { base: "flex", xl: "none" },
   justifyContent: "center",
   alignItems: "center",
-  width: 9,
+  overflowX: "hidden",
   height: 9,
+  width: 9,
 })`
   transition: all 0.5s ease-in-out;
   ${(props) =>
@@ -22,7 +23,6 @@ export const WrapperHamburger = styled(Box).attrs({
     }
     & > :nth-child(1):after {
       transform: rotate(-45deg) translate(30px, 30px);
-    }
     }
   `}
 `;
@@ -58,7 +58,7 @@ export const NavLinkWrapper = styled(Box).attrs({
   justifyContent: { base: "start", lg: "end" },
   alignItems: "center",
 })`
-  @media only screen and (max-width: 1024px) {
+  @media only screen and (max-width: 900px) {
     position: absolute;
     opacity: 0;
     left: 100vw;
@@ -69,6 +69,7 @@ export const Container = styled(Box).attrs({
   bg: "primary.White",
   py: { base: "14px", lg: "18px" },
   px: { base: "1.5rem", lg: "5rem" },
+  overflow: "hidden",
   display: "flex",
   alignItems: "center",
   position: "absolute",
@@ -102,7 +103,7 @@ export const HeaderLink = styled(NavLink)`
         : "var(--chakra-colors-secondary-Gray)"};
     outline: none;
   }
-  @media only screen and (max-width: 1024px) {
+  @media only screen and (max-width: 900px) {
     margin-right: 0;
     font-size: 14px;
   }
@@ -112,7 +113,7 @@ export const SignOutLink = styled(NavLink)`
   font-size: 18px;
   white-space: nowrap;
   color: var(--chakra-colors-state-Error) !important;
-  @media only screen and (max-width: 1024px) {
+  @media only screen and (max-width: 900px) {
     font-size: 14px;
     line-height: 3rem;
   }

@@ -4,20 +4,23 @@ import { useSelector } from "react-redux";
 import { isScheduleConflict } from "containers/SelectedCourses/utils";
 
 function Checkout({ onClickDetail }) {
-  const isMobile = useSelector(state => state.appState.isMobile);
   const schedules = useSelector(state => state.schedules);
-  if (!isMobile || schedules.length === 0) {
-    return null;
-  }
+  const isMobile = useSelector(state => state.appState.isMobile);
 
   const totalCredits = schedules.reduce((prev, { credit }) => prev + credit, 0);
+
+  if (!isMobile || schedules.length === 0) {
+    return null;
+  };
+
   const conflict = schedules.find(schedule =>
     isScheduleConflict(schedules, schedule)
   );
 
   function goToDetail() {
     onClickDetail(conflict);
-  }
+  };
+
   return (
     <CheckoutContainer conflict={conflict} onClick={goToDetail}>
       <div>
@@ -31,41 +34,52 @@ function Checkout({ onClickDetail }) {
         </p>
       </div>
       <div>
-        <h2>Lihat</h2>
+        <h2 className="cta">LIHAT</h2>
       </div>
     </CheckoutContainer>
   );
 }
 
 const CheckoutContainer = styled.div`
-  background: ${props => (props.conflict ? "#C74550" : "#333333")};
-  color: #ffffff;
-  position: fixed;
+  color: ${props => props.theme.color.primaryWhite};
+
+  background: ${props => (
+    props.conflict
+      ? props => props.theme.color.stateError
+      : props => props.theme.color.primaryPurple
+  )};
+
   justify-content: space-between;
+  position: fixed;
   float: bottom;
-  display: flex;
-  flex-direction: row;
-  height: auto;
-  left: 1rem;
-  width: calc(100% - 2rem);
   bottom: 1rem;
+  left: 1rem;
+
+  display: flex;
   align-items: center;
+  flex-direction: row;
+
+  width: calc(100% - 2rem);
   border-radius: 8px;
+  height: auto;
 
   div {
     padding: 8px 16px;
   }
 
   h2 {
-    margin-bottom: 0px;
-    font-weight: 700;
-    font-size: 16px;
-    color: #F2994A;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 12px;
+
+    &.cta {
+      font-size: 14px;
+    }
   }
 
   p {
+    font-size: 12px;
     margin-bottom: 0px;
-    font-size: 16px;
   }
 `;
 
