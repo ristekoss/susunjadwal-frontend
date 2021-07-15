@@ -170,6 +170,17 @@ const Container = styled.div`
     width: 100%;
   }
 
+  button:disabled,
+  button[disabled] {
+    background: #BDBDBD;
+    opacity: 100%;
+  }
+
+  button:disabled:hover,
+  button[disabled]:hover {
+    background: rgba(189, 189, 189, 0.8);
+  }
+
   padding-bottom: 32px;
 `;
 
