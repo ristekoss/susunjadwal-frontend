@@ -58,3 +58,10 @@ export const postBetaTesterData = async function (data) {
     {headers: { Authorization: `Bearer ${config.AIRTABLE_API_KEY}`}}
   );
 }
+
+export const postScrapSchedule = async (username, password) => {
+  await instance.post('/scrap-schedule', {
+    username: username,
+    password: password,
+  });
+}

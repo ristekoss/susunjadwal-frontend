@@ -8,21 +8,28 @@ import Bauhaus from 'components/Bauhaus';
 import { InputPassword, InputText } from 'components/Forms';
 import Info from './Info';
 
-import alert from '../../assets/alert.png';
 import './styles.css';
 import Alert from './Alert';
+import { postScrapSchedule } from 'services/api';
+import { InfoToast, SuccessToast } from 'components/Toast';
 
-const LoginSso = ({ history }) => {
+const LoginSso = () => {
 
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting, isSubmitSuccessful },
-    watch
   } = useForm();
 
-  const onSubmit = () => {
-    console.log("DATA KAMU SUDAH KAMI KIRIM")
+  const onSubmit = async (values) => {
+    try {
+      InfoToast('Sedang memperbaharui jadwal');
+      await postScrapSchedule(values);
+      SuccessToast('Jadwal berhasil diperbaharui');
+    } catch (err) {
+      InfoToast('Maaf ada sedikit kendala, silahkan coba beberapa saat lagi');
+      throw err;
+    }
   }
 
   return (
