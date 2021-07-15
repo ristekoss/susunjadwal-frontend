@@ -3,20 +3,26 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { addSchedule, removeSchedule } from "redux/modules/schedules";
 
+import checkmark from 'assets/Beta/checkmark.svg';
+
 const CourseClassMobile = props => {
   return (
     <CouseClassMobileContainer onClick={props.handleChange}>
       <h2>{props.name}</h2>
       <h3>Pengajar</h3>
-      {props.lecturer.map(lecturer => (
-        <span key={lecturer}>- {lecturer}</span>
-      ))}
+      <ul>
+        {props.lecturer.map(lecturer => (
+          <li key={lecturer}>{lecturer}</li>
+        ))}
+      </ul>
       <h3>Jadwal</h3>
-      {props.schedule_items.map((item, idx) => (
-        <span key={idx}>
-          - {item.day}, {item.start}-{item.end} ({item.room})
-        </span>
-      ))}
+      <ul>
+        {props.schedule_items.map((item, idx) => (
+          <li key={idx}>
+            {item.day}, {item.start}-{item.end} ({item.room})
+          </li>
+        ))}
+      </ul>
       <Radio active={props.isActive} />
     </CouseClassMobileContainer>
   );
@@ -24,9 +30,9 @@ const CourseClassMobile = props => {
 
 const CourseClassDesktop = props => {
   const classSchedules = props.schedule_items.map((item, idx) => (
-    <span key={idx}>
-      - {item.day}, {item.start}-{item.end}
-    </span>
+    <li key={idx}>
+      {item.day}, {item.start}-{item.end}
+    </li>
   ));
 
   const rooms = props.schedule_items.map((item, idx) => (
@@ -34,7 +40,7 @@ const CourseClassDesktop = props => {
   ));
 
   const lecturers = props.lecturer.map((lecturer, idx) => (
-    <span key={idx}>- {lecturer}</span>
+    <li key={idx}>{lecturer}</li>
   ));
 
   return (
@@ -43,9 +49,9 @@ const CourseClassDesktop = props => {
         <Radio active={props.isActive} />
       </CourseClassItem>
       <CourseClassItem flex={3}>{props.name}</CourseClassItem>
-      <CourseClassItem flex={3}>{classSchedules}</CourseClassItem>
+      <CourseClassItem flex={3}><ul>{classSchedules}</ul></CourseClassItem>
       <CourseClassItem flex={1}>{rooms}</CourseClassItem>
-      <CourseClassItem flex={4}>{lecturers}</CourseClassItem>
+      <CourseClassItem flex={4}><ul>{lecturers}</ul></CourseClassItem>
     </CourseClassContainer>
   );
 };
@@ -92,38 +98,77 @@ const CourseClassItem = styled.div`
   padding: 12px;
   display: flex;
   flex-direction: column;
+
+  text-align: center;
+
+  ul {
+    margin-left: 15%;
+    text-align: left;
+  }
+
+  li {
+    list-style-type: none;
+    position: relative;
+  }
+
+  li::before {
+    content: '•';
+    position: absolute;
+    left: -12px;
+    font-size: 16px;
+  }
 `;
 
 const Radio = styled.div`
-  border: 1px solid #333333;
+  border: 1.5px solid #828282;
+  border-radius: 4px;
+  position: relative;
   height: 24px;
   width: 24px;
 
+  border: ${({ active }) => (
+    !active
+      ? '1.5px solid #828282'
+      : 'none'
+  )};
+
+  background-color: ${({ active }) => (
+    active
+      ? props => props.theme.color.primaryPurple
+      : props => props.theme.color.primaryWhite
+  )};
+
   &:before {
-    content: "";
-    display: block;
-    background-color: ${({ active }) => (active ? "#F2994A" : "#0000")};
-    margin: 4px;
-    width: 14px;
-    height: 14px;
+    content: url(${checkmark});
+    border-radius: 4px;
+    position: absolute;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding-top: 3px;
+    width: 100%;
+    height: 100%;
   }
 `;
 
 const CouseClassMobileContainer = styled.div`
+  flex-direction: column;
   position: relative;
   display: flex;
-  flex-direction: column;
   padding: 12px;
 
   h2 {
-    font-size: 24px;
-    margin: 0;
+    color: ${props => props.theme.color.secondaryMineShaft};
+    font-weight: 600;
+    font-size: 18px;
+    margin: 0 0 4px 0;
   }
 
   h3 {
-    font-size: 18px;
-    margin: 0;
-    margin-top: 12px;
+    margin: 12px 0 0 0;
+    font-size: 14px;
   }
 
   ${Radio} {
@@ -134,6 +179,23 @@ const CouseClassMobileContainer = styled.div`
 
   & + & {
     border-top: 1px solid #333333;
+  }
+
+  ul {
+    margin-left: 16px;
+    font-size: 14px;
+  }
+
+  li {
+    list-style-type: none;
+    position: relative;
+  }
+
+  li::before {
+    content: '•';
+    position: absolute;
+    left: -12px;
+    font-size: 16px;
   }
 `;
 export default CourseClass;

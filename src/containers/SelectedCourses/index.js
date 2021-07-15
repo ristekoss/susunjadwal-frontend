@@ -127,18 +127,18 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
             <p>Ada konflik jadwal, perbaiki terlebih dahulu!</p>
           </MessageContainer>
         )}
-        <Button
+        {/* <Button
           intent="secondary"
           onClick={() => setAgendaModalVisibility(true)}
         >
           Tambah Agenda
-        </Button>
+        </Button> */}
         <Button
           onClick={() => !isEditing ? saveSchedule() : schedules.length === 0 ? handleDeleteSchedule() : updateSchedule()}
-          disabled={isConflict || totalCredits > 24}
+          disabled={isConflict || totalCredits > 24 || schedules.length === 0}
           intent={schedules.length === 0 && isEditing && 'danger'}
         >
-          {schedules.length === 0 ? "Hapus Jadwal" : "Simpan Jadwal"}
+          Simpan Jadwal
         </Button>
       </Container>
     </React.Fragment>
@@ -152,14 +152,16 @@ const Container = styled.div`
   color: #333333;
 
   h3 {
-    font-size: 1.5rem;
-    color: #333333;
-    font-weight: bold;
+    color: ${props => props.theme.color.primaryPurple};
     margin-bottom: 16px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
   }
 
   > button {
     margin-top: 16px;
+    width: 100%;
   }
 
   padding-bottom: 32px;
@@ -238,7 +240,7 @@ const TableCreditSum = styled.div`
       flex: 9;
       display: flex;
       justify-content: flex-end;
-      margin-right: 16px;
+      margin-right: 20%;
     }
     &:nth-child(2) {
       span {
@@ -248,6 +250,7 @@ const TableCreditSum = styled.div`
     }
   }
 `;
+
 const DeleteButton = styled.button`
   background: url(${({ inverted }) => (inverted ? TrashWhiteIcon : TrashIcon)});
   background-size: contain;

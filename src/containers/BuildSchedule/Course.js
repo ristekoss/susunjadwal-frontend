@@ -51,6 +51,7 @@ const Header = styled.div`
   display: flex;
 
   div {
+    text-align: center;
     font-size: 16px;
     padding: 12px;
 
