@@ -18,7 +18,6 @@ import BetaForm from "containers/BetaForm";
 import BetaLanding from "containers/BetaLanding";
 import { theme } from "styles/StyledTheme";
 
-
 const ROUTES = [
   { path: "/susun", component: BuildSchedule, auth: true },
   { path: "/jadwal/:scheduleId", component: ViewSchedule, auth: false },
@@ -26,6 +25,7 @@ const ROUTES = [
   { path: "/logout", component: Logout, auth: true },
   { path: "/edit/:scheduleId", component: EditSchedule, auth: true },
 ];
+
 
 function Routes() {
   const isMobile = useSelector((state) => state.appState.isMobile);
