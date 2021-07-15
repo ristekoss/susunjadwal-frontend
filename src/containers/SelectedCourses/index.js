@@ -1,18 +1,20 @@
+import { useSelector, useDispatch } from "react-redux";
+import { Button } from "@chakra-ui/react";
+import { withRouter } from "react-router";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { withRouter } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
-import { putUpdateSchedule } from "services/api";
-import { Button } from "@chakra-ui/react";
-import { postSaveSchedule } from "services/api";
-import { isScheduleConflict } from "./utils";
-import TrashIcon from "assets/Trash.png";
-import TrashWhiteIcon from "assets/TrashWhite.png";
-import Agenda from "./Agenda";
-import { setLoading } from "redux/modules/appState";
+
 import { removeSchedule, clearSchedule } from "redux/modules/schedules";
-import { makeAtLeastMs } from "utils/promise";
+import { setLoading } from "redux/modules/appState";
+import { putUpdateSchedule } from "services/api";
+import { postSaveSchedule } from "services/api";
 import { deleteSchedule } from "services/api";
+import { makeAtLeastMs } from "utils/promise";
+
+import { isScheduleConflict } from "./utils";
+import Agenda from "./Agenda";
+
+import TrashIcon from "assets/Trash.svg";
 
 function transformSchedules(schedules) {
   return schedules
@@ -71,20 +73,21 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
   }
 
   let isConflict = false;
+
   const items = schedules.map((schedule, idx) => {
     const isCurrentScheduleConflict = isScheduleConflict(schedules, schedule);
     isConflict = isConflict || isCurrentScheduleConflict;
 
     const classesTimes = schedule.schedule_items.map((item, index) => (
-      <span key={index}>
-        - {item.day}, {item.start}-{item.end}
-      </span>
+      <li key={index}>
+        {item.day}, {item.start}-{item.end}
+      </li>
     ));
 
     return (
       <TableContentRow key={idx} inverted={isCurrentScheduleConflict}>
         <div className="courseName">{schedule.name}</div>
-        <div>{classesTimes}</div>
+        <div><ul>{classesTimes}</ul></div>
         <div className="small-2 columns">
           <span>{schedule.credit}</span>
         </div>
@@ -106,6 +109,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
       />
       <Container>
         <h3>Kelas Pilihan</h3>
+
         <TableHeader>
           <div>Kelas</div>
           <div>Waktu</div>
@@ -113,7 +117,9 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
             <span>SKS</span>
           </div>
         </TableHeader>
+
         {items}
+
         <TableCreditSum>
           <div>
             <span>Total SKS</span>
@@ -122,19 +128,25 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
             <span>{totalCredits}</span>
           </div>
         </TableCreditSum>
+
         {isConflict && (
           <MessageContainer>
-            <p>Ada konflik jadwal, perbaiki terlebih dahulu!</p>
+            <p>Ada jadwal yang bertabrakan. Perbaiki terlebih dahulu sebelum menyimpan.</p>
           </MessageContainer>
         )}
-        {/* <Button
-          intent="secondary"
-          onClick={() => setAgendaModalVisibility(true)}
-        >
-          Tambah Agenda
-        </Button> */}
+
+        {(!isConflict && totalCredits > 24) && (
+          <MessageContainer>
+            <p>Jumlah SKS yang diambil melebihi batas maksimum (24 SKS).</p>
+          </MessageContainer>
+        )}
+
         <Button
-          onClick={() => !isEditing ? saveSchedule() : schedules.length === 0 ? handleDeleteSchedule() : updateSchedule()}
+          onClick={() => !isEditing
+            ? saveSchedule()
+            : schedules.length === 0
+              ? handleDeleteSchedule()
+              : updateSchedule()}
           disabled={isConflict || totalCredits > 24 || schedules.length === 0}
           intent={schedules.length === 0 && isEditing && 'danger'}
         >
@@ -169,45 +181,73 @@ const Container = styled.div`
 
 const TableHeader = styled.div`
   display: flex;
-  border-bottom: 2px solid #333333;
-  font-weight: bold;
+  border-bottom: 1px solid #BDBDBD;
   align-items: center;
+  font-weight: 600;
 
   div {
     padding: 0.5rem 0;
     &:nth-child(1) {
       flex: 4;
+      margin-left: 1rem;
     }
     &:nth-child(2) {
       flex: 5;
     }
     &:nth-child(3) {
       flex: 3;
-      span {
-        margin-left: 12px;
-      }
     }
   }
 `;
 
 const TableContentRow = styled.div`
-  display: flex;
-  font-size: 0.75rem;
-  min-height: 70px;
   :nth-child(odd) {
-    background-color: ${({ inverted }) => (inverted ? "#C74550" : "#ffffff")};;
+    background: ${({ inverted }) => (
+      inverted
+        ? "rgba(235, 87, 87, 0.2)"
+        : props => props.theme.color.primaryWhite
+    )};
   }
+
   :nth-child(even) {
-    background-color: ${({ inverted }) => (inverted ? "#C74550" : "#ffffff")};;
+    background: ${({ inverted }) => (
+      inverted
+        ? "rgba(235, 87, 87, 0.2)"
+        : "#F5F5F5"
+    )};
   }
+
+
+  display: flex;
+  min-height: 70px;
+  font-size: 0.75rem;
 
   div {
     padding: 0.5rem 0;
     display: flex;
     flex-direction: column;
 
+    ul {
+      margin-left: 15%;
+      text-align: left;
+    }
+
+    li {
+      list-style-type: none;
+      position: relative;
+    }
+
+    li::before {
+      content: '•';
+      position: absolute;
+      left: -12px;
+      font-size: 16px;
+    }
+
+
     &:nth-child(1) {
       flex: 4;
+      margin-left: 1rem;
     }
     &:nth-child(2) {
       flex: 5;
@@ -217,23 +257,26 @@ const TableContentRow = styled.div`
       font-size: 16px;
 
       span {
-        margin-left: 12px;
+        margin-left: 18px;
       }
     }
     &:nth-child(4) {
       flex: 1;
+      margin-right: 6px;
     }
   }
 `;
 
 const TableCreditSum = styled.div`
-  display: flex;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
   background-color: #333333;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 16px;
+  color: white;
+
   padding: 4px 12px;
   margin-top: 8px;
+  display: flex;
 
   div {
     &:nth-child(1) {
@@ -252,7 +295,7 @@ const TableCreditSum = styled.div`
 `;
 
 const DeleteButton = styled.button`
-  background: url(${({ inverted }) => (inverted ? TrashWhiteIcon : TrashIcon)});
+  background: url(${TrashIcon});
   background-size: contain;
   background-repeat: no-repeat;
   height: 100%;
@@ -261,8 +304,14 @@ const DeleteButton = styled.button`
 `;
 
 const MessageContainer = styled.div`
-  background-color: #F2994A;
-  font-size: 0.75rem;
-  padding: 4px;
+  margin: 16px -5px 0px;
   text-align: center;
+  font-weight: 600;
+  font-size: 12px;
+  color: #E91515;
+
+  @media (min-width: 900px) {
+    margin: 18px -5px 0px;
+    font-size: 14px;
+  }
 `;

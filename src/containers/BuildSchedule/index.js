@@ -50,6 +50,7 @@ function BuildSchedule() {
     <Container>
       <BauhausSide />
       <Helmet title="Buat Jadwal" />
+
       <CoursePickerContainer isMobile={isMobile}>
         <h1>Buat Jadwal</h1>
         {!isCoursesDetail && (
@@ -64,17 +65,20 @@ function BuildSchedule() {
             <Course key={`${course.name}-${idx}`} course={course} />
           ))}
       </CoursePickerContainer>
+
       {!isMobile && (
         <SelectedCoursesContainer>
           <SelectedCourses />
         </SelectedCoursesContainer>
       )}
+
       <Checkout
         isMobile={isMobile}
         onClickDetail={isConflict =>
           setDetailData({ opened: true, isConflict: isConflict })
         }
       />
+
       {detailData && detailData.opened && (
         <Detail
           closeDetail={() =>
