@@ -27,10 +27,14 @@ function BuildSchedule() {
   const fetchCourses = useCallback(
     async majorId => {
       dispatch(setLoading(true));
-      const { data } = await getCourses(majorId);
-      setCourses(data.courses);
-      setCoursesDetail(data.is_detail);
-      dispatch(reduxSetCourses(data.courses));
+
+      try {
+        const { data } = await getCourses(majorId);
+        setCourses(data.courses);
+        setCoursesDetail(data.is_detail);
+        dispatch(reduxSetCourses(data.courses));
+      } catch(e) {/** TODO: handle error */}
+
       setTimeout(() => dispatch(setLoading(false)), 1000);
     },
     [dispatch]
@@ -106,6 +110,7 @@ const Container = styled.div`
 
 const InfoContent = styled.div`
   margin-bottom: 16px;
+  min-height: 100vh;
 `;
 
 const CoursePickerContainer = styled.div`

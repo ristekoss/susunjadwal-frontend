@@ -1,4 +1,5 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { useLocation } from "react-router-dom";
 import React from "react";
 import {
   StyledFooterContainer,
@@ -15,6 +16,11 @@ import RistekBetaLogo from "assets/Beta/Beta_Logo.svg";
 import SocialContainer from "./SocialCointainer";
 
 const Footer = () => {
+  const location = useLocation();
+
+  if (location.pathname === "/susun")
+    return null
+
   return (
     <StyledFooterContainer>
       <Flex
