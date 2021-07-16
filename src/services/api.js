@@ -2,13 +2,13 @@ import axios from "axios";
 import config from "config";
 
 let instance = axios.create({
-  baseURL: config.API_BASE_URL
+  baseURL: config.API_BASE_URL,
 });
 
 export function setupAxiosInstance(token) {
   instance = axios.create({
     baseURL: config.API_BASE_URL,
-    headers: { Authorization: `Bearer ${token}` }
+    headers: { Authorization: `Bearer ${token}` },
   });
 }
 
@@ -18,7 +18,7 @@ export function getCourses(majorId) {
 
 export function postSaveSchedule(userId, scheduleItems) {
   return instance.post(`/users/${userId}/user_schedule`, {
-    schedule_items: scheduleItems
+    schedule_items: scheduleItems,
   });
 }
 
@@ -33,7 +33,7 @@ export function getSchedules(userId) {
 export function postAuthTicket(ticket, serviceUrl) {
   return instance.post(`/auth/`, {
     ticket,
-    service_url: serviceUrl
+    service_url: serviceUrl,
   });
 }
 
@@ -48,13 +48,19 @@ export function deleteSchedule(userId, scheduleId) {
   return instance.delete(`/users/${userId}/user_schedules/${scheduleId}`);
 }
 
-
 export const putUpdateSchedule = (userId, scheduleId, scheduleItems) =>
-  instance.put(`/users/${userId}/user_schedules/${scheduleId}`, { schedule_items: scheduleItems });
+  instance.put(`/users/${userId}/user_schedules/${scheduleId}`, {
+    schedule_items: scheduleItems,
+  });
 
-export const postBetaTesterData = async function (data) { 
-  await axios.post(`https://api.airtable.com/v0/${config.AIRTABLE_BASE_ID}/${config.AIRTABLE_TABLE_NAME}`, 
-    {records: [ { fields: data } ]}, 
-    {headers: { Authorization: `Bearer ${config.AIRTABLE_API_KEY}`}}
+export const postBetaTesterData = async function (data) {
+  await axios.post(
+    `https://api.airtable.com/v0/${process.env.REACT_APP_BETA_AIRTABLE_BASE_ID}/${process.env.REACT_APP_BETA_AIRTABLE_TABLE_NAME}`,
+    { records: [{ fields: data }] },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_BETA_AIRTABLE_API_KEY}`,
+      },
+    }
   );
-}
+};

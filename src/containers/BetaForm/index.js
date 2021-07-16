@@ -1,31 +1,35 @@
-import React from 'react'
-import { Box, Text, Button } from '@chakra-ui/react';
-import { InputEmail, InputSelect, InputText } from 'components/Forms';
-import { useForm } from 'react-hook-form';
-import { postBetaTesterData } from 'services/api';
-import FACULTIES from 'utils/faculty-base.json';
-import { Link } from 'react-router-dom';
-import { ChevronLeftIcon } from '@chakra-ui/icons';
-import { InfoToast, SuccessToast } from 'components/Toast';
-import Bauhaus from 'components/Bauhaus';
+import React from "react";
+import { Box, Text, Button } from "@chakra-ui/react";
+import { InputEmail, InputSelect, InputText } from "components/Forms";
+import { useForm } from "react-hook-form";
+import { postBetaTesterData } from "services/api";
+import FACULTIES from "utils/faculty-base.json";
+import { Link } from "react-router-dom";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { InfoToast, SuccessToast } from "components/Toast";
+import Bauhaus from "components/Bauhaus";
 
-const BetaForm = ({history}) => {
+const BetaForm = ({ history }) => {
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting, isSubmitSuccessful },
-    watch
+    watch,
   } = useForm();
 
-  const selectedFaculty = watch('fakultas');
+  const selectedFaculty = watch("fakultas");
 
   async function onSubmit(values) {
     try {
       await postBetaTesterData(values);
-      SuccessToast('Terima Kasih sudah menjadi Beta Tester kami. Tim kami akan segera menghubungi Kamu.');
-      history.push('/');
+      SuccessToast(
+        "Terima Kasih sudah menjadi Beta Tester kami. Tim kami akan segera menghubungi Kamu."
+      );
+      history.push("/");
     } catch (error) {
-      InfoToast('Maaf ada sedikit kesalahan nih, silakan coba beberapa saat lagi atau hubungi contact person');
+      InfoToast(
+        "Maaf ada sedikit kesalahan nih, silakan coba beberapa saat lagi atau hubungi contact person"
+      );
       throw error;
     }
   }
@@ -33,14 +37,25 @@ const BetaForm = ({history}) => {
   return (
     <>
       <Bauhaus />
-      <Box width={{lg:'80%', xl: '70%'}}>
+      <Box width={{ lg: "80%", xl: "70%" }}>
         <Link to="/">
-          <Text color="var(--chakra-colors-primary-Purple)" fontSize="lg" ml='-9px'>
+          <Text
+            color="var(--chakra-colors-primary-Purple)"
+            fontSize="lg"
+            ml="-9px"
+          >
             <ChevronLeftIcon w={8} h={8} />
             Kembali ke Halaman Utama
           </Text>
         </Link>
-        <Text fontSize="3xl" fontWeight="bold" mt="4" textAlign={{sm: 'center', lg: 'left'}}>Lengkapi Formulir untuk Menjadi Beta Tester</Text>
+        <Text
+          fontSize="3xl"
+          fontWeight="bold"
+          mt="4"
+          textAlign={{ sm: "center", lg: "left" }}
+        >
+          Lengkapi Formulir untuk Menjadi Beta Tester
+        </Text>
         <form onSubmit={handleSubmit(onSubmit)}>
           <InputText
             label="Nama lengkap"
@@ -86,13 +101,15 @@ const BetaForm = ({history}) => {
             register={register}
             placeholder="--- Pilih Fakultas ---"
             validator={{
-              required: `Harap Pilih`
+              required: `Harap Pilih`,
             }}
             errors={errors}
           >
-            {Object.keys(FACULTIES).map(faculty=>
-              <option key={faculty} value={faculty}>{faculty}</option>  
-            )}
+            {Object.keys(FACULTIES).map((faculty) => (
+              <option key={faculty} value={faculty}>
+                {faculty}
+              </option>
+            ))}
           </InputSelect>
 
           <InputSelect
@@ -102,14 +119,17 @@ const BetaForm = ({history}) => {
             register={register}
             placeholder="--- Pilih Program Studi ---"
             validator={{
-              required: `Harap Pilih`
+              required: `Harap Pilih`,
             }}
             errors={errors}
             disabled={!selectedFaculty}
           >
-            {selectedFaculty &&  FACULTIES[selectedFaculty].map(prodi=>
-              <option key={prodi.kd_org}>{`${prodi.educational_program} - ${prodi.study_program}`}</option>  
-            )}
+            {selectedFaculty &&
+              FACULTIES[selectedFaculty].map((prodi) => (
+                <option
+                  key={prodi.kd_org}
+                >{`${prodi.educational_program} - ${prodi.study_program}`}</option>
+              ))}
           </InputSelect>
 
           <Button
@@ -118,14 +138,14 @@ const BetaForm = ({history}) => {
             isLoading={isSubmitting}
             type="submit"
             disabled={isSubmitSuccessful}
-            w={{sm: '100%', lg: 'unset'}}
+            w={{ sm: "100%", lg: "unset" }}
           >
             Submit
           </Button>
         </form>
       </Box>
     </>
-  )
-}
+  );
+};
 
-export default BetaForm
+export default BetaForm;
