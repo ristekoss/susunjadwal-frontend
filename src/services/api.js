@@ -31,7 +31,7 @@ export function getSchedules(userId) {
 }
 
 export function postAuthTicket(ticket, serviceUrl) {
-  return instance.post(`/auth/`, {
+  return instance.post(`/auth/v2/`, {
     ticket,
     service_url: serviceUrl,
   });
