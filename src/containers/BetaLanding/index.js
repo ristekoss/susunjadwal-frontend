@@ -21,8 +21,8 @@ import {
   LogoSunjadBeta
 } from "./styles";
 import { FAQS } from "./data";
+import { Bauhaus } from 'components/Bauhaus';
 
-import Bauhaus from "assets/Beta/bauhaus-sm.svg";
 import RistekBetaLogo from "assets/Beta/Beta_Logo.svg";
 import SunjadBetaLogo from "assets/Beta/Sunjad_Beta.svg";
 import BetaAssetA from "assets/Beta/beta-landing-asset-1.svg";
@@ -30,7 +30,7 @@ import BetaAssetB from "assets/Beta/beta-landing-asset-2.svg";
 
 const BetaLanding = () => {
   return (
-    <>
+    <Box px={{ base: "0px", lg: "40px" }}>
       <AssetBauhaus src={Bauhaus} alt="bauhaus" />
       <Box>
         <LogoRistek src={RistekBetaLogo} alt="ristek-logo" />
@@ -81,7 +81,7 @@ const BetaLanding = () => {
           ))}
         </Accordion>
       </GapBox>
-    </>
+    </Box>
   )
 };
 

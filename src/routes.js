@@ -1,8 +1,8 @@
 import React from "react";
-import styled from "styled-components";
+import { ThemeProvider } from "styled-components";
 import { Route, Switch, Redirect } from "react-router";
 import { useSelector } from "react-redux";
-import { ThemeProvider } from "styled-components";
+import { Box } from "@chakra-ui/react";
 
 // import Landing from "containers/Landing"; // uncheck to see component examples
 import Login from "./containers/Login";
@@ -16,7 +16,7 @@ import EditSchedule from "./containers/EditSchedule";
 import Footer from "containers/Footer";
 import BetaForm from "containers/BetaForm";
 import BetaLanding from "containers/BetaLanding";
-import { Box } from "@chakra-ui/react";
+import { theme } from "styles/StyledTheme";
 
 const ROUTES = [
   { path: "/susun", component: BuildSchedule, auth: true },
@@ -31,8 +31,12 @@ function Routes() {
   const isMobile = useSelector((state) => state.appState.isMobile);
 
   return (
-    <ThemeProvider theme={{ mobile: isMobile }}>
-      <Box pt="120px" mb={{base:16,md:'108px'}} px={{ base: 6, lg: "122px" }}>
+    <ThemeProvider theme={{ mobile: isMobile, ...theme }}>
+      <Box
+        pt="120px" mb={{ base: 16 , md: '108px'}}
+        px={{ base: 6, lg: "80px" }}
+        overflowX="hidden !important"
+      >
         <Switch>
           <Route path="/" name="home" component={Login} exact />
           <Route path="/beta" name="beta" component={BetaLanding} />
@@ -49,15 +53,13 @@ function RoutesWithNavbar() {
   return (
     <div>
       <Header />
-      <ComponentWrapper>
-        <Switch>
-          {ROUTES.map((route) => {
-            const Component = route.auth ? PrivateRoute : Route;
-            return <Component key={route.path} {...route} />;
-          })}
-          <Route component={NotFoundPage} />
-        </Switch>
-      </ComponentWrapper>
+      <Switch>
+        {ROUTES.map((route) => {
+          const Component = route.auth ? PrivateRoute : Route;
+          return <Component key={route.path} {...route} />;
+        })}
+        <Route component={NotFoundPage} />
+      </Switch>
     </div>
   );
 }
@@ -78,9 +80,5 @@ function PrivateRoute({ component: Component, ...rest }) {
     />
   );
 }
-
-const ComponentWrapper = styled.div`
-  padding-top: 64px;
-`;
 
 export default Routes;

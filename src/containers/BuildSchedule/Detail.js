@@ -1,10 +1,8 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
-import { useSelector } from "react-redux";
 
 import SelectedCourses from "containers/SelectedCourses";
-import Schedule from "containers/ViewSchedule/Schedule";
-import backImg from "assets/Back.svg";
+import backImg from "assets/Beta/xmark.svg";
 
 const HideBodyOverflow = createGlobalStyle`
   body {
@@ -12,19 +10,7 @@ const HideBodyOverflow = createGlobalStyle`
   }
 `;
 
-function transformSchedules(schedules) {
-  return schedules
-    .map(schedule =>
-      schedule.schedule_items.map(item => ({
-        ...item,
-        name: schedule.name
-      }))
-    )
-    .reduce((prev, now) => [...prev, ...now], []);
-}
-
-function Detail({ closeDetail, isConflict, isEditing = false, scheduleId }) {
-  const schedules = useSelector(state => state.schedules);
+function Detail({ closeDetail, isEditing = false, scheduleId }) {
 
   function performCloseDetail() {
     closeDetail();
@@ -32,33 +18,23 @@ function Detail({ closeDetail, isConflict, isEditing = false, scheduleId }) {
 
   return (
     <Container>
-      <ImageButton src={backImg} onClick={performCloseDetail} />
       <HideBodyOverflow />
-      {console.log(isConflict)}
-      {!isConflict && (
-        <Schedule
-          schedule={{ schedule_items: transformSchedules(schedules) }}
-          pxPerMinute={0.3}
-          width="100%"
-          startHour={7}
-          endHour={21}
-        />
-      )}
+      <ImageButton src={backImg} onClick={performCloseDetail} />
       <SelectedCourses isEditing={isEditing} scheduleId={scheduleId} />
     </Container>
   );
 }
 
 const Container = styled.div`
-  position: fixed;
-  top: 64px;
+  background-color: ${props => props.theme.color.primaryWhite};
+  top: 0px;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #222;
   z-index: 322;
   padding: 1rem;
   overflow: auto;
+  position: fixed;
 `;
 
 const ImageButton = styled.button`
@@ -67,6 +43,8 @@ const ImageButton = styled.button`
   height: 24px;
   width: 24px;
   border: none;
+  display: block;
+  margin-left: auto;
 `;
 
 export default Detail;
