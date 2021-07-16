@@ -17,7 +17,9 @@ import clipboardImg from "assets/Clipboard.svg";
 import deleteImg from "assets/Delete.svg";
 import { decodeHtmlEntity } from 'utils/string'
 import EditIcon from "assets/EditSchedule/EditIcon";
-import Bauhaus from 'components/Bauhaus';
+import { BauhausSide } from 'components/Bauhaus';
+import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
+import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
 
 function ScheduleList() {
   const auth = useSelector(state => state.auth);
@@ -69,14 +71,23 @@ function ScheduleList() {
     history.push(`/edit/${idJadwal}`);
   }
 
+  const convertDate = (date) => {
+    const dateNew = new Date(date)
+    return `${dateNew.getDate()}/${dateNew.getMonth()}/${dateNew.getFullYear()}`
+  }
+
   return (
-    <div style={{ backgroundColor: "#ffffff" }}>
+    <Container>
       <Helmet
         title="Daftar Jadwal"
         meta={[{ name: "description", content: "Description of Jadwal" }]}
       />
       {schedules && schedules.length > 0? (
-        <PageTitle mobile={isMobile}>Daftar Jadwal</PageTitle>): ""}
+          <>
+            <BauhausSide />
+            <PageTitle mobile={isMobile}>Daftar Jadwal</PageTitle>
+          </>
+        ): ""}
       {schedules && schedules.length > 0 ? (
         <CardContainer>
           {schedules.map((schedule, idx) => (
@@ -84,6 +95,7 @@ function ScheduleList() {
               <div className="headerInfo">
                 <Link to={`/jadwal/${schedule.id}`}>
                   <h2>{decodeHtmlEntity(schedule.name) || "Untitled"}</h2>
+                  <h4>Dibuat pada {convertDate(schedule.created_at)}</h4>
                 </Link>
                 <CardActionContainer>
                   <CopyToClipboard
@@ -99,7 +111,6 @@ function ScheduleList() {
                   <EditIcon className="editIcon" onClick={() => handleClickEditJadwal(schedule.id)} />
                 </CardActionContainer>
               </div>
-              <ScheduleCreatedInfo>Dibuat pada {schedule.created_at}</ScheduleCreatedInfo>
               <Schedule
                 startHour={7}
                 endHour={21}
@@ -113,19 +124,33 @@ function ScheduleList() {
         </CardContainer>
       ) : (
         <>
-          <Bauhaus />
-          <Box pt="90px" mb={{base:16,md:'160px'}} ml={8}>
-              <PageTitleNoSchedule mobile={isMobile}>Daftar Jadwal</PageTitleNoSchedule>
+           {isMobile ? (
+              <AssetBauhaus
+                isMobile={isMobile}
+                src={BauhausMobile}
+                alt="bauhaus-sm"
+              />
+          ) : (
+            <AssetBauhaus src={BauhausDesktop} alt="bauhaus-lg" />
+          )}
+          <Box pt="90px" mb={{base:16,md:'160px'}}>
+            <div style={{  textAlign: isMobile?  "center": "left", width: "100%" }}>
+            <PageTitleNoSchedule mobile={isMobile}>Daftar Jadwal</PageTitleNoSchedule>
               <PageInfo mobile={isMobile}>Anda belum pernah membuat jadwal. Mulai susun jadwal anda sekarang!</PageInfo>
               <Link to={`/susun`}>
-                <Button height="57px" width="194px" ml={12}>Buat Jadwal</Button>
+                <Button height={{ base: "44px", md: "57px" }} width={{ base: "137px", md: "194px" }} ml={{md: 12}} fontSize={{ base: "14px", md: "18px" }}>Buat Jadwal</Button>
               </Link>
+            </div>
           </Box>
         </>
         )}
-    </div>
+    </Container>
   );
 }
+const Container = styled.div`
+  margin-left:-3rem;
+  margin-right: -3rem;
+`;
 
 const CardActionContainer = styled.div`
 display:flex;
@@ -137,34 +162,25 @@ align-items:center;
   margin-left:8px;
   cursor:pointer;
 }
-`
-
-const ScheduleCreatedInfo = styled.h4`
-  font-size: 14px;
-  background-color: #F5F5F5;
-  margin: ${({ mobile }) => (mobile ? "1rem" : "0")};
-  padding: ${({ mobile }) => (mobile ? "1rem" : "0 0 0.4rem 1.2rem")};
 `;
 
 const PageTitle = styled.h1`
-  font-size: 2rem;
+  font-size: ${({ mobile }) => (mobile ? "1.7rem" : "2rem")};
   font-weight: bold;
   color: #5038BC;
-  margin: ${({ mobile }) => (mobile ? "1rem" : "0")};
-  margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 16px 48px")};
+  margin: ${({ mobile }) => (mobile ? "-20px 0 0 48px" : "-10px 48px 30px 48px")};
 `;
 
 const PageTitleNoSchedule = styled.h1`
-  font-size: 3rem;
+  font-size: ${({ mobile }) => (mobile ? "50px" : "64px")};
   font-weight: bold;
   color: #5038BC;
-  margin: ${({ mobile }) => (mobile ? "1rem" : "0")};
-  margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 16px 48px")};
+  margin: ${({ mobile }) => (mobile ? "2rem" : "32px 48px 16px 48px")};
 `;
 
 const PageInfo = styled.h2`
-  font-size: 1.1rem;
-  margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 70px 48px")};
+  font-size: ${({ mobile }) => (mobile ? "14px" : "18px")};
+  margin: ${({ mobile }) => (mobile ? "2rem" : "32px 48px 48px 48px")};
   color: #333333;
 `;
 
@@ -174,7 +190,11 @@ const Card = styled.div`
   h2 {
     color: #333333;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 24px;
+  }
+  h4{
+    color: #333333;
+    font-size: 14px;
   }
   .headerInfo {
     padding: 1.2rem;
@@ -199,7 +219,7 @@ const CardContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   flex-direction: ${props => (props.theme.mobile ? "column" : "row")};
-  padding: ${props => (props.theme.mobile ? "1rem" : "0 48px")};
+  padding: ${props => (props.theme.mobile ? "1rem 3rem 0 3rem" : "0 48px")};
   background-color: #ffffff;
 `;
 
@@ -214,4 +234,22 @@ const ImageButton = styled.button`
     margin-left: 8px;
   }
 `;
+
+const AssetBauhaus = styled.img`
+  position: absolute;
+  right: 0;
+  top: 0;
+
+
+  ${props => props.isMobile && (`
+    top: 50px;
+    width: 100%;
+    display: block;
+
+    @media (min-width: 540px) {
+      display: none;
+    }
+  `)}
+`;
+
 export default ScheduleList;
