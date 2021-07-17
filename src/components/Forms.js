@@ -29,7 +29,7 @@ export const InputText = ({
   ...props
 }) => {
   validator["pattern"] = {
-    value: /[A-Za-z]/g,
+    value: /[A-Za-z0-9_+]/g,
     message: "Masukkan harus berupa string",
   };
   return (
