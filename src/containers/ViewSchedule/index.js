@@ -86,7 +86,7 @@ function ViewSchedule({ match }) {
                     </ImageButton>
                   </CopyToClipboard>
               <Link to={`/edit/${scheduleId}`} >
-                <Button intent="primary" onClick={() => null} >
+                <Button intent="primary" variant="outline" onClick={() => null} >
                   {schedule.has_edit_access ? 'Edit' : 'Copy'}
                 </Button>
               </Link>
