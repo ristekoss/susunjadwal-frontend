@@ -65,9 +65,12 @@ function Login({ history, location }) {
           setError({
             majorName
           });
-          (username === undefined)
-          ? history.push('/update')
-          :  history.push('/complete');
+          if (username === undefined) {
+            persistAuth({ majorId, userId, token });
+            history.push('/update')
+          } else {
+            history.push('/complete');
+          }
         }
 
         dispatch(setAuth({ majorId, userId, token }));
