@@ -16,7 +16,7 @@ import EditSchedule from "./containers/EditSchedule";
 import Footer from "containers/Footer";
 import BetaForm from "containers/BetaForm";
 import BetaLanding from "containers/BetaLanding";
-import LoginSso  from "containers/LoginSso";
+import UpdateMatkul  from "containers/UpdateMatkul";
 import { theme } from "styles/StyledTheme";
 
 const ROUTES = [
@@ -42,7 +42,7 @@ function Routes() {
           <Route path="/" name="home" component={Login} exact />
           <Route path="/beta" name="beta" component={BetaLanding} />
           <Route path="/beta-form" name="beta-form" component={BetaForm} />
-          <Route path="/sso/login" name="sso-login" component={LoginSso} />
+          <Route path="/update" name="update-matkul" component={UpdateMatkul} />
           <Route component={RoutesWithNavbar} />
         </Switch>
       </Box>
