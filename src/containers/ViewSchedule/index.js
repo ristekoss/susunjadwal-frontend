@@ -13,6 +13,10 @@ import { decodeHtmlEntity } from "utils/string";
 import { Button } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router';
+import { CopyToClipboard } from "react-copy-to-clipboard";
+
+import deleteImg from "assets/Delete.svg";
+import clipboardImg from "assets/Clipboard.svg";
 
 function ViewSchedule({ match }) {
   const dispatch = useDispatch();
@@ -43,10 +47,16 @@ function ViewSchedule({ match }) {
 
   const scheduleName = schedule && schedule.name;
 
+  const showAlertCopy = () => {
+    alert(
+      "Link telah disalin!! Kamu bisa bagikan link tersebut ke teman kamu."
+    );
+  }
+
   return (
     <React.Fragment>
       <Helmet
-        title={scheduleName ? `Jadwal ${scheduleName}` : `Memuat jadwal ...`}
+        title={scheduleName ? `Jadwal ${scheduleName}` : `Jadwal Untitled`}
         meta={[{ name: "description", content: "Description of Jadwal" }]}
       />
 
@@ -63,11 +73,25 @@ function ViewSchedule({ match }) {
                 {decodeHtmlEntity(schedule.name)}
               </ScheduleName>
             )}
-          <Link to={`/edit/${scheduleId}`} >
-            <Button intent="primary" onClick={() => null} >
-              {schedule.has_edit_access ? 'Edit' : 'Copy'}
-            </Button>
-          </Link>
+            <ButtonContainer>
+              <ImageButton>
+                <img src={deleteImg} />
+              </ImageButton>
+              <CopyToClipboard
+                    text={`${window.location.href}/${schedule.id}`}
+                    onCopy={showAlertCopy}
+                  >
+                    <ImageButton>
+                      <img src={clipboardImg} />
+                    </ImageButton>
+                  </CopyToClipboard>
+              <Link to={`/edit/${scheduleId}`} >
+                <Button intent="primary" onClick={() => null} >
+                  {schedule.has_edit_access ? 'Edit' : 'Copy'}
+                </Button>
+              </Link>
+            </ButtonContainer>
+            
         </Container>
       )}
 
@@ -98,6 +122,17 @@ const Container = styled.div`
 const ScheduleName = styled.div`
   font-size: 32px;
   color: white;
-`
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const ImageButton = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-right: 1rem;
+`;
 
 export default ViewSchedule;
