@@ -54,7 +54,7 @@ function ViewSchedule({ match }) {
   }
 
   return (
-    <React.Fragment>
+    <MainContainer>
       <Helmet
         title={scheduleName ? `Jadwal ${scheduleName}` : `Jadwal Untitled`}
         meta={[{ name: "description", content: "Description of Jadwal" }]}
@@ -105,9 +105,13 @@ function ViewSchedule({ match }) {
         showLabel
         showRoom
       />
-    </React.Fragment>
+    </MainContainer>
   );
 }
+
+const MainContainer = styled.div`
+  padding: 0px !important;
+`;
 
 const Container = styled.div`
   padding: 32px 48px;
