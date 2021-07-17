@@ -55,16 +55,19 @@ function Login({ history, location }) {
             user_id: userId,
             token,
             err,
-            major_name: majorName
+            major_name: majorName,
+            user_name: username,
           }
         } = await makeAtLeastMs(postAuthTicket(ticket, serviceUrl), 1000);
 
         if (err) {
-          // if period/matkul is empty
           dispatch(setLoading(false));
           setError({
             majorName
           });
+          (username === undefined)
+          ? history.push('/update')
+          :  history.push('/complete');
         }
 
         dispatch(setAuth({ majorId, userId, token }));
