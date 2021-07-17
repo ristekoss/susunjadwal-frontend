@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useSelector } from "react-redux";
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import {
   Box,
@@ -19,6 +20,7 @@ import Info from './Info';
 import './styles.css';
 
 const LoginSso = ({ history }) => {
+  const isMobile = useSelector((state) => state.appState.isMobile);
   const toast = useToast();
 
   const {
@@ -29,16 +31,24 @@ const LoginSso = ({ history }) => {
 
   const onSubmit = async (values) => {
     try {
-      InfoToast('Sedang memperbaharui jadwal');
+      InfoToast(
+        'Sedang memperbaharui jadwal',
+        isMobile
+      );
       postScrapSchedule(values);
       setTimeout(() => {
         toast.closeAll();
-        SuccessToast('Jadwal berhasil diperbaharui');
-        history.push('/susun')
+        SuccessToast(
+          'Jadwal berhasil diperbaharui',
+          isMobile
+        );
+        history.go('/susun')
       }, 1000);
     } catch (err) {
-      console.log(err)
-      InfoToast('Maaf ada sedikit kendala, silahkan coba beberapa saat lagi');
+      InfoToast(
+        'Maaf ada sedikit kendala, silahkan coba beberapa saat lagi',
+        isMobile
+      );
       throw err;
     }
   }
