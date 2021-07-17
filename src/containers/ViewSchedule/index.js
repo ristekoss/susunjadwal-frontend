@@ -88,7 +88,7 @@ function ViewSchedule({ match }) {
 const Container = styled.div`
   padding: 32px 48px;
   padding-bottom: 16px;
-  background-color: #1a1a1a;
+  background-color: transparent;
   display:flex;
   flex-direction:row;
   justify-content:space-between;
