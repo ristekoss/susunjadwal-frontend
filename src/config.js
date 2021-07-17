@@ -7,7 +7,7 @@ const config = {
     AIRTABLE_TABLE_NAME: process.env.REACT_APP_BETA_AIRTABLE_TABLE_NAME
   },
   production: {
-    API_BASE_URL: "https://ristek.cs.ui.ac.id/susunjadwal/api",
+    API_BASE_URL: process.env.REACT_APP_AWS_BACKEND_URL,
     BASE_URL: "/"
   },
   development: {

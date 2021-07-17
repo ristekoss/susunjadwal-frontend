@@ -60,7 +60,7 @@ function Login({ history, location }) {
         } = await makeAtLeastMs(postAuthTicket(ticket, serviceUrl), 1000);
 
         if (err) {
-          // if period is none
+          // if period/matkul is empty
           dispatch(setLoading(false));
           setError({
             majorName
