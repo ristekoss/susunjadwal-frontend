@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Button, Box } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import Helmet from "react-helmet";
 import { Link } from "react-router-dom";
@@ -16,6 +17,9 @@ import clipboardImg from "assets/Clipboard.svg";
 import deleteImg from "assets/Delete.svg";
 import { decodeHtmlEntity } from 'utils/string'
 import EditIcon from "assets/EditSchedule/EditIcon";
+import { BauhausSide } from 'components/Bauhaus';
+import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
+import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
 
 function ScheduleList() {
   const auth = useSelector(state => state.auth);
@@ -67,20 +71,31 @@ function ScheduleList() {
     history.push(`/edit/${idJadwal}`);
   }
 
+  const convertDate = (date) => {
+    const dateNew = new Date(date)
+    return `${dateNew.getDate()}/${dateNew.getMonth()}/${dateNew.getFullYear()}`
+  }
+
   return (
-    <div style={{ backgroundColor: "#1a1a1a" }}>
+    <Container>
       <Helmet
         title="Daftar Jadwal"
         meta={[{ name: "description", content: "Description of Jadwal" }]}
       />
-      <PageTitle mobile={isMobile}>Daftar Jadwal</PageTitle>
+      {schedules && schedules.length > 0? (
+          <>
+            <BauhausSide />
+            <PageTitle mobile={isMobile}>Daftar Jadwal</PageTitle>
+          </>
+        ): ""}
       {schedules && schedules.length > 0 ? (
         <CardContainer>
           {schedules.map((schedule, idx) => (
             <Card key={`${schedule.name}-${idx}`}>
-              <div className="header">
+              <div className="headerInfo">
                 <Link to={`/jadwal/${schedule.id}`}>
                   <h2>{decodeHtmlEntity(schedule.name) || "Untitled"}</h2>
+                  <h4>Dibuat pada {convertDate(schedule.created_at)}</h4>
                 </Link>
                 <CardActionContainer>
                   <CopyToClipboard
@@ -108,11 +123,34 @@ function ScheduleList() {
           ))}
         </CardContainer>
       ) : (
-          <PageInfo mobile={isMobile}>Kamu belum pernah membuat jadwal.</PageInfo>
+        <>
+           {isMobile ? (
+              <AssetBauhaus
+                isMobile={isMobile}
+                src={BauhausMobile}
+                alt="bauhaus-sm"
+              />
+          ) : (
+            <AssetBauhaus src={BauhausDesktop} alt="bauhaus-lg" />
+          )}
+          <Box pt="90px" mb={{base:16,md:'160px'}}>
+            <div style={{  textAlign: isMobile?  "center": "left", width: "100%" }}>
+            <PageTitleNoSchedule mobile={isMobile}>Daftar Jadwal</PageTitleNoSchedule>
+              <PageInfo mobile={isMobile}>Anda belum pernah membuat jadwal. Mulai susun jadwal anda sekarang!</PageInfo>
+              <Link to={`/susun`}>
+                <Button height={{ base: "44px", md: "57px" }} width={{ base: "137px", md: "194px" }} ml={{md: 12}} fontSize={{ base: "14px", md: "18px" }}>Buat Jadwal</Button>
+              </Link>
+            </div>
+          </Box>
+        </>
         )}
-    </div>
+    </Container>
   );
 }
+const Container = styled.div`
+  margin-left:-3rem;
+  margin-right: -3rem;
+`;
 
 const CardActionContainer = styled.div`
 display:flex;
@@ -124,33 +162,46 @@ align-items:center;
   margin-left:8px;
   cursor:pointer;
 }
-`
+`;
 
 const PageTitle = styled.h1`
-  font-size: 1.5rem;
+  font-size: ${({ mobile }) => (mobile ? "1.7rem" : "2rem")};
   font-weight: bold;
-  color: white;
-  margin: ${({ mobile }) => (mobile ? "1rem" : "0")};
-  margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 16px 48px")};
+  color: #5038BC;
+  margin: ${({ mobile }) => (mobile ? "-20px 0 0 48px" : "-10px 48px 30px 48px")};
+`;
+
+const PageTitleNoSchedule = styled.h1`
+  font-size: ${({ mobile }) => (mobile ? "50px" : "64px")};
+  font-weight: bold;
+  color: #5038BC;
+  margin: ${({ mobile }) => (mobile ? "2rem" : "32px 48px 16px 48px")};
 `;
 
 const PageInfo = styled.h2`
-  font-size: 1.1rem;
-  margin: ${({ mobile }) => (mobile ? "1rem" : "32px 48px 16px 48px")};
-  color: white;
+  font-size: ${({ mobile }) => (mobile ? "14px" : "18px")};
+  margin: ${({ mobile }) => (mobile ? "2rem" : "32px 48px 48px 48px")};
+  color: #333333;
 `;
 
 const Card = styled.div`
-  border: 0.05px solid #4F4F4F;
-  border-radius: 4;
+  border: 0.05px solid #E5E5E5;
+  border-radius: 8px;
   h2 {
-    color: #F2994A;
+    color: #333333;
+    font-weight: bold;
+    font-size: 24px;
   }
-  .header {
-    padding: 1rem;
+  h4{
+    color: #333333;
+    font-size: 14px;
+  }
+  .headerInfo {
+    padding: 1.2rem;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    background-color: #F5F5F5;
   }
   ${props =>
     !props.theme.mobile &&
@@ -168,8 +219,8 @@ const CardContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   flex-direction: ${props => (props.theme.mobile ? "column" : "row")};
-  padding: ${props => (props.theme.mobile ? "1rem" : "0 48px")};
-  background-color: #1a1a1a;
+  padding: ${props => (props.theme.mobile ? "1rem 3rem 0 3rem" : "0 48px")};
+  background-color: #ffffff;
 `;
 
 const ImageButton = styled.button`
@@ -183,4 +234,22 @@ const ImageButton = styled.button`
     margin-left: 8px;
   }
 `;
+
+const AssetBauhaus = styled.img`
+  position: absolute;
+  right: 0;
+  top: 0;
+
+
+  ${props => props.isMobile && (`
+    top: 50px;
+    width: 100%;
+    display: block;
+
+    @media (min-width: 540px) {
+      display: none;
+    }
+  `)}
+`;
+
 export default ScheduleList;
