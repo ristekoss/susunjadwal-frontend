@@ -38,18 +38,20 @@ function Course({ course }) {
 }
 
 const CourseContainer = styled.div`
-  border: 1px solid #333333;
-  margin-bottom: 32px;
+  border: 1px solid ${props => props.theme.color.primaryMineShaft};
+  box-sizing: border-box;
+  margin-bottom: 24px;
+  border-radius: 4px;
 `;
 
 const Header = styled.div`
-  background-color: #333333;
-  font-family: Avenir;
-  font-weight: 400;
-  color: white;
+  background-color: ${props => props.theme.color.primaryPurple};
+  color: ${props => props.theme.color.primaryWhite};
+  font-weight: 600;
   display: flex;
 
   div {
+    text-align: center;
     font-size: 16px;
     padding: 12px;
 
@@ -72,18 +74,29 @@ const Header = styled.div`
 `;
 
 const CourseTitle = styled.h2`
-  font-size: 1.5rem;
-  color: #F2994A;
+  color: ${props => props.theme.color.primaryMineShaft};
+  margin-bottom: 8px;
   font-weight: bold;
+  font-size: 18px;
 
+  align-items: center;
+  display: flex;
 
   span {
+    color: ${props => props.theme.color.primaryMineShaft};
+    font-weight: 600;
+    margin-left: 7.5px;
     display: inline;
-    // ${({ isMobile }) => isMobile && `margin-left: 0.5rem;`}
+    font-size: 12px;
+  }
 
-    color: white;
-    font-weight: 400;
-    font-size: 1rem;
+  @media (min-width: 900px) {
+    margin-bottom: 12px;
+    font-size: 24px ;
+
+    span {
+      font-size: 18px;
+    }
   }
 `;
 
