@@ -1,19 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeftIcon } from '@chakra-ui/icons';
-import { Box, Button, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import { ChevronLeftIcon } from '@chakra-ui/icons';
+import {
+  Box,
+  Button,
+  Text,
+  useToast
+} from '@chakra-ui/react';
 
-import Bauhaus from 'components/Bauhaus';
-import { InputPassword, InputText } from 'components/Forms';
-import Info from './Info';
-
-import './styles.css';
-import Alert from './Alert';
 import { postScrapSchedule } from 'services/api';
-import { InfoToast, SuccessToast } from 'components/Toast';
 
-const LoginSso = () => {
+import { InputPassword, InputText } from 'components/Forms';
+import { InfoToast, SuccessToast } from 'components/Toast';
+import { Bauhaus } from 'components/Bauhaus';
+import Alert from './Alert';
+import Info from './Info';
+import './styles.css';
+
+const LoginSso = ({ history }) => {
+  const toast = useToast();
 
   const {
     handleSubmit,
@@ -24,9 +30,14 @@ const LoginSso = () => {
   const onSubmit = async (values) => {
     try {
       InfoToast('Sedang memperbaharui jadwal');
-      await postScrapSchedule(values);
-      SuccessToast('Jadwal berhasil diperbaharui');
+      postScrapSchedule(values);
+      setTimeout(() => {
+        toast.closeAll();
+        SuccessToast('Jadwal berhasil diperbaharui');
+        history.push('/susun')
+      }, 1000);
     } catch (err) {
+      console.log(err)
       InfoToast('Maaf ada sedikit kendala, silahkan coba beberapa saat lagi');
       throw err;
     }

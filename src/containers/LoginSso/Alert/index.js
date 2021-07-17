@@ -9,7 +9,11 @@ const Alert = () => (
     <div className="alert">
       <img src={alert} alt="alert"/>
     </div>
-    <Text fontSize="sm">Dengan menekan tombol ini, Anda setuju bahwa SusunJadwal akan menggunakan data SSO Anda untuk melakukan scraping ke website SIAK-NG untuk mengumpulkan kelas yang dapat Anda ambil.</Text>
+    <Text fontSize="sm">
+      Dengan menekan tombol ini, Anda setuju bahwa SusunJadwal
+      akan menggunakan data SSO Anda untuk melakukan scraping ke
+      ebsite SIAK-NG untuk mengumpulkan kelas yang dapat Anda ambil.
+    </Text>
   </div>
 );
 
