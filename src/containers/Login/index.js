@@ -60,14 +60,15 @@ function Login({ history, location }) {
         } = await makeAtLeastMs(postAuthTicket(ticket, serviceUrl), 1000);
 
         if (err) {
+          // if period is none
           dispatch(setLoading(false));
           setError({
             majorName
           });
-        } else {
-          dispatch(setAuth({ majorId, userId, token }));
-          persistAuth({ majorId, userId, token });
         }
+
+        dispatch(setAuth({ majorId, userId, token }));
+        persistAuth({ majorId, userId, token });
       } catch (e) {
         dispatch(setLoading(false));
         history.replace("/");
