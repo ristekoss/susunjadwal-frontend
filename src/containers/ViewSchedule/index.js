@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Helmet from "react-helmet";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getSchedule, postRenameSchedule } from "services/api";
+import { getSchedule, postRenameSchedule, deleteSchedule } from "services/api";
 import { makeAtLeastMs } from "utils/promise";
 import { setLoading } from "redux/modules/appState";
 
@@ -18,7 +18,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
 
-function ViewSchedule({ match }) {
+function ViewSchedule({ match, history }) {
   const dispatch = useDispatch();
   const isMobile = useSelector(state => state.appState.isMobile);
   const auth = useSelector(state => state.auth);
@@ -53,6 +53,19 @@ function ViewSchedule({ match }) {
     );
   }
 
+  const performDeleteSchedule = async (userId, scheduleId) => {
+    dispatch(setLoading(true));
+    await makeAtLeastMs(deleteSchedule(userId, scheduleId), 1000);
+    history.push('/jadwal');
+  }
+
+  const confirmDeleteSchedule = (scheduleId) => {
+    const response = window.confirm("Apakah kamu yakin akan menghapusnya?");
+    if (response) {
+      performDeleteSchedule(auth.userId, scheduleId);
+    }
+  }
+
   return (
     <MainContainer>
       <Helmet
@@ -74,15 +87,17 @@ function ViewSchedule({ match }) {
               </ScheduleName>
             )}
             <ButtonContainer>
-              <ImageButton>
-                <img src={deleteImg} />
+              <ImageButton
+                onClick={() => confirmDeleteSchedule(schedule.id)}
+              >
+                <img src={deleteImg} alt="delete"/>
               </ImageButton>
               <CopyToClipboard
                     text={`${window.location.href}/${schedule.id}`}
                     onCopy={showAlertCopy}
                   >
                     <ImageButton>
-                      <img src={clipboardImg} />
+                      <img src={clipboardImg} alt="copy"/>
                     </ImageButton>
                   </CopyToClipboard>
               <Link to={`/edit/${scheduleId}`} >
