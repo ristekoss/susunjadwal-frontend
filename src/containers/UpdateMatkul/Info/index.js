@@ -4,7 +4,7 @@ import React from 'react';
 import './styles.css';
 
 const Info = () => (
-  <div className="container">
+  <div className="info-container">
     <Text className="title">Apa itu Update Jadwal?</Text>
     <Text className="description">Update Jadwal adalah fitur yang membolehkan penggunanya untuk memperbarui jadwal kuliah dari program studi masing-masing.</Text>
     <Text className="title">Kenapa perlu Update Jadwal?</Text>
