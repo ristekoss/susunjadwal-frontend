@@ -27,8 +27,6 @@ export const CustomToast = ({ message, type }) => {
       d="flex"
       overflowWrap="break-word"
       maxW={{ base: "300px", lg: "600px" }}
-      mt={{ base: "70px", lg: "90px" }}
-      mr={{ base: 4, lg: 20 }}
       minH={{ base: "40px", lg: "50px" }}
       bg="var(--chakra-colors-primary-Alabaster)"
     >

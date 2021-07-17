@@ -42,7 +42,7 @@ const LoginSso = ({ history }) => {
           'Jadwal berhasil diperbaharui',
           isMobile
         );
-        history.go('/susun')
+        history.push('/susun')
       }, 1000);
     } catch (err) {
       InfoToast(
