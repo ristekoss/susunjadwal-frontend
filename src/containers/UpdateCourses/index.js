@@ -19,7 +19,7 @@ import Alert from './Alert';
 import Info from './Info';
 import './styles.css';
 
-const LoginSso = ({ history }) => {
+const UpdateCourses = ({ history }) => {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const toast = useToast();
 
@@ -118,4 +118,4 @@ const LoginSso = ({ history }) => {
   );
 };
 
-export default LoginSso;
+export default UpdateCourses;
