@@ -14,7 +14,7 @@ import {
 import { postScrapSchedule } from "services/api";
 
 import { InputPassword, InputText } from "components/Forms";
-import { InfoToast, SuccessToast } from "components/Toast";
+import { InfoToast, SuccessToast, ErrorToast } from "components/Toast";
 import { Bauhaus } from "components/Bauhaus";
 import Alert from "./Alert";
 import Info from "./Info";
@@ -38,11 +38,10 @@ const UpdateCourses = ({ history }) => {
       postScrapSchedule(values);
       setTimeout(() => {
         toast.closeAll();
-        SuccessToast(
+        ErrorToast(
           "Jadwal berhasil diperbaharui",
           isMobile
         );
-        // history.push("/susun")
         window.location.replace("/susun")
       }, 1000);
     } catch (err) {
@@ -122,6 +121,6 @@ const UpdateCourses = ({ history }) => {
 
 export default UpdateCourses;
 
-const FormContainer = styled.div`
+const FormContainer = styled.form`
   margin-top: 3rem;
 `;

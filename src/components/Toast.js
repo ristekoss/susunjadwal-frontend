@@ -3,7 +3,11 @@ import {
   Box,
   createStandaloneToast,
 } from "@chakra-ui/react";
-import { CheckCircleIcon, WarningIcon } from "@chakra-ui/icons";
+import {
+  CheckCircleIcon,
+  WarningTwoIcon,
+  WarningIcon
+} from "@chakra-ui/icons";
 
 const toast = createStandaloneToast();
 
@@ -16,6 +20,10 @@ const ToastType = {
     color: "var(--chakra-colors-state-Info)",
     icon: <WarningIcon boxSize={{ base: 6, lg: 8 }} transform="auto" rotate="180deg" color="white" />,
   },
+  error: {
+    color: "var(--chakra-colors-state-Error)",
+    icon: <WarningTwoIcon boxSize={{ base: 6, lg: 8 }} color="white" />,
+  }
 };
 
 export const CustomToast = ({ message, type }) => {
@@ -66,4 +74,12 @@ export const InfoToast = (message, isMobile=false) =>
     position: isMobile ? "top" : "top-right",
     isClosable: true,
     render: () => <CustomToast type="info" message={message} />,
+  });
+
+  export const ErrorToast = (message, isMobile=false) =>
+  toast({
+    duration: 3000,
+    position: isMobile ? "top" : "top-right",
+    isClosable: true,
+    render: () => <CustomToast type="error" message={message} />,
   });
