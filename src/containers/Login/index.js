@@ -49,23 +49,26 @@ function Login({ history, location }) {
         dispatch(setLoading(true));
         const {
           data: {
-            major_id: majorId,
-            user_id: userId,
             token,
-            err: isPeriodMissing,
+            user_id: userId,
+            major_id: majorId,
             user_name: username,
             full_name: fullname,
+            err: isPeriodMissing,
             completion_id: completionId
           }
         } = await makeAtLeastMs(postAuthTicket(ticket, serviceUrl), 1000);
 
         if (completionId !== undefined) {
           persistCompletion({ username, fullname, completionId });
+          dispatch(setLoading(false));
           history.replace('/complete');
           return null;
         }
 
         if (isPeriodMissing) {
+          dispatch(setLoading(false));
+          persistAuth({ majorId, userId, token });
           history.replace('/update')
           return null;
         } else {

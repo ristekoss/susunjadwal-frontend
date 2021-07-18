@@ -52,12 +52,12 @@ const CompleteForm = ({ history }) => {
         }
       } = await makeAtLeastMs(postSsoCompletionData({ completionId, npm, kdOrg }), 1000);
 
-      dispatch(setLoading(false));
       dispatch(setAuth({ majorId, userId, token }));
       persistAuth({ majorId, userId, token });
       persistCompletion();
 
       if (isPeriodMissing) {
+        dispatch(setLoading(false));
         window.location.replace("/update");
         return null;
       }
