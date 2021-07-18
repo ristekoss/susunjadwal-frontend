@@ -30,12 +30,6 @@ function Schedule({
     return (hour - startHour + 2) * 60 + minute - (showHeader ? 0 : 30);
   };
 
-  const isOneSKS = (start, end) => {
-    var [hourStart, minuteStart] = start.split(".").map(part => parseInt(part, 10));
-    var [hourEnd, minuteEnd] = end.split(".").map(part => parseInt(part, 10));
-    return ((hourEnd*60)+minuteEnd) - ((hourStart*60)+minuteStart) <= 50;
-  };
-
   const minuteToRow = minute => {
     return (minute + 1) * 60 - (showHeader ? 0 : 30);
   };
@@ -90,7 +84,7 @@ function Schedule({
             )}
             <div className="content">
               {showRoom && isMobile && <span>{room}</span>}
-              <span style={{ fontSize: isMobile?  "8px": "12px", color: isOneSKS(start,end)?  "#5038BC": "#ffffff", mixBlendMode: "normal"}}>{name}</span>
+              <span style={{ fontSize: isMobile?  "8px": "12px", color:"#FFD668",  mixBlendMode: "normal"}}>{name}</span>
             </div>
           </ScheduleItem>
         ))}
@@ -170,7 +164,7 @@ const ScheduleItem = styled.div`
 
   .content {
     padding: 2px 4px;
-    font-weight:lighter;
+    font-weight: ${({ mobile }) => (mobile ? "bold" : "bold")};
     ${isMobile =>
       isMobile &&
       css`
