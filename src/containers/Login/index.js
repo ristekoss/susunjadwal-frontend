@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Box } from "@chakra-ui/react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { parse } from "query-string";
 
@@ -35,13 +35,6 @@ import ChevronArrow from "assets/Beta/chevron-down.svg";
 import BetaAssetA from "assets/Beta/beta-landing-asset-1.svg";
 import BetaAssetB from "assets/Beta/beta-landing-asset-2.svg";
 
-/**
- * States of logging in
- * 1. Complete sso data & period
- * 2. Missing sso data -> /complete
- * 3. Missing period -> /update
- */
-
 function getServiceUrl() {
   return window.location.href.split("?")[0];
 }
@@ -49,8 +42,6 @@ function getServiceUrl() {
 function Login({ history, location }) {
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
-
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function authenticate(ticket, serviceUrl) {
@@ -62,7 +53,6 @@ function Login({ history, location }) {
             user_id: userId,
             token,
             err: isPeriodMissing,
-            major_name: majorName,
             user_name: username,
             full_name: fullname,
             completion_id: completionId
@@ -78,7 +68,6 @@ function Login({ history, location }) {
         }
 
         if (isPeriodMissing) {
-          setError({ majorName });
           history.replace('/update')
           return null;
         } else {
@@ -112,27 +101,12 @@ function Login({ history, location }) {
       <HeroSection>
         <LogoRistek src={RistekLogo} alt="ristek-logo" />
         <Header>Susun<span>Jadwal</span></Header>
-        {error ? (
-          /**
-           * TODO: handle error for conditions below:
-           * - when sso return data is incomplete
-           *   -> redirect to sso creds form
-           * - when user's major currently does not have active period schedule saved
-           *   -> redirect to update jadwal (check if user is beta tester first)
-           */
-          <Link to="/update">
-            <Button mt={{ base: "4rem", lg: "4.5rem" }}>
-              Log out dari SSO
-            </Button>
-          </Link>
-        ) : (
-          <Button
-            mt={{ base: "4rem", lg: "4.5rem" }}
-            onClick={redirectToSSOLogin}
-          >
-            Masuk dengan SSO
-          </Button>
-        )}
+        <Button
+          mt={{ base: "4rem", lg: "4.5rem" }}
+          onClick={redirectToSSOLogin}
+        >
+          Masuk dengan SSO
+        </Button>
         <a href="#content">
           <AssetChevron src={ChevronArrow} alt="chevron-down" />
         </a>
