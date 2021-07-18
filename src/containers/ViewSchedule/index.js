@@ -25,13 +25,14 @@ function ViewSchedule({ match, history }) {
   const { scheduleId } = useParams();
 
   const [schedule, setSchedule] = useState(null);
+  const [createdAt, setCreatedAt] = useState(null);
 
   async function onRename(slug, value) {
     if (auth) {
       await postRenameSchedule(auth.userId, slug, value);
       setSchedule({ ...schedule, name: value });
-    }
-  }
+    };
+  };
 
   useEffect(() => {
     async function fetchSchedule() {
@@ -40,6 +41,7 @@ function ViewSchedule({ match, history }) {
         data: { user_schedule }
       } = await makeAtLeastMs(getSchedule(match.params.scheduleId), 1000);
       setSchedule(user_schedule);
+      setCreatedAt(new Date(user_schedule.created_at))
       dispatch(setLoading(false));
     }
     fetchSchedule();
@@ -75,37 +77,48 @@ function ViewSchedule({ match, history }) {
 
       {schedule && (
         <Container>
-          {schedule.has_edit_access ? (
-            <ControlledInput
-              name={decodeHtmlEntity(schedule.name)}
-              slug={match.params.scheduleId}
-              rename={onRename}
-            />
-          ) : (
-              <ScheduleName>
-                {decodeHtmlEntity(schedule.name)}
-              </ScheduleName>
-            )}
-            <ButtonContainer>
-              <ImageButton
-                onClick={() => confirmDeleteSchedule(schedule.id)}
-              >
-                <img src={deleteImg} alt="delete"/>
-              </ImageButton>
-              <CopyToClipboard
-                    text={`${window.location.href}/${schedule.id}`}
-                    onCopy={showAlertCopy}
-                  >
-                    <ImageButton>
-                      <img src={clipboardImg} alt="copy"/>
-                    </ImageButton>
-                  </CopyToClipboard>
-              <Link to={`/edit/${scheduleId}`} >
-                <Button intent="primary" variant="outline" onClick={() => null} >
-                  {schedule.has_edit_access ? 'Edit' : 'Copy'}
-                </Button>
-              </Link>
-            </ButtonContainer>
+          <HeaderContainer>
+            {schedule.has_edit_access ? (
+              <ScheduleNameEditable>
+                <ControlledInput
+                  name={decodeHtmlEntity(schedule.name)}
+                  slug={match.params.scheduleId}
+                  rename={onRename}
+                />
+                <p>
+                  Dibuat pada {" "}
+                  {createdAt?.getDate() + "/"
+                  + createdAt?.getMonth() + "/"
+                  + createdAt?.getFullYear()}
+                </p>
+              </ScheduleNameEditable>
+            ) : (
+                <ScheduleName>
+                  {decodeHtmlEntity(schedule.name)}
+                </ScheduleName>
+              )}
+              <ButtonContainer>
+                <ImageButton
+                  onClick={() => confirmDeleteSchedule(schedule.id)}
+                >
+                  <img src={deleteImg} alt="delete"/>
+                </ImageButton>
+                <CopyToClipboard
+                  text={`${window.location.href}/${schedule.id}`}
+                  onCopy={showAlertCopy}
+                >
+                  <ImageButton>
+                    <img src={clipboardImg} alt="copy"/>
+                  </ImageButton>
+                </CopyToClipboard>
+              </ButtonContainer>
+          </HeaderContainer>
+
+          <Link to={`/edit/${scheduleId}`} >
+            <Button intent="primary" variant="outline" onClick={() => null} >
+              {schedule.has_edit_access ? 'Edit' : 'Copy'}
+            </Button>
+          </Link>
         </Container>
       )}
 
@@ -133,17 +146,47 @@ const MainContainer = styled.div`
 `;
 
 const Container = styled.div`
-  background-color: transparent;
-  display:flex;
-  flex-direction:column;
-  align-items:left;
+  display: flex;
+  flex-direction: column;
   padding: 32px 24px 20px;
 
+  & > :nth-child(2) {
+    margin-top: 24px;
+  }
+
   @media (min-width: 900px) {
-    padding: 32px 80px 20px;
-    justify-content:space-between;
-    align-items:center;
     flex-direction: row;
+    align-items: center;
+    padding: 32px 80px 20px;
+
+    & > :nth-child(1) {
+      flex-grow: 1;
+    }
+
+    & > :nth-child(2) {
+      margin-top: 0px;
+    }
+  }
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  justify-content: space-between;
+`;
+
+const ScheduleNameEditable = styled.div`
+  p {
+    text-align: left;
+    margin-top: 4px;
+    font-size: 12px;
+  }
+
+  @media (min-width: 900px) {
+    p {
+      font-size: 14px;
+    }
   }
 `;
 

@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import AutosizeInput from "react-input-autosize";
 
-import editImg from "assets/edit_black.png";
+import editImg from "assets/edit_black.svg";
 
 class ControlledInput extends React.Component {
   constructor(props) {

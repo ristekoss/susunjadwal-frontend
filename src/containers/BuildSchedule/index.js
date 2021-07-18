@@ -62,8 +62,8 @@ function BuildSchedule() {
           <h6>
             Jadwal terakhir diperbarui pada {isMobile ? <br/> : " "}
             <span>
-              {lastUpdated.getDate() + "/" + lastUpdated.getMonth() + "/" +
-              (lastUpdated.getFullYear()) + " " + lastUpdated.toLocaleTimeString()}
+              {lastUpdated?.getDate() + "/" + lastUpdated?.getMonth() + "/" +
+              (lastUpdated?.getFullYear()) + " " + lastUpdated?.toLocaleTimeString()}
             </span>
           </h6>
         )}
@@ -92,11 +92,11 @@ function BuildSchedule() {
           </InfoContent>
         )}
 
-
         {courses &&
           courses.map((course, idx) => (
             <Course key={`${course.name}-${idx}`} course={course} />
-          ))}
+          ))
+        }
       </CoursePickerContainer>
 
       {!isMobile && (
