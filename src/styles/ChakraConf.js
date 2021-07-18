@@ -37,7 +37,7 @@ export const colors = {
     Gray: "#828282",
     DarkPurple: "#402D99",
     LightPurple: "#5038BC1A",
-    LigthGray: "#F5F5F5",
+    lightGray: "#F5F5F5",
     InputGray: "#F2F2F2",
     Golden: "#FFD668",
     Cerise: "#C424A3",
@@ -45,6 +45,7 @@ export const colors = {
   },
   state: {
     Error: "#EB5757",
+    DarkError: "#C74040",
     ErrorGhost: "#EB57571A",
     Warning: "#F7B500",
     Success: "#27AE60",
