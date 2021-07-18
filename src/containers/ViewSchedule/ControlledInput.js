@@ -63,7 +63,6 @@ class ControlledInput extends React.Component {
               this.changeScheduleName("blur");
             }
           }}
-          inputStyle={{ fontSize: 32, backgroundColor: "transparent", border: "none" }}
         />
         <button
           className={this.state.editing ? "hide" : ""}
@@ -74,7 +73,6 @@ class ControlledInput extends React.Component {
           <img
             src={editImg}
             alt="Edit"
-            style={{ width: 24, height: 24, marginLeft: 8 }}
           />
         </button>
       </Container>
@@ -88,5 +86,32 @@ const Container = styled.div`
   color: #333333;
   background-color: transparent;
 
+  input {
+    font-size: 24px;
+    margin-right: 12px;
+    background-color: transparent;
+    overflow: visible;
+
+    border: 2px solid transparent !important;
+  }
+
+  img {
+    width: 18px;
+    height: 18px;
+  }
+
+  input:focus {
+    outline: none !important;
+    border-radius: 4px !important;
+    border: 2px solid ${props => props.theme.color.primaryPurple} !important;
+  }
+
+  @media (min-width: 900px) {
+    input {
+      margin-right: 8px;
+      font-size: 32px;
+    }
+  }
 `;
+
 export default ControlledInput;

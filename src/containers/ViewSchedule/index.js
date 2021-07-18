@@ -49,7 +49,7 @@ function ViewSchedule({ match, history }) {
 
   const showAlertCopy = () => {
     alert(
-      "Link telah disalin!! Kamu bisa bagikan link tersebut ke teman kamu."
+      "Link telah disalin! Kamu bisa bagikan link tersebut ke teman kamu."
     );
   }
 
@@ -106,7 +106,6 @@ function ViewSchedule({ match, history }) {
                 </Button>
               </Link>
             </ButtonContainer>
-            
         </Container>
       )}
 
@@ -126,16 +125,26 @@ function ViewSchedule({ match, history }) {
 
 const MainContainer = styled.div`
   padding: 0px !important;
+  margin: -56px -24px 0;
+
+  @media (min-width: 900px) {
+    margin: -36px -80px 0;
+  }
 `;
 
 const Container = styled.div`
-  padding: 32px 48px;
-  padding-bottom: 16px;
   background-color: transparent;
   display:flex;
-  flex-direction:row;
-  justify-content:space-between;
-  align-items:center;
+  flex-direction:column;
+  align-items:left;
+  padding: 32px 24px 20px;
+
+  @media (min-width: 900px) {
+    padding: 32px 80px 20px;
+    justify-content:space-between;
+    align-items:center;
+    flex-direction: row;
+  }
 `;
 
 const ScheduleName = styled.div`

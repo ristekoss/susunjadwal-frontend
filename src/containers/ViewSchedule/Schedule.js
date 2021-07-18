@@ -90,7 +90,7 @@ function Schedule({
             )}
             <div className="content">
               {showRoom && isMobile && <span>{room}</span>}
-              <span style={{ fontSize: isMobile?  "8px": "12px", color: isOneSKS(start,end)?  "#5038BC": "#fffff"}}>{name}</span>
+              <span style={{ fontSize: isMobile?  "8px": "12px", color: isOneSKS(start,end)?  "#5038BC": "#ffffff", mixBlendMode: "normal"}}>{name}</span>
             </div>
           </ScheduleItem>
         ))}
