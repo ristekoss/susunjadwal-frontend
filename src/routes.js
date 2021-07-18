@@ -16,7 +16,9 @@ import EditSchedule from "./containers/EditSchedule";
 import Footer from "containers/Footer";
 import BetaForm from "containers/BetaForm";
 import BetaLanding from "containers/BetaLanding";
+import UpdateCourses  from "containers/UpdateCourses";
 import { theme } from "styles/StyledTheme";
+import CompleteForm from "containers/CompleteForm";
 
 const ROUTES = [
   { path: "/susun", component: BuildSchedule, auth: true },
@@ -41,6 +43,8 @@ function Routes() {
           <Route path="/" name="home" component={Login} exact />
           <Route path="/beta" name="beta" component={BetaLanding} />
           <Route path="/beta-form" name="beta-form" component={BetaForm} />
+          <Route path="/update" name="update-matkul" component={UpdateCourses} />
+          <Route path="/complete" name="complete-form" component={CompleteForm} />
           <Route component={RoutesWithNavbar} />
         </Switch>
       </Box>

@@ -90,7 +90,7 @@ function Schedule({
             )}
             <div className="content">
               {showRoom && isMobile && <span>{room}</span>}
-              <span style={{ fontSize: isMobile?  "8px": "12px", color: isOneSKS(start,end)?  "#5038BC": "#fffff"}}>{name}</span>
+              <span style={{ fontSize: isMobile?  "8px": "12px", color: isOneSKS(start,end)?  "#5038BC": "#ffffff", mixBlendMode: "normal"}}>{name}</span>
             </div>
           </ScheduleItem>
         ))}
@@ -116,7 +116,7 @@ const TimeLabel = styled.div`
   place-self: center;
   grid-area: ${({ row }) => row + 30} / 1 / ${({ row }) => row + 90} / 1;
   font-size: ${props => (props.theme.mobile ? "12px" : "16px")};
-  color: white;
+  color: #000000;
 `;
 
 const TimeMarker = styled.div`
@@ -132,7 +132,7 @@ const Header = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #333333;
+  background-color: #5038BC;
   color: white;
   flex-direction: row;
   grid-row: 1 / 60;

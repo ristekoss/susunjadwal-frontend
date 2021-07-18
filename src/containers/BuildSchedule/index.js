@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
 
@@ -46,10 +47,6 @@ function BuildSchedule() {
     fetchCourses(majorId);
   }, [auth.majorId, dispatch, fetchCourses]);
 
-  useEffect(() => {
-    console.log(courses)
-  }, [courses])
-
   return (
     <Container>
       <BauhausSide />
@@ -64,6 +61,14 @@ function BuildSchedule() {
             LINE (@rye2953f). Terima kasih :D
           </InfoContent>
         )}
+        {courses?.length === 0 && (
+          <InfoContent>
+            Jadwal kosong gara-gara password salah, tunggu 5 menit lagi
+            <Link to="/sso/login"> disini</Link>
+          </InfoContent>
+        )}
+
+
         {courses &&
           courses.map((course, idx) => (
             <Course key={`${course.name}-${idx}`} course={course} />

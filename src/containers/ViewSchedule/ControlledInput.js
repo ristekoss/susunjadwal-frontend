@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import AutosizeInput from "react-input-autosize";
 
-import editImg from "assets/Edit.png";
+import editImg from "assets/edit_black.png";
 
 class ControlledInput extends React.Component {
   constructor(props) {
@@ -63,7 +63,6 @@ class ControlledInput extends React.Component {
               this.changeScheduleName("blur");
             }
           }}
-          inputStyle={{ fontSize: 32, backgroundColor: "#1a1a1a", border: "none" }}
         />
         <button
           className={this.state.editing ? "hide" : ""}
@@ -74,7 +73,6 @@ class ControlledInput extends React.Component {
           <img
             src={editImg}
             alt="Edit"
-            style={{ width: 32, height: 32, marginLeft: 8 }}
           />
         </button>
       </Container>
@@ -85,8 +83,35 @@ class ControlledInput extends React.Component {
 const Container = styled.div`
   display: flex;
   align-items: center;
-  color: white;
-  background-color: #1a1a1a;
+  color: #333333;
+  background-color: transparent;
 
+  input {
+    font-size: 24px;
+    margin-right: 12px;
+    background-color: transparent;
+    overflow: visible;
+
+    border: 2px solid transparent !important;
+  }
+
+  img {
+    width: 18px;
+    height: 18px;
+  }
+
+  input:focus {
+    outline: none !important;
+    border-radius: 4px !important;
+    border: 2px solid ${props => props.theme.color.primaryPurple} !important;
+  }
+
+  @media (min-width: 900px) {
+    input {
+      margin-right: 8px;
+      font-size: 32px;
+    }
+  }
 `;
+
 export default ControlledInput;

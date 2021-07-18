@@ -55,7 +55,8 @@ function Login({ history, location }) {
             user_id: userId,
             token,
             err,
-            major_name: majorName
+            major_name: majorName,
+            user_name: username,
           }
         } = await makeAtLeastMs(postAuthTicket(ticket, serviceUrl), 1000);
 
@@ -64,10 +65,16 @@ function Login({ history, location }) {
           setError({
             majorName
           });
-        } else {
-          dispatch(setAuth({ majorId, userId, token }));
-          persistAuth({ majorId, userId, token });
+          if (username === undefined) {
+            persistAuth({ majorId, userId, token });
+            history.push('/update')
+          } else {
+            history.push('/complete');
+          }
         }
+
+        dispatch(setAuth({ majorId, userId, token }));
+        persistAuth({ majorId, userId, token });
       } catch (e) {
         dispatch(setLoading(false));
         history.replace("/");

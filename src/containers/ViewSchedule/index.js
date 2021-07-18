@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Helmet from "react-helmet";
 import { useSelector, useDispatch } from "react-redux";
 
-import { getSchedule, postRenameSchedule } from "services/api";
+import { getSchedule, postRenameSchedule, deleteSchedule } from "services/api";
 import { makeAtLeastMs } from "utils/promise";
 import { setLoading } from "redux/modules/appState";
 
@@ -13,8 +13,12 @@ import { decodeHtmlEntity } from "utils/string";
 import { Button } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router';
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
-function ViewSchedule({ match }) {
+import deleteImg from "assets/Delete.svg";
+import clipboardImg from "assets/Clipboard.svg";
+
+function ViewSchedule({ match, history }) {
   const dispatch = useDispatch();
   const isMobile = useSelector(state => state.appState.isMobile);
   const auth = useSelector(state => state.auth);
@@ -43,10 +47,29 @@ function ViewSchedule({ match }) {
 
   const scheduleName = schedule && schedule.name;
 
+  const showAlertCopy = () => {
+    alert(
+      "Link telah disalin! Kamu bisa bagikan link tersebut ke teman kamu."
+    );
+  }
+
+  const performDeleteSchedule = async (userId, scheduleId) => {
+    dispatch(setLoading(true));
+    await makeAtLeastMs(deleteSchedule(userId, scheduleId), 1000);
+    history.push('/jadwal');
+  }
+
+  const confirmDeleteSchedule = (scheduleId) => {
+    const response = window.confirm("Apakah kamu yakin akan menghapusnya?");
+    if (response) {
+      performDeleteSchedule(auth.userId, scheduleId);
+    }
+  }
+
   return (
-    <React.Fragment>
+    <MainContainer>
       <Helmet
-        title={scheduleName ? `Jadwal ${scheduleName}` : `Memuat jadwal ...`}
+        title={scheduleName ? `Jadwal ${scheduleName}` : `Jadwal Untitled`}
         meta={[{ name: "description", content: "Description of Jadwal" }]}
       />
 
@@ -63,11 +86,26 @@ function ViewSchedule({ match }) {
                 {decodeHtmlEntity(schedule.name)}
               </ScheduleName>
             )}
-          <Link to={`/edit/${scheduleId}`} >
-            <Button intent="primary" onClick={() => null} >
-              {schedule.has_edit_access ? 'Edit' : 'Copy'}
-            </Button>
-          </Link>
+            <ButtonContainer>
+              <ImageButton
+                onClick={() => confirmDeleteSchedule(schedule.id)}
+              >
+                <img src={deleteImg} alt="delete"/>
+              </ImageButton>
+              <CopyToClipboard
+                    text={`${window.location.href}/${schedule.id}`}
+                    onCopy={showAlertCopy}
+                  >
+                    <ImageButton>
+                      <img src={clipboardImg} alt="copy"/>
+                    </ImageButton>
+                  </CopyToClipboard>
+              <Link to={`/edit/${scheduleId}`} >
+                <Button intent="primary" variant="outline" onClick={() => null} >
+                  {schedule.has_edit_access ? 'Edit' : 'Copy'}
+                </Button>
+              </Link>
+            </ButtonContainer>
         </Container>
       )}
 
@@ -81,23 +119,48 @@ function ViewSchedule({ match }) {
         showLabel
         showRoom
       />
-    </React.Fragment>
+    </MainContainer>
   );
 }
 
+const MainContainer = styled.div`
+  padding: 0px !important;
+  margin: -56px -24px 0;
+
+  @media (min-width: 900px) {
+    margin: -36px -80px 0;
+  }
+`;
+
 const Container = styled.div`
-  padding: 32px 48px;
-  padding-bottom: 16px;
-  background-color: #1a1a1a;
+  background-color: transparent;
   display:flex;
-  flex-direction:row;
-  justify-content:space-between;
-  align-items:center;
+  flex-direction:column;
+  align-items:left;
+  padding: 32px 24px 20px;
+
+  @media (min-width: 900px) {
+    padding: 32px 80px 20px;
+    justify-content:space-between;
+    align-items:center;
+    flex-direction: row;
+  }
 `;
 
 const ScheduleName = styled.div`
   font-size: 32px;
   color: white;
-`
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const ImageButton = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-right: 1rem;
+`;
 
 export default ViewSchedule;

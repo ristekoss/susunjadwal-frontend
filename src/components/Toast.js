@@ -26,9 +26,7 @@ export const CustomToast = ({ message, type }) => {
       borderColor={ToastType[type].color}
       d="flex"
       overflowWrap="break-word"
-      maxW="300px"
-      mt={{ base: "70px", lg: "90px" }}
-      mr={{ base: 4, lg: 20 }}
+      maxW={{ base: "300px", lg: "600px" }}
       minH={{ base: "40px", lg: "50px" }}
       bg="var(--chakra-colors-primary-Alabaster)"
     >
@@ -43,24 +41,29 @@ export const CustomToast = ({ message, type }) => {
       >
         {ToastType[type].icon}
       </Box>
-      <Box style={{wordWrap: 'break-word'}} alignItems="center" px="1.2rem">
+      <Box
+        display="flex"
+        style={{wordWrap: 'break-word'}}
+        alignItems="center"
+        px="1.2rem"
+      >
         {message}
       </Box>
     </Box>
   );
 };
 
-export const SuccessToast = (message) =>
+export const SuccessToast = (message, isMobile=false) =>
   toast({
     duration: 3000,
-    position: "top-right",
+    position: isMobile ? "top" : "top-right",
     render: () => <CustomToast type="success" message={message} />,
-  });
+  })
 
-export const InfoToast = (message) =>
+export const InfoToast = (message, isMobile=false) =>
   toast({
     duration: 3000,
-    position: "top-right",
+    position: isMobile ? "top" : "top-right",
     isClosable: true,
     render: () => <CustomToast type="info" message={message} />,
   });

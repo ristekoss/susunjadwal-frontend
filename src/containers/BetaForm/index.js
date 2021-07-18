@@ -1,13 +1,16 @@
 import React from "react";
-import { Box, Text, Button } from "@chakra-ui/react";
-import { InputEmail, InputSelect, InputText } from "components/Forms";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { Box, Text, Button } from "@chakra-ui/react";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
+
 import { postBetaTesterData } from "services/api";
 import FACULTIES from "utils/faculty-base.json";
-import { Link } from "react-router-dom";
-import { ChevronLeftIcon } from "@chakra-ui/icons";
-import { InfoToast, SuccessToast } from "components/Toast";
+
 import { Bauhaus } from "components/Bauhaus";
+import { InfoToast, SuccessToast } from "components/Toast";
+import { InputEmail, InputSelect, InputText } from "components/Forms";
 
 const BetaForm = ({ history }) => {
   const {
@@ -16,19 +19,21 @@ const BetaForm = ({ history }) => {
     formState: { errors, isSubmitting, isSubmitSuccessful },
     watch,
   } = useForm();
-
   const selectedFaculty = watch("fakultas");
+  const isMobile = useSelector((state) => state.appState.isMobile);
 
   async function onSubmit(values) {
     try {
       await postBetaTesterData(values);
       SuccessToast(
-        "Terima Kasih sudah menjadi Beta Tester kami. Tim kami akan segera menghubungi Kamu."
+        "Terima Kasih sudah menjadi Beta Tester kami. Tim kami akan segera menghubungi Kamu.",
+        isMobile
       );
       history.push("/");
     } catch (error) {
       InfoToast(
-        "Maaf ada sedikit kesalahan nih, silakan coba beberapa saat lagi atau hubungi contact person"
+        "Maaf ada sedikit kesalahan nih, silakan coba beberapa saat lagi atau hubungi contact person",
+        isMobile
       );
       throw error;
     }

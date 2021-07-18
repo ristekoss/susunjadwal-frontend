@@ -64,3 +64,10 @@ export const postBetaTesterData = async function (data) {
     }
   );
 };
+
+export const postScrapSchedule = async ({ username, password }) => {
+  await instance.post('/scrape-schedule', {
+    username: username,
+    password: password,
+  });
+};
