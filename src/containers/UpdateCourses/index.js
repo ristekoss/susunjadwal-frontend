@@ -35,21 +35,23 @@ const UpdateCourses = ({ history }) => {
         "Sedang memperbaharui jadwal",
         isMobile
       );
-      postScrapSchedule(values);
+      await postScrapSchedule(values);
       setTimeout(() => {
         toast.closeAll();
-        ErrorToast(
+        SuccessToast(
           "Jadwal berhasil diperbaharui",
           isMobile
         );
         window.location.replace("/susun")
       }, 1000);
-    } catch (err) {
-      InfoToast(
-        "Maaf ada sedikit kendala, silahkan coba beberapa saat lagi",
-        isMobile
-      );
-      throw err;
+    } catch (e) {
+      setTimeout(() => {
+        toast.closeAll();
+        ErrorToast(
+          e.response.data.message,
+          isMobile
+        );
+      }, 1000)
     }
   }
 
