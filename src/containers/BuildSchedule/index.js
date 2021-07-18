@@ -126,7 +126,7 @@ function BuildSchedule() {
 
 export default BuildSchedule;
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   background-color: ${props => props.theme.color.primaryWhite};
   color: ${props => props.theme.color.secondaryMineShaft};
@@ -137,7 +137,7 @@ const Container = styled.div`
   }
 `;
 
-const InfoContent = styled.div`
+export const InfoContent = styled.div`
   margin: 48px 0 16px;
   text-align: center;
   min-height: 100vh;
@@ -156,7 +156,7 @@ const InfoContent = styled.div`
   }
 `;
 
-const CoursePickerContainer = styled.div`
+export const CoursePickerContainer = styled.div`
   width: ${({ isMobile }) => (isMobile ? "100%" : "75%;")};
   color: #333333;
 
@@ -190,7 +190,7 @@ const CoursePickerContainer = styled.div`
   }
 `;
 
-const SelectedCoursesContainer = styled.div`
+export const SelectedCoursesContainer = styled.div`
   background-color: ${props => props.theme.color.primaryWhite};
   height: 100vh;
   padding: 128px 32px;
