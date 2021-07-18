@@ -57,7 +57,10 @@ const UpdateCourses = ({ history }) => {
   return (
     <>
       <Bauhaus />
-      <Box width={{lg: "80%", xl: "70%"}}>
+      <Box
+        width={{lg: "80%", xl: "70%"}}
+        mt={{ base: "0px", lg: "-40px" }}
+      >
         <Link to="/">
           <Text
             color="var(--chakra-colors-primary-Purple)"
@@ -80,7 +83,7 @@ const UpdateCourses = ({ history }) => {
         <Info />
         <FormContainer className="form-container" onSubmit={handleSubmit(onSubmit)} >
           <InputText
-            label="User Name"
+            label="Username SSO"
             name="username"
             marginTop="1rem"
             register={register}
@@ -91,7 +94,7 @@ const UpdateCourses = ({ history }) => {
           />
 
           <InputPassword
-            label="Kata Sandi"
+            label="Password SSO"
             name="password"
             marginTop="1rem"
             register={register}
@@ -121,4 +124,4 @@ export default UpdateCourses;
 
 const FormContainer = styled.div`
   margin-top: 3rem;
-`
+`;

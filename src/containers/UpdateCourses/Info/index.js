@@ -22,7 +22,8 @@ const Info = () => (
       Apakah akun SSO saya aman setelah melakukan Update Jadwal?
     </Question>
     <Answer>
-      100% aman, karena kami sama sekali tidak menyimpan credentials kalian di sistem kami.
+      100% aman, karena kami sama sekali tidak menyimpan <em>credentials</em> kalian
+      di sistem kami.
     </Answer>
     <Question>
       Saya masih ragu, apakah saya dapat mempelajari SusunJadwal?
@@ -42,6 +43,8 @@ const InfoContainer = styled.ul`
   border: 1px solid #5038BC;
   font-family: 'Poppins';
   border-radius: 0.8rem;
+  position: relative;
+  z-index: 10;
 
   @media (min-width: 900px) {
     padding: 3rem 2.5rem 3rem calc(2rem + 24px);
