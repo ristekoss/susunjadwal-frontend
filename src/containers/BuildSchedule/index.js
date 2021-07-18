@@ -23,6 +23,7 @@ function BuildSchedule() {
   const dispatch = useDispatch();
 
   const [courses, setCourses] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState();
   const [isCoursesDetail, setCoursesDetail] = useState(null);
 
   const fetchCourses = useCallback(
@@ -33,6 +34,7 @@ function BuildSchedule() {
         const { data } = await getCourses(majorId);
         setCourses(data.courses);
         setCoursesDetail(data.is_detail);
+        setLastUpdated(new Date(data.last_update_at))
         dispatch(reduxSetCourses(data.courses));
       } catch(e) {/** TODO: handle error */}
 
@@ -54,6 +56,17 @@ function BuildSchedule() {
 
       <CoursePickerContainer isMobile={isMobile}>
         <h1>Buat Jadwal</h1>
+
+        {lastUpdated && (
+          <h6>
+            Jadwal terakhir diperbarui pada {isMobile ? <br/> : " "}
+            <span>
+              {lastUpdated.getDate() + "/" + lastUpdated.getMonth() + "/" +
+              (lastUpdated.getFullYear()) + " " + lastUpdated.toLocaleTimeString()}
+            </span>
+          </h6>
+        )}
+
         {!isCoursesDetail && (
           <InfoContent>
             Halo! Jadwal kamu belum detail nih, kalo kamu ingin membantu kami
@@ -124,15 +137,29 @@ const CoursePickerContainer = styled.div`
 
   h1 {
     color: ${props => props.theme.color.primaryPurple};
-    margin-bottom: 16px;
     font-weight: bold;
     font-size: 24px;
     text-align: center;
   }
 
+  h6 {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  h6 span {
+    font-weight: 600;
+  }
+
   @media (min-width: 900px) {
     h1 {
       font-size: 32px;
+      text-align: left;
+    }
+
+    h6 {
+      font-size: 16px;
       text-align: left;
     }
   }
