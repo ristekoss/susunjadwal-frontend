@@ -19,14 +19,14 @@ import { Bauhaus } from "components/Bauhaus";
 import Alert from "./Alert";
 import Info from "./Info";
 
-const UpdateCourses = ({ history }) => {
+const UpdateCourses = () => {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const toast = useToast();
 
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useForm();
 
   const onSubmit = async (values) => {
@@ -62,7 +62,7 @@ const UpdateCourses = ({ history }) => {
         width={{lg: "80%", xl: "70%"}}
         mt={{ base: "0px", lg: "-40px" }}
       >
-        <Link to="/">
+        <Link to="/susun">
           <Text
             color="var(--chakra-colors-primary-Purple)"
             fontSize="lg"
@@ -110,7 +110,6 @@ const UpdateCourses = ({ history }) => {
             colorScheme="teal"
             isLoading={isSubmitting}
             type="submit"
-            disabled={isSubmitSuccessful}
             w={{sm: "100%", lg: "unset"}}
           >
             Update Jadwal
