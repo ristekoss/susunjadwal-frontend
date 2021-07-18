@@ -59,8 +59,6 @@ function Login({ history, location }) {
           }
         } = await makeAtLeastMs(postAuthTicket(ticket, serviceUrl), 1000);
 
-        dispatch(setLoading(false));
-
         if (completionId !== undefined) {
           persistCompletion({ username, fullname, completionId });
           history.replace('/complete');
