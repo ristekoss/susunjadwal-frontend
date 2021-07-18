@@ -42,7 +42,8 @@ const UpdateCourses = ({ history }) => {
           'Jadwal berhasil diperbaharui',
           isMobile
         );
-        history.push('/susun')
+        // history.push('/susun')
+        window.location.replace('/susun')
       }, 1000);
     } catch (err) {
       InfoToast(

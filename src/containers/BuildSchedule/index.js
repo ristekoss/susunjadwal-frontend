@@ -47,10 +47,6 @@ function BuildSchedule() {
     fetchCourses(majorId);
   }, [auth.majorId, dispatch, fetchCourses]);
 
-  useEffect(() => {
-    console.log(courses)
-  }, [courses])
-
   return (
     <Container>
       <BauhausSide />
