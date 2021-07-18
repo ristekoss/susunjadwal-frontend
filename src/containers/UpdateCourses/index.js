@@ -11,7 +11,7 @@ import {
   useToast
 } from "@chakra-ui/react";
 
-import { postScrapSchedule } from "services/api";
+import { postScrapeSchedule } from "services/api";
 
 import { InputPassword, InputText } from "components/Forms";
 import { InfoToast, SuccessToast, ErrorToast } from "components/Toast";
@@ -35,7 +35,7 @@ const UpdateCourses = () => {
         "Sedang memperbaharui jadwal",
         isMobile
       );
-      await postScrapSchedule(values);
+      await postScrapeSchedule(values);
       setTimeout(() => {
         toast.closeAll();
         SuccessToast(

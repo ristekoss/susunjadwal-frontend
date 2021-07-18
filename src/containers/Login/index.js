@@ -4,12 +4,12 @@ import { Button, Box } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { parse } from "query-string";
 
-import { redirectToSSOLogin, redirectToSSOLogout } from "services/sso";
+import { persistAuth, persistCompletion } from "utils/auth";
+import { redirectToSSOLogin } from "services/sso";
 import { setLoading } from "redux/modules/appState";
 import { makeAtLeastMs } from "utils/promise";
 import { postAuthTicket } from "services/api";
 import { setAuth } from "redux/modules/auth";
-import { persistAuth } from "utils/auth";
 
 import { Bauhaus } from 'components/Bauhaus';
 
@@ -35,6 +35,13 @@ import ChevronArrow from "assets/Beta/chevron-down.svg";
 import BetaAssetA from "assets/Beta/beta-landing-asset-1.svg";
 import BetaAssetB from "assets/Beta/beta-landing-asset-2.svg";
 
+/**
+ * States of logging in
+ * 1. Complete sso data & period
+ * 2. Missing sso data -> /complete
+ * 3. Missing period -> /update
+ */
+
 function getServiceUrl() {
   return window.location.href.split("?")[0];
 }
@@ -54,27 +61,32 @@ function Login({ history, location }) {
             major_id: majorId,
             user_id: userId,
             token,
-            err,
+            err: isPeriodMissing,
             major_name: majorName,
             user_name: username,
+            full_name: fullname,
+            completion_id: completionId
           }
         } = await makeAtLeastMs(postAuthTicket(ticket, serviceUrl), 1000);
 
-        if (err) {
-          dispatch(setLoading(false));
-          setError({
-            majorName
-          });
-          if (username === undefined) {
-            persistAuth({ majorId, userId, token });
-            history.push('/update')
-          } else {
-            history.push('/complete');
-          }
+        dispatch(setLoading(false));
+
+        if (completionId !== undefined) {
+          persistCompletion({ username, fullname, completionId });
+          history.replace('/complete');
+          return null;
         }
 
-        dispatch(setAuth({ majorId, userId, token }));
+        if (isPeriodMissing) {
+          setError({ majorName });
+          history.replace('/update')
+          return null;
+        } else {
+          dispatch(setAuth({ majorId, userId, token }));
+        }
+
         persistAuth({ majorId, userId, token });
+
       } catch (e) {
         dispatch(setLoading(false));
         history.replace("/");
@@ -90,7 +102,7 @@ function Login({ history, location }) {
   }, [location, dispatch, history]);
 
   useEffect(() => {
-    if (auth) history.push("/susun");
+    if (auth?.token) history.push("/susun");
   }, [auth, history]);
 
   return (
@@ -108,12 +120,11 @@ function Login({ history, location }) {
            * - when user's major currently does not have active period schedule saved
            *   -> redirect to update jadwal (check if user is beta tester first)
            */
-          <Button
-            mt={{ base: "4rem", lg: "4.5rem" }}
-            onClick={redirectToSSOLogout}
-          >
-            Log out dari SSO
-          </Button>
+          <Link to="/update">
+            <Button mt={{ base: "4rem", lg: "4.5rem" }}>
+              Log out dari SSO
+            </Button>
+          </Link>
         ) : (
           <Button
             mt={{ base: "4rem", lg: "4.5rem" }}
