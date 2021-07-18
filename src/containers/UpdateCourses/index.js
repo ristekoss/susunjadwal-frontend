@@ -18,7 +18,6 @@ import { InfoToast, SuccessToast } from "components/Toast";
 import { Bauhaus } from "components/Bauhaus";
 import Alert from "./Alert";
 import Info from "./Info";
-import "./styles.css";
 
 const UpdateCourses = ({ history }) => {
   const isMobile = useSelector((state) => state.appState.isMobile);
@@ -73,19 +72,18 @@ const UpdateCourses = ({ history }) => {
           fontSize="3xl"
           fontWeight="bold"
           mt="4"
-          mb="20"
+          mb={{ base: "24px", lg: "48px" }}
           textAlign={{sm: "center", lg: "left"}}
         >
           Daftarkan SSO untuk Update Jadwal
         </Text>
         <Info />
-        <form className="form-container" onSubmit={handleSubmit(onSubmit)} >
+        <FormContainer className="form-container" onSubmit={handleSubmit(onSubmit)} >
           <InputText
             label="User Name"
             name="username"
             marginTop="1rem"
             register={register}
-            placeholder="john.doe"
             validator={{
               required: `User name tidak boleh kosong`,
             }}
@@ -97,7 +95,6 @@ const UpdateCourses = ({ history }) => {
             name="password"
             marginTop="1rem"
             register={register}
-            placeholder="password"
             validator={{
               required: `Password tidak boleh kosong`,
             }}
@@ -114,7 +111,7 @@ const UpdateCourses = ({ history }) => {
           >
             Update Jadwal
           </Button>
-        </form>
+        </FormContainer>
       </Box>
     </>
   );
