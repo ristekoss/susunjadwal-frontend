@@ -62,7 +62,7 @@ function BuildSchedule() {
           <h6>
             Jadwal terakhir diperbarui pada {isMobile ? <br/> : " "}
             <span>
-              {lastUpdated?.getDate() + "/" + lastUpdated?.getMonth() + "/" +
+              {lastUpdated?.getDate() + "/" + (lastUpdated?.getMonth() +1) + "/" +
               (lastUpdated?.getFullYear()) + " " + lastUpdated?.toLocaleTimeString()}
             </span>
           </h6>
