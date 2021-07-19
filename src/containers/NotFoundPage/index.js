@@ -12,15 +12,17 @@ export default class NotFound extends React.Component {
 }
 
 const NotFoundTitle = styled.div`
-  font-size: 2rem;
-  color: white;
   margin: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: ${props => props.theme.color.primaryPurple};
 `;
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: calc(100vh - 140px - 1rem);
   width: 100%;
   display: flex;
+  text-align: center;
   align-items: center;
   justify-content: center;
 `;
