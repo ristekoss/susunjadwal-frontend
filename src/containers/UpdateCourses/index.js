@@ -79,7 +79,7 @@ const UpdateCourses = () => {
           mb={{ base: "24px", lg: "48px" }}
           textAlign={{sm: "center", lg: "left"}}
         >
-          Daftarkan SSO untuk Update Jadwal
+          Daftarkan SSO untuk Update Matkul
         </Text>
         <Info />
         <FormContainer className="form-container" onSubmit={handleSubmit(onSubmit)} >
