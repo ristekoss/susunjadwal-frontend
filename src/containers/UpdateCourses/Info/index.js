@@ -4,14 +4,14 @@ import React from "react";
 const Info = () => (
   <InfoContainer className="info-container">
     <Question>
-      Apa itu Update Jadwal?
+      Apa itu Update Matkul?
     </Question>
     <Answer>
-      Update Jadwal adalah fitur yang membolehkan penggunanya untuk memperbarui
+      Update Matkul adalah fitur yang membolehkan penggunanya untuk memperbarui
       jadwal kuliah dari program studi masing-masing.
     </Answer>
     <Question>
-      Kenapa perlu Update Jadwal?
+      Kenapa perlu Update Matkul?
     </Question>
     <Answer>
       SusunJadwal tidak bekerjasama dengan pihak UI. Sehingga, SusunJadwal perlu
@@ -19,7 +19,7 @@ const Info = () => (
       agar SusunJadwal dapat digunakan.
     </Answer>
     <Question>
-      Apakah akun SSO saya aman setelah melakukan Update Jadwal?
+      Apakah akun SSO saya aman setelah melakukan Update Matkul?
     </Question>
     <Answer>
       100% aman, karena kami sama sekali tidak menyimpan <em>credentials</em> kalian
