@@ -121,7 +121,7 @@ function ViewSchedule({ match, history }) {
                   <p>
                     Dibuat pada {" "}
                     {createdAt?.getDate() + "/"
-                    + createdAt?.getMonth() + "/"
+                    + (createdAt?.getMonth() + 1) + "/"
                     + createdAt?.getFullYear()}
                   </p>
                 </ScheduleNameEditable>
