@@ -11,9 +11,13 @@ const CourseClassMobile = props => {
       <h2>{props.name}</h2>
       <h3>Pengajar</h3>
       <ul>
-        {props.lecturer.map(lecturer => (
-          <li key={lecturer}>{lecturer}</li>
-        ))}
+        {props.lecturer[0] === "" ? (
+          <span>Pengajar belum tersedia</span>
+        ) : (
+          props.lecturer.map(lecturer => (
+            <li key={lecturer}>{lecturer}</li>
+          ))
+        )}
       </ul>
       <h3>Jadwal</h3>
       <ul>
@@ -39,9 +43,28 @@ const CourseClassDesktop = props => {
     <span key={idx}>{item.room}</span>
   ));
 
-  const lecturers = props.lecturer.map((lecturer, idx) => (
-    <li key={idx}>{lecturer}</li>
-  ));
+  const lecturers = () => {
+    console.log(props.lecturer)
+    return (
+      <>
+        {props.lecturer[0] === "" ? (
+          <span
+            style={{
+              display: "block",
+              textAlign: "center",
+              paddingRight: "15%"
+            }}
+          >
+            –
+          </span>
+        ) : (
+          props.lecturer.map((lecturer, idx) => (
+            <li key={idx}>{lecturer}</li>
+          ))
+        )}
+      </>
+    )
+  }
 
   return (
     <CourseClassContainer onClick={props.handleChange}>
@@ -51,7 +74,7 @@ const CourseClassDesktop = props => {
       <CourseClassItem flex={3}>{props.name}</CourseClassItem>
       <CourseClassItem flex={3}><ul>{classSchedules}</ul></CourseClassItem>
       <CourseClassItem flex={1}>{rooms}</CourseClassItem>
-      <CourseClassItem flex={4}><ul>{lecturers}</ul></CourseClassItem>
+      <CourseClassItem flex={4}><ul>{lecturers()}</ul></CourseClassItem>
     </CourseClassContainer>
   );
 };
