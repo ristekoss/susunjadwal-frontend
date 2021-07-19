@@ -20,6 +20,7 @@ import {
   SignOutLink,
   WrapperHamburger,
 } from "./styles";
+import { useSelector } from "react-redux";
 // import { useSelector } from "react-redux";
 
 const LINKS = [
@@ -32,6 +33,7 @@ const LINKS = [
 function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { pathname } = useLocation();
+  const isMobile = useSelector((state) => state.appState.isMobile);
   // const auth = useSelector(state => state.auth);
 
   function toggleMenu() {
@@ -50,9 +52,9 @@ function Header() {
           />
         </Link>
       </Box>
-      <WrapperHamburger open={isOpen} onClick={toggleMenu}>
+      {isMobile && <WrapperHamburger open={isOpen} onClick={toggleMenu}>
         <HamburgerIcon />
-      </WrapperHamburger>
+      </WrapperHamburger>}
       {/* {!auth ? <NavLinks /> : null} TODO:should uncomment this line*/} 
       <NavLinks pathname={pathname} /> {/** TODO: should comment this line*/}
       <SideBar pathname={pathname} onClose={onClose} isOpen={isOpen} />
