@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Box } from "@chakra-ui/react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { parse } from "query-string";
 
-import { redirectToSSOLogin, redirectToSSOLogout } from "services/sso";
+import { persistAuth, persistCompletion } from "utils/auth";
+import { redirectToSSOLogin } from "services/sso";
 import { setLoading } from "redux/modules/appState";
 import { makeAtLeastMs } from "utils/promise";
 import { postAuthTicket } from "services/api";
 import { setAuth } from "redux/modules/auth";
-import { persistAuth } from "utils/auth";
 
 import { Bauhaus } from 'components/Bauhaus';
 
@@ -43,38 +43,40 @@ function Login({ history, location }) {
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
-  const [error, setError] = useState(null);
-
   useEffect(() => {
     async function authenticate(ticket, serviceUrl) {
       try {
         dispatch(setLoading(true));
         const {
           data: {
-            major_id: majorId,
-            user_id: userId,
             token,
-            err,
-            major_name: majorName,
+            user_id: userId,
+            major_id: majorId,
             user_name: username,
+            full_name: fullname,
+            err: isPeriodMissing,
+            completion_id: completionId
           }
         } = await makeAtLeastMs(postAuthTicket(ticket, serviceUrl), 1000);
 
-        if (err) {
+        if (completionId !== undefined) {
+          persistCompletion({ username, fullname, completionId });
           dispatch(setLoading(false));
-          setError({
-            majorName
-          });
-          if (username === undefined) {
-            persistAuth({ majorId, userId, token });
-            history.push('/update')
-          } else {
-            history.push('/complete');
-          }
+          history.replace('/complete');
+          return null;
         }
 
-        dispatch(setAuth({ majorId, userId, token }));
+        if (isPeriodMissing) {
+          dispatch(setLoading(false));
+          persistAuth({ majorId, userId, token });
+          history.replace('/update')
+          return null;
+        } else {
+          dispatch(setAuth({ majorId, userId, token }));
+        }
+
         persistAuth({ majorId, userId, token });
+
       } catch (e) {
         dispatch(setLoading(false));
         history.replace("/");
@@ -90,7 +92,7 @@ function Login({ history, location }) {
   }, [location, dispatch, history]);
 
   useEffect(() => {
-    if (auth) history.push("/susun");
+    if (auth?.token) history.push("/susun");
   }, [auth, history]);
 
   return (
@@ -100,28 +102,12 @@ function Login({ history, location }) {
       <HeroSection>
         <LogoRistek src={RistekLogo} alt="ristek-logo" />
         <Header>Susun<span>Jadwal</span></Header>
-        {error ? (
-          /**
-           * TODO: handle error for conditions below:
-           * - when sso return data is incomplete
-           *   -> redirect to sso creds form
-           * - when user's major currently does not have active period schedule saved
-           *   -> redirect to update jadwal (check if user is beta tester first)
-           */
-          <Button
-            mt={{ base: "4rem", lg: "4.5rem" }}
-            onClick={redirectToSSOLogout}
-          >
-            Log out dari SSO
-          </Button>
-        ) : (
-          <Button
-            mt={{ base: "4rem", lg: "4.5rem" }}
-            onClick={redirectToSSOLogin}
-          >
-            Masuk dengan SSO
-          </Button>
-        )}
+        <Button
+          mt={{ base: "4rem", lg: "4.5rem" }}
+          onClick={redirectToSSOLogin}
+        >
+          Masuk dengan SSO
+        </Button>
         <a href="#content">
           <AssetChevron src={ChevronArrow} alt="chevron-down" />
         </a>

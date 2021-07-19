@@ -1,13 +1,25 @@
-import { ChevronLeftIcon } from '@chakra-ui/icons';
-import { Box, Button, Text } from '@chakra-ui/react';
-import { Bauhaus } from "components/Bauhaus";
-import { InputSelect, InputText } from 'components/Forms';
-import React from 'react';
-import FACULTIES from 'utils/faculty-base.json';
-import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { Box, Button, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
-const CompleteForm = () => {
+import { setAuth } from "redux/modules/auth";
+import { makeAtLeastMs } from "utils/promise";
+import FACULTIES from "utils/faculty-base.json";
+import { setLoading } from "redux/modules/appState";
+import { postSsoCompletionData } from "services/api";
+import {
+  persistAuth,
+  loadCompletion,
+  persistCompletion
+} from "utils/auth";
+
+import { InputSelect, InputText } from "components/Forms";
+import { Bauhaus } from "components/Bauhaus";
+
+const CompleteForm = ({ history }) => {
   const {
     handleSubmit,
     register,
@@ -15,11 +27,59 @@ const CompleteForm = () => {
     watch,
   } = useForm();
 
-  const selectedFaculty = watch('fakultas');
+  const auth = useSelector(state => state.auth);
+  const selectedFaculty = watch("fakultas");
+  const dispatch = useDispatch();
 
-  const onSubmit = () => {
-    console.log("KIRIM DATA KAMU");
+  const [completionData, setCompletionData] = useState(null);
+  const [completionId, setCompletionId] = useState(null);
+  const [username, setUsername] = useState(null);
+  const [fullname, setFullname] = useState(null);
+
+  const onSubmit = async (value) => {
+    const { npm, jurusan } = value
+    const kdOrg = jurusan.split(" - ")[2]
+
+    try {
+      dispatch(setLoading(true))
+
+      const {
+        data: {
+          major_id: majorId,
+          user_id: userId,
+          token,
+          err: isPeriodMissing,
+        }
+      } = await makeAtLeastMs(postSsoCompletionData({ completionId, npm, kdOrg }), 1000);
+
+      dispatch(setAuth({ majorId, userId, token }));
+      persistAuth({ majorId, userId, token });
+      persistCompletion();
+
+      if (isPeriodMissing) {
+        dispatch(setLoading(false));
+        window.location.replace("/update");
+        return null;
+      }
+    } catch (e) {
+      dispatch(setLoading(false));
+    }
   };
+
+  useEffect(() => {
+    if (auth) history.push("/susun");
+  }, [auth, history]);
+
+  useEffect(() => {
+    const completion = loadCompletion();
+    setCompletionData(completion)
+  }, [])
+
+  useEffect(() => {
+    setUsername(completionData?.username);
+    setFullname(completionData?.fullname);
+    setCompletionId(completionData?.completionId);
+  }, [completionData])
 
   return (
     <>
@@ -30,54 +90,55 @@ const CompleteForm = () => {
             <ChevronLeftIcon w={8} h={8} />
             Kembali ke Halaman Utama
           </Text>
-          <Text fontSize="3xl" fontWeight="bold" mt="4" textAlign={{sm: 'center', lg: 'left'}}>Lengkapi Informasi untuk SusunJadwal</Text>
+          <Text
+            fontSize="3xl"
+            fontWeight="bold"
+            mt="4"
+            textAlign={{sm: 'center', lg: 'left'}}
+          >
+            Lengkapi Informasi untuk Susun<span style={{ color: "#5038BC" }}>Jadwal</span>
+          </Text>
         </Link>
+
         <form onSubmit={handleSubmit(onSubmit)}>
-          <InputText 
+          <InputText
             label="Nama Lengkap"
             name="nama"
             marginTop="1rem"
             register={register}
-            placeholder="John Doe"
-            validator={{
-              required: `Nama tidak boleh kosong`,
-            }}
+            disabled={true}
+            placeholder={fullname}
+            validator={{required: false}}
             errors={errors}
           />
 
-          <InputText 
-            label="Email SSO"
+          <InputText
+            label="Username SSO"
             name="email"
             marginTop="1rem"
             register={register}
-            placeholder="johndoe@ui.ac.id"
-            validator={{
-              required: `Email tidak boleh kosong`,
-            }}
+            disabled={true}
+            placeholder={username}
+            validator={{required: false}}
             errors={errors}
           />
 
-          <InputText 
+          <InputText
             label="NPM"
             name="npm"
             marginTop="1rem"
             register={register}
-            placeholder="189271658291"
-            validator={{
-              required: `NPM tidak boleh kosong`,
-            }}
+            validator={{ required: `NPM tidak boleh kosong` }}
             errors={errors}
           />
 
-          <InputSelect 
+          <InputSelect
             label="Fakultas"
             name="fakultas"
             marginTop="1rem"
             register={register}
             placeholder="Pilih Fakultas"
-            validator={{
-              required: `Harap Pilih`,
-            }}
+            validator={{ required: `Harap Pilih` }}
             errors={errors}
           >
             {Object.keys(FACULTIES).map(faculty => (
@@ -91,17 +152,17 @@ const CompleteForm = () => {
             marginTop="1rem"
             register={register}
             placeholder="Pilih Program Studi"
-            validator={{
-              required: `Harap Pilih`
-            }}
+            validator={{ required: `Harap Pilih` }}
             errors={errors}
             disabled={!selectedFaculty}
           >
             {selectedFaculty && FACULTIES[selectedFaculty].map(jurusan => (
-              <option key={jurusan.kd_org}>{`${jurusan.educational_program} - ${jurusan.study_program}`}</option>
+              <option key={jurusan.kd_org}>
+                {`${jurusan.educational_program} - ${jurusan.study_program} - ${jurusan.kd_org}`}
+              </option>
             ))}
           </InputSelect>
-          
+
           <Button
             mt={8}
             colorScheme="teal"

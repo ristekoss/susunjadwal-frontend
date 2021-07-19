@@ -51,9 +51,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
       } = await postSaveSchedule(auth.userId, transformSchedules(schedules));
       dispatch(clearSchedule());
       history.push(`/jadwal/${scheduleId}`);
-    } catch (e) {
-      // TODO: handle error
-    }
+    } catch (e) {/** TODO: handle error */}
     setTimeout(() => dispatch(setLoading(false)), 1000);
   }
 
@@ -66,9 +64,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
       );
       dispatch(clearSchedule());
       history.push(`/jadwal/${data.user_schedule.id}`);
-    } catch (e) {
-      // TODO: handle error
-    }
+    } catch (e) {/** TODO: handle error */}
     setTimeout(() => dispatch(setLoading(false)), 1000);
   }
 
@@ -191,7 +187,7 @@ const ModalContent = styled(ChakraModalContent).attrs({
   padding: { base: "16px 24px", lg: "20px 24px" },
   width: { base: "90%", lg: "initial" },
   textAlign: "center"
-})``
+})``;
 
 const ModalFooter = styled(ChakraModalFooter).attrs({
   display: "flex",
@@ -202,7 +198,7 @@ const ModalFooter = styled(ChakraModalFooter).attrs({
   button {
     margin: 0px 4px;
   }
-`
+`;
 
 const Container = styled.div`
   width: 100%;

@@ -65,9 +65,17 @@ export const postBetaTesterData = async function (data) {
   );
 };
 
-export const postScrapSchedule = async ({ username, password }) => {
+export const postScrapeSchedule = async ({ username, password }) => (
   await instance.post('/scrape-schedule', {
     username: username,
     password: password,
-  });
-};
+  })
+);
+
+export const postSsoCompletionData = async ({ completionId, npm, kdOrg }) => (
+  await instance.post('/auth/completion/', {
+    completion_id: completionId,
+    npm: npm,
+    kd_org: kdOrg
+  })
+);

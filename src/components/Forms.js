@@ -26,6 +26,7 @@ export const InputText = ({
   label,
   placeholder,
   validator,
+  disabled=false,
   ...props
 }) => {
   validator["pattern"] = {
@@ -39,6 +40,7 @@ export const InputText = ({
         bg={errors[name] ? "state.ErrorGhost" : "secondary.InputGray"}
         id={name}
         placeholder={placeholder}
+        disabled={disabled}
         {...register(name, validator)}
       />
       <FormErrorMessage>

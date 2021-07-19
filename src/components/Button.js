@@ -42,6 +42,16 @@ const Button = {
         bg: "secondary.DarkPurple",
       },
     },
+    danger: {
+      bg: "state.Error",
+      color: "white",
+      _hover: {
+        bg: "state.DarkError",
+      },
+      _active: {
+        bg: "state.DarkError",
+      },
+    },
     ghost: {
       bg: "trasparent",
       color: "primary.Purple",

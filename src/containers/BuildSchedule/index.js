@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
@@ -23,6 +24,7 @@ function BuildSchedule() {
   const dispatch = useDispatch();
 
   const [courses, setCourses] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState(null);
   const [isCoursesDetail, setCoursesDetail] = useState(null);
 
   const fetchCourses = useCallback(
@@ -33,6 +35,7 @@ function BuildSchedule() {
         const { data } = await getCourses(majorId);
         setCourses(data.courses);
         setCoursesDetail(data.is_detail);
+        setLastUpdated(new Date(data.last_update_at))
         dispatch(reduxSetCourses(data.courses));
       } catch(e) {/** TODO: handle error */}
 
@@ -54,25 +57,46 @@ function BuildSchedule() {
 
       <CoursePickerContainer isMobile={isMobile}>
         <h1>Buat Jadwal</h1>
+
+        {lastUpdated && (
+          <h6>
+            Jadwal terakhir diperbarui pada {isMobile ? <br/> : " "}
+            <span>
+              {lastUpdated?.getDate() + "/" + lastUpdated?.getMonth() + "/" +
+              (lastUpdated?.getFullYear()) + " " + lastUpdated?.toLocaleTimeString()}
+            </span>
+          </h6>
+        )}
+
         {!isCoursesDetail && (
           <InfoContent>
-            Halo! Jadwal kamu belum detail nih, kalo kamu ingin membantu kami
-            agar jadwal ini detail, kamu dapat mengubungi Ristek Fasilkom UI di
-            LINE (@rye2953f). Terima kasih :D
-          </InfoContent>
-        )}
-        {courses?.length === 0 && (
-          <InfoContent>
-            Jadwal kosong gara-gara password salah, tunggu 5 menit lagi
-            <Link to="/sso/login"> disini</Link>
+            <p>
+              Uh oh, sepertinya kami belum memiliki jadwal untuk jurusan kamu. Silahkan
+              coba untuk melakukan <span>Update Matkul</span> dengan menekan tombol di bawah ini!
+            </p>
+            <Link to="/update">
+              <Button mt={{ base: "1rem", lg: "1.5rem" }}>Update Matkul</Button>
+            </Link>
           </InfoContent>
         )}
 
+        {courses?.length === 0 && (
+          <InfoContent>
+            <p>
+              Uh oh, sepertinya jadwal jurusan kamu belum tersedia. Silahkan coba
+              untuk melakukan <span>Update Matkul</span> lagi nanti!
+            </p>
+            <Link to="/update">
+              <Button mt={{ base: "1rem", lg: "1.5rem" }}>Update Matkul</Button>
+            </Link>
+          </InfoContent>
+        )}
 
         {courses &&
           courses.map((course, idx) => (
             <Course key={`${course.name}-${idx}`} course={course} />
-          ))}
+          ))
+        }
       </CoursePickerContainer>
 
       {!isMobile && (
@@ -102,7 +126,7 @@ function BuildSchedule() {
 
 export default BuildSchedule;
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   background-color: ${props => props.theme.color.primaryWhite};
   color: ${props => props.theme.color.secondaryMineShaft};
@@ -113,21 +137,44 @@ const Container = styled.div`
   }
 `;
 
-const InfoContent = styled.div`
-  margin-bottom: 16px;
+export const InfoContent = styled.div`
+  margin: 48px 0 16px;
+  text-align: center;
   min-height: 100vh;
+  font-size: 16px;
+
+  p span {
+    color: ${props => props.theme.color.primaryPurple};
+    font-weight: 600;
+  }
+
+  @media (min-width: 900px) {
+    margin-top: 24px;
+    text-align: left;
+    font-size: 18px;
+    width: 80%;
+  }
 `;
 
-const CoursePickerContainer = styled.div`
+export const CoursePickerContainer = styled.div`
   width: ${({ isMobile }) => (isMobile ? "100%" : "75%;")};
   color: #333333;
 
   h1 {
     color: ${props => props.theme.color.primaryPurple};
-    margin-bottom: 16px;
     font-weight: bold;
     font-size: 24px;
     text-align: center;
+  }
+
+  h6 {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  h6 span {
+    font-weight: 600;
   }
 
   @media (min-width: 900px) {
@@ -135,10 +182,15 @@ const CoursePickerContainer = styled.div`
       font-size: 32px;
       text-align: left;
     }
+
+    h6 {
+      font-size: 16px;
+      text-align: left;
+    }
   }
 `;
 
-const SelectedCoursesContainer = styled.div`
+export const SelectedCoursesContainer = styled.div`
   background-color: ${props => props.theme.color.primaryWhite};
   height: 100vh;
   padding: 128px 32px;
