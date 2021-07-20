@@ -16,7 +16,7 @@ import EditSchedule from "./containers/EditSchedule";
 import Footer from "containers/Footer";
 import BetaForm from "containers/BetaForm";
 import BetaLanding from "containers/BetaLanding";
-import UpdateCourses  from "containers/UpdateCourses";
+import UpdateCourses from "containers/UpdateCourses";
 import { theme } from "styles/StyledTheme";
 import CompleteForm from "containers/CompleteForm";
 
@@ -28,14 +28,14 @@ const ROUTES = [
   { path: "/edit/:scheduleId", component: EditSchedule, auth: true },
 ];
 
-
 function Routes() {
   const isMobile = useSelector((state) => state.appState.isMobile);
 
   return (
     <ThemeProvider theme={{ mobile: isMobile, ...theme }}>
       <Box
-        pt="120px" mb={{ base: 16 , md: '108px'}}
+        pt="120px"
+        mb={{ base: 16, md: "108px" }}
         px={{ base: 6, lg: "80px" }}
         overflowX="hidden !important"
       >

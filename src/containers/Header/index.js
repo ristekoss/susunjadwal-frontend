@@ -21,7 +21,6 @@ import {
   WrapperHamburger,
 } from "./styles";
 import { useSelector } from "react-redux";
-// import { useSelector } from "react-redux";
 
 const LINKS = [
   { to: "/susun", label: "Buat Jadwal" },
@@ -34,7 +33,7 @@ function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { pathname } = useLocation();
   const isMobile = useSelector((state) => state.appState.isMobile);
-  // const auth = useSelector(state => state.auth);
+  const auth = useSelector((state) => state.auth);
 
   function toggleMenu() {
     return isOpen ? onClose() : onOpen();
@@ -52,11 +51,12 @@ function Header() {
           />
         </Link>
       </Box>
-      {isMobile && <WrapperHamburger open={isOpen} onClick={toggleMenu}>
-        <HamburgerIcon />
-      </WrapperHamburger>}
-      {/* {!auth ? <NavLinks /> : null} TODO:should uncomment this line*/} 
-      <NavLinks pathname={pathname} /> {/** TODO: should comment this line*/}
+      {isMobile && auth && (
+        <WrapperHamburger open={isOpen} onClick={toggleMenu}>
+          <HamburgerIcon />
+        </WrapperHamburger>
+      )}
+      {auth && <NavLinks />}
       <SideBar pathname={pathname} onClose={onClose} isOpen={isOpen} />
     </Container>
   );
