@@ -73,7 +73,7 @@ function ScheduleList() {
 
   const convertDate = (date) => {
     const dateNew = new Date(date)
-    return `${dateNew.getDate()}/${dateNew.getMonth()}/${dateNew.getFullYear()}`
+    return `${dateNew.getDate()}/${(dateNew.getMonth())+1}/${dateNew.getFullYear()}`
   }
 
   return (

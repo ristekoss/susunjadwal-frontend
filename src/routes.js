@@ -24,6 +24,7 @@ const ROUTES = [
   { path: "/susun", component: BuildSchedule, auth: true },
   { path: "/jadwal/:scheduleId", component: ViewSchedule, auth: false },
   { path: "/jadwal", component: ScheduleList, auth: true },
+  { path: "/update", component: UpdateCourses, auth: true },
   { path: "/logout", component: Logout, auth: true },
   { path: "/edit/:scheduleId", component: EditSchedule, auth: true },
 ];
@@ -43,7 +44,6 @@ function Routes() {
           <Route path="/" name="home" component={Login} exact />
           <Route path="/beta" name="beta" component={BetaLanding} />
           <Route path="/beta-form" name="beta-form" component={BetaForm} />
-          <Route path="/update" name="update-matkul" component={UpdateCourses} />
           <Route path="/complete" name="complete-form" component={CompleteForm} />
           <Route component={RoutesWithNavbar} />
         </Switch>
