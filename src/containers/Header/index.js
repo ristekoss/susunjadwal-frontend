@@ -52,12 +52,14 @@ function Header() {
         </Link>
       </Box>
       {isMobile && auth && (
-        <WrapperHamburger open={isOpen} onClick={toggleMenu}>
-          <HamburgerIcon />
-        </WrapperHamburger>
+        <>
+          <WrapperHamburger open={isOpen} onClick={toggleMenu}>
+            <HamburgerIcon />
+          </WrapperHamburger>
+          <SideBar pathname={pathname} onClose={onClose} isOpen={isOpen} />
+        </>
       )}
       {auth && <NavLinks pathname={pathname} />}
-      <SideBar pathname={pathname} onClose={onClose} isOpen={isOpen} />
     </Container>
   );
   // The checking above is added for auth only
