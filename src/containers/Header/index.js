@@ -56,7 +56,7 @@ function Header() {
           <HamburgerIcon />
         </WrapperHamburger>
       )}
-      {auth && <NavLinks />}
+      {auth && <NavLinks pathname={pathname} />}
       <SideBar pathname={pathname} onClose={onClose} isOpen={isOpen} />
     </Container>
   );
