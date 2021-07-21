@@ -44,7 +44,7 @@ const InfoContainer = styled.ul`
   font-family: 'Poppins';
   border-radius: 0.8rem;
   position: relative;
-  z-index: 10;
+  z-index: 4;
 
   @media (min-width: 900px) {
     padding: 3rem 2.5rem 3rem calc(2rem + 24px);

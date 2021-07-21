@@ -57,21 +57,10 @@ const UpdateCourses = () => {
 
   return (
     <>
-      <Bauhaus />
+      {!isMobile && <Bauhaus isPrivate />}
       <Box
         width={{lg: "80%", xl: "70%"}}
-        mt={{ base: "0px", lg: "-40px" }}
       >
-        <Link to="/susun">
-          <Text
-            color="var(--chakra-colors-primary-Purple)"
-            fontSize="lg"
-            ml="-9px"
-          >
-              <ChevronLeftIcon w={8} h={8} />
-              Kembali ke Halaman Utama
-          </Text>
-        </Link>
         <Text
           fontSize="3xl"
           fontWeight="bold"

@@ -9,7 +9,7 @@ import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
 const AssetBauhaus = styled.img`
   position: absolute;
   right: 0;
-  top: 0;
+  top: ${({isPrivate}) => isPrivate ? '81px' : '0'};
 
   ${props => props.isMobile && (`
     width: 100%;
@@ -32,7 +32,7 @@ const AssetBauhausSide = styled.img`
   )}
 `
 
-export const Bauhaus = () => {
+export const Bauhaus = ({isPrivate}) => {
   const isMobile = useSelector(state => state.appState.isMobile);
 
   return (
@@ -44,7 +44,7 @@ export const Bauhaus = () => {
           alt="bauhaus-sm"
         />
       ) : (
-        <AssetBauhaus src={BauhausDesktop} alt="bauhaus-lg" />
+        <AssetBauhaus isPrivate={isPrivate} src={BauhausDesktop} alt="bauhaus-lg" />
       )}
     </>
   )
