@@ -8,6 +8,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@fontsource/poppins": "^4.4.5",
+    "@heroicons/react": "^1.0.2",
     "axios": "^0.19.0",
     "framer-motion": "^4",
     "query-string": "^6.8.1",
