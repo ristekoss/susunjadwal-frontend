@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Text, Box, Button, SimpleGrid, Flex } from "@chakra-ui/react";
+import { Text, Box, Button, Flex } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { getContributors } from "services/api";
 import { ContributorCard } from "components/Cards";
