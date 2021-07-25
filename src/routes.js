@@ -19,6 +19,7 @@ import BetaLanding from "containers/BetaLanding";
 import UpdateCourses from "containers/UpdateCourses";
 import { theme } from "styles/StyledTheme";
 import CompleteForm from "containers/CompleteForm";
+import Contributors from "containers/Contributors";
 
 const ROUTES = [
   { path: "/susun", component: BuildSchedule, auth: true },
@@ -45,6 +46,7 @@ function Routes() {
           <Route path="/beta" name="beta" component={BetaLanding} />
           <Route path="/beta-form" name="beta-form" component={BetaForm} />
           <Route path="/complete" name="complete-form" component={CompleteForm} />
+          <Route path="/kontributor" name="kontributor" component={Contributors} />
           <Route component={RoutesWithNavbar} />
         </Switch>
       </Box>

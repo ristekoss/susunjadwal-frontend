@@ -1,14 +1,15 @@
 import React from "react";
-import { Box, Image, LinkBox, LinkOverlay, Text } from "@chakra-ui/react";
+import { Box, Image, Flex, Text, Icon } from "@chakra-ui/react";
+import { GoMarkGithub } from "react-icons/go";
 
-export const ContributorCard = () => {
+export const ContributorCard = ({ name, avatar, github, contributions }) => {
   return (
-    <LinkBox
-      maxW="389px"
+    <Box
+      maxW="400px"
       d="flex"
-      p={{base:"1rem", sm:'36px'}}
+      p={{ base: "1rem", sm: "36px" }}
       justifyContent="space-between"
-      as="article"
+      gridGap={{ base: "1.25rem", md: "2rem" }}
       borderWidth="1px"
       rounded="md"
       borderRadius="8px"
@@ -24,21 +25,29 @@ export const ContributorCard = () => {
         borderRadius="full"
         boxSize="96px"
         objectFit="contain"
-        src="https://bit.ly/sage-adebayo"
-        alt="Segun Adebayo"
+        src={avatar}
+        alt={name}
       />
       <Box>
-        <Text fontWeight="bold" fontSize="lg">
-          <LinkOverlay
-            _hover={{ color: "Black" }}
-            _focus={{ color: "Black" }}
-            href="#"
-          >
-            Sage Adebayo
-          </LinkOverlay>
+        <Text fontWeight="bold" fontSize={{ base: "sm", md: "lg" }}>
+          <Box _hover={{ color: "Black" }} _focus={{ color: "Black" }}>
+            {name}
+          </Box>
         </Text>
-        <Text>Backend Developer</Text>
+        <Text fontSize={{ base: "xs", md: "md" }}>
+          {contributions} contributions
+        </Text>
+        <Flex align='center' mt="1rem">
+          <Text
+            as="a"
+            d="block"
+            href={github}
+            fontSize={{ base: "xs", md: "md" }}
+          >
+            <Icon boxSize={"1.2rem"} as={GoMarkGithub} /> Github
+          </Text>
+        </Flex>
       </Box>
-    </LinkBox>
+    </Box>
   );
 };
