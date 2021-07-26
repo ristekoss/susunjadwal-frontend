@@ -32,15 +32,15 @@ const Contributors = () => {
   ));
 
   return (
-    <>
+    <Box mt='-4rem'>
       <Link to="/">
-        <Text color="primary.Purple" fontSize="lg" ml="-9px">
+        <Text fontSize={{base: 'sm', md:"lg"}} color="primary.Purple" ml="-9px">
           <ChevronLeftIcon w={8} h={8} />
           Kembali ke Halaman Utama
         </Text>
       </Link>
 
-      <Box textAlign="center">
+      <Box textAlign="center" mt='2rem'>
         <Text fontWeight="bold" fontSize={{base: 'x-large', md:"xx-large"}} color="primary.Purple">
           Kontributor{" "}
           <Box as="span" color="secondary.MineShaft">
@@ -70,7 +70,7 @@ const Contributors = () => {
       >
         {contributionList}
       </Flex>
-    </>
+    </Box>
   );
 };
 

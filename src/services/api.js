@@ -81,5 +81,5 @@ export const postSsoCompletionData = async ({ completionId, npm, kdOrg }) => (
 );
 
 export const getContributors = async () => (
-  await instance.get('https://api.github.com/repos/ristekoss/susunjadwal/contributors')
+  await axios.get('https://api.github.com/repos/ristekoss/susunjadwal/contributors')
 )
