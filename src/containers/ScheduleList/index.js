@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Button, Box } from "@chakra-ui/react";
+
+import { 
+  Button, 
+  Box,
+  Modal,
+  ModalOverlay,
+  ModalContent as ChakraModalContent,
+  ModalFooter as ChakraModalFooter,
+  ModalBody,
+  useDisclosure,
+} from "@chakra-ui/react";
+
 import { useSelector, useDispatch } from "react-redux";
 import Helmet from "react-helmet";
 import { Link } from "react-router-dom";
@@ -25,6 +36,10 @@ function ScheduleList() {
   const auth = useSelector(state => state.auth);
   const isMobile = useSelector(state => state.appState.isMobile);
 
+  const [selectedId, setSelectedId] = useState('');
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const dispatch = useDispatch();
 
   const [schedules, setSchedules] = useState();
@@ -46,6 +61,7 @@ function ScheduleList() {
 
   async function performDeleteSchedule(userId, scheduleId) {
     dispatch(setLoading(true));
+    onClose();
     await makeAtLeastMs(deleteSchedule(userId, scheduleId), 1000);
     const {
       data: { user_schedules }
@@ -55,10 +71,7 @@ function ScheduleList() {
   }
 
   function confirmDeleteSchedule(scheduleId) {
-    const response = window.confirm("Apakah kamu yakin akan menghapusnya?");
-    if (response) {
-      performDeleteSchedule(auth.userId, scheduleId);
-    }
+    performDeleteSchedule(auth.userId, scheduleId);
   }
 
   function showAlertCopy() {
@@ -76,8 +89,31 @@ function ScheduleList() {
     return `${dateNew.getDate()}/${(dateNew.getMonth())+1}/${dateNew.getFullYear()}`
   }
 
+  const showDialogDelete = (id) => {
+    setSelectedId(id);
+    onOpen();
+  }
+
   return (
     <Container>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalBody>Apakah kamu yakin ingin menghapus jadwal?</ModalBody>
+
+          <ModalFooter>
+            <Button onClick={onClose} variant="outline">
+              Batal
+            </Button>
+            <Button
+              onClick={() => confirmDeleteSchedule(selectedId)}
+              variant="danger"
+            >
+              Hapus
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       <Helmet
         title="Daftar Jadwal"
         meta={[{ name: "description", content: "Description of Jadwal" }]}
@@ -106,7 +142,7 @@ function ScheduleList() {
                   </CopyToClipboard>
                   <ImageButton
                     src={deleteImg}
-                    onClick={() => confirmDeleteSchedule(schedule.id)}
+                    onClick={() => showDialogDelete(schedule.id)}
                   />
                   <EditIcon className="editIcon" onClick={() => handleClickEditJadwal(schedule.id)} />
                 </CardActionContainer>
@@ -147,6 +183,24 @@ function ScheduleList() {
     </Container>
   );
 }
+
+const ModalContent = styled(ChakraModalContent).attrs({
+  padding: { base: "16px 24px", lg: "20px 24px" },
+  width: { base: "90%", lg: "initial" },
+  textAlign: "center",
+})``;
+
+const ModalFooter = styled(ChakraModalFooter).attrs({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  marginTop: { base: "12px", lg: "16px" },
+})`
+  button {
+    margin: 0px 4px;
+  }
+`;
+
 const Container = styled.div`
   margin-left:-3rem;
   margin-right: -3rem;
