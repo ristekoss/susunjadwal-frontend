@@ -32,7 +32,7 @@ import { BauhausSide } from 'components/Bauhaus';
 import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
 import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
 
-function ScheduleList() {
+const ScheduleList = () => {
   const auth = useSelector(state => state.auth);
   const isMobile = useSelector(state => state.appState.isMobile);
 
@@ -59,7 +59,7 @@ function ScheduleList() {
     fetchSchedules();
   }, [dispatch, auth]);
 
-  async function performDeleteSchedule(userId, scheduleId) {
+  const performDeleteSchedule = async (userId, scheduleId) => {
     dispatch(setLoading(true));
     onClose();
     await makeAtLeastMs(deleteSchedule(userId, scheduleId), 1000);
@@ -70,11 +70,11 @@ function ScheduleList() {
     dispatch(setLoading(false));
   }
 
-  function confirmDeleteSchedule(scheduleId) {
+  const confirmDeleteSchedule = (scheduleId)  => {
     performDeleteSchedule(auth.userId, scheduleId);
   }
 
-  function showAlertCopy() {
+  const showAlertCopy = () => {
     alert(
       "Link telah disalin!! Kamu bisa bagikan link tersebut ke teman kamu."
     );
