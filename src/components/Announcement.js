@@ -35,6 +35,7 @@ const Announcement = () => {
   const [notificationText, setNotificationText] = useState("");
   const [notificationLink, setNotificationLink] = useState("");
   const [ctaText, setCtaText] = useState("");
+  const [linkText, setLinkText] = useState("");
   useEffect(() => {
     axios
       .get(
@@ -67,6 +68,9 @@ const Announcement = () => {
           case "cta_text":
             setCtaText(configItem.fields.config_value);
             break;
+          case "link_text":
+            setLinkText(configItem.fields.config_value);
+            break;
           default:
             break;
         }
@@ -80,7 +84,7 @@ const Announcement = () => {
       <div>
         {notificationText} <span style={{ marginRight: "5px" }}>-</span>
         <CTALinkContainer target="_blank" href={notificationLink}>
-          Isi Survey
+          {linkText}
         </CTALinkContainer>
       </div>
     </AnnouncementContainer>
