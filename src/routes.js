@@ -36,7 +36,7 @@ function Routes() {
   return (
     <ThemeProvider theme={{ mobile: isMobile, ...theme }}>
       <Box
-        pt="120px"
+        pt="140px"
         mb={{ base: 16, md: "108px" }}
         px={{ base: 6, lg: "80px" }}
         overflowX="hidden !important"
@@ -45,8 +45,16 @@ function Routes() {
           <Route path="/" name="home" component={Login} exact />
           <Route path="/beta" name="beta" component={BetaLanding} />
           <Route path="/beta-form" name="beta-form" component={BetaForm} />
-          <Route path="/complete" name="complete-form" component={CompleteForm} />
-          <Route path="/kontributor" name="kontributor" component={Contributors} />
+          <Route
+            path="/complete"
+            name="complete-form"
+            component={CompleteForm}
+          />
+          <Route
+            path="/kontributor"
+            name="kontributor"
+            component={Contributors}
+          />
           <Route component={RoutesWithNavbar} />
         </Switch>
       </Box>

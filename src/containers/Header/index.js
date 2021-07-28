@@ -21,6 +21,7 @@ import {
   WrapperHamburger,
 } from "./styles";
 import { useSelector } from "react-redux";
+import Announcement from "components/Announcement";
 
 const LINKS = [
   { to: "/susun", label: "Buat Jadwal" },
@@ -41,25 +42,37 @@ function Header() {
 
   return (
     <Container>
-      <Box mr="auto">
-        <Link to="/">
-          <Image
-            src={LogoSunjad}
-            alt="logo"
-            objectFit="contain"
-            w={{ base: "140px", lg: "initial" }}
-          />
-        </Link>
-      </Box>
-      {isMobile && auth && (
-        <>
-          <WrapperHamburger open={isOpen} onClick={toggleMenu}>
-            <HamburgerIcon />
-          </WrapperHamburger>
-          <SideBar pathname={pathname} onClose={onClose} isOpen={isOpen} />
-        </>
-      )}
-      {auth && <NavLinks pathname={pathname} />}
+      <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
+        <Announcement />
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box mr="auto">
+            <Link to="/">
+              <Image
+                src={LogoSunjad}
+                alt="logo"
+                objectFit="contain"
+                w={{ base: "140px", lg: "initial" }}
+              />
+            </Link>
+          </Box>
+          {isMobile && auth && (
+            <>
+              <WrapperHamburger open={isOpen} onClick={toggleMenu}>
+                <HamburgerIcon />
+              </WrapperHamburger>
+              <SideBar pathname={pathname} onClose={onClose} isOpen={isOpen} />
+            </>
+          )}
+          {auth && <NavLinks pathname={pathname} />}
+        </div>
+      </div>
     </Container>
   );
   // The checking above is added for auth only
