@@ -29,7 +29,10 @@ function transformSchedules(schedules) {
     .map(schedule =>
       schedule.schedule_items.map(item => ({
         ...item,
-        name: schedule.name
+        name: schedule.name,
+        course_name: schedule.parentName,
+        sks: schedule.credit,
+        lecturer: schedule.lecturer
       }))
     )
     .reduce((prev, now) => [...prev, ...now], []);
@@ -81,6 +84,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
   const items = schedules.map((schedule, idx) => {
     const isCurrentScheduleConflict = isScheduleConflict(schedules, schedule);
     isConflict = isConflict || isCurrentScheduleConflict;
+    const labelName = (String(schedule.name).includes(schedule.parentName)) ? schedule.name : `${schedule.parentName}-${schedule.name}`
 
     const classesTimes = schedule.schedule_items.map((item, index) => (
       <li key={index}>
@@ -90,7 +94,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
     return (
       <TableContentRow key={idx} inverted={isCurrentScheduleConflict}>
-        <div className="courseName">{schedule.name}</div>
+        <div className="courseName">{labelName}</div>
         <div><ul>{classesTimes}</ul></div>
         <div className="small-2 columns">
           <span>{schedule.credit}</span>
