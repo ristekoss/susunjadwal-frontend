@@ -3,7 +3,8 @@ import { getCourses } from "services/api"
 const mapScheduleItemsByName = (scheduleArray) => {
     let result = {}
     scheduleArray.forEach(sched => {
-        result[sched.name] = sched;
+        const key = `${sched.course_name}-${sched.name}`;
+        result[key] = sched;
     })
     return result;
 }
@@ -18,10 +19,13 @@ const formatScheduleFromCourse = (courses, schedule) => {
     courseList.forEach(course => {
         const { classes } = course;
         classes.forEach(classItem => {
-            if (classItem.name in scheduleMap && !(classItem.name in added)) {
-                added[classItem.name] = 1;
+            const classKey = `${course.name}-${classItem.name}`;
+            if (classKey in scheduleMap && !(classKey in added)) {
+                added[classKey] = 1;
+                // add Matched class schedule to result
                 result.push({ ...classItem, credit: course.credit, parentName: course.name, term: course.term, name: classItem.name })
-                savedSchedule.schedule_items = savedSchedule.schedule_items.filter(sched => sched.name !== classItem.name)
+                // removing Matched class schedule from savedSchedule, so it became remainingSchedule
+                savedSchedule.schedule_items = savedSchedule.schedule_items.filter(sched => (sched.name !== classItem.name && sched.course_name !== course.name))
             }
         })
     })

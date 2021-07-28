@@ -67,7 +67,7 @@ function Schedule({
           </TimeLabel>
         ))}
       {schedule &&
-        schedule.schedule_items.map(({ day, start, end, room, name }, idx) => (
+        schedule.schedule_items.map(({ day, start, end, room, name, course_name }, idx) => (
           <ScheduleItem
             key={`${schedule.name}-${idx}`}
             start={displayToMinute(start)}
@@ -84,7 +84,9 @@ function Schedule({
             )}
             <div className="content">
               {showRoom && isMobile && <span>{room}</span>}
-              <span style={{ fontSize: isMobile?  "8px": "12px", color:"#F7B500",  mixBlendMode: "normal"}}>{name}</span>
+              <span style={{ fontSize: isMobile?  "8px": "12px", color:"#F7B500",  mixBlendMode: "normal"}}>
+                {(String(name).includes(course_name) || !course_name) ? name : `${course_name} - ${name}`}
+              </span>
             </div>
           </ScheduleItem>
         ))}
