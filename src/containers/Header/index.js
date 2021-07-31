@@ -33,6 +33,7 @@ const LINKS = [
 function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { pathname } = useLocation();
+
   const isMobile = useSelector((state) => state.appState.isMobile);
   const auth = useSelector((state) => state.auth);
 

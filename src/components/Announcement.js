@@ -1,7 +1,9 @@
+import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+
+import { setAnnouncement } from "redux/modules/appState";
+import { getAnnouncement } from "services/api";
 
 const AnnouncementContainer = styled.div`
   width: "100%";
@@ -29,27 +31,23 @@ const CTALinkContainer = styled.a`
 `;
 
 const Announcement = () => {
-  const [config, setConfig] = useState(null);
   const isMobile = useSelector((state) => state.appState.isMobile);
+  const dispatch = useDispatch();
+
+  const [config, setConfig] = useState(null);
   const [isShowNotification, setIsShowNotification] = useState(false);
   const [notificationText, setNotificationText] = useState("");
   const [notificationLink, setNotificationLink] = useState("");
   const [ctaText, setCtaText] = useState("");
   const [linkText, setLinkText] = useState("");
+
   useEffect(() => {
-    axios
-      .get(
-        `https://api.airtable.com/v0/${process.env.REACT_APP_BETA_AIRTABLE_BASE_ID}/${process.env.REACT_APP_AIRTABLE_NOTIFICATION_CONFIG_TABLE_NAME}`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_BETA_AIRTABLE_API_KEY}`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data.records);
-        setConfig(res.data.records);
-      });
+    const fetchAnnouncement = async () => {
+      const response = await getAnnouncement();
+      setConfig(response.data.records);
+    }
+
+    fetchAnnouncement();
   }, []);
 
   useEffect(() => {
@@ -57,7 +55,9 @@ const Announcement = () => {
       config.forEach((configItem) => {
         switch (configItem.fields.config_name) {
           case "show_notification":
-            setIsShowNotification(configItem.fields.config_value === "true");
+            const isAnnouncement = configItem.fields.config_value === "true";
+            dispatch(setAnnouncement(isAnnouncement));
+            setIsShowNotification(isAnnouncement);
             break;
           case "notification_text":
             setNotificationText(configItem.fields.config_value);
@@ -76,7 +76,7 @@ const Announcement = () => {
         }
       });
     }
-  }, [config]);
+  }, [config, dispatch]);
 
   return (
     <AnnouncementContainer disabled={!isShowNotification} isMobile={isMobile}>

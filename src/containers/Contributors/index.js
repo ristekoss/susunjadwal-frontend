@@ -12,7 +12,6 @@ const Contributors = () => {
     try {
       const { data } = await getContributors();
       setContributors(data);
-      console.log(data);
     } catch (error) {
       alert("error");
     }
