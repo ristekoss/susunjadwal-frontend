@@ -21,6 +21,8 @@ import { theme } from "styles/StyledTheme";
 import CompleteForm from "containers/CompleteForm";
 import Contributors from "containers/Contributors";
 
+import withAnalytics from "utils/analytics"
+
 const ROUTES = [
   { path: "/susun", component: BuildSchedule, auth: true },
   { path: "/jadwal/:scheduleId", component: ViewSchedule, auth: false },
@@ -42,19 +44,11 @@ function Routes() {
         overflowX="hidden !important"
       >
         <Switch>
-          <Route path="/" name="home" component={Login} exact />
-          <Route path="/beta" name="beta" component={BetaLanding} />
-          <Route path="/beta-form" name="beta-form" component={BetaForm} />
-          <Route
-            path="/complete"
-            name="complete-form"
-            component={CompleteForm}
-          />
-          <Route
-            path="/kontributor"
-            name="kontributor"
-            component={Contributors}
-          />
+          <Route path="/" name="home" component={withAnalytics(Login)} exact />
+          <Route path="/beta" name="beta" component={withAnalytics(BetaLanding)} />
+          <Route path="/beta-form" name="beta-form" component={withAnalytics(BetaForm)} />
+          <Route path="/complete" name="complete-form" component={withAnalytics(CompleteForm)} />
+          <Route path="/kontributor" name="kontributor" component={withAnalytics(Contributors)} />
           <Route component={RoutesWithNavbar} />
         </Switch>
       </Box>

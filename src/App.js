@@ -11,7 +11,7 @@ import store from "./redux/store";
 
 import config from "config";
 import "./app.css";
-import ScrollToTop from "utils/ScrollToTop";
+import ScrollToTop from "utils/scroll";
 
 const history = createBrowserHistory({ basename: config.BASE_URL });
 

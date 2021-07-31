@@ -1,5 +1,5 @@
-import {useEffect} from 'react'
-import { useLocation } from 'react-router';
+import {useEffect} from "react";
+import { useLocation } from "react-router";
 
 // ref: https://reactrouter.com/web/guides/scroll-restoration
 const ScrollToTop = () => {
