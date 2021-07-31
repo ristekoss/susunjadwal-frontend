@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { 
-  Button, 
+import {
+  Button,
   Box,
   Modal,
   ModalOverlay,
@@ -31,6 +31,7 @@ import EditIcon from "assets/EditSchedule/EditIcon";
 import { BauhausSide } from 'components/Bauhaus';
 import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
 import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
+import { SuccessToast } from "components/Toast";
 
 const ScheduleList = () => {
   const auth = useSelector(state => state.auth);
@@ -75,7 +76,7 @@ const ScheduleList = () => {
   }
 
   const showAlertCopy = () => {
-    alert(
+    SuccessToast(
       "Link telah disalin!! Kamu bisa bagikan link tersebut ke teman kamu."
     );
   }
