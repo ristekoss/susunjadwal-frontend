@@ -4,25 +4,27 @@ import styled from "styled-components";
 const ScheduleList = ({ schedule }) => {
   if (schedule) {
     const formattedSchedule = {};
-    schedule.schedule_items.forEach((scheduleItem) => {
-      if (!(scheduleItem.name in formattedSchedule)) {
-        formattedSchedule[scheduleItem.name] = {
-          name: scheduleItem.name,
+    schedule.schedule_items.forEach(({name, start, end, day, room, course_name}) => {
+      const scheduleKey =  `${course_name}-${name}`;
+      const formatedName = (String(name).includes(course_name) || !course_name) ? name : `${course_name} - ${name}`
+      if (!(scheduleKey in formattedSchedule)) {
+        formattedSchedule[scheduleKey] = {
+          name: formatedName,
           time: [
             {
-              start: scheduleItem.start,
-              end: scheduleItem.end,
-              day: scheduleItem.day,
-              room: scheduleItem.room,
+              start: start,
+              end: end,
+              day: day,
+              room: room,
             },
           ],
         };
       } else {
-        formattedSchedule[scheduleItem.name].time.push({
-          start: scheduleItem.start,
-          end: scheduleItem.end,
-          day: scheduleItem.day,
-          room: scheduleItem.room,
+        formattedSchedule[scheduleKey].time.push({
+          start: start,
+          end: end,
+          day: day,
+          room: room,
         });
       }
     });
