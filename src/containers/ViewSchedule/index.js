@@ -106,6 +106,7 @@ function ViewSchedule({ match, history }) {
           title={scheduleName ? `Jadwal ${scheduleName}` : `Jadwal Untitled`}
           meta={[{ name: "description", content: "Description of Jadwal" }]}
         />
+
         {schedule && (
           <Container>
             <HeaderContainer>

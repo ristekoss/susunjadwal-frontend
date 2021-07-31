@@ -83,10 +83,13 @@ function Schedule({
                 {showRoom && <span className="room">{room}</span>}
               </div>
             )}
+
             <div className="content">
               {showRoom && isMobile && <span className="room">{room}</span>}
               <span style={{ fontSize: isMobile?  "8px": "12px", color:"#F7B500",  mixBlendMode: "normal"}}>
-                {(String(name).includes(course_name) || !course_name) ? name : `${course_name} - ${name}`}
+                {(String(name).includes(course_name) || !course_name)
+                  ? name
+                  : `${course_name} - ${name}`}
               </span>
             </div>
           </ScheduleItem>

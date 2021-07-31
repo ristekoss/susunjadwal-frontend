@@ -2,11 +2,15 @@ import React from "react";
 import styled from "styled-components";
 
 const ScheduleList = ({ schedule }) => {
+  const formattedSchedule = {};
+
   if (schedule) {
-    const formattedSchedule = {};
     schedule.schedule_items.forEach(({name, start, end, day, room, course_name}) => {
       const scheduleKey =  `${course_name}-${name}`;
-      const formatedName = (String(name).includes(course_name) || !course_name) ? name : `${course_name} - ${name}`
+      const formatedName = (String(name).includes(course_name) || !course_name)
+        ? name
+        : `${course_name} - ${name}`
+
       if (!(scheduleKey in formattedSchedule)) {
         formattedSchedule[scheduleKey] = {
           name: formatedName,
@@ -28,33 +32,32 @@ const ScheduleList = ({ schedule }) => {
         });
       }
     });
-    return (
-      <ClassTableContainer>
-        <ClassHeaderContainer>
-          <div>Nama Kelas</div>
-          <div>Waktu</div>
-          <div>Ruang</div>
-        </ClassHeaderContainer>
-        {Object.keys(formattedSchedule).map((scheduleName) => (
-          <ClassItemContainer>
-            <div>{formattedSchedule[scheduleName].name}</div>
-            <div>
-              {formattedSchedule[scheduleName].time.map((dayItem) => (
-                <div>{`${dayItem.day}, ${dayItem.start} - ${dayItem.end}`}</div>
-              ))}
-            </div>
-            <div>
-              {formattedSchedule[scheduleName].time.map((dayItem) => (
-                <div>{dayItem.room}</div>
-              ))}
-            </div>
-          </ClassItemContainer>
-        ))}
-      </ClassTableContainer>
-    );
-  } else {
-    return <div>Loading...</div>;
   }
+
+  return (
+    <ClassTableContainer>
+      <ClassHeaderContainer>
+        <div>Nama Kelas</div>
+        <div>Waktu</div>
+        <div>Ruang</div>
+      </ClassHeaderContainer>
+      {Object.keys(formattedSchedule).map((scheduleName) => (
+        <ClassItemContainer>
+          <div className="nama-kelas">{formattedSchedule[scheduleName].name}</div>
+          <div>
+            {formattedSchedule[scheduleName].time.map((dayItem) => (
+              <div>{`${dayItem.day}, ${dayItem.start} - ${dayItem.end}`}</div>
+            ))}
+          </div>
+          <div>
+            {formattedSchedule[scheduleName].time.map((dayItem) => (
+              <div>{dayItem.room}</div>
+            ))}
+          </div>
+        </ClassItemContainer>
+      ))}
+    </ClassTableContainer>
+  );
 };
 
 const ClassHeaderContainer = styled.div`
@@ -90,7 +93,7 @@ const ClassItemContainer = styled.tr`
     flex: 1;
     font-size: 0.75rem;
     text-align: center;
-    padding: 8px 8px;
+    padding: 8px;
   }
 
   @media (min-width: 900px) {
