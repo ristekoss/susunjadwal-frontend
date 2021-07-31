@@ -133,7 +133,7 @@ export const Container = styled.div`
   margin-top: -40px;
 
   @media (min-width: 900px) {
-    margin-top: 8px;
+    margin-top: 0px;
   }
 `;
 

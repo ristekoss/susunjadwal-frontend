@@ -168,7 +168,7 @@ const PageTitle = styled.h1`
   font-size: ${({ mobile }) => (mobile ? "1.7rem" : "2rem")};
   font-weight: bold;
   color: #5038BC;
-  margin: ${({ mobile }) => (mobile ? "-20px 0 0 48px" : "-10px 48px 30px 48px")};
+  margin: ${({ mobile }) => (mobile ? "-40px 0 0 48px" : "0px 48px 30px 48px")};
 `;
 
 const PageTitleNoSchedule = styled.h1`

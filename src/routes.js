@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { Box } from "@chakra-ui/react";
 import React from "react";
 
-// import Landing from "containers/Landing"; // uncheck to see component examples
 import Login from "./containers/Login";
 import BuildSchedule from "./containers/BuildSchedule";
 import Header from "./containers/Header";
@@ -34,7 +33,7 @@ function Routes() {
   const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
   const isMobile = useSelector((state) => state.appState.isMobile);
 
-  const paddingTopLargeScreen = isAnnouncement ? "140px" : "120px";
+  const paddingTopLargeScreen = isAnnouncement ? "162px" : "120px";
 
   return (
     <ThemeProvider theme={{ mobile: isMobile, ...theme }}>

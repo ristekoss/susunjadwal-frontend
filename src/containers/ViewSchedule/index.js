@@ -1,3 +1,4 @@
+import { TableIcon, CalendarIcon } from "@heroicons/react/solid";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
@@ -5,7 +6,6 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
-import { TableIcon, CalendarIcon } from "@heroicons/react/solid";
 
 import {
   Button,
@@ -257,7 +257,7 @@ const ScheduleNameEditable = styled.div`
 
 const ScheduleName = styled.div`
   font-size: 32px;
-  color: white;
+  color: ${props => props.theme.color.secondaryMineShaft};
 `;
 
 const ButtonContainer = styled.div`
