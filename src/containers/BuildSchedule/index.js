@@ -194,8 +194,8 @@ export const SelectedCoursesContainer = styled.div`
   background-color: ${props => props.theme.color.primaryWhite};
   padding: ${({ isAnnouncement }) =>
     isAnnouncement
-      ? '150px 32px'
-      : '128px 32px'
+      ? '162px 32px'
+      : '120px 32px'
   };
   overflow-y: auto;
   position: fixed;
