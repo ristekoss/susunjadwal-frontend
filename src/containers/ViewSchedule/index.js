@@ -39,7 +39,7 @@ function ViewSchedule({ match, history }) {
 
   const [schedule, setSchedule] = useState(null);
   const [createdAt, setCreatedAt] = useState(null);
-  const [isDisplayTimetable, setIsDisplayTimetable] = useState(false);
+  const [isDisplayTimetable, setIsDisplayTimetable] = useState(true);
 
   async function onRename(slug, value) {
     if (auth) {
@@ -65,7 +65,7 @@ function ViewSchedule({ match, history }) {
 
   const showAlertCopy = () => {
     SuccessToast(
-      "Link telah disalin! Kamu bisa bagikan link tersebut ke teman kamu.",
+      "Link berhasil disalin!",
       isMobile
     );
   };

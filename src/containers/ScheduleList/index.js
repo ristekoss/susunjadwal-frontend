@@ -77,7 +77,8 @@ const ScheduleList = () => {
 
   const showAlertCopy = () => {
     SuccessToast(
-      "Link telah disalin!! Kamu bisa bagikan link tersebut ke teman kamu."
+      "Link berhasil disalin!",
+      isMobile
     );
   }
 

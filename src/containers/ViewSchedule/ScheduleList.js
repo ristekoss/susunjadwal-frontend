@@ -43,7 +43,7 @@ const ScheduleList = ({ schedule }) => {
       </ClassHeaderContainer>
       {Object.keys(formattedSchedule).map((scheduleName) => (
         <ClassItemContainer>
-          <div className="nama-kelas">{formattedSchedule[scheduleName].name}</div>
+          <div>{formattedSchedule[scheduleName].name}</div>
           <div>
             {formattedSchedule[scheduleName].time.map((dayItem) => (
               <div>{`${dayItem.day}, ${dayItem.start} - ${dayItem.end}`}</div>
