@@ -1,5 +1,8 @@
+import { Link } from "@chakra-ui/react";
 import styled from "styled-components";
 import React from "react";
+
+const MANUAL_VIDEO_URL = "https://drive.google.com/file/d/1hXwLpzcttDeeuTKN-fs49lroW6UnssaM/view";
 
 const Info = () => (
   <InfoContainer className="info-container">
@@ -29,8 +32,17 @@ const Info = () => (
       Saya masih ragu, apakah saya dapat mempelajari SusunJadwal?
     </Question>
     <Answer>
-      Kami suka semangat keingintahuanmu! Untuk mempelajari bagaimana SusunJadwal
-      bekerja, kamu dapat lihat di video ini.
+      Kami suka semangat keingintahuanmu! Untuk mempelajari bagaimana SusunJadwal bekerja,
+      kamu dapat lihat di {' '}
+        <Link
+          _hover={{ color: 'black' }}
+          rel="noopener noreferrer"
+          href={MANUAL_VIDEO_URL}
+          target="_blank"
+        >
+          <u>video</u>
+        </Link>
+      {' '} ini.
     </Answer>
   </InfoContainer>
 );
