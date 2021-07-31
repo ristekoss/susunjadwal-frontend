@@ -8,7 +8,7 @@ const Info = () => (
     </Question>
     <Answer>
       Update Matkul adalah fitur yang membolehkan penggunanya untuk memperbarui
-      jadwal kuliah dari program studi masing-masing.
+      jadwal kuliah dari program studi masing-masing sesuai dengan jadwal di SIAK-NG.
     </Answer>
     <Question>
       Kenapa perlu Update Matkul?
@@ -30,7 +30,7 @@ const Info = () => (
     </Question>
     <Answer>
       Kami suka semangat keingintahuanmu! Untuk mempelajari bagaimana SusunJadwal
-      bekerja, kamu dapat lihat di laman ini.
+      bekerja, kamu dapat lihat di video ini.
     </Answer>
   </InfoContainer>
 );

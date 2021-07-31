@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+
 import {
   Box,
   Button,
@@ -11,9 +12,10 @@ import {
 
 import { postScrapeSchedule } from "services/api";
 
-import { InputPassword, InputText } from "components/Forms";
 import { InfoToast, SuccessToast, ErrorToast } from "components/Toast";
+import { InputPassword, InputText } from "components/Forms";
 import { Bauhaus } from "components/Bauhaus";
+
 import Alert from "./Alert";
 import Info from "./Info";
 
@@ -60,13 +62,11 @@ const UpdateCourses = () => {
         width={{lg: "80%", xl: "70%"}}
       >
         <Text
-          fontSize="3xl"
+          color="primary.Purple"
+          fontSize={{ base: '27.2px', lg: '3xl' }}
           fontWeight="bold"
-          mt={isMobile 
-            ? "-3"
-            : "4"
-          }
-          mb={{ base: "24px", lg: "48px" }}
+          mt={{ base: '-40px', lg: '0px' }}
+          mb={{ base: "24px", lg: "32px" }}
           textAlign={isMobile
             ? "center"
             : "left"
