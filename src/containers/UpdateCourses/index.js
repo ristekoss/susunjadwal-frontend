@@ -62,9 +62,15 @@ const UpdateCourses = () => {
         <Text
           fontSize="3xl"
           fontWeight="bold"
-          mt="4"
+          mt={isMobile 
+            ? "-3"
+            : "4"
+          }
           mb={{ base: "24px", lg: "48px" }}
-          textAlign={{sm: "center", lg: "left"}}
+          textAlign={isMobile
+            ? "center"
+            : "left"
+          }
         >
           Daftarkan SSO untuk Update Matkul
         </Text>
