@@ -16,6 +16,7 @@
     "react-burger-menu": "^2.6.10",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.6",
+    "react-ga": "^3.3.0",
     "react-helmet": "^5.2.1",
     "react-hook-form": "^7.9.0",
     "react-input-autosize": "^2.2.1",
