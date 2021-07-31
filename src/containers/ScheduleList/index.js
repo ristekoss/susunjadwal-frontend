@@ -115,10 +115,12 @@ const ScheduleList = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
       <Helmet
         title="Daftar Jadwal"
         meta={[{ name: "description", content: "Description of Jadwal" }]}
       />
+
       {schedules && schedules.length > 0? (
           <>
             <BauhausSide />
@@ -161,7 +163,7 @@ const ScheduleList = () => {
         </CardContainer>
       ) : (
         <>
-           {isMobile ? (
+          {isMobile ? (
               <AssetBauhaus
                 isMobile={isMobile}
                 src={BauhausMobile}
@@ -286,8 +288,8 @@ const Card = styled.div`
 
 const CardContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
   width: 100%;
+  flex-wrap: wrap;
   flex-direction: ${props => (props.theme.mobile ? "column" : "row")};
   padding: ${props => (props.theme.mobile ? "1rem 3rem 0 3rem" : "0 48px")};
   background-color: #ffffff;

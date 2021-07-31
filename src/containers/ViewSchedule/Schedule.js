@@ -39,6 +39,7 @@ function Schedule({
   const TIME_MARKERS = Array(endHour - startHour + 1)
     .fill()
     .map((_, idx) => rowToDisplay(idx * 60));
+
   const renderHeader = () => (
     <>
       {showLabel && (

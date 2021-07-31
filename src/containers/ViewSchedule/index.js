@@ -39,7 +39,7 @@ function ViewSchedule({ match, history }) {
 
   const [schedule, setSchedule] = useState(null);
   const [createdAt, setCreatedAt] = useState(null);
-  const [isDisplayTimetable, setIsDisplayTimetable] = useState(true);
+  const [isDisplayTimetable, setIsDisplayTimetable] = useState(false);
 
   async function onRename(slug, value) {
     if (auth) {
