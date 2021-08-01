@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Text, Box, Button, Flex } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
-import { getContributors } from "services/api";
+import { Link } from "react-router-dom";
+import Helmet from "react-helmet";
+
 import { ContributorCard } from "components/Cards";
+import { getContributors } from "services/api";
 
 const Contributors = () => {
   const [contributors, setContributors] = useState();
@@ -33,6 +35,8 @@ const Contributors = () => {
 
   return (
     <Box mt={{ base: 'calc(-5rem)', lg: '-4rem' }}>
+      <Helmet title="Kontributor SusunJadwal" />
+
       <Link to="/">
         <Text fontSize={{base: 'sm', md:"lg"}} color="primary.Purple" ml="-9px">
           <ChevronLeftIcon w={8} h={8} />

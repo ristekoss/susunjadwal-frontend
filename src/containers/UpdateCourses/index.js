@@ -1,4 +1,5 @@
 import React from "react";
+import Helmet from "react-helmet";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -58,6 +59,8 @@ const UpdateCourses = () => {
   return (
     <>
       {!isMobile && <Bauhaus isPrivate />}
+      <Helmet title="Update Matkul" />
+
       <Box
         width={{lg: "80%", xl: "70%"}}
       >
