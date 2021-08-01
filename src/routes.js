@@ -49,7 +49,7 @@ function Routes() {
           <Route path="/beta-form" name="beta-form" component={withAnalytics(BetaForm)} />
           <Route path="/complete" name="complete-form" component={withAnalytics(CompleteForm)} />
           <Route path="/kontributor" name="kontributor" component={withAnalytics(Contributors)} />
-          <Route component={RoutesWithNavbar} />
+          <Route component={withAnalytics(RoutesWithNavbar)} />
         </Switch>
       </Box>
       <Footer />
