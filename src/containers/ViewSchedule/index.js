@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
 import { TableIcon, CalendarIcon } from "@heroicons/react/solid";
+import ReactGA from "react-ga";
 
 import {
   Button,
@@ -64,6 +65,10 @@ function ViewSchedule({ match, history }) {
   const scheduleName = schedule && schedule.name;
 
   const showAlertCopy = () => {
+    ReactGA.event({
+      category: "Bagikan Jadwal",
+      action: "Copied a schedule's URL"
+    });
     SuccessToast(
       "Link telah disalin! Kamu bisa bagikan link tersebut ke teman kamu.",
       isMobile
@@ -71,6 +76,10 @@ function ViewSchedule({ match, history }) {
   };
 
   const performDeleteSchedule = async (userId, scheduleId) => {
+    ReactGA.event({
+      category: "Hapus Jadwal",
+      action: "Deleted a schedule"
+    });
     dispatch(setLoading(true));
     await makeAtLeastMs(deleteSchedule(userId, scheduleId), 1000);
     history.push("/jadwal");

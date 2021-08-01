@@ -1,4 +1,5 @@
 import React from "react";
+import ReactGA from "react-ga";
 import styled from "styled-components";
 import { withRouter } from "react-router";
 import { Button } from "@chakra-ui/react";
@@ -53,6 +54,10 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         data: { id: scheduleId }
       } = await postSaveSchedule(auth.userId, transformSchedules(schedules));
       dispatch(clearSchedule());
+      ReactGA.event({
+        category: "Simpan Jadwal",
+        action: "Created/edited a schedule"
+      });
       history.push(`/jadwal/${scheduleId}`);
     } catch (e) {/** TODO: handle error */}
     setTimeout(() => dispatch(setLoading(false)), 1000);

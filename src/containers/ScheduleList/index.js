@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ReactGA from "react-ga";
 
 import {
   Button,
@@ -61,6 +62,10 @@ const ScheduleList = () => {
   }, [dispatch, auth]);
 
   const performDeleteSchedule = async (userId, scheduleId) => {
+    ReactGA.event({
+      category: "Hapus Jadwal",
+      action: "Deleted a schedule"
+    });
     dispatch(setLoading(true));
     onClose();
     await makeAtLeastMs(deleteSchedule(userId, scheduleId), 1000);
@@ -76,6 +81,10 @@ const ScheduleList = () => {
   }
 
   const showAlertCopy = () => {
+    ReactGA.event({
+      category: "Bagikan Jadwal",
+      action: "Copied a schedule's URL"
+    });
     SuccessToast(
       "Link telah disalin!! Kamu bisa bagikan link tersebut ke teman kamu."
     );

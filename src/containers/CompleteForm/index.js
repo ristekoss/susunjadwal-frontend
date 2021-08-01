@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import ReactGA from "react-ga";
 
 import { setAuth } from "redux/modules/auth";
 import { makeAtLeastMs } from "utils/promise";
@@ -55,7 +56,10 @@ const CompleteForm = ({ history }) => {
       dispatch(setAuth({ majorId, userId, token }));
       persistAuth({ majorId, userId, token });
       persistCompletion();
-
+      ReactGA.event({
+        category: "Lengkapi SSO",
+        action: "Completed SSO Data"
+      });
       if (isPeriodMissing) {
         dispatch(setLoading(false));
         window.location.replace("/update");
