@@ -83,3 +83,14 @@ export const postSsoCompletionData = async ({ completionId, npm, kdOrg }) => (
 export const getContributors = async () => (
   await axios.get('https://api.github.com/repos/ristekoss/susunjadwal/contributors')
 )
+
+export const getAnnouncement = async () => (
+  await axios.get(
+    `https://api.airtable.com/v0/${process.env.REACT_APP_BETA_AIRTABLE_BASE_ID}/${process.env.REACT_APP_AIRTABLE_NOTIFICATION_CONFIG_TABLE_NAME}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.REACT_APP_BETA_AIRTABLE_API_KEY}`,
+      },
+    }
+  )
+);

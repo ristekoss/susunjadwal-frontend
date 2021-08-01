@@ -89,7 +89,10 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
   const items = schedules.map((schedule, idx) => {
     const isCurrentScheduleConflict = isScheduleConflict(schedules, schedule);
     isConflict = isConflict || isCurrentScheduleConflict;
-    const labelName = (String(schedule.name).includes(schedule.parentName)) ? schedule.name : `${schedule.parentName}-${schedule.name}`
+
+    const labelName = (String(schedule.name).includes(schedule.parentName))
+      ? schedule.name
+      : `${schedule.parentName} - ${schedule.name}`
 
     const classesTimes = schedule.schedule_items.map((item, index) => (
       <li key={index}>
@@ -131,11 +134,12 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
               Batal
             </Button>
             <Button
-              onClick={() => !isEditing
-                ? saveSchedule()
-                : schedules.length === 0
-                ? handleDeleteSchedule()
-                : updateSchedule()}
+              onClick={() =>
+                !isEditing
+                  ? saveSchedule()
+                  : schedules.length === 0
+                    ? handleDeleteSchedule()
+                    : updateSchedule()}
               variant="solid"
             >
               Simpan

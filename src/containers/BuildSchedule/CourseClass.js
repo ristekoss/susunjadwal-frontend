@@ -44,7 +44,6 @@ const CourseClassDesktop = props => {
   ));
 
   const lecturers = () => {
-    console.log(props.lecturer)
     return (
       <>
         {props.lecturer[0] === "" ? (

@@ -17,12 +17,12 @@ import Course from "./Course";
 import Detail from "./Detail";
 
 function BuildSchedule() {
-  const auth = useSelector(state => state.auth);
+  const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
   const isMobile = useSelector(state => state.appState.isMobile);
-  const [detailData, setDetailData] = useState(null);
-
+  const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
+  const [detailData, setDetailData] = useState(null);
   const [courses, setCourses] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isCoursesDetail, setCoursesDetail] = useState(null);
@@ -100,7 +100,7 @@ function BuildSchedule() {
       </CoursePickerContainer>
 
       {!isMobile && (
-        <SelectedCoursesContainer>
+        <SelectedCoursesContainer isAnnouncement={isAnnouncement}>
           <SelectedCourses />
         </SelectedCoursesContainer>
       )}
@@ -133,7 +133,7 @@ export const Container = styled.div`
   margin-top: -40px;
 
   @media (min-width: 900px) {
-    margin-top: 8px;
+    margin-top: 0px;
   }
 `;
 
@@ -192,10 +192,14 @@ export const CoursePickerContainer = styled.div`
 
 export const SelectedCoursesContainer = styled.div`
   background-color: ${props => props.theme.color.primaryWhite};
-  height: 100vh;
-  padding: 128px 32px;
+  padding: ${({ isAnnouncement }) =>
+    isAnnouncement
+      ? '162px 32px'
+      : '120px 32px'
+  };
   overflow-y: auto;
   position: fixed;
+  height: 100vh;
   width: 25%;
   right: 0;
   top: 0;

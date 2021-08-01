@@ -5,13 +5,14 @@ import { Link } from "react-router-dom";
 import { parse } from "query-string";
 
 import { persistAuth, persistCompletion } from "utils/auth";
-import { redirectToSSOLogin } from "services/sso";
 import { setLoading } from "redux/modules/appState";
+import { redirectToSSOLogin } from "services/sso";
 import { makeAtLeastMs } from "utils/promise";
 import { postAuthTicket } from "services/api";
 import { setAuth } from "redux/modules/auth";
 
 import { Bauhaus } from "components/Bauhaus";
+import Announcement from "components/Announcement";
 
 import {
   Header,
@@ -20,6 +21,7 @@ import {
   HeroSection,
   AssetChevron,
 } from "./styles";
+
 import {
   Title,
   FlexBox,
@@ -30,11 +32,11 @@ import {
   AssetBetaB,
 } from "containers/BetaLanding/styles";
 
+
 import RistekLogo from "assets/Beta/Beta_Logo.svg";
 import ChevronArrow from "assets/Beta/chevron-down.svg";
 import BetaAssetA from "assets/Beta/beta-landing-asset-1.svg";
 import BetaAssetB from "assets/Beta/beta-landing-asset-2.svg";
-import Announcement from "components/Announcement";
 
 function getServiceUrl() {
   return window.location.href.split("?")[0];
@@ -150,19 +152,21 @@ function Login({ history, location }) {
             Universitas Indonesia!
           </Paragraph>
           <LinkBox>
-            <a
+            <Link
               href="https://discord.com/"
               rel="noopener noreferrer"
               target="_blank"
             >
               <Button
+                disabled
+                _hover={{ background: 'primary.Purple' }}
                 m={{ base: "0 0 1rem 0", lg: "0 1rem 0 0" }}
                 w="fit-content"
               >
                 Gabung Discord
               </Button>
-            </a>
-            <Link to="/beta-form">
+            </Link>
+            <Link to="/kontributor">
               <Button variant="outline" w="fit-content">
                 Lihat kontributor
               </Button>

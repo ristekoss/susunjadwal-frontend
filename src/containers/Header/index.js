@@ -1,7 +1,7 @@
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import React from "react";
 
-import "./styles.css";
 import {
   Box,
   Drawer,
@@ -11,7 +11,7 @@ import {
   Image,
   useDisclosure,
 } from "@chakra-ui/react";
-import LogoSunjad from "assets/Beta/LogoSunjad.svg";
+
 import {
   Container,
   HamburgerIcon,
@@ -20,8 +20,10 @@ import {
   SignOutLink,
   WrapperHamburger,
 } from "./styles";
-import { useSelector } from "react-redux";
+
+import LogoSunjad from "assets/Beta/LogoSunjad.svg";
 import Announcement from "components/Announcement";
+import "./styles.css";
 
 const LINKS = [
   { to: "/susun", label: "Buat Jadwal" },
@@ -33,6 +35,7 @@ const LINKS = [
 function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { pathname } = useLocation();
+
   const isMobile = useSelector((state) => state.appState.isMobile);
   const auth = useSelector((state) => state.auth);
 

@@ -39,8 +39,9 @@ function Schedule({
   const TIME_MARKERS = Array(endHour - startHour + 1)
     .fill()
     .map((_, idx) => rowToDisplay(idx * 60));
+
   const renderHeader = () => (
-    <React.Fragment>
+    <>
       {showLabel && (
         <Header>
           <span>Jam</span>
@@ -51,7 +52,7 @@ function Schedule({
           <span>{day}</span>
         </Header>
       ))}
-    </React.Fragment>
+    </>
   );
 
   return (
@@ -82,10 +83,13 @@ function Schedule({
                 {showRoom && <span className="room">{room}</span>}
               </div>
             )}
+
             <div className="content">
-              {showRoom && isMobile && <span>{room}</span>}
+              {showRoom && isMobile && <span className="room">{room}</span>}
               <span style={{ fontSize: isMobile?  "8px": "12px", color:"#F7B500",  mixBlendMode: "normal"}}>
-                {(String(name).includes(course_name) || !course_name) ? name : `${course_name} - ${name}`}
+                {(String(name).includes(course_name) || !course_name)
+                  ? name
+                  : `${course_name} - ${name}`}
               </span>
             </div>
           </ScheduleItem>
@@ -106,6 +110,7 @@ const Container = styled.div`
   grid-template-rows: repeat(990, ${({ pxPerMinute }) => pxPerMinute}px);
   width: ${({ width }) => width};
   background-color: #ffffff;
+  border-radius: 0 0 8px 8px;
 `;
 
 const TimeLabel = styled.div`
@@ -166,7 +171,7 @@ const ScheduleItem = styled.div`
 
   .content {
     padding: 2px 4px;
-    font-weight: ${({ mobile }) => (mobile ? "bold" : "bold")};
+    font-weight: bold;
     ${isMobile =>
       isMobile &&
       css`
@@ -177,6 +182,12 @@ const ScheduleItem = styled.div`
           font-size: 7px;
         }
       `}
+    .room {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 10ch;
+    }
   }
 `;
 
