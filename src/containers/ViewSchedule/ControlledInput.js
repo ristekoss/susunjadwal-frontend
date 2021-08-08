@@ -40,7 +40,6 @@ class ControlledInput extends React.Component {
   render() {
     return (
       <Container>
-        {/* TODO: Disable spellcheck */}
         <AutosizeInput
           name="form-field-schedule-name"
           value={this.state.title}

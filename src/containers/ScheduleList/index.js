@@ -35,18 +35,15 @@ import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
 import { SuccessToast } from "components/Toast";
 
 const ScheduleList = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
   const auth = useSelector(state => state.auth);
   const isMobile = useSelector(state => state.appState.isMobile);
-
-  const [selectedId, setSelectedId] = useState('');
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const dispatch = useDispatch();
-
+  const [selectedId, setSelectedId] = useState('');
   const [schedules, setSchedules] = useState();
 
-  const history = useHistory();
 
   useEffect(() => {
     const fetchSchedules = async () => {
