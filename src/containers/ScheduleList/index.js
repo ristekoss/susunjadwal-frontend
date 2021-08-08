@@ -44,7 +44,6 @@ const ScheduleList = () => {
   const [selectedId, setSelectedId] = useState('');
   const [schedules, setSchedules] = useState();
 
-
   useEffect(() => {
     const fetchSchedules = async () => {
       dispatch(setLoading(true));

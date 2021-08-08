@@ -42,6 +42,43 @@ function ViewSchedule({ match, history }) {
   const [createdAt, setCreatedAt] = useState(null);
   const [isDisplayTimetable, setIsDisplayTimetable] = useState(true);
 
+  const formattedSchedule = {};
+  let totalCredits = 0
+
+  if (schedule) {
+    schedule.schedule_items.forEach(({name, start, end, day, room, course_name, sks, lecturer}) => {
+      const scheduleKey =  `${course_name}-${name}`;
+      const formatedName = (String(name).includes(course_name) || !course_name)
+        ? name
+        : `${course_name} - ${name}`
+
+      if (!(scheduleKey in formattedSchedule)) {
+        formattedSchedule[scheduleKey] = {
+          name: formatedName,
+          time: [
+            {
+              start: start,
+              end: end,
+              day: day,
+              room: room,
+            },
+          ],
+          lecturer: lecturer,
+          sks: sks
+        };
+
+        totalCredits += sks;
+      } else {
+        formattedSchedule[scheduleKey].time.push({
+          start: start,
+          end: end,
+          day: day,
+          room: room,
+        });
+      }
+    });
+  }
+
   async function onRename(slug, value) {
     if (auth) {
       await postRenameSchedule(auth.userId, slug, value);
@@ -132,7 +169,7 @@ function ViewSchedule({ match, history }) {
                       "/" +
                       (createdAt?.getMonth() + 1) +
                       "/" +
-                      createdAt?.getFullYear()}
+                      createdAt?.getFullYear()} • {totalCredits} SKS
                   </p>
                 </ScheduleNameEditable>
               ) : (
@@ -196,7 +233,10 @@ function ViewSchedule({ match, history }) {
             showRoom
           />
         ) : (
-          <ScheduleList schedule={schedule} />
+          <ScheduleList
+            formattedSchedule={formattedSchedule}
+            totalCredits={totalCredits}
+          />
         )}
       </MainContainer>
     </>
