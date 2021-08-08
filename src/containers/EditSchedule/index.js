@@ -25,6 +25,7 @@ import { BauhausSide } from "components/Bauhaus";
 import { makeAtLeastMs } from "utils/promise";
 
 const EditSchedule = ({ match }) => {
+	const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
 	const { isMobile } = useSelector(state => state.appState)
 	const auth = useSelector(state => state.auth);
 	const { scheduleId } = useParams();
@@ -123,7 +124,7 @@ const EditSchedule = ({ match }) => {
 				</CoursePickerContainer>
 
 				{!isMobile && (
-					<SelectedCoursesContainer>
+					<SelectedCoursesContainer isAnnouncement={isAnnouncement}>
 							<SelectedCourses scheduleId={scheduleId} isEditing />
 					</SelectedCoursesContainer>
 				)}
