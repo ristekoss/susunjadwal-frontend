@@ -29,6 +29,7 @@ import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
 import { SuccessToast } from "components/Toast";
 
+import getFormattedSchedule from "utils/schedule";
 import ScheduleList from "./ScheduleList";
 
 function ViewSchedule({ match, history }) {
@@ -42,41 +43,11 @@ function ViewSchedule({ match, history }) {
   const [createdAt, setCreatedAt] = useState(null);
   const [isDisplayTimetable, setIsDisplayTimetable] = useState(true);
 
-  const formattedSchedule = {};
-  let totalCredits = 0
+  let formattedSchedule = {};
+  let totalCredits = 0;
 
   if (schedule) {
-    schedule.schedule_items.forEach(({name, start, end, day, room, course_name, sks, lecturer}) => {
-      const scheduleKey =  `${course_name}-${name}`;
-      const formatedName = (String(name).includes(course_name) || !course_name)
-        ? name
-        : `${course_name} - ${name}`
-
-      if (!(scheduleKey in formattedSchedule)) {
-        formattedSchedule[scheduleKey] = {
-          name: formatedName,
-          time: [
-            {
-              start: start,
-              end: end,
-              day: day,
-              room: room,
-            },
-          ],
-          lecturer: lecturer,
-          sks: sks
-        };
-
-        totalCredits += sks;
-      } else {
-        formattedSchedule[scheduleKey].time.push({
-          start: start,
-          end: end,
-          day: day,
-          room: room,
-        });
-      }
-    });
+    [formattedSchedule, totalCredits] = getFormattedSchedule(schedule);
   }
 
   async function onRename(slug, value) {
