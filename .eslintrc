@@ -1,5 +1,6 @@
 {
-  "extends": ["standard", "plugin:react/recommended"],
+  "plugins": ["prettier"],
+  "extends": ["prettier", "react-app", "unused-imports" ],
   "rules": {
     "no-unused-vars": "warn",
     "unused-imports/no-unused-imports": "error",
