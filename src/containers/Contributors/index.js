@@ -34,18 +34,26 @@ const Contributors = () => {
   ));
 
   return (
-    <Box mt={{ base: 'calc(-5rem)', lg: '-4rem' }}>
+    <Box mt={{ base: "calc(-5rem)", lg: "-4rem" }}>
       <Helmet title="Kontributor SusunJadwal" />
 
       <Link to="/">
-        <Text fontSize={{base: 'sm', md:"lg"}} color="primary.Purple" ml="-9px">
+        <Text
+          fontSize={{ base: "sm", md: "lg" }}
+          color="primary.Purple"
+          ml="-9px"
+        >
           <ChevronLeftIcon w={8} h={8} />
           Kembali ke Halaman Utama
         </Text>
       </Link>
 
-      <Box textAlign="center" mt={{ base: '1rem', lg: '2rem' }}>
-        <Text fontWeight="bold" fontSize={{base: 'x-large', md:"xx-large"}} color="primary.Purple">
+      <Box textAlign="center" mt={{ base: "1rem", lg: "2rem" }}>
+        <Text
+          fontWeight="bold"
+          fontSize={{ base: "x-large", md: "xx-large" }}
+          color="primary.Purple"
+        >
           Kontributor{" "}
           <Box as="span" color="secondary.MineShaft">
             Susun
@@ -62,7 +70,13 @@ const Contributors = () => {
           kehidupan mahasiswa Universitas Indonesia.
         </Text>
 
-        <Button m="2rem auto 3rem">Gabung Discord SusunJadwal</Button>
+        <a
+          href="https://discord.gg/V9W5ESksgG"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <Button m="2rem auto 3rem">Gabung Discord SusunJadwal</Button>
+        </a>
       </Box>
 
       <Flex
