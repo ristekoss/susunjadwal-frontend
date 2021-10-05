@@ -35,9 +35,9 @@ export const ContributorCard = ({ name, avatar, github, contributions }) => {
           </Box>
         </Text>
         <Text fontSize={{ base: "xs", md: "md" }}>
-          {contributions} contributions
+          {contributions} contribution{contributions !== 1 && "s"}
         </Text>
-        <Flex align='center' mt="1rem">
+        <Flex align="center" mt="1rem">
           <Text
             as="a"
             d="block"
