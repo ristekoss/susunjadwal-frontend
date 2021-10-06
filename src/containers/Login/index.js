@@ -32,6 +32,7 @@ import {
   AssetBetaB,
 } from "containers/BetaLanding/styles";
 
+
 import RistekLogo from "assets/Beta/Beta_Logo.svg";
 import ChevronArrow from "assets/Beta/chevron-down.svg";
 import BetaAssetA from "assets/Beta/beta-landing-asset-1.svg";
@@ -142,7 +143,8 @@ function Login({ history, location }) {
         </FlexItem>
         <TextBox>
           <Title>
-            Bergabung dengan Komunitas SusunJadwal di Discord. <span>Now!</span>
+            Bergabung dengan Komunitas SusunJadwal di Discord.{" "}
+            <span>Soon!</span>
           </Title>
           <Paragraph>
             Bantu kami dengan menjadi kontributor untuk meningkatkan kualitas
@@ -150,19 +152,20 @@ function Login({ history, location }) {
             Universitas Indonesia!
           </Paragraph>
           <LinkBox>
-            <a
-              href="https://discord.gg/V9W5ESksgG"
+            <Link
+              href="https://discord.com/"
               rel="noopener noreferrer"
               target="_blank"
             >
               <Button
-                _hover={{ background: "primary.Purple" }}
+                disabled
+                _hover={{ background: 'primary.Purple' }}
                 m={{ base: "0 0 1rem 0", lg: "0 1rem 0 0" }}
                 w="fit-content"
               >
                 Gabung Discord
               </Button>
-            </a>
+            </Link>
             <Link to="/kontributor">
               <Button variant="outline" w="fit-content">
                 Lihat kontributor
