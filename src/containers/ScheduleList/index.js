@@ -10,6 +10,7 @@ import {
   ModalFooter as ChakraModalFooter,
   ModalBody,
   useDisclosure,
+  PopoverBody,
 } from "@chakra-ui/react";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -25,15 +26,15 @@ import { getSchedules, deleteSchedule } from "services/api";
 import { setLoading } from "redux/modules/appState";
 import { makeAtLeastMs } from "utils/promise";
 import Schedule from "containers/ViewSchedule/Schedule";
-import clipboardImg from "assets/Clipboard.svg";
-import deleteImg from "assets/Delete.svg";
-import { decodeHtmlEntity } from 'utils/string'
-import EditIcon from "assets/EditSchedule/EditIcon";
+import { decodeHtmlEntity } from 'utils/string';
 import { BauhausSide } from 'components/Bauhaus';
 import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
 import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
 import { SuccessToast } from "components/Toast";
 import getFormattedSchedule from "utils/schedule";
+import MoreOptions from "components/MoreOptions/MoreOptions";
+import { theme } from "styles/StyledTheme";
+import useDownloadCalendar from "hooks/useDownloadCalendar";
 
 const ScheduleList = () => {
   const history = useHistory();
@@ -44,6 +45,9 @@ const ScheduleList = () => {
 
   const [selectedId, setSelectedId] = useState('');
   const [schedules, setSchedules] = useState();
+
+  const { parseFormattedScheduleToEvent, generateICalendarFile } =
+    useDownloadCalendar();
 
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -102,6 +106,53 @@ const ScheduleList = () => {
     onOpen();
   }
 
+  const moreOptionsProps = ({ schedule }) => {
+    const [formattedSchedule] = getFormattedSchedule(schedule);
+    return {
+      items: [
+        {
+          node: (
+            <CopyToClipboard
+              text={`${window.location.href}/${schedule.id}`}
+              onCopy={showAlertCopy}
+            >
+              <Button
+                variant="unstyled"
+                style={{ textAlign: "left", borderRadius: 0 }}
+              >
+                <PopoverBody>Bagikan Jadwal</PopoverBody>
+              </Button>
+            </CopyToClipboard>
+          ),
+        },
+        {
+          text: "Download Jadwal",
+          props: {
+            onClick: () => {
+              generateICalendarFile(
+                parseFormattedScheduleToEvent(formattedSchedule),
+              );
+            },
+          },
+        },
+        {
+          text: "Edit Jadwal",
+          props: {
+            onClick: () => handleClickEditJadwal(schedule.id),
+          },
+        },
+        {
+          text: "Hapus Jadwal",
+          props: {
+            style: {
+              color: theme.color.stateError,
+            },
+            onClick: () => showDialogDelete(schedule.id),
+          },
+        },
+      ],
+    };
+  };
   return (
     <Container>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -132,72 +183,68 @@ const ScheduleList = () => {
         <>
           <BauhausSide />
           <PageTitle mobile={isMobile}>Daftar Jadwal</PageTitle>
-        </>
-      ): ""}
+          <CardContainer>
+            {schedules.map((schedule, idx) => {
+              const [, totalCredits] = getFormattedSchedule(schedule)
 
-      {schedules && schedules.length > 0 ? (
-        <CardContainer>
-          {schedules.map((schedule, idx) => {
-            const [, totalCredits] = getFormattedSchedule(schedule)
-
-            return (
-              <Card key={`${schedule.name}-${idx}`}>
-                <div className="headerInfo">
-                  <Link to={`/jadwal/${schedule.id}`}>
-                    <h2>{decodeHtmlEntity(schedule.name) || "Untitled"}</h2>
-                    <h4>
+              return (
+                <Card key={`${schedule.name}-${idx}`}>
+                  <div className="headerInfo">
+                    <div>
+                      <div className="headerWrapper">
+                        <Link
+                          to={`/jadwal/${schedule.id}`}
+                          style={{ marginRight: 16 }}
+                        >
+                          <h2>
+                            {decodeHtmlEntity(schedule.name) || "Untitled"}
+                          </h2>
+                        </Link>
+                        <MoreOptions
+                          {...moreOptionsProps({ schedule: schedule })}
+                        />
+                      </div>
+                      <h4>
                       Dibuat pada {convertDate(schedule.created_at)}
                       {' '} • {totalCredits} SKS
-                    </h4>
-                  </Link>
-                  <CardActionContainer>
-                    <CopyToClipboard
-                      text={`${window.location.href}/${schedule.id}`}
-                      onCopy={showAlertCopy}
-                    >
-                      <ImageButton src={clipboardImg} />
-                    </CopyToClipboard>
-                    <ImageButton
-                      src={deleteImg}
-                      onClick={() => showDialogDelete(schedule.id)}
-                    />
-                    <EditIcon className="editIcon" onClick={() => handleClickEditJadwal(schedule.id)} />
-                  </CardActionContainer>
-                </div>
-                <Schedule
-                  startHour={7}
-                  endHour={21}
-                  schedule={schedule}
-                  pxPerMinute={isMobile ? 0.3 : 0.7}
-                  width="100%"
-                  showRoom
-                />
-              </Card>
-            )
-          })}
-        </CardContainer>
+                      </h4>
+                    </div>
+                  </div>
+                  <Schedule
+                    startHour={7}
+                    endHour={21}
+                    schedule={schedule}
+                    pxPerMinute={isMobile ? 0.3 : 0.7}
+                    width="100%"
+                    showRoom
+                  />
+                </Card>
+              )
+            })}
+          </CardContainer>
+        </>
       ) : (
         <>
           {isMobile ? (
-              <AssetBauhaus
-                isMobile={isMobile}
-                src={BauhausMobile}
-                alt="bauhaus-sm"
-              />
+            <AssetBauhaus
+              isMobile={isMobile}
+              src={BauhausMobile}
+              alt="bauhaus-sm"
+            />
           ) : (
             <AssetBauhaus src={BauhausDesktop} alt="bauhaus-lg" />
           )}
           <Box pt="90px" mb={{base:16,md:'160px'}}>
-            <div style={{  textAlign: isMobile?  "center": "left", width: "100%" }}>
+          <div style={{  textAlign: isMobile?  "center": "left", width: "100%" }}>
             <PageTitleNoSchedule mobile={isMobile}>Daftar Jadwal</PageTitleNoSchedule>
               <PageInfo mobile={isMobile}>Anda belum pernah membuat jadwal. Mulai susun jadwal anda sekarang!</PageInfo>
               <Link to={`/susun`}>
-                <Button height={{ base: "44px", md: "57px" }} width={{ base: "137px", md: "194px" }} ml={{md: 12}} fontSize={{ base: "14px", md: "18px" }}>Buat Jadwal</Button>
+              <Button height={{ base: "44px", md: "57px" }} width={{ base: "137px", md: "194px" }} ml={{md: 12}} fontSize={{ base: "14px", md: "18px" }}>Buat Jadwal</Button>
               </Link>
             </div>
           </Box>
         </>
-        )}
+      )}
     </Container>
   );
 }
@@ -225,15 +272,15 @@ const Container = styled.div`
 `;
 
 const CardActionContainer = styled.div`
-display:flex;
-flex-direction:'row';
-justify-content: center;
-align-items:center;
+  display:flex;
+  flex-direction:'row';
+  justify-content: center;
+  align-items:center;
 
-.editIcon{
-  margin-left:8px;
-  cursor:pointer;
-}
+  .editIcon{
+    margin-left:8px;
+    cursor:pointer;
+  }
 `;
 
 const PageTitle = styled.h1`
@@ -272,6 +319,11 @@ const Card = styled.div`
   h4{
     color: #333333;
     font-size: 12px;
+  }
+  .headerWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
   .headerInfo {
     padding: 1.2rem;

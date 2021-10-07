@@ -1,45 +1,61 @@
-import { useToast } from "@chakra-ui/react";
+import { ErrorToast, SuccessToast } from "components/Toast";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { dayToColumn, getDayOfCurrentWeek } from "utils/date";
 import useDidUpdate from "./useDidUpdate";
-const ics = require('ics')
+const ics = require("ics");
 
 const useDownloadCalendar = () => {
   const [events, setEvents] = useState();
   const [error, setError] = useState("");
   const [data, setData] = useState("");
-  const toast = useToast();
+  const isMobile = useSelector((state) => state.appState.isMobile);
   const fn = () =>
     ics.createEvents(events, (error, value) => {
       if (error) {
         console.error(error.message);
-        toast({
-          id: 'error-generate-calendar',
-          title: "Error",
-          description: "Terjadi kesalahan, silakan dicoba kembali.",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
+        ErrorToast("Terjadi kesalahan, silakan dicoba kembali.", isMobile);
         setError(error);
         return error;
       }
       setData(value);
       const dlurl = `data:text/calendar;charset=utf-8,${value}`;
       download(dlurl);
-      toast({
-        id: 'success-generate-calendar',
-        title: "Berhasil download jadwal.",
-        status: "success",
-        duration: 30000,
-        isClosable: true,
-      });
+      SuccessToast("Berhasil download jadwal!", isMobile);
       return value;
     });
+
+  const parseFormattedScheduleToEvent = (formattedSchedule) => {
+    const classes = [];
+    Object.keys(formattedSchedule).forEach((subject) => {
+      formattedSchedule[subject].time.forEach((item) => {
+        const calendarDate = getDayOfCurrentWeek(dayToColumn(item.day));
+        const year = calendarDate.getFullYear();
+        const month = calendarDate.getMonth() + 1;
+        const day = calendarDate.getDate();
+        const [startHour, startMinute] = item.start.split(".").map((item) => {
+          return parseInt(item, 10);
+        });
+        const [endHour, endMinute] = item.end.split(".").map((item) => {
+          return parseInt(item, 10);
+        });
+        const data = {
+          start: [year, month, day, startHour, startMinute],
+          end: [year, month, day, endHour, endMinute],
+          title: formattedSchedule[subject].name,
+          location: item.room,
+        };
+        classes.push(data);
+      });
+    });
+    return classes;
+  };
 
   useDidUpdate(fn, [events]);
 
   return {
     generateICalendarFile: setEvents,
+    parseFormattedScheduleToEvent,
     error,
     data,
   };

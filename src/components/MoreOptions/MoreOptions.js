@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Popover,
   PopoverTrigger,
@@ -10,7 +10,7 @@ import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 const MoreOptions = ({ items }) => {
   return (
-    <Popover>
+    <Popover placement="bottom-end">
       <PopoverTrigger>
         <Button
           data-testid="more-options-trigger"
@@ -21,13 +21,16 @@ const MoreOptions = ({ items }) => {
         </Button>
       </PopoverTrigger>
       <PopoverContent data-testid="more-options-content">
-        {items.map(({ text, props }, index) => {
+        {items.map(({ text, node, props }, index) => {
+          if (React.isValidElement(node)) {
+            return node;
+          }
           return (
             <Button
               key={index}
               variant="unstyled"
               {...props}
-              style={{ ...props.style, textAlign: "left", borderRadius: 0 }}
+              style={{ ...props?.style, textAlign: "left", borderRadius: 0 }}
             >
               <PopoverBody>{text}</PopoverBody>
             </Button>

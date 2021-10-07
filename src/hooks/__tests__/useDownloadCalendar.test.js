@@ -1,23 +1,13 @@
-import {
-  render,
-  fireEvent,
-} from "@testing-library/react";
+import { fireEvent } from "@testing-library/react";
 import React from "react";
-import { useToast } from "@chakra-ui/react";
 const { createEvents } = require("ics");
 import useDownloadCalendar from "../useDownloadCalendar";
+import { mockFormattedSchedule } from "../__mocks__";
+import { render } from "../../utils/test-utils";
 
 jest.mock("ics", () => {
   return {
     createEvents: jest.fn(),
-  };
-});
-
-jest.mock("@chakra-ui/react", () => {
-  const ui = jest.requireActual("@chakra-ui/react");
-  return {
-    ...ui,
-    useToast: jest.fn(() => jest.fn),
   };
 });
 
@@ -26,36 +16,15 @@ describe("useDownloadCalendar", () => {
 
   beforeEach(() => {
     App = function () {
-      const { data, error, generateICalendarFile } = useDownloadCalendar();
-      const mockEvent = [
-        {
-          start: [2021, 10, 30, 6, 30],
-          duration: { hours: 6, minutes: 30 },
-          title: "Bolder Boulder",
-          description: "Annual 10-kilometer run in Boulder, Colorado",
-          location: "Folsom Field, University of Colorado (finish line)",
-          url: "http://www.bolderboulder.com/",
-          geo: { lat: 40.0095, lon: 105.2669 },
-          categories: ["10k races", "Memorial Day Weekend", "Boulder CO"],
-          status: "CONFIRMED",
-          busyStatus: "BUSY",
-          organizer: { name: "Admin", email: "Race@BolderBOULDER.com" },
-          attendees: [
-            {
-              name: "Adam Gibbons",
-              email: "adam@example.com",
-              rsvp: true,
-              partstat: "ACCEPTED",
-              role: "REQ-PARTICIPANT",
-            },
-          ],
-        },
-      ];
+      const { parseFormattedScheduleToEvent, generateICalendarFile } =
+        useDownloadCalendar();
       return (
         <div>
           <button
             data-testid="trigger-btn"
-            onClick={() => generateICalendarFile(mockEvent)}
+            onClick={() =>
+              generateICalendarFile(parseFormattedScheduleToEvent(mockFormattedSchedule))
+            }
           >
             Generate
           </button>
@@ -83,7 +52,6 @@ describe("useDownloadCalendar", () => {
     const dom = render(<App />);
     const trigger = dom.getByTestId("trigger-btn");
     fireEvent.click(trigger);
-    expect(useToast).toHaveBeenCalled();
     expect(createEvents).toHaveBeenCalled();
   });
 
@@ -96,7 +64,18 @@ describe("useDownloadCalendar", () => {
     const dom = render(<App />);
     const trigger = dom.getByTestId("trigger-btn");
     fireEvent.click(trigger);
-    expect(useToast).toHaveBeenCalled();
+    expect(createEvents).toHaveBeenCalled();
+  });
+
+  it("[with window.URL] downloads .ics file correctly", async () => {
+    global.URL.revokeObjectURL = jest.fn();
+    global.ActiveXObject = false;
+    createEvents.mockImplementation((events, callback) =>
+      callback(false, true),
+    );
+    const dom = render(<App />);
+    const trigger = dom.getByTestId("trigger-btn");
+    fireEvent.click(trigger);
     expect(createEvents).toHaveBeenCalled();
   });
 
@@ -110,20 +89,6 @@ describe("useDownloadCalendar", () => {
     const dom = render(<App />);
     const trigger = dom.getByTestId("trigger-btn");
     fireEvent.click(trigger);
-    expect(useToast).toHaveBeenCalled();
-    expect(createEvents).toHaveBeenCalled();
-  });
-
-  it("[with window.URL] downloads .ics file correctly", async () => {
-    global.URL.revokeObjectURL = jest.fn();
-    global.ActiveXObject = false;
-    createEvents.mockImplementation((events, callback) =>
-      callback(false, true),
-    );
-    const dom = render(<App />);
-    const trigger = dom.getByTestId("trigger-btn");
-    fireEvent.click(trigger);
-    expect(useToast).toHaveBeenCalled();
     expect(createEvents).toHaveBeenCalled();
   });
 
@@ -134,8 +99,16 @@ describe("useDownloadCalendar", () => {
     const dom = render(<App />);
     const trigger = dom.getByTestId("trigger-btn");
     fireEvent.click(trigger);
-    expect(useToast).toHaveBeenCalled();
+    expect(createEvents).toHaveBeenCalled();
+  });
+
+  it("correctly parses formattedSchedule to event", async () => {
+    createEvents.mockImplementation((events, callback) =>
+      callback(new Error("error"), false),
+    );
+    const dom = render(<App />);
+    const trigger = dom.getByTestId("trigger-btn");
+    fireEvent.click(trigger);
     expect(createEvents).toHaveBeenCalled();
   });
 });
-
