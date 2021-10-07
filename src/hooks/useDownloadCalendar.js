@@ -2,16 +2,17 @@ import { ErrorToast, SuccessToast } from "components/Toast";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { dayToColumn, getDayOfCurrentWeek } from "utils/date";
+import getFormattedSchedule from "utils/schedule";
 import useDidUpdate from "./useDidUpdate";
 const ics = require("ics");
 
 const useDownloadCalendar = () => {
-  const [events, setEvents] = useState();
+  const [schedule, setSchedule] = useState();
   const [error, setError] = useState("");
   const [data, setData] = useState("");
   const isMobile = useSelector((state) => state.appState.isMobile);
   const fn = () =>
-    ics.createEvents(events, (error, value) => {
+    ics.createEvents(parseFormattedScheduleToEvent(schedule), (error, value) => {
       if (error) {
         console.error(error.message);
         ErrorToast("Terjadi kesalahan, silakan dicoba kembali.", isMobile);
@@ -20,12 +21,13 @@ const useDownloadCalendar = () => {
       }
       setData(value);
       const dlurl = `data:text/calendar;charset=utf-8,${value}`;
-      download(dlurl);
+      download(dlurl, `${schedule.name || 'Untitled'}_calendar_susunjadwal.ics`);
       SuccessToast("Berhasil download jadwal!", isMobile);
       return value;
     });
 
-  const parseFormattedScheduleToEvent = (formattedSchedule) => {
+  const parseFormattedScheduleToEvent = (schedule) => {
+    const [formattedSchedule] = getFormattedSchedule(schedule);
     const classes = [];
     Object.keys(formattedSchedule).forEach((subject) => {
       formattedSchedule[subject].time.forEach((item) => {
@@ -51,23 +53,23 @@ const useDownloadCalendar = () => {
     return classes;
   };
 
-  useDidUpdate(fn, [events]);
+  useDidUpdate(fn, [schedule]);
 
   return {
-    generateICalendarFile: setEvents,
+    generateICalendarFile: setSchedule,
     parseFormattedScheduleToEvent,
     error,
     data,
   };
 };
 
-function download(fileURL) {
+function download(fileURL, fileName) {
   const isIE = window.ActiveXObject;
   if (!isIE) {
     let save = document.createElement("a");
     save.href = fileURL;
     save.target = "_blank";
-    save.download = "hehe.ics";
+    save.download = fileName;
 
     let evt = new MouseEvent("click", {
       view: window,

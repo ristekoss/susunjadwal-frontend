@@ -46,8 +46,7 @@ const ScheduleList = () => {
   const [selectedId, setSelectedId] = useState('');
   const [schedules, setSchedules] = useState();
 
-  const { parseFormattedScheduleToEvent, generateICalendarFile } =
-    useDownloadCalendar();
+  const { generateICalendarFile } = useDownloadCalendar();
 
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -107,7 +106,6 @@ const ScheduleList = () => {
   }
 
   const moreOptionsProps = ({ schedule }) => {
-    const [formattedSchedule] = getFormattedSchedule(schedule);
     return {
       items: [
         {
@@ -128,11 +126,7 @@ const ScheduleList = () => {
         {
           text: "Download Jadwal",
           props: {
-            onClick: () => {
-              generateICalendarFile(
-                parseFormattedScheduleToEvent(formattedSchedule),
-              );
-            },
+            onClick: () => generateICalendarFile(schedule),
           },
         },
         {
