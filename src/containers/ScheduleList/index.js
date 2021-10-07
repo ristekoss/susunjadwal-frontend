@@ -271,18 +271,6 @@ const Container = styled.div`
   margin-right: -3rem;
 `;
 
-const CardActionContainer = styled.div`
-  display:flex;
-  flex-direction:'row';
-  justify-content: center;
-  align-items:center;
-
-  .editIcon{
-    margin-left:8px;
-    cursor:pointer;
-  }
-`;
-
 const PageTitle = styled.h1`
   margin: ${({ mobile }) => (mobile ? "-40px 0 0 0px" : "0px 48px 30px 48px")};
   font-size: ${({ mobile }) => (mobile ? "1.7rem" : "2rem")};
@@ -360,18 +348,6 @@ const CardContainer = styled.div`
   flex-direction: ${props => (props.theme.mobile ? "column" : "row")};
   padding: ${props => (props.theme.mobile ? "1rem 3rem 0 3rem" : "0 48px")};
   background-color: #ffffff;
-`;
-
-const ImageButton = styled.button`
-  background: url(${({ src }) => src}) no-repeat;
-  cursor: pointer;
-  height: 24px;
-  width: 24px;
-  border: none;
-
-  & + & {
-    margin-left: 8px;
-  }
 `;
 
 const AssetBauhaus = styled.img`

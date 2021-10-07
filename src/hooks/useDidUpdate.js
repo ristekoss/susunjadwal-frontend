@@ -27,6 +27,7 @@ const useDidUpdate = (callback, deps) => {
       } else {
         hasMountedRef.current = true;
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, deps);
   }
 
