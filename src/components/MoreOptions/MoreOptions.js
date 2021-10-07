@@ -23,7 +23,7 @@ const MoreOptions = ({ items }) => {
       <PopoverContent data-testid="more-options-content">
         {items.map(({ text, node, props }, index) => {
           if (React.isValidElement(node)) {
-            return node;
+            return React.cloneElement(node, { key: index });
           }
           return (
             <Button
