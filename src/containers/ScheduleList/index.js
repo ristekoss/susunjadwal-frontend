@@ -1,25 +1,37 @@
 import React, { useEffect, useState } from "react";
-
-import { Button, Box } from "@chakra-ui/react";
-
+import ReactGA from "react-ga";
+import { useHistory } from "react-router";
+import {
+  Button,
+  Box,
+  Modal,
+  ModalOverlay,
+  ModalContent as ChakraModalContent,
+  ModalFooter as ChakraModalFooter,
+  ModalBody,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import Helmet from "react-helmet";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-
 import { getSchedules } from "services/api";
 import { setLoading } from "redux/modules/appState";
 import { makeAtLeastMs } from "utils/promise";
 import { BauhausSide } from "components/Bauhaus";
 import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
 import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
-
 import ScheduleDetail from "./ScheduleDetail";
+import { deleteSchedule } from "services/api";
+import { SuccessToast } from "components/Toast";
 
 const ScheduleList = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const auth = useSelector((state) => state.auth);
   const isMobile = useSelector((state) => state.appState.isMobile);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedId, setSelectedId] = useState("");
   const [schedules, setSchedules] = useState();
 
   useEffect(() => {
@@ -34,9 +46,59 @@ const ScheduleList = () => {
 
     fetchSchedules();
   }, [dispatch, auth]);
+  const performDeleteSchedule = async (userId, scheduleId) => {
+    ReactGA.event({
+      category: "Hapus Jadwal",
+      action: "Deleted a schedule",
+    });
+    dispatch(setLoading(true));
+    onClose();
+    await makeAtLeastMs(deleteSchedule(userId, scheduleId), 1000);
+    const {
+      data: { user_schedules },
+    } = await makeAtLeastMs(getSchedules(auth.userId), 1000);
+    setSchedules(user_schedules);
+    dispatch(setLoading(false));
+  };
+
+  const confirmDeleteSchedule = (scheduleId) => {
+    performDeleteSchedule(auth.userId, scheduleId);
+  };
+  const showDialogDelete = (id) => {
+    setSelectedId(id);
+    onOpen();
+  };
+  const showAlertCopy = () => {
+    ReactGA.event({
+      category: "Bagikan Jadwal",
+      action: "Copied a schedule's URL",
+    });
+    SuccessToast("Link berhasil disalin!", isMobile);
+  };
+  const handleClickEditJadwal = (idJadwal) => {
+    history.push(`/edit/${idJadwal}`);
+  };
 
   return (
     <Container>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalBody>Apakah kamu yakin ingin menghapus jadwal?</ModalBody>
+
+          <ModalFooter>
+            <Button onClick={onClose} variant="outline">
+              Batal
+            </Button>
+            <Button
+              onClick={() => confirmDeleteSchedule(selectedId)}
+              variant="danger"
+            >
+              Hapus
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       <Helmet
         title="Daftar Jadwal"
         meta={[{ name: "description", content: "Description of Jadwal" }]}
@@ -54,7 +116,16 @@ const ScheduleList = () => {
       {schedules && schedules.length > 0 ? (
         <CardContainer>
           {schedules.map((schedule, idx) => {
-            return <ScheduleDetail schedule={schedule} idx={idx} />;
+            return (
+              <ScheduleDetail
+                schedule={schedule}
+                idx={idx}
+                key={schedule.id}
+                alertCopy={showAlertCopy}
+                showModal={showDialogDelete}
+                editSchedule={handleClickEditJadwal}
+              />
+            );
           })}
         </CardContainer>
       ) : (
@@ -147,5 +218,20 @@ const AssetBauhaus = styled.img`
     }
   `}
 `;
+const ModalContent = styled(ChakraModalContent).attrs({
+  padding: { base: "16px 24px", lg: "20px 24px" },
+  width: { base: "90%", lg: "initial" },
+  textAlign: "center",
+})``;
 
+const ModalFooter = styled(ChakraModalFooter).attrs({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  marginTop: { base: "12px", lg: "16px" },
+})`
+  button {
+    margin: 0px 4px;
+  }
+`;
 export default ScheduleList;
