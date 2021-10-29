@@ -3,14 +3,19 @@ import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import styled from "styled-components";
 import { DotsHorizontalIcon } from "@heroicons/react/solid";
 import CopyToClipboard from "react-copy-to-clipboard";
-const Dropdown = ({ DropdownItems }) => {
+
+import { useSelector } from "react-redux";
+const Dropdown = ({ DropdownItems, DropdownWidth }) => {
+  const isMobile = useSelector((state) => state.appState.isMobile);
+  const position = !isMobile ? "right-start" : "bottom";
+
   return (
     <DropdownContainer>
-      <Menu autoSelect={false} placement="right-start">
+      <Menu autoSelect={false} placement={position}>
         <MenuButton>
-          <DotsHorizontalIcon style={{ marginTop: "10px" }} width={15} />
+          <DotsHorizontalIcon width={20} height={10} />
         </MenuButton>
-        <MenuList>
+        <MenuList minWidth={DropdownWidth}>
           {DropdownItems.map((item) => {
             return (
               <>
