@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { CalendarIcon, ViewListIcon } from "@heroicons/react/solid";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import { decodeHtmlEntity } from "utils/string";
 import getFormattedSchedule from "utils/schedule";
 import EditIcon from "assets/EditSchedule/EditIcon";
@@ -11,7 +10,7 @@ import clipboardImg from "assets/Clipboard.svg";
 import deleteImg from "assets/Delete.svg";
 import ScheduleList from "containers/ViewSchedule/ScheduleList";
 import Schedule from "containers/ViewSchedule/Schedule";
-
+import Dropdown from "components/Dropdown";
 const ScheduleDetail = ({
   schedule,
   idx,
@@ -35,28 +34,43 @@ const ScheduleDetail = ({
     <>
       <Card key={`${schedule.name}-${idx}`}>
         <div className="headerInfo">
-          <Link to={`/jadwal/${schedule.id}`}>
-            <h2>{decodeHtmlEntity(schedule.name) || "Untitled"}</h2>
+          <div>
+            <div style={{ display: "flex", gap: "13px" }}>
+              <Link to={`/jadwal/${schedule.id}`}>
+                <h2>
+                  {schedule.name ? decodeHtmlEntity(schedule.name) : "Untitled"}
+                </h2>
+              </Link>
+              <Dropdown
+                DropdownItems={[
+                  {
+                    text: "Bagikan Jadwal",
+                    icon: <ImageButton src={clipboardImg} />,
+                    action: alertCopy,
+                    copy: true,
+                    scheduleId: schedule.id,
+                  },
+
+                  {
+                    text: "Edit Jadwal",
+                    icon: <EditIcon style={{ marginRight: "6px" }} />,
+                    action: () => editSchedule(schedule.id),
+                  },
+                  {
+                    text: "Delete Jadwal",
+                    icon: <ImageButton src={deleteImg} />,
+                    action: () => showModal(schedule.id),
+                  },
+                ]}
+              ></Dropdown>
+            </div>
             <h4>
               Dibuat pada {convertDate(schedule.created_at)} • {totalCredits}{" "}
               SKS
             </h4>
-          </Link>
+          </div>
+
           <CardActionContainer>
-            <CopyToClipboard
-              text={`${window.location.href}/${schedule.id}`}
-              onCopy={alertCopy}
-            >
-              <ImageButton src={clipboardImg} />
-            </CopyToClipboard>
-            <ImageButton
-              src={deleteImg}
-              onClick={() => showModal(schedule.id)}
-            />
-            <EditIcon
-              className="editIcon"
-              onClick={() => editSchedule(schedule.id)}
-            />
             <ViewToggleContainer>
               <ViewListContainer
                 isActive={!isDisplayTimetable}
