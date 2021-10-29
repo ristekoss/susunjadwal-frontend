@@ -35,7 +35,7 @@ const ScheduleDetail = ({
       <Card key={`${schedule.name}-${idx}`}>
         <div className="headerInfo">
           <div>
-            <div style={{ display: "flex", gap: "13px" }}>
+            <div style={{ display: "flex", gap: "13px", alignItems: "center" }}>
               <Link to={`/jadwal/${schedule.id}`}>
                 <h2>
                   {schedule.name ? decodeHtmlEntity(schedule.name) : "Untitled"}
