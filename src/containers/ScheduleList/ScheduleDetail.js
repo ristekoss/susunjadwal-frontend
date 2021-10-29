@@ -37,7 +37,10 @@ const ScheduleDetail = ({
         <div className="headerInfo">
           <Link to={`/jadwal/${schedule.id}`}>
             <h2>{decodeHtmlEntity(schedule.name) || "Untitled"}</h2>
-            <h4>Dibuat pada {convertDate(schedule.created_at)} • SKS</h4>
+            <h4>
+              Dibuat pada {convertDate(schedule.created_at)} • {totalCredits}{" "}
+              SKS
+            </h4>
           </Link>
           <CardActionContainer>
             <CopyToClipboard
@@ -146,7 +149,7 @@ const ImageButton = styled.button`
 
 const ViewToggleContainer = styled.div`
   display: flex;
-  margin-left: 5%
+  margin-left: 5%;
   flex-direction: row;
   cursor: pointer;
   border-radius: 1em;

@@ -104,18 +104,16 @@ const ScheduleList = () => {
         meta={[{ name: "description", content: "Description of Jadwal" }]}
       />
 
-      {schedules && schedules.length > 0 ? (
+      {!!schedules?.length && (
         <>
           <BauhausSide />
           <PageTitle mobile={isMobile}>Daftar Jadwal</PageTitle>
         </>
-      ) : (
-        ""
       )}
 
-      {schedules && schedules.length > 0 ? (
+      {!!schedules?.length ? (
         <CardContainer>
-          {schedules.map((schedule, idx) => {
+          {schedules?.map((schedule, idx) => {
             return (
               <ScheduleDetail
                 schedule={schedule}
