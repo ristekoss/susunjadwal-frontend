@@ -42,6 +42,7 @@ const ScheduleDetail = ({
                 </h2>
               </Link>
               <Dropdown
+                DropdownWidth="200px"
                 DropdownItems={[
                   {
                     text: "Bagikan Jadwal",
