@@ -1,27 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { CalendarIcon, ViewListIcon } from "@heroicons/react/solid";
 import { decodeHtmlEntity } from "utils/string";
-import getFormattedSchedule from "utils/schedule";
-import EditIcon from "assets/EditSchedule/EditIcon";
+// import EditIcon from "assets/EditSchedule/EditIcon";
 import clipboardImg from "assets/Clipboard.svg";
 import deleteImg from "assets/Delete.svg";
-import ScheduleList from "containers/ViewSchedule/ScheduleList";
 import Schedule from "containers/ViewSchedule/Schedule";
-import Dropdown from "components/Dropdown";
-const ScheduleDetail = ({
-  schedule,
-  idx,
-  showModal,
-  alertCopy,
-  editSchedule,
-}) => {
-  const isMobile = useSelector((state) => state.appState.isMobile);
-  const [isDisplayTimetable, setIsDisplayTimetable] = useState(true);
+import GroupedIcons from "components/GroupedIcons";
+import exportImg from "assets/Export.svg";
+import downloadImg from "assets/Download.svg";
+import { Button } from "@chakra-ui/react";
 
-  const [formattedSchedule, totalCredits] = getFormattedSchedule(schedule);
+const ScheduleDetail = ({ schedule, idx, showModal, alertCopy }) => {
+  const isMobile = useSelector((state) => state.appState.isMobile);
 
   const convertDate = (date) => {
     const dateNew = new Date(date);
@@ -41,69 +33,61 @@ const ScheduleDetail = ({
                   {schedule.name ? decodeHtmlEntity(schedule.name) : "Untitled"}
                 </h2>
               </Link>
-              <Dropdown
-                DropdownWidth="200px"
-                DropdownItems={[
-                  {
-                    text: "Bagikan Jadwal",
-                    icon: <ImageButton src={clipboardImg} />,
-                    action: alertCopy,
-                    copy: true,
-                    scheduleId: schedule.id,
-                  },
-
-                  {
-                    text: "Edit Jadwal",
-                    icon: <EditIcon style={{ marginRight: "6px" }} />,
-                    action: () => editSchedule(schedule.id),
-                  },
-                  {
-                    text: "Delete Jadwal",
-                    icon: <ImageButton src={deleteImg} />,
-                    action: () => showModal(schedule.id),
-                  },
-                ]}
-              ></Dropdown>
             </div>
-            <h4>
-              Dibuat pada {convertDate(schedule.created_at)} • {totalCredits}{" "}
-              SKS
-            </h4>
+            <h4>Dibuat pada {convertDate(schedule.created_at)}</h4>
           </div>
 
           <CardActionContainer>
-            <ViewToggleContainer>
-              <ViewListContainer
-                isActive={!isDisplayTimetable}
-                onClick={() => setIsDisplayTimetable(false)}
-              >
-                <ViewListIcon width={20} />
-              </ViewListContainer>
+            <GroupedIcons
+              Items={[
+                {
+                  desc: "Export Jadwal",
+                  icon: exportImg,
+                  alt: "export",
+                },
+                {
+                  desc: "Download Jadwal",
+                  icon: downloadImg,
+                  alt: "download",
+                },
+                {
+                  desc: "Share Jadwal",
+                  icon: clipboardImg,
+                  alt: "copy",
+                  copy: true,
+                  action: alertCopy,
+                  scheduleId: schedule.id,
+                },
+                {
+                  desc: "Delete Jadwal",
+                  icon: deleteImg,
+                  alt: "delete",
+                  action: () => showModal(schedule.id),
+                },
+              ]}
+            ></GroupedIcons>
 
-              <ViewCalendarContainer
-                isActive={isDisplayTimetable}
-                onClick={() => setIsDisplayTimetable(true)}
+            <Link to={`/edit/${schedule.id}`}>
+              <Button
+                mx="1rem"
+                intent="primary"
+                variant="outline"
+                onClick={() => null}
+                display={isMobile ? "none" : "flex"}
               >
-                <CalendarIcon width={20} />
-              </ViewCalendarContainer>
-            </ViewToggleContainer>
+                Edit Jadwal
+              </Button>
+            </Link>
           </CardActionContainer>
         </div>
-        {isDisplayTimetable ? (
-          <Schedule
-            startHour={7}
-            endHour={21}
-            schedule={schedule}
-            pxPerMinute={isMobile ? 0.3 : 0.7}
-            width="100%"
-            showRoom
-          />
-        ) : (
-          <ScheduleList
-            formattedSchedule={formattedSchedule}
-            totalCredits={totalCredits}
-          />
-        )}
+        <Schedule
+          startHour={7}
+          endHour={21}
+          schedule={schedule}
+          pxPerMinute={isMobile ? 0.3 : 0.7}
+          width="100%"
+          showRoom
+        />
       </Card>
     </>
   );
@@ -148,64 +132,6 @@ const CardActionContainer = styled.div`
   .editIcon {
     margin-left: 8px;
     cursor: pointer;
-  }
-`;
-
-const ImageButton = styled.button`
-  background: url(${({ src }) => src}) no-repeat;
-  cursor: pointer;
-  height: 24px;
-  width: 24px;
-  border: none;
-  & + & {
-    margin-left: 8px;
-  }
-`;
-
-const ViewToggleContainer = styled.div`
-  display: flex;
-  margin-left: 5%;
-  flex-direction: row;
-  cursor: pointer;
-  border-radius: 1em;
-`;
-
-const ViewListContainer = styled.div`
-  background-color: ${(props) =>
-    props.isActive
-      ? props.theme.color.primaryPurple
-      : props.theme.color.primaryWhite};
-  padding: 10px 1rem;
-  border-top-left-radius: 1em;
-  border-bottom-left-radius: 1em;
-  border-left: 1px solid ${(props) => props.theme.color.primaryPurple};
-  border-top: 2px solid ${(props) => props.theme.color.primaryPurple};
-  border-bottom: 2px solid ${(props) => props.theme.color.primaryPurple};
-  svg {
-    color: ${(props) =>
-      props.isActive
-        ? props.theme.color.primaryWhite
-        : props.theme.color.primaryPurple};
-  }
-`;
-
-const ViewCalendarContainer = styled.div`
-  background-color: ${(props) =>
-    props.isActive
-      ? props.theme.color.primaryPurple
-      : props.theme.color.primaryWhite};
-  padding: 10px 1rem;
-  border-top-right-radius: 1em;
-  border-bottom-right-radius: 1em;
-  border-right: 1px solid ${(props) => props.theme.color.primaryPurple};
-  border-top: 2px solid ${(props) => props.theme.color.primaryPurple};
-  border-bottom: 2px solid ${(props) => props.theme.color.primaryPurple};
-
-  svg {
-    color: ${(props) =>
-      props.isActive
-        ? props.theme.color.primaryWhite
-        : props.theme.color.primaryPurple};
   }
 `;
 
