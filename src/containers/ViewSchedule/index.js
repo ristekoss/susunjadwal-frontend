@@ -25,6 +25,8 @@ import Schedule from "./Schedule";
 import ControlledInput from "./ControlledInput";
 import { decodeHtmlEntity } from "utils/string";
 
+import exportImg from "assets/Export.svg";
+import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
 import { SuccessToast } from "components/Toast";
@@ -75,18 +77,15 @@ function ViewSchedule({ match, history }) {
   const showAlertCopy = () => {
     ReactGA.event({
       category: "Bagikan Jadwal",
-      action: "Copied a schedule's URL"
+      action: "Copied a schedule's URL",
     });
-    SuccessToast(
-      "Link berhasil disalin!",
-      isMobile
-    );
+    SuccessToast("Link berhasil disalin!", isMobile);
   };
 
   const performDeleteSchedule = async (userId, scheduleId) => {
     ReactGA.event({
       category: "Hapus Jadwal",
-      action: "Deleted a schedule"
+      action: "Deleted a schedule",
     });
     dispatch(setLoading(true));
     await makeAtLeastMs(deleteSchedule(userId, scheduleId), 1000);
@@ -140,7 +139,8 @@ function ViewSchedule({ match, history }) {
                       "/" +
                       (createdAt?.getMonth() + 1) +
                       "/" +
-                      createdAt?.getFullYear()} • {totalCredits} SKS
+                      createdAt?.getFullYear()}{" "}
+                    • {totalCredits} SKS
                   </p>
                 </ScheduleNameEditable>
               ) : (
@@ -148,15 +148,21 @@ function ViewSchedule({ match, history }) {
               )}
 
               <IconContainer isAuthenticated={Boolean(auth)}>
+                <ImageButton data-hover="Export Jadwal">
+                  <img src={exportImg} alt="export" />
+                </ImageButton>
+                <ImageButton data-hover="Download Jadwal">
+                  <img src={downloadImg} alt="download" />
+                </ImageButton>
                 <CopyToClipboard
                   text={`${window.location.href}/${schedule.id}`}
                   onCopy={showAlertCopy}
                 >
-                  <ImageButton>
+                  <ImageButton data-hover="Share Jadwal">
                     <img src={clipboardImg} alt="copy" />
                   </ImageButton>
                 </CopyToClipboard>
-                <ImageButton onClick={onOpen}>
+                <ImageButton onClick={onOpen} data-hover="Delete Jadwal">
                   <img src={deleteImg} alt="delete" />
                 </ImageButton>
               </IconContainer>
@@ -165,7 +171,7 @@ function ViewSchedule({ match, history }) {
             <ButtonContainer isAuthenticated={Boolean(auth)}>
               <Link to={`/edit/${scheduleId}`}>
                 <Button
-                  mr={{ base: '0rem', lg: '1rem' }}
+                  mr={{ base: "0rem", lg: "1rem" }}
                   intent="primary"
                   variant="outline"
                   onClick={() => null}
@@ -271,10 +277,8 @@ const IconContainer = styled.div`
   display: flex;
   flex-direction: row;
 
-  ${props => props.isAuthenticated
-    ? 'visibility: visible;'
-    : 'visibility: hidden;'
-  }
+  ${(props) =>
+    props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
 `;
 
 const ButtonContainer = styled.div`
@@ -284,10 +288,8 @@ const ButtonContainer = styled.div`
   display: flex;
 
   a {
-    ${props => props.isAuthenticated
-      ? 'visibility: visible;'
-      : 'visibility: hidden;'
-    }
+    ${(props) =>
+      props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
   }
 
   @media (min-width: 900px) {
@@ -311,7 +313,7 @@ const ScheduleNameEditable = styled.div`
 
 const ScheduleName = styled.div`
   font-size: 32px;
-  color: ${props => props.theme.color.secondaryMineShaft};
+  color: ${(props) => props.theme.color.secondaryMineShaft};
 `;
 
 const ImageButton = styled.div`
@@ -319,6 +321,40 @@ const ImageButton = styled.div`
   margin-right: 1rem;
   cursor: pointer;
   display: flex;
+  position: relative;
+  &:before,
+  &:after {
+    visibility: hidden;
+    opacity: 0;
+    z-index: 1;
+    position: absolute;
+  }
+  &:before {
+    content: attr(data-hover);
+    width: max-content;
+    height: 32px;
+    background-color: #4e4e4e;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 6px;
+    right: 0;
+    top: 130%;
+    font-size: 14px;
+  }
+  &:after {
+    content: "";
+    border-style: solid;
+    border-color: #4e4e4e transparent;
+    border-width: 0 8px 10px;
+    top: 100%;
+    right: 3px;
+  }
+  &:hover&:before,
+  &:hover&:after {
+    opacity: 1;
+    visibility: visible;
+  }
 `;
 
 const ViewToggleContainer = styled.div`
@@ -343,8 +379,7 @@ const ViewListContainer = styled.div`
     color: ${(props) =>
       props.isActive
         ? props.theme.color.primaryWhite
-        : props.theme.color.primaryPurple
-    };
+        : props.theme.color.primaryPurple};
   }
 `;
 
@@ -364,8 +399,7 @@ const ViewCalendarContainer = styled.div`
     color: ${(props) =>
       props.isActive
         ? props.theme.color.primaryWhite
-        : props.theme.color.primaryPurple
-    };
+        : props.theme.color.primaryPurple};
   }
 `;
 
