@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import CopyToClipboard from "react-copy-to-clipboard";
 
-const GroupedIcons = ({ Items }) => {
+const Icons = ({ Items }) => {
   return (
-    <IconContainer>
+    <>
       {Items.map((item) => {
         return (
           <>
@@ -25,14 +25,9 @@ const GroupedIcons = ({ Items }) => {
           </>
         );
       })}
-    </IconContainer>
+    </>
   );
 };
-
-const IconContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
 
 const ImageButton = styled.div`
   justify-content: center;
@@ -75,4 +70,4 @@ const ImageButton = styled.div`
   }
 `;
 
-export default GroupedIcons;
+export default Icons;

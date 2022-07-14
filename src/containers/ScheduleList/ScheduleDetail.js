@@ -3,16 +3,21 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { decodeHtmlEntity } from "utils/string";
-// import EditIcon from "assets/EditSchedule/EditIcon";
 import clipboardImg from "assets/Clipboard.svg";
 import deleteImg from "assets/Delete.svg";
 import Schedule from "containers/ViewSchedule/Schedule";
-import GroupedIcons from "components/GroupedIcons";
+import Icons from "components/Icons";
 import exportImg from "assets/Export.svg";
 import downloadImg from "assets/Download.svg";
 import { Button } from "@chakra-ui/react";
 
-const ScheduleDetail = ({ schedule, idx, showModal, alertCopy }) => {
+const ScheduleDetail = ({
+  schedule,
+  idx,
+  showModal,
+  alertCopy,
+  editSchedule,
+}) => {
   const isMobile = useSelector((state) => state.appState.isMobile);
 
   const convertDate = (date) => {
@@ -24,71 +29,75 @@ const ScheduleDetail = ({ schedule, idx, showModal, alertCopy }) => {
 
   return (
     <>
-      <Card key={`${schedule.name}-${idx}`}>
-        <div className="headerInfo">
-          <div>
-            <div style={{ display: "flex", gap: "13px", alignItems: "center" }}>
-              <Link to={`/jadwal/${schedule.id}`}>
+      <Link to={`/jadwal/${schedule.id}`}>
+        <Card key={`${schedule.name}-${idx}`}>
+          <div className="headerInfo">
+            <div>
+              <div
+                style={{ display: "flex", gap: "13px", alignItems: "center" }}
+              >
                 <h2>
                   {schedule.name ? decodeHtmlEntity(schedule.name) : "Untitled"}
                 </h2>
-              </Link>
+              </div>
+              <h4>Dibuat pada {convertDate(schedule.created_at)}</h4>
             </div>
-            <h4>Dibuat pada {convertDate(schedule.created_at)}</h4>
-          </div>
 
-          <CardActionContainer>
-            <GroupedIcons
-              Items={[
-                {
-                  desc: "Export Jadwal",
-                  icon: exportImg,
-                  alt: "export",
-                },
-                {
-                  desc: "Download Jadwal",
-                  icon: downloadImg,
-                  alt: "download",
-                },
-                {
-                  desc: "Share Jadwal",
-                  icon: clipboardImg,
-                  alt: "copy",
-                  copy: true,
-                  action: alertCopy,
-                  scheduleId: schedule.id,
-                },
-                {
-                  desc: "Delete Jadwal",
-                  icon: deleteImg,
-                  alt: "delete",
-                  action: () => showModal(schedule.id),
-                },
-              ]}
-            ></GroupedIcons>
+            <Link to={null} style={{ display: "flex" }}>
+              <CardActionContainer>
+                <IconContainer>
+                  <Icons
+                    Items={[
+                      {
+                        desc: "Export Jadwal",
+                        icon: exportImg,
+                        alt: "export",
+                      },
+                      {
+                        desc: "Download Jadwal",
+                        icon: downloadImg,
+                        alt: "download",
+                      },
+                      {
+                        desc: "Share Jadwal",
+                        icon: clipboardImg,
+                        alt: "copy",
+                        copy: true,
+                        action: alertCopy,
+                        scheduleId: schedule.id,
+                      },
+                      {
+                        desc: "Delete Jadwal",
+                        icon: deleteImg,
+                        alt: "delete",
+                        action: () => showModal(schedule.id),
+                      },
+                    ]}
+                  />
+                </IconContainer>
 
-            <Link to={`/edit/${schedule.id}`}>
-              <Button
-                mx="1rem"
-                intent="primary"
-                variant="outline"
-                onClick={() => null}
-                display={isMobile ? "none" : "flex"}
-              >
-                Edit Jadwal
-              </Button>
+                <Button
+                  mx="1rem"
+                  intent="primary"
+                  variant="outline"
+                  onClick={() => editSchedule(schedule.id)}
+                  display={isMobile ? "none" : "flex"}
+                >
+                  Edit Jadwal
+                </Button>
+              </CardActionContainer>
             </Link>
-          </CardActionContainer>
-        </div>
-        <Schedule
-          startHour={7}
-          endHour={21}
-          schedule={schedule}
-          pxPerMinute={isMobile ? 0.3 : 0.7}
-          width="100%"
-          showRoom
-        />
-      </Card>
+          </div>
+          <Schedule
+            startHour={7}
+            endHour={21}
+            schedule={schedule}
+            pxPerMinute={isMobile ? 0.3 : 0.7}
+            width="100%"
+            showRoom
+          />
+        </Card>
+      </Link>
     </>
   );
 };
@@ -133,6 +142,11 @@ const CardActionContainer = styled.div`
     margin-left: 8px;
     cursor: pointer;
   }
+`;
+
+const IconContainer = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 export default ScheduleDetail;

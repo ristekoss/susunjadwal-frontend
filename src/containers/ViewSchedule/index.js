@@ -1,5 +1,4 @@
 import { TableIcon, CalendarIcon } from "@heroicons/react/solid";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -30,6 +29,7 @@ import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
 import { SuccessToast } from "components/Toast";
+import Icons from "components/Icons";
 
 import getFormattedSchedule from "utils/schedule";
 import ScheduleList from "./ScheduleList";
@@ -148,23 +148,34 @@ function ViewSchedule({ match, history }) {
               )}
 
               <IconContainer isAuthenticated={Boolean(auth)}>
-                <ImageButton data-hover="Export Jadwal">
-                  <img src={exportImg} alt="export" />
-                </ImageButton>
-                <ImageButton data-hover="Download Jadwal">
-                  <img src={downloadImg} alt="download" />
-                </ImageButton>
-                <CopyToClipboard
-                  text={`${window.location.href}/${schedule.id}`}
-                  onCopy={showAlertCopy}
-                >
-                  <ImageButton data-hover="Share Jadwal">
-                    <img src={clipboardImg} alt="copy" />
-                  </ImageButton>
-                </CopyToClipboard>
-                <ImageButton onClick={onOpen} data-hover="Delete Jadwal">
-                  <img src={deleteImg} alt="delete" />
-                </ImageButton>
+                <Icons
+                  Items={[
+                    {
+                      desc: "Export Jadwal",
+                      icon: exportImg,
+                      alt: "export",
+                    },
+                    {
+                      desc: "Download Jadwal",
+                      icon: downloadImg,
+                      alt: "download",
+                    },
+                    {
+                      desc: "Share Jadwal",
+                      icon: clipboardImg,
+                      alt: "copy",
+                      copy: true,
+                      action: showAlertCopy,
+                      scheduleId: schedule.id,
+                    },
+                    {
+                      desc: "Delete Jadwal",
+                      icon: deleteImg,
+                      alt: "delete",
+                      action: onOpen,
+                    },
+                  ]}
+                />
               </IconContainer>
             </HeaderContainer>
 
@@ -276,6 +287,7 @@ const HeaderContainer = styled.div`
 const IconContainer = styled.div`
   display: flex;
   flex-direction: row;
+  margin-right: 1rem;
 
   ${(props) =>
     props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
@@ -314,47 +326,6 @@ const ScheduleNameEditable = styled.div`
 const ScheduleName = styled.div`
   font-size: 32px;
   color: ${(props) => props.theme.color.secondaryMineShaft};
-`;
-
-const ImageButton = styled.div`
-  justify-content: center;
-  margin-right: 1rem;
-  cursor: pointer;
-  display: flex;
-  position: relative;
-  &:before,
-  &:after {
-    visibility: hidden;
-    opacity: 0;
-    z-index: 1;
-    position: absolute;
-  }
-  &:before {
-    content: attr(data-hover);
-    width: max-content;
-    height: 32px;
-    background-color: #4e4e4e;
-    color: #ffffff;
-    text-align: center;
-    border-radius: 8px;
-    padding: 6px;
-    right: 0;
-    top: 130%;
-    font-size: 14px;
-  }
-  &:after {
-    content: "";
-    border-style: solid;
-    border-color: #4e4e4e transparent;
-    border-width: 0 8px 10px;
-    top: 100%;
-    right: 3px;
-  }
-  &:hover&:before,
-  &:hover&:after {
-    opacity: 1;
-    visibility: visible;
-  }
 `;
 
 const ViewToggleContainer = styled.div`
