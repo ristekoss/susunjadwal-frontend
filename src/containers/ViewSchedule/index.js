@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
 import ReactGA from "react-ga";
+import CopyToClipboard from "react-copy-to-clipboard";
 
 import {
   Button,
@@ -15,6 +16,9 @@ import {
   ModalFooter as ChakraModalFooter,
   ModalBody,
   useDisclosure,
+  ModalCloseButton,
+  Text,
+  Flex,
 } from "@chakra-ui/react";
 
 import { getSchedule, postRenameSchedule, deleteSchedule } from "services/api";
@@ -24,7 +28,9 @@ import Schedule from "./Schedule";
 import ControlledInput from "./ControlledInput";
 import { decodeHtmlEntity } from "utils/string";
 
-import exportImg from "assets/Export.svg";
+import alertImg from "assets/Alert2.svg";
+import linkImg from "assets/Link.svg";
+import copyImg from "assets/Copy.svg";
 import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
@@ -37,6 +43,7 @@ import ScheduleList from "./ScheduleList";
 function ViewSchedule({ match, history }) {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const shareModal = useDisclosure();
   const auth = useSelector((state) => state.auth);
   const { scheduleId } = useParams();
   const dispatch = useDispatch();
@@ -117,6 +124,43 @@ function ViewSchedule({ match, history }) {
         </ModalContent>
       </Modal>
 
+      <Modal isOpen={shareModal.isOpen} onClose={shareModal.onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody>
+            Bagikan Jadwal <b>{scheduleName}</b>
+          </ModalBody>
+
+          <ModalFooter>
+            <Flex flexDirection="column">
+              <Flex flexDirection={isMobile ? "column" : "row"}>
+                <CopyToClipboard
+                  text={`${window.location.href}/${scheduleId}`}
+                  onCopy={showAlertCopy}
+                >
+                  <Button variant="outline" my="4px !important">
+                    <img src={linkImg} style={{ marginRight: "4px" }} />
+                    Copy Link
+                  </Button>
+                </CopyToClipboard>
+                <Button variant="solid" my="4px !important">
+                  <img src={copyImg} style={{ marginRight: "8px" }} />
+                  Copy Image
+                </Button>
+              </Flex>
+              <Flex mt="1rem">
+                <img src={alertImg} style={{ height: "24px" }} />
+                <Text>
+                  <b>Copy Image</b> akan menyalin gambar ke clipboard sementara{" "}
+                  <b>Copy Link</b> akan menyalin link jadwal
+                </Text>
+              </Flex>
+            </Flex>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <MainContainer>
         <Helmet
           title={scheduleName ? `Jadwal ${scheduleName}` : `Jadwal Untitled`}
@@ -151,11 +195,6 @@ function ViewSchedule({ match, history }) {
                 <Icons
                   Items={[
                     {
-                      desc: "Export Jadwal",
-                      icon: exportImg,
-                      alt: "export",
-                    },
-                    {
                       desc: "Download Jadwal",
                       icon: downloadImg,
                       alt: "download",
@@ -164,9 +203,7 @@ function ViewSchedule({ match, history }) {
                       desc: "Share Jadwal",
                       icon: clipboardImg,
                       alt: "copy",
-                      copy: true,
-                      action: showAlertCopy,
-                      scheduleId: schedule.id,
+                      action: shareModal.onOpen,
                     },
                     {
                       desc: "Delete Jadwal",

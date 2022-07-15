@@ -1,28 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import CopyToClipboard from "react-copy-to-clipboard";
 
 const Icons = ({ Items }) => {
   return (
     <>
       {Items.map((item) => {
         return (
-          <>
-            {item.copy ? (
-              <CopyToClipboard
-                text={`${window.location.href}/${item.scheduleId}`}
-                onCopy={item.action}
-              >
-                <ImageButton data-hover={item.desc}>
-                  <img src={item.icon} alt={item.alt} />
-                </ImageButton>
-              </CopyToClipboard>
-            ) : (
-              <ImageButton onClick={item.action} data-hover={item.desc}>
-                <img src={item.icon} alt={item.alt} />
-              </ImageButton>
-            )}
-          </>
+          <ImageButton onClick={item.action} data-hover={item.desc}>
+            <img src={item.icon} alt={item.alt} />
+          </ImageButton>
         );
       })}
     </>

@@ -7,7 +7,6 @@ import clipboardImg from "assets/Clipboard.svg";
 import deleteImg from "assets/Delete.svg";
 import Schedule from "containers/ViewSchedule/Schedule";
 import Icons from "components/Icons";
-import exportImg from "assets/Export.svg";
 import downloadImg from "assets/Download.svg";
 import { Button } from "@chakra-ui/react";
 
@@ -15,8 +14,8 @@ const ScheduleDetail = ({
   schedule,
   idx,
   showModal,
-  alertCopy,
   editSchedule,
+  showShareModal,
 }) => {
   const isMobile = useSelector((state) => state.appState.isMobile);
 
@@ -49,11 +48,6 @@ const ScheduleDetail = ({
                   <Icons
                     Items={[
                       {
-                        desc: "Export Jadwal",
-                        icon: exportImg,
-                        alt: "export",
-                      },
-                      {
                         desc: "Download Jadwal",
                         icon: downloadImg,
                         alt: "download",
@@ -62,9 +56,8 @@ const ScheduleDetail = ({
                         desc: "Share Jadwal",
                         icon: clipboardImg,
                         alt: "copy",
-                        copy: true,
-                        action: alertCopy,
-                        scheduleId: schedule.id,
+                        action: () =>
+                          showShareModal(schedule.id, schedule.name),
                       },
                       {
                         desc: "Delete Jadwal",
