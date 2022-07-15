@@ -1,12 +1,13 @@
 import { TableIcon, CalendarIcon } from "@heroicons/react/solid";
 import { useSelector, useDispatch } from "react-redux";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
 import ReactGA from "react-ga";
 import CopyToClipboard from "react-copy-to-clipboard";
+import * as htmlToImage from "html-to-image";
 
 import {
   Button,
@@ -101,6 +102,17 @@ function ViewSchedule({ match, history }) {
 
   const confirmDeleteSchedule = (scheduleId) => {
     performDeleteSchedule(auth.userId, scheduleId);
+  };
+
+  const refs = useRef(null);
+
+  const downloadImage = async () => {
+    const dataUrl = await htmlToImage.toPng(refs.current);
+
+    const link = document.createElement("a");
+    link.download = scheduleName + ".png";
+    link.href = dataUrl;
+    link.click();
   };
 
   return (
@@ -198,6 +210,7 @@ function ViewSchedule({ match, history }) {
                       desc: "Download Jadwal",
                       icon: downloadImg,
                       alt: "download",
+                      action: downloadImage,
                     },
                     {
                       desc: "Share Jadwal",
@@ -246,23 +259,25 @@ function ViewSchedule({ match, history }) {
           </Container>
         )}
 
-        {isDisplayTimetable ? (
-          <Schedule
-            width="100%"
-            pxPerMinute={isMobile ? 0.7 : 0.9}
-            schedule={schedule}
-            startHour={7}
-            endHour={21}
-            showHeader
-            showLabel
-            showRoom
-          />
-        ) : (
-          <ScheduleList
-            formattedSchedule={formattedSchedule}
-            totalCredits={totalCredits}
-          />
-        )}
+        <div ref={refs}>
+          {isDisplayTimetable ? (
+            <Schedule
+              width="100%"
+              pxPerMinute={isMobile ? 0.7 : 0.9}
+              schedule={schedule}
+              startHour={7}
+              endHour={21}
+              showHeader
+              showLabel
+              showRoom
+            />
+          ) : (
+            <ScheduleList
+              formattedSchedule={formattedSchedule}
+              totalCredits={totalCredits}
+            />
+          )}
+        </div>
       </MainContainer>
     </>
   );
