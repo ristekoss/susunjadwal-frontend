@@ -130,17 +130,17 @@ const ScheduleList = () => {
                   onCopy={showAlertCopy}
                 >
                   <Button variant="outline" my="4px !important">
-                    <img src={linkImg} style={{ marginRight: "4px" }} />
+                    <img src={linkImg} style={{ marginRight: "4px" }} alt="" />
                     Copy Link
                   </Button>
                 </CopyToClipboard>
                 <Button variant="solid" my="4px !important">
-                  <img src={copyImg} style={{ marginRight: "8px" }} />
+                  <img src={copyImg} style={{ marginRight: "8px" }} alt="" />
                   Copy Image
                 </Button>
               </Flex>
               <Flex mt="1rem">
-                <img src={alertImg} style={{ height: "24px" }} />
+                <img src={alertImg} style={{ height: "24px" }} alt="" />
                 <Text>
                   <b>Copy Image</b> akan menyalin gambar ke clipboard sementara{" "}
                   <b>Copy Link</b> akan menyalin link jadwal
