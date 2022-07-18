@@ -18,12 +18,12 @@ import {
   AccordionIcon,
   AssetBauhaus,
   LogoRistek,
-  LogoSunjadBeta
+  LogoSunjadBeta,
 } from "./styles";
 import { FAQS } from "./data";
 
 import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
-import RistekBetaLogo from "assets/Beta/Beta_Logo.svg";
+import RistekBetaLogo from "assets/Beta/Beta_Logo_Light.svg";
 import SunjadBetaLogo from "assets/Beta/Sunjad_Beta.svg";
 import BetaAssetA from "assets/Beta/beta-landing-asset-1.svg";
 import BetaAssetB from "assets/Beta/beta-landing-asset-2.svg";
@@ -41,9 +41,9 @@ const BetaLanding = () => {
         <TextBox>
           <Title>Apa itu SusunJadwal?</Title>
           <Paragraph>
-            SusunJadwal merupakan situs untuk membantu kamu menentukan jadwal kuliah
-            yang akan kamu ambil dalam suatu semester. Dengan SusunJadwal, peluang
-            kamu menang SIAK War akan lebih besar, loh!
+            SusunJadwal merupakan situs untuk membantu kamu menentukan jadwal
+            kuliah yang akan kamu ambil dalam suatu semester. Dengan
+            SusunJadwal, peluang kamu menang SIAK War akan lebih besar, loh!
           </Paragraph>
         </TextBox>
         <FlexItem display="flex" justifyContent="center">
@@ -52,17 +52,23 @@ const BetaLanding = () => {
       </FlexBox>
 
       <FlexBox flexDir={{ base: "column", lg: "row" }}>
-        <FlexItem display="flex" justifyContent={{ base: "center", lg: "flex-start" }} >
+        <FlexItem
+          display="flex"
+          justifyContent={{ base: "center", lg: "flex-start" }}
+        >
           <AssetBetaB src={BetaAssetB} alt="beta-landing-asset-2" />
         </FlexItem>
         <TextBox>
           <Title>Jadilah beta tester SusunJadwal!</Title>
           <Paragraph>
-            Mau membantu kami meningkatkan kualitas SusunJadwal? Jadilah beta tester kami
-            untuk mencobafitur-fitur yang ada pada SusunJadwal sebelum SIAK War dimulai!
+            Mau membantu kami meningkatkan kualitas SusunJadwal? Jadilah beta
+            tester kami untuk mencobafitur-fitur yang ada pada SusunJadwal
+            sebelum SIAK War dimulai!
           </Paragraph>
-          <Link to="/beta-form" >
-            <Button mt={{ base: "1rem", lg: "1.75rem" }} w="fit-content">Jadi Beta Tester</Button>
+          <Link to="/beta-form">
+            <Button mt={{ base: "1rem", lg: "1.75rem" }} w="fit-content">
+              Jadi Beta Tester
+            </Button>
           </Link>
         </TextBox>
       </FlexBox>
@@ -73,7 +79,9 @@ const BetaLanding = () => {
           {FAQS.map((el, id) => (
             <AccordionItem key={id}>
               <AccordionButton>
-                <Box flex="1" textAlign="left">{el.question}</Box>
+                <Box flex="1" textAlign="left">
+                  {el.question}
+                </Box>
                 <AccordionIcon />
               </AccordionButton>
               <AccordionPanel>{el.answer}</AccordionPanel>
@@ -82,7 +90,7 @@ const BetaLanding = () => {
         </Accordion>
       </GapBox>
     </Box>
-  )
+  );
 };
 
 export default BetaLanding;

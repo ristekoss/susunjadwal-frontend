@@ -32,8 +32,7 @@ import {
   AssetBetaB,
 } from "containers/BetaLanding/styles";
 
-
-import RistekLogo from "assets/Beta/Beta_Logo.svg";
+import RistekLogo from "assets/Beta/Beta_Logo_Light.svg";
 import ChevronArrow from "assets/Beta/chevron-down.svg";
 import BetaAssetA from "assets/Beta/beta-landing-asset-1.svg";
 import BetaAssetB from "assets/Beta/beta-landing-asset-2.svg";
@@ -159,7 +158,7 @@ function Login({ history, location }) {
             >
               <Button
                 disabled
-                _hover={{ background: 'primary.Purple' }}
+                _hover={{ background: "primary.Purple" }}
                 m={{ base: "0 0 1rem 0", lg: "0 1rem 0 0" }}
                 w="fit-content"
               >

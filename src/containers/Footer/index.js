@@ -1,4 +1,4 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useColorModeValue } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import React from "react";
 import {
@@ -11,25 +11,29 @@ import {
 } from "./styles";
 import GojekLogo from "assets/Beta/gojek.svg";
 import HackLogo from "assets/Beta/HackPlus.svg";
+import HackDarkLogo from "assets/Beta/HackPlus-dark.svg";
 import MapPoint from "assets/Beta/MapPoint.svg";
-import RistekBetaLogo from "assets/Beta/Beta_Logo.svg";
+import MapPointDark from "assets/Beta/MapPoint-dark.svg";
+
+import RistekBetaLogoLight from "assets/Beta/Beta_Logo_Light.svg";
+import RistekBetaLogoDark from "assets/Beta/Beta_Logo_Dark.svg";
+
 import SocialContainer from "./SocialCointainer";
 
 const Footer = () => {
   const location = useLocation();
-
-  if (location.pathname === "/susun")
-    return null
+  const theme = useColorModeValue("light", "dark");
+  if (location.pathname === "/susun") return null;
 
   return (
-    <StyledFooterContainer>
+    <StyledFooterContainer mode={theme}>
       <Flex
         justify="space-between"
         direction={{ base: "column", lg: "row" }}
         textAlign={{ base: "center", lg: "left" }}
       >
         <Image
-          src={RistekBetaLogo}
+          src={theme === "light" ? RistekBetaLogoLight : RistekBetaLogoDark}
           alt=""
           objectFit="contain"
           mx={{ base: "auto", lg: 0 }}
@@ -37,15 +41,20 @@ const Footer = () => {
           h="44px"
         />
         <StyledFooterDesc>
-          <StyledLocation>
-            <Image mr="3" objectFit="contain" src={MapPoint} alt="MapPoint" />
+          <StyledLocation mode={theme}>
+            <Image
+              mr="3"
+              objectFit="contain"
+              src={theme === "light" ? MapPoint : MapPointDark}
+              alt="MapPoint"
+            />
             Universitas Indonesia, Depok
           </StyledLocation>
           <Text
             fontWeight="normal"
             fontSize="sm"
             align={{ base: "center", md: "left" }}
-            color="secondary.MineShaft"
+            color={theme === "light" ? "secondary.MineShaft" : "dark.White"}
           >
             RISTEK is a United States of America fiscally sponsored 501(c)(3)
             non-profit organization established by students from Faculty of
@@ -60,7 +69,9 @@ const Footer = () => {
               rel="noopener noreferrer"
               href="https://www.gojek.com/en-id/"
             >
-              <StyledPartnerTitle>Official Learning Partner</StyledPartnerTitle>
+              <StyledPartnerTitle mode={theme}>
+                Official Learning Partner
+              </StyledPartnerTitle>
               <Image
                 objectFit="contain"
                 w={{ base: "36", lg: "40" }}
@@ -79,11 +90,13 @@ const Footer = () => {
               rel="noopener noreferrer"
               href="https://hackplus.io/"
             >
-              <StyledPartnerTitle>Accelerated by</StyledPartnerTitle>
+              <StyledPartnerTitle mode={theme}>
+                Accelerated by
+              </StyledPartnerTitle>
               <Image
                 objectFit="contain"
                 width={{ base: 28, lg: 32 }}
-                src={HackLogo}
+                src={theme === "light" ? HackLogo : HackDarkLogo}
                 alt="logo hackPlus"
               />
             </a>
@@ -101,9 +114,9 @@ const Footer = () => {
         <Text
           mt={{ base: "6", lg: "0" }}
           fontSize="sm"
-          color="secondary.MineShaft"
+          color={theme === "light" ? "secondary.MineShaft" : "dark.White"}
         >
-          © 2021 RISTEK Fasilkom
+          © 2022 RISTEK Fasilkom
         </Text>
         <SocialContainer />
       </Box>
