@@ -97,7 +97,7 @@ export const HeaderLink = styled(NavLink)`
             : (props) => props.theme.color.darkPurple
       : ({ mode }) =>
           mode === "light"
-            ? (props) => props.theme.color.primaryGray
+            ? (props) => props.theme.color.secondaryGray
             : (props) => props.theme.color.darkWhite}
 
   &:hover {
@@ -115,7 +115,7 @@ export const HeaderLink = styled(NavLink)`
               : (props) => props.theme.color.darkPurple
         : ({ mode }) =>
             mode === "light"
-              ? (props) => props.theme.color.primaryGray
+              ? (props) => props.theme.color.secondaryGray
               : (props) => props.theme.color.darkWhite}
     outline: none;
   }

@@ -1,8 +1,16 @@
 import React from "react";
-import { Box, Image, Flex, Text, Icon } from "@chakra-ui/react";
+import {
+  Box,
+  Image,
+  Flex,
+  Text,
+  Icon,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { GoMarkGithub } from "react-icons/go";
 
 export const ContributorCard = ({ name, avatar, github, contributions }) => {
+  const theme = useColorModeValue("light", "dark");
   return (
     <Box
       maxW="400px"
@@ -15,10 +23,10 @@ export const ContributorCard = ({ name, avatar, github, contributions }) => {
       borderRadius="8px"
       border="2px"
       borderColor="transparent"
-      bg="primary.Alabaster"
+      bg={theme === "light" ? "primary.Alabaster" : "secondary.MineShaft"}
       _hover={{
-        bg: "primary.White",
-        borderColor: "primary.Purple",
+        bg: theme === "light" ? "primary.White" : "dark.Black",
+        borderColor: theme === "light" ? "primary.Purple" : "dark.LightPurple",
       }}
     >
       <Image
@@ -30,7 +38,10 @@ export const ContributorCard = ({ name, avatar, github, contributions }) => {
       />
       <Box>
         <Text fontWeight="bold" fontSize={{ base: "sm", md: "lg" }}>
-          <Box _hover={{ color: "Black" }} _focus={{ color: "Black" }}>
+          <Box
+            _hover={{ color: theme === "light" ? "Black" : "dark.White" }}
+            _focus={{ color: theme === "light" ? "Black" : "dark.White" }}
+          >
             {name}
           </Box>
         </Text>
@@ -43,8 +54,17 @@ export const ContributorCard = ({ name, avatar, github, contributions }) => {
             d="block"
             href={github}
             fontSize={{ base: "xs", md: "md" }}
+            color={theme === "light" ? "" : "dark.LightPurple"}
+            _hover={{
+              color: theme === "light" ? "Black" : "dark.Purple",
+            }}
           >
-            <Icon boxSize={"1.2rem"} as={GoMarkGithub} /> Github
+            <Icon
+              boxSize={"1.2rem"}
+              as={GoMarkGithub}
+              color={theme === "light" ? "Black" : "dark.LightPurple"}
+            />{" "}
+            Github
           </Text>
         </Flex>
       </Box>

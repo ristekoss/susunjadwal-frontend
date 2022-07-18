@@ -10,6 +10,7 @@ export const theme = {
     darkLightBlack: "#222222",
     darkWhite: "#D0D0D0",
     darkRed: "#3F1C1B",
+    secondaryGray: "#828282",
     secondaryMineShaft: "#333333",
     secondaryCerise: "#C424A3",
     secondaryGolden: "#FFD668",
