@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button } from "@chakra-ui/react";
+import { Button, useColorModeValue } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
@@ -18,30 +18,33 @@ import Detail from "./Detail";
 
 function BuildSchedule() {
   const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
-  const isMobile = useSelector(state => state.appState.isMobile);
-  const auth = useSelector(state => state.auth);
+  const isMobile = useSelector((state) => state.appState.isMobile);
+  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const [detailData, setDetailData] = useState(null);
   const [courses, setCourses] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isCoursesDetail, setCoursesDetail] = useState(null);
+  const theme = useColorModeValue("light", "dark");
 
   const fetchCourses = useCallback(
-    async majorId => {
+    async (majorId) => {
       dispatch(setLoading(true));
 
       try {
         const { data } = await getCourses(majorId);
         setCourses(data.courses);
         setCoursesDetail(data.is_detail);
-        setLastUpdated(new Date(data.last_update_at))
+        setLastUpdated(new Date(data.last_update_at));
         dispatch(reduxSetCourses(data.courses));
-      } catch(e) {/** TODO: handle error */}
+      } catch (e) {
+        /** TODO: handle error */
+      }
 
       setTimeout(() => dispatch(setLoading(false)), 1000);
     },
-    [dispatch]
+    [dispatch],
   );
 
   useEffect(() => {
@@ -55,15 +58,20 @@ function BuildSchedule() {
       <BauhausSide />
       <Helmet title="Buat Jadwal" />
 
-      <CoursePickerContainer isMobile={isMobile}>
+      <CoursePickerContainer isMobile={isMobile} mode={theme}>
         <h1>Buat Jadwal</h1>
 
         {lastUpdated && (
           <h6>
-            Jadwal terakhir diperbarui pada {isMobile ? <br/> : " "}
+            Jadwal terakhir diperbarui pada {isMobile ? <br /> : " "}
             <span>
-              {lastUpdated?.getDate() + "/" + (lastUpdated?.getMonth() +1) + "/" +
-              (lastUpdated?.getFullYear()) + " " + lastUpdated?.toLocaleTimeString()}
+              {lastUpdated?.getDate() +
+                "/" +
+                (lastUpdated?.getMonth() + 1) +
+                "/" +
+                lastUpdated?.getFullYear() +
+                " " +
+                lastUpdated?.toLocaleTimeString()}
             </span>
           </h6>
         )}
@@ -71,8 +79,9 @@ function BuildSchedule() {
         {!isCoursesDetail && (
           <InfoContent>
             <p>
-              Uh oh, sepertinya kami belum memiliki jadwal untuk jurusan kamu. Silahkan
-              coba untuk melakukan <span>Update Matkul</span> dengan menekan tombol di bawah ini!
+              Uh oh, sepertinya kami belum memiliki jadwal untuk jurusan kamu.
+              Silahkan coba untuk melakukan <span>Update Matkul</span> dengan
+              menekan tombol di bawah ini!
             </p>
             <Link to="/update">
               <Button mt={{ base: "1rem", lg: "1.5rem" }}>Update Matkul</Button>
@@ -83,8 +92,8 @@ function BuildSchedule() {
         {courses?.length === 0 && (
           <InfoContent>
             <p>
-              Uh oh, sepertinya jadwal jurusan kamu belum tersedia. Silahkan coba
-              untuk melakukan <span>Update Matkul</span> lagi nanti!
+              Uh oh, sepertinya jadwal jurusan kamu belum tersedia. Silahkan
+              coba untuk melakukan <span>Update Matkul</span> lagi nanti!
             </p>
             <Link to="/update">
               <Button mt={{ base: "1rem", lg: "1.5rem" }}>Update Matkul</Button>
@@ -95,19 +104,18 @@ function BuildSchedule() {
         {courses &&
           courses.map((course, idx) => (
             <Course key={`${course.name}-${idx}`} course={course} />
-          ))
-        }
+          ))}
       </CoursePickerContainer>
 
       {!isMobile && (
-        <SelectedCoursesContainer isAnnouncement={isAnnouncement}>
+        <SelectedCoursesContainer isAnnouncement={isAnnouncement} mode={theme}>
           <SelectedCourses />
         </SelectedCoursesContainer>
       )}
 
       <Checkout
         isMobile={isMobile}
-        onClickDetail={isConflict =>
+        onClickDetail={(isConflict) =>
           setDetailData({ opened: true, isConflict: isConflict })
         }
       />
@@ -128,8 +136,7 @@ export default BuildSchedule;
 
 export const Container = styled.div`
   display: flex;
-  background-color: ${props => props.theme.color.primaryWhite};
-  color: ${props => props.theme.color.secondaryMineShaft};
+  color: ${(props) => props.theme.color.secondaryMineShaft};
   margin-top: -40px;
 
   @media (min-width: 900px) {
@@ -143,8 +150,18 @@ export const InfoContent = styled.div`
   min-height: 100vh;
   font-size: 16px;
 
+  p {
+    color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.secondaryMineshaft
+        : (props) => props.theme.color.darkWhite}
+  }
+
   p span {
-    color: ${props => props.theme.color.primaryPurple};
+    color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.primaryPurple
+        : (props) => props.theme.color.darkPurple}
     font-weight: 600;
   }
 
@@ -161,7 +178,10 @@ export const CoursePickerContainer = styled.div`
   color: #333333;
 
   h1 {
-    color: ${props => props.theme.color.primaryPurple};
+    color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.primaryPurple
+        : (props) => props.theme.color.darkPurple};
     font-weight: bold;
     font-size: 24px;
     text-align: center;
@@ -171,6 +191,8 @@ export const CoursePickerContainer = styled.div`
     font-size: 14px;
     text-align: center;
     margin-bottom: 20px;
+    color: ${({ mode }) =>
+      mode === "light" ? "#333333" : (props) => props.theme.color.darkWhite};
   }
 
   h6 span {
@@ -191,12 +213,12 @@ export const CoursePickerContainer = styled.div`
 `;
 
 export const SelectedCoursesContainer = styled.div`
-  background-color: ${props => props.theme.color.primaryWhite};
+  background-color: ${({ mode }) =>
+    mode === "light"
+      ? (props) => props.theme.color.primaryWhite
+      : (props) => props.theme.color.darkBlack};
   padding: ${({ isAnnouncement }) =>
-    isAnnouncement
-      ? '162px 32px'
-      : '120px 32px'
-  };
+    isAnnouncement ? "162px 32px" : "120px 32px"};
   overflow-y: auto;
   position: fixed;
   height: 100vh;

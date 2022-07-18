@@ -4,22 +4,22 @@ import { useSelector } from "react-redux";
 import { isScheduleConflict } from "containers/SelectedCourses/utils";
 
 function Checkout({ onClickDetail }) {
-  const schedules = useSelector(state => state.schedules);
-  const isMobile = useSelector(state => state.appState.isMobile);
+  const schedules = useSelector((state) => state.schedules);
+  const isMobile = useSelector((state) => state.appState.isMobile);
 
   const totalCredits = schedules.reduce((prev, { credit }) => prev + credit, 0);
 
   if (!isMobile || schedules.length === 0) {
     return null;
-  };
+  }
 
-  const conflict = schedules.find(schedule =>
-    isScheduleConflict(schedules, schedule)
+  const conflict = schedules.find((schedule) =>
+    isScheduleConflict(schedules, schedule),
   );
 
   function goToDetail() {
     onClickDetail(conflict);
-  };
+  }
 
   return (
     <CheckoutContainer conflict={conflict} onClick={goToDetail}>
@@ -41,13 +41,12 @@ function Checkout({ onClickDetail }) {
 }
 
 const CheckoutContainer = styled.div`
-  color: ${props => props.theme.color.primaryWhite};
+  color: ${(props) => props.theme.color.primaryWhite};
 
-  background: ${props => (
+  background: ${(props) =>
     props.conflict
-      ? props => props.theme.color.stateError
-      : props => props.theme.color.primaryPurple
-  )};
+      ? (props) => props.theme.color.stateError
+      : (props) => props.theme.color.primaryPurple};
 
   justify-content: space-between;
   position: fixed;

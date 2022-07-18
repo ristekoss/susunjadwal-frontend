@@ -10,8 +10,12 @@ import {
   DrawerOverlay,
   Image,
   useDisclosure,
+  IconButton,
+  useColorMode,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import {
   Container,
   HamburgerIcon,
@@ -21,7 +25,8 @@ import {
   WrapperHamburger,
 } from "./styles";
 
-import LogoSunjad from "assets/Beta/LogoSunjad.svg";
+import LogoSunjadLight from "assets/Beta/LogoSunjad-light.svg";
+import LogoSunjadDark from "assets/Beta/LogoSunjad-dark.svg";
 import Announcement from "components/Announcement";
 import "./styles.css";
 
@@ -35,6 +40,7 @@ const LINKS = [
 function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { pathname } = useLocation();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const isMobile = useSelector((state) => state.appState.isMobile);
   const auth = useSelector((state) => state.auth);
@@ -44,8 +50,16 @@ function Header() {
   }
 
   return (
-    <Container>
-      <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
+    <Container
+      style={{ backgroundColor: colorMode === "light" ? "#FFFFFF" : "#2c2c2c" }}
+    >
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Announcement />
         <div
           style={{
@@ -58,13 +72,19 @@ function Header() {
           <Box mr="auto">
             <Link to="/">
               <Image
-                src={LogoSunjad}
+                src={colorMode === "light" ? LogoSunjadLight : LogoSunjadDark}
                 alt="logo"
                 objectFit="contain"
                 w={{ base: "140px", lg: "initial" }}
               />
             </Link>
-          </Box>
+          </Box>{" "}
+          <IconButton
+            aria-label="Toggle light dark mode"
+            onClick={toggleColorMode}
+            icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+            style={{ marginRight: "2rem", marginTop: "5px" }}
+          />
           {isMobile && auth && (
             <>
               <WrapperHamburger open={isOpen} onClick={toggleMenu}>
@@ -84,10 +104,11 @@ function Header() {
 export default Header;
 
 const NavLinks = ({ pathname }) => {
+  const theme = useColorModeValue("light", "dark");
   return (
     <NavLinkWrapper>
       {LINKS.map(({ to, label }) => (
-        <HeaderLink isCurrent={pathname === to} key={to} to={to}>
+        <HeaderLink isCurrent={pathname === to} key={to} to={to} mode={theme}>
           {label}
         </HeaderLink>
       ))}

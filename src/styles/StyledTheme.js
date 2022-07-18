@@ -4,11 +4,17 @@ export const theme = {
     primaryMalibu: "#64E6FB",
     primaryPurple: "#5038BC",
     primaryAlabaster: "#F8F8F8",
+    darkPurple: "#917DEC",
+    darkLightPurple: "#674DE0",
+    darkBlack: "#121212",
+    darkLightBlack: "#222222",
+    darkWhite: "#D0D0D0",
+    darkRed: "#3F1C1B",
     secondaryMineShaft: "#333333",
     secondaryCerise: "#C424A3",
     secondaryGolden: "#FFD668",
     stateSuccess: "#27AE60",
     stateWarn: "#F7B500",
     stateError: "#EB5757",
-  }
-}
+  },
+};
