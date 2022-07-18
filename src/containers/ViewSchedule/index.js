@@ -8,6 +8,7 @@ import Helmet from "react-helmet";
 import ReactGA from "react-ga";
 import CopyToClipboard from "react-copy-to-clipboard";
 import * as htmlToImage from "html-to-image";
+import { copyImageToClipboard } from "copy-image-clipboard";
 
 import {
   Button,
@@ -20,6 +21,7 @@ import {
   ModalCloseButton,
   Text,
   Flex,
+  Image,
 } from "@chakra-ui/react";
 
 import { getSchedule, postRenameSchedule, deleteSchedule } from "services/api";
@@ -52,6 +54,7 @@ function ViewSchedule({ match, history }) {
   const [schedule, setSchedule] = useState(null);
   const [createdAt, setCreatedAt] = useState(null);
   const [isDisplayTimetable, setIsDisplayTimetable] = useState(true);
+  const [imageURL, setImageURL] = useState(null);
 
   let formattedSchedule = {};
   let totalCredits = 0;
@@ -82,12 +85,12 @@ function ViewSchedule({ match, history }) {
 
   const scheduleName = schedule && schedule.name;
 
-  const showAlertCopy = () => {
+  const showAlertCopy = (type) => {
     ReactGA.event({
       category: "Bagikan Jadwal",
       action: "Copied a schedule's URL",
     });
-    SuccessToast("Link berhasil disalin!", isMobile);
+    SuccessToast(`${type} berhasil disalin!`, isMobile);
   };
 
   const performDeleteSchedule = async (userId, scheduleId) => {
@@ -113,6 +116,18 @@ function ViewSchedule({ match, history }) {
     link.download = scheduleName + ".png";
     link.href = dataUrl;
     link.click();
+  };
+
+  const openShareModal = async () => {
+    const dataUrl = await htmlToImage.toPng(refs.current);
+    setImageURL(dataUrl);
+    shareModal.onOpen();
+  };
+
+  const copyImage = () => {
+    copyImageToClipboard(imageURL)
+      .then(() => showAlertCopy("Gambar"))
+      .catch((e) => {});
   };
 
   return (
@@ -141,7 +156,12 @@ function ViewSchedule({ match, history }) {
         <ModalContent>
           <ModalCloseButton />
           <ModalBody>
-            Bagikan Jadwal <b>{scheduleName}</b>
+            <Flex flexDirection="column">
+              <Text mb="8px">
+                Bagikan Jadwal <b>{scheduleName}</b>
+              </Text>
+              <Image alt="" src={imageURL} maxH="30vh" objectFit="contain" />
+            </Flex>
           </ModalBody>
 
           <ModalFooter>
@@ -149,14 +169,17 @@ function ViewSchedule({ match, history }) {
               <Flex flexDirection={isMobile ? "column" : "row"}>
                 <CopyToClipboard
                   text={`${window.location.href}/${scheduleId}`}
-                  onCopy={showAlertCopy}
+                  onCopy={() => showAlertCopy("Link")}
                 >
-                  <Button variant="outline" my="4px !important">
+                  <Button
+                    variant="outline"
+                    mb={isMobile ? "8px !important" : "0"}
+                  >
                     <img src={linkImg} style={{ marginRight: "4px" }} alt="" />
                     Copy Link
                   </Button>
                 </CopyToClipboard>
-                <Button variant="solid" my="4px !important">
+                <Button variant="solid" onClick={copyImage}>
                   <img src={copyImg} style={{ marginRight: "8px" }} alt="" />
                   Copy Image
                 </Button>
@@ -216,7 +239,7 @@ function ViewSchedule({ match, history }) {
                       desc: "Share Jadwal",
                       icon: clipboardImg,
                       alt: "copy",
-                      action: shareModal.onOpen,
+                      action: openShareModal,
                     },
                     {
                       desc: "Delete Jadwal",
