@@ -10,6 +10,9 @@ import {
   ModalFooter as ChakraModalFooter,
   ModalBody,
   useDisclosure,
+  ModalCloseButton,
+  Flex,
+  Text,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import Helmet from "react-helmet";
@@ -24,6 +27,10 @@ import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
 import ScheduleDetail from "./ScheduleDetail";
 import { deleteSchedule } from "services/api";
 import { SuccessToast } from "components/Toast";
+import CopyToClipboard from "react-copy-to-clipboard";
+import alertImg from "assets/Alert2.svg";
+import linkImg from "assets/Link.svg";
+import copyImg from "assets/Copy.svg";
 
 const ScheduleList = () => {
   const dispatch = useDispatch();
@@ -31,7 +38,9 @@ const ScheduleList = () => {
   const auth = useSelector((state) => state.auth);
   const isMobile = useSelector((state) => state.appState.isMobile);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const shareModal = useDisclosure();
   const [selectedId, setSelectedId] = useState("");
+  const [selectedName, setSelectedName] = useState("");
   const [schedules, setSchedules] = useState();
 
   useEffect(() => {
@@ -78,6 +87,11 @@ const ScheduleList = () => {
   const handleClickEditJadwal = (idJadwal) => {
     history.push(`/edit/${idJadwal}`);
   };
+  const showDialogShare = (id, name) => {
+    setSelectedId(id);
+    setSelectedName(name);
+    shareModal.onOpen();
+  };
 
   return (
     <Container>
@@ -99,6 +113,44 @@ const ScheduleList = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      <Modal isOpen={shareModal.isOpen} onClose={shareModal.onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody>
+            Bagikan Jadwal <b>{selectedName}</b>
+          </ModalBody>
+
+          <ModalFooter>
+            <Flex flexDirection="column">
+              <Flex flexDirection={isMobile ? "column" : "row"}>
+                <CopyToClipboard
+                  text={`${window.location.href}/${selectedId}`}
+                  onCopy={showAlertCopy}
+                >
+                  <Button variant="outline" my="4px !important">
+                    <img src={linkImg} style={{ marginRight: "4px" }} alt="" />
+                    Copy Link
+                  </Button>
+                </CopyToClipboard>
+                <Button variant="solid" my="4px !important">
+                  <img src={copyImg} style={{ marginRight: "8px" }} alt="" />
+                  Copy Image
+                </Button>
+              </Flex>
+              <Flex mt="1rem">
+                <img src={alertImg} style={{ height: "24px" }} alt="" />
+                <Text>
+                  <b>Copy Image</b> akan menyalin gambar ke clipboard sementara{" "}
+                  <b>Copy Link</b> akan menyalin link jadwal
+                </Text>
+              </Flex>
+            </Flex>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <Helmet
         title="Daftar Jadwal"
         meta={[{ name: "description", content: "Description of Jadwal" }]}
@@ -119,9 +171,9 @@ const ScheduleList = () => {
                 schedule={schedule}
                 idx={idx}
                 key={schedule.id}
-                alertCopy={showAlertCopy}
                 showModal={showDialogDelete}
                 editSchedule={handleClickEditJadwal}
+                showShareModal={showDialogShare}
               />
             );
           })}
