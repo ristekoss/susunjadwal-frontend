@@ -5,20 +5,23 @@ import { useSelector } from "react-redux";
 import BauhausLeft from "assets/Beta/bauhaus-left.svg";
 import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
 import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
+import BauhausDarkDesktop from "assets/Beta/bauhaus-dark-lg.svg";
 
 const AssetBauhaus = styled.img`
   position: absolute;
   right: 0;
-  top: ${({isPrivate}) => isPrivate ? '81px' : '0'};
+  top: ${({ isPrivate }) => (isPrivate ? "81px" : "0")};
 
-  ${props => props.isMobile && (`
+  ${(props) =>
+    props.isMobile &&
+    `
     width: 100%;
     display: block;
 
     @media (min-width: 480px) {
       display: none;
     }
-  `)}
+  `}
 `;
 
 const AssetBauhausSide = styled.img`
@@ -27,13 +30,11 @@ const AssetBauhausSide = styled.img`
   top: -2px;
   left: 0;
 
-  ${props => props.isMobile && (
-    'display: none;'
-  )}
-`
+  ${(props) => props.isMobile && "display: none;"}
+`;
 
-export const Bauhaus = ({isPrivate}) => {
-  const isMobile = useSelector(state => state.appState.isMobile);
+export const Bauhaus = ({ isPrivate, mode }) => {
+  const isMobile = useSelector((state) => state.appState.isMobile);
 
   return (
     <>
@@ -44,14 +45,18 @@ export const Bauhaus = ({isPrivate}) => {
           alt="bauhaus-sm"
         />
       ) : (
-        <AssetBauhaus isPrivate={isPrivate} src={BauhausDesktop} alt="bauhaus-lg" />
+        <AssetBauhaus
+          isPrivate={isPrivate}
+          src={mode === "light" ? BauhausDesktop : BauhausDarkDesktop}
+          alt="bauhaus-lg"
+        />
       )}
     </>
-  )
+  );
 };
 
 export const BauhausSide = () => {
-  const isMobile = useSelector(state => state.appState.isMobile);
+  const isMobile = useSelector((state) => state.appState.isMobile);
 
   return (
     <AssetBauhausSide
@@ -59,5 +64,5 @@ export const BauhausSide = () => {
       src={BauhausLeft}
       alt="bauhaus-left"
     />
-  )
+  );
 };
