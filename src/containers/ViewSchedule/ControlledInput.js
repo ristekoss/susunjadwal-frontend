@@ -11,7 +11,6 @@ class ControlledInput extends React.Component {
     super(props);
     this.state = {
       title: props.name ? props.name : "Untitled",
-      mode: props.mode,
     };
   }
 
@@ -40,7 +39,7 @@ class ControlledInput extends React.Component {
 
   render() {
     return (
-      <Container mode={this.state.mode}>
+      <Container>
         <AutosizeInput
           name="form-field-schedule-name"
           value={this.state.title}
@@ -80,10 +79,7 @@ class ControlledInput extends React.Component {
 const Container = styled.div`
   display: flex;
   align-items: center;
-  color: ${({ mode }) =>
-    mode === "light"
-      ? (props) => props.theme.color.secondaryMineShaft
-      : (props) => props.theme.color.darkWhite}
+
   background-color: transparent;
 
   input {

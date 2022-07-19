@@ -156,6 +156,7 @@ const NavLinks = ({ pathname }) => {
 
 const SideBar = ({ onClose, isOpen, pathname }) => {
   const firstField = React.useRef();
+  const theme = useColorModeValue("light", "dark");
   return (
     <Drawer
       initialFocusRef={firstField}
@@ -164,7 +165,11 @@ const SideBar = ({ onClose, isOpen, pathname }) => {
       size="full"
     >
       <DrawerOverlay bg="transparent" />
-      <DrawerContent maxW="undefined" px="1.5rem">
+      <DrawerContent
+        maxW="undefined"
+        px="1.5rem"
+        bg={theme === "light" ? "white" : "dark.Black"}
+      >
         <DrawerBody d="contents" dir="col" textAlign="left">
           {LINKS.map(({ to, label }) => (
             <HeaderLink
@@ -172,6 +177,7 @@ const SideBar = ({ onClose, isOpen, pathname }) => {
               onClick={onClose}
               key={to}
               to={to}
+              mode={theme}
             >
               {label}
             </HeaderLink>

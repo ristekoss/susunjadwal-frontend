@@ -97,7 +97,7 @@ const ScheduleDetail = ({
                   onClick={() => editSchedule(schedule.id)}
                   display={isMobile ? "none" : "flex"}
                   borderColor={
-                    theme === "light" ? "primary.Purple" : "dark.Purple"
+                    theme === "light" ? "primary.Purple" : "dark.LightPurple"
                   }
                   color={theme === "light" ? "primary.Purple" : "dark.Purple"}
                 >

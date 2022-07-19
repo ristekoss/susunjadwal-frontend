@@ -135,7 +135,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     <>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={theme === "light" ? "white" : "dark.LightBlack"}>
           <ModalBody>Apakah kamu yakin ingin menyimpan jadwal?</ModalBody>
 
           <ModalFooter>
@@ -173,7 +173,9 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
         <TableCreditSum>
           <div>
-            <span>Total SKS</span>
+            <span style={{ color: theme === "light" ? "#FFFFFF" : "#D0D0D0" }}>
+              Total SKS
+            </span>
           </div>
           <div>
             <span>{totalCredits}</span>
@@ -229,7 +231,6 @@ const ModalFooter = styled(ChakraModalFooter).attrs({
 const Container = styled.div`
   width: 100%;
   color: #333333;
-
   h3 {
     color: ${({ mode }) =>
       mode === "light"
@@ -248,12 +249,15 @@ const Container = styled.div`
       mode === "light"
         ? (props) => props.theme.color.primaryPurple
         : (props) => props.theme.color.darkLightPurple};
+    color: ${({ mode }) =>
+      mode === "light" ? "#FFFFFF" : (props) => props.theme.color.darkWhite};
   }
 
   button:disabled,
   button[disabled] {
     background: #bdbdbd;
     opacity: 100%;
+    color: #ffffff;
   }
 
   button:disabled:hover,
@@ -272,7 +276,7 @@ const TableHeader = styled.div`
   color: ${({ mode }) =>
     mode === "light"
       ? (props) => props.theme.color.secondaryMineshaft
-      : (props) => props.theme.color.primaryWhite};
+      : (props) => props.theme.color.darkWhite};
   div {
     padding: 0.5rem 0;
     &:nth-child(1) {

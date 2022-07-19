@@ -34,7 +34,7 @@ const UpdateCourses = () => {
 
   const onSubmit = async (values) => {
     try {
-      InfoToast("Sedang memperbaharui jadwal", isMobile);
+      InfoToast("Sedang memperbaharui jadwal", isMobile, theme);
       await postScrapeSchedule(values);
       setTimeout(() => {
         toast.closeAll();
@@ -42,13 +42,13 @@ const UpdateCourses = () => {
           category: "Update Matkul",
           action: "Updated the courses",
         });
-        SuccessToast("Jadwal berhasil diperbaharui", isMobile);
+        SuccessToast("Jadwal berhasil diperbaharui", isMobile, theme);
         window.location.replace("/susun");
       }, 1000);
     } catch (e) {
       setTimeout(() => {
         toast.closeAll();
-        ErrorToast(e.response.data.message, isMobile);
+        ErrorToast(e.response.data.message, isMobile, theme);
       }, 1000);
     }
   };

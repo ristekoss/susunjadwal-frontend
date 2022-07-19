@@ -15,7 +15,7 @@ const NotFoundTitle = styled.div`
   margin: 1rem;
   font-size: 2rem;
   font-weight: 700;
-  color: ${props => props.theme.color.primaryPurple};
+  color: ${(props) => props.theme.color.primaryPurple};
 `;
 
 const Container = styled.div`
