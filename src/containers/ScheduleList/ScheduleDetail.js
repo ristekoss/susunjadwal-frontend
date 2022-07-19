@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -9,6 +9,7 @@ import Schedule from "containers/ViewSchedule/Schedule";
 import Icons from "components/Icons";
 import downloadImg from "assets/Download.svg";
 import { Button } from "@chakra-ui/react";
+import * as htmlToImage from "html-to-image";
 
 const ScheduleDetail = ({
   schedule,
@@ -24,6 +25,22 @@ const ScheduleDetail = ({
     return `${dateNew.getDate()}/${
       dateNew.getMonth() + 1
     }/${dateNew.getFullYear()}`;
+  };
+
+  const refs = useRef(null);
+
+  const downloadImage = async (name) => {
+    const dataUrl = await htmlToImage.toPng(refs.current);
+
+    const link = document.createElement("a");
+    link.download = name + ".png";
+    link.href = dataUrl;
+    link.click();
+  };
+
+  const openShareModal = async (id, name) => {
+    const dataUrl = await htmlToImage.toPng(refs.current);
+    showShareModal(id, name, dataUrl);
   };
 
   return (
@@ -51,13 +68,17 @@ const ScheduleDetail = ({
                         desc: "Download Jadwal",
                         icon: downloadImg,
                         alt: "download",
+                        action: () =>
+                          downloadImage(
+                            schedule.name != null ? schedule.name : "Untitled",
+                          ),
                       },
                       {
                         desc: "Share Jadwal",
                         icon: clipboardImg,
                         alt: "copy",
                         action: () =>
-                          showShareModal(schedule.id, schedule.name),
+                          openShareModal(schedule.id, schedule.name),
                       },
                       {
                         desc: "Delete Jadwal",
@@ -80,6 +101,20 @@ const ScheduleDetail = ({
                 </Button>
               </CardActionContainer>
             </Link>
+          </div>
+          <div style={{ overflow: "hidden", height: "0" }}>
+            <div ref={refs}>
+              <Schedule
+                startHour={7}
+                endHour={21}
+                schedule={schedule}
+                pxPerMinute={isMobile ? 0.7 : 0.9}
+                width="100%"
+                showRoom
+                showHeader
+                showLabel
+              />
+            </div>
           </div>
           <Schedule
             startHour={7}
