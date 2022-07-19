@@ -10,12 +10,10 @@ import {
   DrawerOverlay,
   Image,
   useDisclosure,
-  IconButton,
   useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
 
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import {
   Container,
   HamburgerIcon,
@@ -41,7 +39,7 @@ function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { pathname } = useLocation();
   const { colorMode, toggleColorMode } = useColorMode();
-
+  const theme = useColorModeValue("light", "dark");
   const isMobile = useSelector((state) => state.appState.isMobile);
   const auth = useSelector((state) => state.auth);
 
@@ -79,12 +77,26 @@ function Header() {
               />
             </Link>
           </Box>{" "}
-          <IconButton
-            aria-label="Toggle light dark mode"
-            onClick={toggleColorMode}
-            icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-            style={{ marginRight: "2rem", marginTop: "5px" }}
-          />
+          <div
+            className="switch"
+            style={{
+              marginRight: isMobile ? "1rem" : "2rem",
+              marginTop: isMobile ? "0px" : "7px",
+            }}
+          >
+            <input
+              type="checkbox"
+              id="toggle"
+              onClick={toggleColorMode}
+              checked={theme === "light" ? false : true}
+            />
+            <label
+              for="toggle"
+              style={{
+                backgroundColor: theme === "light" ? "#FFFFFF" : "#674DE0",
+              }}
+            ></label>
+          </div>
           {isMobile && auth && (
             <>
               <WrapperHamburger open={isOpen} onClick={toggleMenu}>
