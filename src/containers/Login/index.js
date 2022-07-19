@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Box } from "@chakra-ui/react";
+import { Button, Box, useColorModeValue } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { parse } from "query-string";
@@ -44,6 +44,7 @@ function getServiceUrl() {
 function Login({ history, location }) {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const theme = useColorModeValue("light", "dark");
 
   useEffect(() => {
     async function authenticate(ticket, serviceUrl) {
@@ -97,7 +98,7 @@ function Login({ history, location }) {
 
   return (
     <Box px={{ base: "0px", lg: "40px" }}>
-      <Bauhaus />
+      <Bauhaus mode={theme} />
 
       <HeroSection>
         <LogoRistek src={RistekLogo} alt="ristek-logo" />
