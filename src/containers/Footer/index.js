@@ -9,7 +9,10 @@ import {
   StyledPartnerTitle,
   StyledSpanWrapper,
 } from "./styles";
-import GojekLogo from "assets/Beta/gojek.svg";
+import GojekLogo from "assets/Beta/Gojek.svg";
+import GotoLogo from "assets/Beta/Goto.svg";
+import GojekDarkLogo from "assets/Beta/Gojek-dark.svg";
+import GotoDarkLogo from "assets/Beta/Goto-dark.svg";
 import HackLogo from "assets/Beta/HackPlus.svg";
 import HackDarkLogo from "assets/Beta/HackPlus-dark.svg";
 import MapPoint from "assets/Beta/MapPoint.svg";
@@ -60,26 +63,52 @@ const Footer = () => {
             non-profit organization established by students from Faculty of
             Computer Science, Universitas Indonesia.
           </Text>
+          <Text
+            fontWeight="normal"
+            fontSize="sm"
+            marginTop="20px"
+            align={{ base: "center", md: "left" }}
+            color={theme === "light" ? "secondary.MineShaft" : "dark.White"}
+          >
+            <p style={{ fontWeight: 600 }}>Contact us (Email): </p>
+            team@ristek.cs.ui.ac.id
+          </Text>
         </StyledFooterDesc>
 
         <StyledPartner>
           <StyledSpanWrapper>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://www.gojek.com/en-id/"
-            >
+            <div>
               <StyledPartnerTitle mode={theme}>
                 Official Learning Partner
               </StyledPartnerTitle>
-              <Image
-                objectFit="contain"
-                w={{ base: "36", lg: "40" }}
-                mr={{ base: "9", lg: "10" }}
-                src={GojekLogo}
-                alt="logo Gojek"
-              />
-            </a>
+              <div style={{ display: "flex" }}>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://www.gojek.com/en-id/"
+                >
+                  <Image
+                    objectFit="contain"
+                    w={{ base: "24", lg: "28" }}
+                    mr="13px"
+                    src={theme === "light" ? GojekLogo : GojekDarkLogo}
+                    alt="logo Gojek"
+                  />
+                </a>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://www.gotocompany.com/"
+                >
+                  <Image
+                    w={{ base: "20", lg: "24" }}
+                    src={theme === "light" ? GotoLogo : GotoDarkLogo}
+                    style={{ transform: `translateY(-20%)` }}
+                    alt="logo GoTo"
+                  />
+                </a>
+              </div>
+            </div>
             <a
               style={{
                 borderLeftWidth: "1px",
