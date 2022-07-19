@@ -91,17 +91,32 @@ export const HeaderLink = styled(NavLink)`
   white-space: nowrap;
   color: ${(props) =>
     props.isCurrent
-      ? "var(--chakra-colors-primary-Purple)"
-      : "var(--chakra-colors-secondary-Gray)"};
+      ? ({ mode }) =>
+          mode === "light"
+            ? (props) => props.theme.color.primaryPurple
+            : (props) => props.theme.color.darkPurple
+      : ({ mode }) =>
+          mode === "light"
+            ? (props) => props.theme.color.secondaryGray
+            : (props) => props.theme.color.darkWhite}
 
   &:hover {
-    color: var(--chakra-colors-primary-Purple);
+    color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.primaryPurple
+        : (props) => props.theme.color.darkPurple};
   }
   &:focus {
     color: ${(props) =>
       props.isCurrent
-        ? "var(--chakra-colors-primary-Purple)"
-        : "var(--chakra-colors-secondary-Gray)"};
+        ? ({ mode }) =>
+            mode === "light"
+              ? (props) => props.theme.color.primaryPurple
+              : (props) => props.theme.color.darkPurple
+        : ({ mode }) =>
+            mode === "light"
+              ? (props) => props.theme.color.secondaryGray
+              : (props) => props.theme.color.darkWhite}
     outline: none;
   }
   @media only screen and (max-width: 900px) {

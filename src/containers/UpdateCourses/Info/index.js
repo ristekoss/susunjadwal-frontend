@@ -2,20 +2,18 @@ import { Link } from "@chakra-ui/react";
 import styled from "styled-components";
 import React from "react";
 
-const MANUAL_VIDEO_URL = "https://drive.google.com/file/d/1hXwLpzcttDeeuTKN-fs49lroW6UnssaM/view";
+const MANUAL_VIDEO_URL =
+  "https://drive.google.com/file/d/1hXwLpzcttDeeuTKN-fs49lroW6UnssaM/view";
 
-const Info = () => (
-  <InfoContainer className="info-container">
-    <Question>
-      Apa itu Update Matkul?
-    </Question>
+const Info = ({ mode }) => (
+  <InfoContainer className="info-container" mode={mode}>
+    <Question>Apa itu Update Matkul?</Question>
     <Answer>
       Update Matkul adalah fitur yang membolehkan penggunanya untuk memperbarui
-      jadwal kuliah dari program studi masing-masing sesuai dengan jadwal di SIAK-NG.
+      jadwal kuliah dari program studi masing-masing sesuai dengan jadwal di
+      SIAK-NG.
     </Answer>
-    <Question>
-      Kenapa perlu Update Matkul?
-    </Question>
+    <Question>Kenapa perlu Update Matkul?</Question>
     <Answer>
       SusunJadwal tidak bekerjasama dengan pihak UI. Sehingga, SusunJadwal perlu
       untuk mengumpulkan data jadwal kuliah mahasiswa dari seluruh program studi
@@ -25,24 +23,24 @@ const Info = () => (
       Apakah akun SSO saya aman setelah melakukan Update Matkul?
     </Question>
     <Answer>
-      100% aman, karena kami sama sekali tidak menyimpan <em>credentials</em> kalian
-      di sistem kami.
+      100% aman, karena kami sama sekali tidak menyimpan <em>credentials</em>{" "}
+      kalian di sistem kami.
     </Answer>
     <Question>
       Saya masih ragu, apakah saya dapat mempelajari SusunJadwal?
     </Question>
     <Answer>
-      Kami suka semangat keingintahuanmu! Untuk mempelajari bagaimana SusunJadwal bekerja,
-      kamu dapat lihat di {' '}
-        <Link
-          _hover={{ color: 'black' }}
-          rel="noopener noreferrer"
-          href={MANUAL_VIDEO_URL}
-          target="_blank"
-        >
-          <u>video</u>
-        </Link>
-      {' '} ini.
+      Kami suka semangat keingintahuanmu! Untuk mempelajari bagaimana
+      SusunJadwal bekerja, kamu dapat lihat di{" "}
+      <Link
+        _hover={{ color: "black" }}
+        rel="noopener noreferrer"
+        href={MANUAL_VIDEO_URL}
+        target="_blank"
+      >
+        <u>video</u>
+      </Link>{" "}
+      ini.
     </Answer>
   </InfoContainer>
 );
@@ -51,9 +49,10 @@ export default Info;
 
 const InfoContainer = styled.ul`
   padding: 2rem 1.5rem 2rem calc(1rem + 24px);
-  background-color: #F8F8F8;
-  border: 1px solid #5038BC;
-  font-family: 'Poppins';
+  background-color: ${({ mode }) => (mode === "light" ? "#f8f8f8" : "#222222")};
+  color: ${({ mode }) => (mode === "light" ? "" : "#D0D0D0")};
+  border: 1px solid #5038bc;
+  font-family: "Poppins";
   border-radius: 0.8rem;
   position: relative;
   z-index: 4;

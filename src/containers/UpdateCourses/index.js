@@ -9,7 +9,8 @@ import {
   Box,
   Button,
   Text,
-  useToast
+  useToast,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
 import { postScrapeSchedule } from "services/api";
@@ -24,7 +25,7 @@ import Info from "./Info";
 const UpdateCourses = () => {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const toast = useToast();
-
+  const theme = useColorModeValue("light", "dark");
   const {
     handleSubmit,
     register,
@@ -33,61 +34,51 @@ const UpdateCourses = () => {
 
   const onSubmit = async (values) => {
     try {
-      InfoToast(
-        "Sedang memperbaharui jadwal",
-        isMobile
-      );
+      InfoToast("Sedang memperbaharui jadwal", isMobile, theme);
       await postScrapeSchedule(values);
       setTimeout(() => {
         toast.closeAll();
         ReactGA.event({
           category: "Update Matkul",
-          action: "Updated the courses"
+          action: "Updated the courses",
         });
-        SuccessToast(
-          "Jadwal berhasil diperbaharui",
-          isMobile
-        );
-        window.location.replace("/susun")
+        SuccessToast("Jadwal berhasil diperbaharui", isMobile, theme);
+        window.location.replace("/susun");
       }, 1000);
     } catch (e) {
       setTimeout(() => {
         toast.closeAll();
-        ErrorToast(
-          e.response.data.message,
-          isMobile
-        );
-      }, 1000)
+        ErrorToast(e.response.data.message, isMobile, theme);
+      }, 1000);
     }
-  }
+  };
 
   return (
     <>
-      {!isMobile && <Bauhaus isPrivate />}
+      {!isMobile && <Bauhaus isPrivate mode={theme} />}
       <Helmet title="Update Matkul" />
 
-      <Box
-        width={{lg: "80%", xl: "70%"}}
-      >
+      <Box width={{ lg: "80%", xl: "70%" }}>
         <Text
-          color="primary.Purple"
-          fontSize={{ base: '27.2px', lg: '3xl' }}
+          color={theme === "light" ? "primary.Purple" : "dark.White"}
+          fontSize={{ base: "27.2px", lg: "3xl" }}
           fontWeight="bold"
-          mt={{ base: '-40px', lg: '0px' }}
+          mt={{ base: "-40px", lg: "0px" }}
           mb={{ base: "24px", lg: "32px" }}
-          textAlign={isMobile
-            ? "center"
-            : "left"
-          }
+          textAlign={isMobile ? "center" : "left"}
         >
           Daftarkan SSO untuk Update Matkul
         </Text>
-        <Info />
-        <FormContainer className="form-container" onSubmit={handleSubmit(onSubmit)} >
+        <Info mode={theme} />
+        <FormContainer
+          className="form-container"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <InputText
             label="Username SSO"
             name="username"
             marginTop="1rem"
+            mode={theme}
             register={register}
             validator={{
               required: `User name tidak boleh kosong`,
@@ -99,6 +90,7 @@ const UpdateCourses = () => {
             label="Password SSO"
             name="password"
             marginTop="1rem"
+            mode={theme}
             register={register}
             validator={{
               required: `Password tidak boleh kosong`,
@@ -111,7 +103,9 @@ const UpdateCourses = () => {
             colorScheme="teal"
             isLoading={isSubmitting}
             type="submit"
-            w={{sm: "100%", lg: "unset"}}
+            w={{ sm: "100%", lg: "unset" }}
+            bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+            color={theme === "light" ? "white" : "dark.White"}
           >
             Update Jadwal
           </Button>

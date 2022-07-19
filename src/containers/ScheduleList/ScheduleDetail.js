@@ -8,7 +8,7 @@ import deleteImg from "assets/Delete.svg";
 import Schedule from "containers/ViewSchedule/Schedule";
 import Icons from "components/Icons";
 import downloadImg from "assets/Download.svg";
-import { Button } from "@chakra-ui/react";
+import { Button, useColorModeValue } from "@chakra-ui/react";
 import * as htmlToImage from "html-to-image";
 
 const ScheduleDetail = ({
@@ -19,7 +19,7 @@ const ScheduleDetail = ({
   showShareModal,
 }) => {
   const isMobile = useSelector((state) => state.appState.isMobile);
-
+  const theme = useColorModeValue("light", "dark");
   const convertDate = (date) => {
     const dateNew = new Date(date);
     return `${dateNew.getDate()}/${
@@ -46,7 +46,7 @@ const ScheduleDetail = ({
   return (
     <>
       <Link to={`/jadwal/${schedule.id}`}>
-        <Card key={`${schedule.name}-${idx}`}>
+        <Card key={`${schedule.name}-${idx}`} mode={theme}>
           <div className="headerInfo">
             <div>
               <div
@@ -96,6 +96,10 @@ const ScheduleDetail = ({
                   variant="outline"
                   onClick={() => editSchedule(schedule.id)}
                   display={isMobile ? "none" : "flex"}
+                  borderColor={
+                    theme === "light" ? "primary.Purple" : "dark.LightPurple"
+                  }
+                  color={theme === "light" ? "primary.Purple" : "dark.Purple"}
                 >
                   Edit Jadwal
                 </Button>
@@ -130,15 +134,22 @@ const ScheduleDetail = ({
   );
 };
 const Card = styled.div`
-  border: 0.05px solid #e5e5e5;
+  border: 0.05px solid ${({ mode }) =>
+    mode === "light" ? "#e5e5e5" : "#363636"};
   border-radius: 8px;
   h2 {
-    color: #333333;
+    color:  ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.secondaryMineShaft
+        : (props) => props.theme.color.darkWhite}
     font-weight: bold;
     font-size: 18px;
   }
   h4 {
-    color: #333333;
+    color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.secondaryMineShaft
+        : (props) => props.theme.color.darkWhite}
     font-size: 12px;
   }
   .headerInfo {
@@ -146,7 +157,8 @@ const Card = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    background-color: #f5f5f5;
+    background-color: ${({ mode }) =>
+      mode === "light" ? "#f5f5f5" : "#333333"}
     border-radius: 8px 8px 0 0;
   }
 

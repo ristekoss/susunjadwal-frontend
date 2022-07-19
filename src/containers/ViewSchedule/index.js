@@ -22,6 +22,7 @@ import {
   Text,
   Flex,
   Image,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
 import { getSchedule, postRenameSchedule, deleteSchedule } from "services/api";
@@ -45,6 +46,7 @@ import ScheduleList from "./ScheduleList";
 
 function ViewSchedule({ match, history }) {
   const isMobile = useSelector((state) => state.appState.isMobile);
+  const theme = useColorModeValue("light", "dark");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const shareModal = useDisclosure();
   const auth = useSelector((state) => state.auth);
@@ -134,7 +136,7 @@ function ViewSchedule({ match, history }) {
     <>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={theme === "light" ? "white" : "dark.LightBlack"}>
           <ModalBody>Apakah kamu yakin ingin menghapus jadwal?</ModalBody>
 
           <ModalFooter>
@@ -153,7 +155,7 @@ function ViewSchedule({ match, history }) {
 
       <Modal isOpen={shareModal.isOpen} onClose={shareModal.onClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={theme === "light" ? "white" : "dark.LightBlack"}>
           <ModalCloseButton />
           <ModalBody>
             <Flex flexDirection="column">
@@ -208,6 +210,7 @@ function ViewSchedule({ match, history }) {
               {schedule.has_edit_access ? (
                 <ScheduleNameEditable>
                   <ControlledInput
+                    style={{ color: theme === "light" ? "aqua" : "orange" }}
                     name={decodeHtmlEntity(schedule.name)}
                     slug={match.params.scheduleId}
                     rename={onRename}
@@ -223,7 +226,9 @@ function ViewSchedule({ match, history }) {
                   </p>
                 </ScheduleNameEditable>
               ) : (
-                <ScheduleName>{decodeHtmlEntity(schedule.name)}</ScheduleName>
+                <ScheduleName mode={theme}>
+                  {decodeHtmlEntity(schedule.name)}
+                </ScheduleName>
               )}
 
               <IconContainer isAuthenticated={Boolean(auth)}>
@@ -259,6 +264,10 @@ function ViewSchedule({ match, history }) {
                   intent="primary"
                   variant="outline"
                   onClick={() => null}
+                  borderColor={
+                    theme === "light" ? "primary.Purple" : "dark.LightPurple"
+                  }
+                  color={theme === "light" ? "primary.Purple" : "dark.Purple"}
                 >
                   {schedule.has_edit_access ? "Edit" : "Copy"}
                 </Button>
@@ -268,12 +277,14 @@ function ViewSchedule({ match, history }) {
                 <ViewListContainer
                   isActive={!isDisplayTimetable}
                   onClick={() => setIsDisplayTimetable(false)}
+                  mode={theme}
                 >
                   <TableIcon width={20} />
                 </ViewListContainer>
                 <ViewCalendarContainer
                   isActive={isDisplayTimetable}
                   onClick={() => setIsDisplayTimetable(true)}
+                  mode={theme}
                 >
                   <CalendarIcon width={20} />
                 </ViewCalendarContainer>
@@ -400,7 +411,10 @@ const ScheduleNameEditable = styled.div`
 
 const ScheduleName = styled.div`
   font-size: 32px;
-  color: ${(props) => props.theme.color.secondaryMineShaft};
+  color: ${(props) =>
+    props.mode === "light"
+      ? props.theme.color.secondaryMineShaft
+      : props.theme.color.darkWhite};
 `;
 
 const ViewToggleContainer = styled.div`
@@ -414,7 +428,9 @@ const ViewListContainer = styled.div`
   background-color: ${(props) =>
     props.isActive
       ? props.theme.color.primaryPurple
-      : props.theme.color.primaryWhite};
+      : props.mode === "light"
+      ? props.theme.color.primaryWhite
+      : props.theme.color.darkBlack};
   padding: 10px 1rem;
   border-top-left-radius: 1em;
   border-bottom-left-radius: 1em;
@@ -433,7 +449,9 @@ const ViewCalendarContainer = styled.div`
   background-color: ${(props) =>
     props.isActive
       ? props.theme.color.primaryPurple
-      : props.theme.color.primaryWhite};
+      : props.mode === "light"
+      ? props.theme.color.primaryWhite
+      : props.theme.color.darkBlack};
   padding: 10px 1rem;
   border-top-right-radius: 1em;
   border-bottom-right-radius: 1em;

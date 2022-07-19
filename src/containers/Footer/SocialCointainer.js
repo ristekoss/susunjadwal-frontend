@@ -1,22 +1,26 @@
-import { Image } from "@chakra-ui/react";
+import { Image, useColorModeValue } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { ListIcon } from "./const";
 import { StyledIconWrapper } from "./styles";
 
 const SocialContainer = () => {
   const [listOfIcons, setListOfIcons] = useState([]);
-
+  const theme = useColorModeValue("light", "dark");
   useEffect(() => {
-    let list = importAll(
-      require.context("assets/Beta/icons", false, /\.(svg)$/)
-    );
-    
+    const dir =
+      theme === "light"
+        ? importAll(require.context("assets/Beta/icons", false, /\.(svg)$/))
+        : importAll(
+            require.context("assets/Beta/icons/icon-dark", false, /\.(svg)$/),
+          );
+
+    let list = dir;
     list = list.map((img, idx) => ({
       image: img,
       link: ListIcon[idx].url,
     }));
     setListOfIcons(list);
-  }, []);
+  }, [theme]);
 
   const importAll = (r) => {
     return r.keys().map(r);

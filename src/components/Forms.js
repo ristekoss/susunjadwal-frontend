@@ -26,7 +26,8 @@ export const InputText = ({
   label,
   placeholder,
   validator,
-  disabled=false,
+  disabled = false,
+  mode,
   ...props
 }) => {
   validator["pattern"] = {
@@ -37,7 +38,13 @@ export const InputText = ({
     <FormControl {...props} isInvalid={errors[name]}>
       <FormLabel htmlFor={name}>{label}</FormLabel>
       <Input
-        bg={errors[name] ? "state.ErrorGhost" : "secondary.InputGray"}
+        bg={
+          errors[name]
+            ? "state.ErrorGhost"
+            : mode === "light"
+            ? "secondary.InputGray"
+            : "dark.LightBlack"
+        }
         id={name}
         placeholder={placeholder}
         disabled={disabled}
@@ -95,6 +102,7 @@ export const InputPassword = ({
   label,
   validator,
   placeholder,
+  mode,
   ...props
 }) => {
   const [show, setShow] = React.useState(false);
@@ -107,7 +115,13 @@ export const InputPassword = ({
         <Input
           id={name}
           pr="4.5rem"
-          bg={errors[name] ? "state.ErrorGhost" : "secondary.InputGray"}
+          bg={
+            errors[name]
+              ? "state.ErrorGhost"
+              : mode === "light"
+              ? "secondary.InputGray"
+              : "dark.LightBlack"
+          }
           type={show ? "text" : "password"}
           placeholder={placeholder}
           {...register(name, validator)}
@@ -141,27 +155,27 @@ export const InputSelect = ({
   ...props
 }) => (
   <FormControl {...props} isInvalid={errors[name]}>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
-      <Select
-        bg={errors[name] ? "state.ErrorGhost" : "secondary.InputGray"}
-        variant="filled"
-        _focus={{
-          borderColor: "primary.Purple",
-          backgroundColor: "primary.White",
-        }}
-        id={name}
-        placeholder={placeholder ? placeholder : ""}
-        disabled={disabled}
-        {...register(name, validator)}
-      >
-        {children}
-      </Select>
-      <FormErrorMessage fontWeight="semibold">
-        {errors[name] && (
-          <span>
-            <Warning /> {errors[name].message}
-          </span>
-        )}
-      </FormErrorMessage>
-    </FormControl>
-)
+    <FormLabel htmlFor={name}>{label}</FormLabel>
+    <Select
+      bg={errors[name] ? "state.ErrorGhost" : "secondary.InputGray"}
+      variant="filled"
+      _focus={{
+        borderColor: "primary.Purple",
+        backgroundColor: "primary.White",
+      }}
+      id={name}
+      placeholder={placeholder ? placeholder : ""}
+      disabled={disabled}
+      {...register(name, validator)}
+    >
+      {children}
+    </Select>
+    <FormErrorMessage fontWeight="semibold">
+      {errors[name] && (
+        <span>
+          <Warning /> {errors[name].message}
+        </span>
+      )}
+    </FormErrorMessage>
+  </FormControl>
+);

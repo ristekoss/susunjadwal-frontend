@@ -10,7 +10,7 @@ class ControlledInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: props.name ? props.name : "Untitled"
+      title: props.name ? props.name : "Untitled",
     };
   }
 
@@ -21,7 +21,7 @@ class ControlledInput extends React.Component {
     }
     this.setState({
       title: title,
-      editing: false
+      editing: false,
     });
     //TODO: PATCH the schedule with new name=this.state.title
     this.props.rename(this.props.slug, title);
@@ -44,20 +44,20 @@ class ControlledInput extends React.Component {
           name="form-field-schedule-name"
           value={this.state.title}
           maxLength="20"
-          onChange={event => {
+          onChange={(event) => {
             this.setState({
-              title: event.target.value
+              title: event.target.value,
             });
           }}
           onFocus={() => {
             this.setState({
-              editing: true
+              editing: true,
             });
           }}
           onBlur={() => {
             this.submit();
           }}
-          onKeyDown={event => {
+          onKeyDown={(event) => {
             if (event.key === "Enter") {
               this.changeScheduleName("blur");
             }
@@ -69,10 +69,7 @@ class ControlledInput extends React.Component {
             this.changeScheduleName("focus");
           }}
         >
-          <img
-            src={editImg}
-            alt="Edit"
-          />
+          <img src={editImg} alt="Edit" />
         </button>
       </Container>
     );
@@ -82,7 +79,7 @@ class ControlledInput extends React.Component {
 const Container = styled.div`
   display: flex;
   align-items: center;
-  color: #333333;
+
   background-color: transparent;
 
   input {
@@ -102,7 +99,7 @@ const Container = styled.div`
   input:focus {
     outline: none !important;
     border-radius: 4px !important;
-    border: 2px solid ${props => props.theme.color.primaryPurple} !important;
+    border: 2px solid ${(props) => props.theme.color.primaryPurple} !important;
   }
 
   @media (min-width: 900px) {

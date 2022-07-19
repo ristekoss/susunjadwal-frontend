@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { useSelector } from "react-redux";
-
+import { useColorModeValue } from "@chakra-ui/react";
 const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
 const pad = (val) => {
@@ -19,7 +19,7 @@ function Schedule({
   showRoom,
 }) {
   const isMobile = useSelector((state) => state.appState.isMobile);
-
+  const theme = useColorModeValue("light");
   const rowToDisplay = (minute) => {
     const hour = Math.floor(minute / 60) + startHour;
     return `${pad(hour)}.${pad(minute % 60)}`;
@@ -43,12 +43,12 @@ function Schedule({
   const renderHeader = () => (
     <>
       {showLabel && (
-        <Header>
+        <Header mode={theme}>
           <span>Jam</span>
         </Header>
       )}
       {DAYS.map((day) => (
-        <Header key={day}>
+        <Header mode={theme} key={day}>
           <span>{day}</span>
         </Header>
       ))}
@@ -56,14 +56,24 @@ function Schedule({
   );
 
   return (
-    <Container pxPerMinute={pxPerMinute} width={width} showLabel={showLabel}>
+    <Container
+      pxPerMinute={pxPerMinute}
+      width={width}
+      showLabel={showLabel}
+      mode={theme}
+    >
       {showHeader && renderHeader()}
       {TIME_MARKERS.map((_, idx) => (
-        <TimeMarker key={idx} row={minuteToRow(idx)} showLabel={showLabel} />
+        <TimeMarker
+          key={idx}
+          row={minuteToRow(idx)}
+          showLabel={showLabel}
+          mode={theme}
+        />
       ))}
       {showLabel &&
         TIME_MARKERS.map((marker, idx) => (
-          <TimeLabel key={idx} row={minuteToRow(idx)}>
+          <TimeLabel key={idx} row={minuteToRow(idx)} mode={theme}>
             {marker}
           </TimeLabel>
         ))}
@@ -75,6 +85,7 @@ function Schedule({
               start={displayToMinute(start)}
               end={displayToMinute(end)}
               day={dayToColumn(day)}
+              mode={theme}
             >
               {!isMobile && (
                 <div className="header">
@@ -118,7 +129,7 @@ const Container = styled.div`
     );
   grid-template-rows: repeat(990, ${({ pxPerMinute }) => pxPerMinute}px);
   width: ${({ width }) => width};
-  background-color: #ffffff;
+  background-color:${({ mode }) => (mode === "light" ? "#FFFFFF" : "#292929")}
   border-radius: 0 0 8px 8px;
 `;
 
@@ -126,13 +137,16 @@ const TimeLabel = styled.div`
   place-self: center;
   grid-area: ${({ row }) => row + 30} / 1 / ${({ row }) => row + 90} / 1;
   font-size: ${(props) => (props.theme.mobile ? "12px" : "16px")};
-  color: #000000;
+  color: ${({ mode }) => (mode === "light" ? "#000000" : "#D0D0D0")};
 `;
 
 const TimeMarker = styled.div`
-  grid-area: ${({ row }) => row} / ${({ showLabel }) => (showLabel ? "2" : "1")} /
-    ${({ row }) => row + 60 + 1} / ${({ showLabel }) => (showLabel ? "8" : "7")};
-  border: 0.95px solid #e5e5e5;
+  grid-area: ${({ row }) => row} / ${({ showLabel }) =>
+  showLabel ? "2" : "1"} /
+    ${({ row }) => row + 60 + 1} / ${({ showLabel }) =>
+  showLabel ? "8" : "7"};
+  border: 0.95px solid ${({ mode }) =>
+    mode === "light" ? "#E5E5E5" : "#363636"} 
   z-index: 0;
   padding-left: 30px;
 `;
@@ -142,7 +156,7 @@ const Header = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #5038bc;
+  background-color: ${({ mode }) => (mode === "light" ? "#5038bc" : "#674DE0")} 
   color: white;
   flex-direction: row;
   grid-row: 1 / 60;
@@ -154,9 +168,10 @@ const Header = styled.div`
 const ScheduleItem = styled.div`
   z-index: 1;
   width: 95%;
-  background-color: #5038bc;
+  background-color: ${({ mode }) => (mode === "light" ? "#5038bc" : "#674DE0")} 
   color: white;
-  grid-area: ${({ start }) => start} / ${({ day }) => day} / ${({ end }) => end} /
+  grid-area: ${({ start }) => start} / ${({ day }) => day} / ${({ end }) =>
+  end} /
     ${({ day }) => day + 1};
   border-radius: 8px;
 
