@@ -14,6 +14,7 @@ import {
   Flex,
   Text,
   Image,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import Helmet from "react-helmet";
@@ -41,6 +42,7 @@ const ScheduleList = () => {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const shareModal = useDisclosure();
+  const theme = useColorModeValue("light", "dark");
   const [selectedId, setSelectedId] = useState("");
   const [selectedName, setSelectedName] = useState("");
   const [schedules, setSchedules] = useState();
@@ -182,7 +184,9 @@ const ScheduleList = () => {
       {!!schedules?.length && (
         <>
           <BauhausSide />
-          <PageTitle mobile={isMobile}>Daftar Jadwal</PageTitle>
+          <PageTitle mobile={isMobile} mode={theme}>
+            Daftar Jadwal
+          </PageTitle>
         </>
       )}
 
@@ -251,7 +255,7 @@ const PageTitle = styled.h1`
   font-size: ${({ mobile }) => (mobile ? "1.7rem" : "2rem")};
   text-align: center;
   font-weight: bold;
-  color: #5038bc;
+  color: ${({ mode }) => (mode === "light" ? "#5038bc" : "#917DEC")};
   @media (min-width: 900px) {
     text-align: left;
   }
@@ -273,7 +277,6 @@ const PageInfo = styled.h2`
 const CardContainer = styled.div`
   padding: ${(props) => (props.theme.mobile ? "1rem 3rem 0 3rem" : "0 48px")};
   width: 100%;
-  background-color: #ffffff;
 `;
 
 const AssetBauhaus = styled.img`

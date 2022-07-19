@@ -9,7 +9,7 @@ import {
   StyledPartnerTitle,
   StyledSpanWrapper,
 } from "./styles";
-import GojekLogo from "assets/Beta/Gojek.svg";
+import GojekLogo from "assets/Beta/gojek.svg";
 import GotoLogo from "assets/Beta/Goto.svg";
 import GojekDarkLogo from "assets/Beta/Gojek-dark.svg";
 import GotoDarkLogo from "assets/Beta/Goto-dark.svg";

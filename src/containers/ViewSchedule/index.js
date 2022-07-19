@@ -22,6 +22,7 @@ import {
   Text,
   Flex,
   Image,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
 import { getSchedule, postRenameSchedule, deleteSchedule } from "services/api";
@@ -45,6 +46,7 @@ import ScheduleList from "./ScheduleList";
 
 function ViewSchedule({ match, history }) {
   const isMobile = useSelector((state) => state.appState.isMobile);
+  const theme = useColorModeValue("light", "dark");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const shareModal = useDisclosure();
   const auth = useSelector((state) => state.auth);
@@ -208,6 +210,7 @@ function ViewSchedule({ match, history }) {
               {schedule.has_edit_access ? (
                 <ScheduleNameEditable>
                   <ControlledInput
+                    mode={theme}
                     name={decodeHtmlEntity(schedule.name)}
                     slug={match.params.scheduleId}
                     rename={onRename}
@@ -223,7 +226,9 @@ function ViewSchedule({ match, history }) {
                   </p>
                 </ScheduleNameEditable>
               ) : (
-                <ScheduleName>{decodeHtmlEntity(schedule.name)}</ScheduleName>
+                <ScheduleName mode={theme}>
+                  {decodeHtmlEntity(schedule.name)}
+                </ScheduleName>
               )}
 
               <IconContainer isAuthenticated={Boolean(auth)}>
@@ -400,7 +405,10 @@ const ScheduleNameEditable = styled.div`
 
 const ScheduleName = styled.div`
   font-size: 32px;
-  color: ${(props) => props.theme.color.secondaryMineShaft};
+  color: ${(props) =>
+    props.mode === "light"
+      ? props.theme.color.secondaryMineShaft
+      : props.theme.color.darkWhite};
 `;
 
 const ViewToggleContainer = styled.div`
