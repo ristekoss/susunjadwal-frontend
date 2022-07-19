@@ -13,6 +13,7 @@ import {
   ModalCloseButton,
   Flex,
   Text,
+  Image,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import Helmet from "react-helmet";
@@ -31,6 +32,7 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import alertImg from "assets/Alert2.svg";
 import linkImg from "assets/Link.svg";
 import copyImg from "assets/Copy.svg";
+import { copyImageToClipboard } from "copy-image-clipboard";
 
 const ScheduleList = () => {
   const dispatch = useDispatch();
@@ -42,6 +44,7 @@ const ScheduleList = () => {
   const [selectedId, setSelectedId] = useState("");
   const [selectedName, setSelectedName] = useState("");
   const [schedules, setSchedules] = useState();
+  const [imageURL, setImageURL] = useState("");
 
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -55,6 +58,7 @@ const ScheduleList = () => {
 
     fetchSchedules();
   }, [dispatch, auth]);
+
   const performDeleteSchedule = async (userId, scheduleId) => {
     ReactGA.event({
       category: "Hapus Jadwal",
@@ -73,24 +77,35 @@ const ScheduleList = () => {
   const confirmDeleteSchedule = (scheduleId) => {
     performDeleteSchedule(auth.userId, scheduleId);
   };
+
   const showDialogDelete = (id) => {
     setSelectedId(id);
     onOpen();
   };
-  const showAlertCopy = () => {
+
+  const showAlertCopy = (type) => {
     ReactGA.event({
       category: "Bagikan Jadwal",
       action: "Copied a schedule's URL",
     });
-    SuccessToast("Link berhasil disalin!", isMobile);
+    SuccessToast(`${type} berhasil disalin!`, isMobile);
   };
+
   const handleClickEditJadwal = (idJadwal) => {
     history.push(`/edit/${idJadwal}`);
   };
-  const showDialogShare = (id, name) => {
+
+  const showDialogShare = (id, name, dataUrl) => {
     setSelectedId(id);
     setSelectedName(name);
+    setImageURL(dataUrl);
     shareModal.onOpen();
+  };
+
+  const copyImage = () => {
+    copyImageToClipboard(imageURL)
+      .then(() => showAlertCopy("Gambar"))
+      .catch((e) => {});
   };
 
   return (
@@ -119,7 +134,12 @@ const ScheduleList = () => {
         <ModalContent>
           <ModalCloseButton />
           <ModalBody>
-            Bagikan Jadwal <b>{selectedName}</b>
+            <Flex flexDirection="column">
+              <Text mb="8px">
+                Bagikan Jadwal <b>{selectedName}</b>
+              </Text>
+              <Image alt="" src={imageURL} maxH="30vh" objectFit="contain" />
+            </Flex>
           </ModalBody>
 
           <ModalFooter>
@@ -127,14 +147,17 @@ const ScheduleList = () => {
               <Flex flexDirection={isMobile ? "column" : "row"}>
                 <CopyToClipboard
                   text={`${window.location.href}/${selectedId}`}
-                  onCopy={showAlertCopy}
+                  onCopy={() => showAlertCopy("Link")}
                 >
-                  <Button variant="outline" my="4px !important">
+                  <Button
+                    variant="outline"
+                    mb={isMobile ? "8px !important" : "0"}
+                  >
                     <img src={linkImg} style={{ marginRight: "4px" }} alt="" />
                     Copy Link
                   </Button>
                 </CopyToClipboard>
-                <Button variant="solid" my="4px !important">
+                <Button variant="solid" onClick={copyImage}>
                   <img src={copyImg} style={{ marginRight: "8px" }} alt="" />
                   Copy Image
                 </Button>
