@@ -70,7 +70,7 @@ const ScheduleDetail = ({
                         alt: "download",
                         action: () =>
                           downloadImage(
-                            schedule.name != null ? schedule.name : "Untitled",
+                            !schedule.name ? "Untitled" : schedule.name,
                           ),
                       },
                       {
