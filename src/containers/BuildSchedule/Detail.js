@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
-
+import { useColorModeValue } from "@chakra-ui/react";
 import SelectedCourses from "containers/SelectedCourses";
 import backImg from "assets/Beta/xmark.svg";
 
@@ -11,13 +11,13 @@ const HideBodyOverflow = createGlobalStyle`
 `;
 
 function Detail({ closeDetail, isEditing = false, scheduleId }) {
-
+  const theme = useColorModeValue("light", "dark");
   function performCloseDetail() {
     closeDetail();
   }
 
   return (
-    <Container>
+    <Container mode={theme}>
       <HideBodyOverflow />
       <ImageButton src={backImg} onClick={performCloseDetail} />
       <SelectedCourses isEditing={isEditing} scheduleId={scheduleId} />
@@ -26,7 +26,10 @@ function Detail({ closeDetail, isEditing = false, scheduleId }) {
 }
 
 const Container = styled.div`
-  background-color: ${props => props.theme.color.primaryWhite};
+  background-color: ${(props) =>
+    props.mode === "light"
+      ? props.theme.color.primaryWhite
+      : props.theme.color.darkBlack};
   top: 0px;
   left: 0;
   right: 0;

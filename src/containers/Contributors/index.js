@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Text, Box, Button, Flex } from "@chakra-ui/react";
+import { Text, Box, Button, Flex, useColorModeValue } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import Helmet from "react-helmet";
@@ -9,7 +9,7 @@ import { getContributors } from "services/api";
 
 const Contributors = () => {
   const [contributors, setContributors] = useState();
-
+  const theme = useColorModeValue("light", "dark");
   const fetchContributors = useCallback(async () => {
     try {
       const { data } = await getContributors();
@@ -34,20 +34,31 @@ const Contributors = () => {
   ));
 
   return (
-    <Box mt={{ base: 'calc(-5rem)', lg: '-4rem' }}>
+    <Box mt={{ base: "calc(-5rem)", lg: "-4rem" }}>
       <Helmet title="Kontributor SusunJadwal" />
 
       <Link to="/">
-        <Text fontSize={{base: 'sm', md:"lg"}} color="primary.Purple" ml="-9px">
+        <Text
+          fontSize={{ base: "sm", md: "lg" }}
+          color={theme === "light" ? "primary.Purple" : "dark.Purple"}
+          ml="-9px"
+        >
           <ChevronLeftIcon w={8} h={8} />
           Kembali ke Halaman Utama
         </Text>
       </Link>
 
-      <Box textAlign="center" mt={{ base: '1rem', lg: '2rem' }}>
-        <Text fontWeight="bold" fontSize={{base: 'x-large', md:"xx-large"}} color="primary.Purple">
+      <Box textAlign="center" mt={{ base: "1rem", lg: "2rem" }}>
+        <Text
+          fontWeight="bold"
+          fontSize={{ base: "x-large", md: "xx-large" }}
+          color={theme === "light" ? "primary.Purple" : "dark.Purple"}
+        >
           Kontributor{" "}
-          <Box as="span" color="secondary.MineShaft">
+          <Box
+            as="span"
+            color={theme === "light" ? "secondary.MineShaft" : "dark.White"}
+          >
             Susun
           </Box>
           Jadwal
@@ -56,13 +67,20 @@ const Contributors = () => {
           mt="1.5rem"
           fontSize={{ base: "xs", md: "md" }}
           px={{ md: "8rem" }}
+          color={theme === "light" ? "black" : "dark.White"}
         >
           Kami menyambut segala bentuk kontribusi, besar maupun kecil, untuk
           membantu menciptakan teknologi yang memberi dampak positif bagi
           kehidupan mahasiswa Universitas Indonesia.
         </Text>
 
-        <Button m="2rem auto 3rem">Gabung Discord SusunJadwal</Button>
+        <Button
+          m="2rem auto 3rem"
+          bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+          color={theme === "light" ? "white" : "dark.White"}
+        >
+          Gabung Discord SusunJadwal
+        </Button>
       </Box>
 
       <Flex

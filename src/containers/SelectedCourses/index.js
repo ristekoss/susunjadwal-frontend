@@ -2,7 +2,7 @@ import React from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
 import { withRouter } from "react-router";
-import { Button } from "@chakra-ui/react";
+import { Button, useColorModeValue } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
@@ -11,8 +11,8 @@ import {
   ModalContent as ChakraModalContent,
   ModalFooter as ChakraModalFooter,
   ModalBody,
-  useDisclosure
-} from "@chakra-ui/react"
+  useDisclosure,
+} from "@chakra-ui/react";
 
 import { removeSchedule, clearSchedule } from "redux/modules/schedules";
 import { setLoading } from "redux/modules/appState";
@@ -27,39 +27,41 @@ import TrashIcon from "assets/Trash.svg";
 
 function transformSchedules(schedules) {
   return schedules
-    .map(schedule =>
-      schedule.schedule_items.map(item => ({
+    .map((schedule) =>
+      schedule.schedule_items.map((item) => ({
         ...item,
         name: schedule.name,
         course_name: schedule.parentName,
         sks: schedule.credit,
-        lecturer: schedule.lecturer
-      }))
+        lecturer: schedule.lecturer,
+      })),
     )
     .reduce((prev, now) => [...prev, ...now], []);
 }
 
 function SelectedCourses({ history, scheduleId, isEditing }) {
-  const schedules = useSelector(state => state.schedules);
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const auth = useSelector(state => state.auth);
+  const schedules = useSelector((state) => state.schedules);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  const theme = useColorModeValue("light", "dark");
   const totalCredits = schedules.reduce((prev, { credit }) => prev + credit, 0);
 
   async function saveSchedule() {
     dispatch(setLoading(true));
     try {
       const {
-        data: { id: scheduleId }
+        data: { id: scheduleId },
       } = await postSaveSchedule(auth.userId, transformSchedules(schedules));
       dispatch(clearSchedule());
       ReactGA.event({
         category: "Simpan Jadwal",
-        action: "Created/edited a schedule"
+        action: "Created/edited a schedule",
       });
       history.push(`/jadwal/${scheduleId}`);
-    } catch (e) {/** TODO: handle error */}
+    } catch (e) {
+      /** TODO: handle error */
+    }
     setTimeout(() => dispatch(setLoading(false)), 1000);
   }
 
@@ -67,12 +69,18 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     dispatch(setLoading(true));
     try {
       const { data } = await makeAtLeastMs(
-        putUpdateSchedule(auth.userId, scheduleId, transformSchedules(schedules)),
-        1000
+        putUpdateSchedule(
+          auth.userId,
+          scheduleId,
+          transformSchedules(schedules),
+        ),
+        1000,
       );
       dispatch(clearSchedule());
       history.push(`/jadwal/${data.user_schedule.id}`);
-    } catch (e) {/** TODO: handle error */}
+    } catch (e) {
+      /** TODO: handle error */
+    }
     setTimeout(() => dispatch(setLoading(false)), 1000);
   }
 
@@ -80,9 +88,9 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     dispatch(setLoading(true));
     await makeAtLeastMs(deleteSchedule(auth.userId, scheduleId), 1000);
     dispatch(clearSchedule());
-    history.push("/jadwal")
+    history.push("/jadwal");
     setTimeout(() => dispatch(setLoading(false)), 1000);
-  }
+  };
 
   let isConflict = false;
 
@@ -90,9 +98,9 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     const isCurrentScheduleConflict = isScheduleConflict(schedules, schedule);
     isConflict = isConflict || isCurrentScheduleConflict;
 
-    const labelName = (String(schedule.name).includes(schedule.parentName))
+    const labelName = String(schedule.name).includes(schedule.parentName)
       ? schedule.name
-      : `${schedule.parentName} - ${schedule.name}`
+      : `${schedule.parentName} - ${schedule.name}`;
 
     const classesTimes = schedule.schedule_items.map((item, index) => (
       <li key={index}>
@@ -101,9 +109,15 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     ));
 
     return (
-      <TableContentRow key={idx} inverted={isCurrentScheduleConflict}>
+      <TableContentRow
+        key={idx}
+        inverted={isCurrentScheduleConflict}
+        mode={theme}
+      >
         <div className="courseName">{labelName}</div>
-        <div><ul>{classesTimes}</ul></div>
+        <div>
+          <ul>{classesTimes}</ul>
+        </div>
         <div className="small-2 columns">
           <span>{schedule.credit}</span>
         </div>
@@ -121,16 +135,11 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     <>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalBody>
-            Apakah kamu yakin ingin menyimpan jadwal?
-          </ModalBody>
+        <ModalContent bg={theme === "light" ? "white" : "dark.LightBlack"}>
+          <ModalBody>Apakah kamu yakin ingin menyimpan jadwal?</ModalBody>
 
           <ModalFooter>
-            <Button
-              onClick={onClose}
-              variant="outline"
-            >
+            <Button onClick={onClose} variant="outline">
               Batal
             </Button>
             <Button
@@ -138,8 +147,9 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
                 !isEditing
                   ? saveSchedule()
                   : schedules.length === 0
-                    ? handleDeleteSchedule()
-                    : updateSchedule()}
+                  ? handleDeleteSchedule()
+                  : updateSchedule()
+              }
               variant="solid"
             >
               Simpan
@@ -148,10 +158,10 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         </ModalContent>
       </Modal>
 
-      <Container>
+      <Container mode={theme}>
         <h3>Kelas Pilihan</h3>
 
-        <TableHeader>
+        <TableHeader mode={theme}>
           <div>Kelas</div>
           <div>Waktu</div>
           <div>
@@ -163,7 +173,9 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
         <TableCreditSum>
           <div>
-            <span>Total SKS</span>
+            <span style={{ color: theme === "light" ? "#FFFFFF" : "#D0D0D0" }}>
+              Total SKS
+            </span>
           </div>
           <div>
             <span>{totalCredits}</span>
@@ -172,11 +184,14 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
         {isConflict && (
           <MessageContainer>
-            <p>Ada jadwal yang bertabrakan. Perbaiki terlebih dahulu sebelum menyimpan.</p>
+            <p>
+              Ada jadwal yang bertabrakan. Perbaiki terlebih dahulu sebelum
+              menyimpan.
+            </p>
           </MessageContainer>
         )}
 
-        {(!isConflict && totalCredits > 24) && (
+        {!isConflict && totalCredits > 24 && (
           <MessageContainer>
             <p>Jumlah SKS yang diambil melebihi batas maksimum (24 SKS).</p>
           </MessageContainer>
@@ -185,7 +200,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         <Button
           onClick={onOpen}
           disabled={isConflict || totalCredits > 24 || schedules.length === 0}
-          intent={schedules.length === 0 && isEditing && 'danger'}
+          intent={schedules.length === 0 && isEditing && "danger"}
         >
           Simpan Jadwal
         </Button>
@@ -199,14 +214,14 @@ export default withRouter(SelectedCourses);
 const ModalContent = styled(ChakraModalContent).attrs({
   padding: { base: "16px 24px", lg: "20px 24px" },
   width: { base: "90%", lg: "initial" },
-  textAlign: "center"
+  textAlign: "center",
 })``;
 
 const ModalFooter = styled(ChakraModalFooter).attrs({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  marginTop: { base: "12px", lg: "16px" }
+  marginTop: { base: "12px", lg: "16px" },
 })`
   button {
     margin: 0px 4px;
@@ -216,9 +231,11 @@ const ModalFooter = styled(ChakraModalFooter).attrs({
 const Container = styled.div`
   width: 100%;
   color: #333333;
-
   h3 {
-    color: ${props => props.theme.color.primaryPurple};
+    color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.primaryPurple
+        : (props) => props.theme.color.darkPurple};
     margin-bottom: 16px;
     text-align: center;
     font-weight: bold;
@@ -228,12 +245,19 @@ const Container = styled.div`
   > button {
     margin-top: 16px;
     width: 100%;
+    background-color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.primaryPurple
+        : (props) => props.theme.color.darkLightPurple};
+    color: ${({ mode }) =>
+      mode === "light" ? "#FFFFFF" : (props) => props.theme.color.darkWhite};
   }
 
   button:disabled,
   button[disabled] {
-    background: #BDBDBD;
+    background: #bdbdbd;
     opacity: 100%;
+    color: #ffffff;
   }
 
   button:disabled:hover,
@@ -246,10 +270,13 @@ const Container = styled.div`
 
 const TableHeader = styled.div`
   display: flex;
-  border-bottom: 1px solid #BDBDBD;
+  border-bottom: 1px solid #bdbdbd;
   align-items: center;
   font-weight: 600;
-
+  color: ${({ mode }) =>
+    mode === "light"
+      ? (props) => props.theme.color.secondaryMineshaft
+      : (props) => props.theme.color.darkWhite};
   div {
     padding: 0.5rem 0;
     &:nth-child(1) {
@@ -267,26 +294,38 @@ const TableHeader = styled.div`
 
 const TableContentRow = styled.div`
   :nth-child(odd) {
-    background: ${({ inverted }) => (
+    background: ${({ inverted }) =>
       inverted
-        ? "rgba(235, 87, 87, 0.2)"
-        : props => props.theme.color.primaryWhite
-    )};
+        ? ({ mode }) =>
+            mode === "light"
+              ? "rgba(235, 87, 87, 0.2)"
+              : (props) => props.theme.color.darkRed
+        : ({ mode }) =>
+            mode === "light"
+              ? (props) => props.theme.color.primaryWhite
+              : (props) => props.theme.color.darkBlack};
   }
-
   :nth-child(even) {
-    background: ${({ inverted }) => (
+    background: ${({ inverted }) =>
       inverted
-        ? "rgba(235, 87, 87, 0.2)"
-        : "#F5F5F5"
-    )};
+        ? ({ mode }) =>
+            mode === "light"
+              ? "rgba(235, 87, 87, 0.2)"
+              : (props) => props.theme.color.darkRed
+        : ({ mode }) =>
+            mode === "light"
+              ? "#F5F5F5"
+              : (props) => props.theme.color.darkBlack};
   }
-
 
   display: flex;
   min-height: 70px;
   font-size: 0.75rem;
 
+  color: ${({ mode }) =>
+    mode === "light"
+      ? (props) => props.theme.color.secondaryMineshaft
+      : (props) => props.theme.color.primaryWhite};
   div {
     padding: 0.5rem 0;
     display: flex;
@@ -303,12 +342,11 @@ const TableContentRow = styled.div`
     }
 
     li::before {
-      content: '•';
+      content: "•";
       position: absolute;
       left: -12px;
       font-size: 16px;
     }
-
 
     &:nth-child(1) {
       flex: 4;
@@ -373,7 +411,7 @@ const MessageContainer = styled.div`
   text-align: center;
   font-weight: 600;
   font-size: 12px;
-  color: #E91515;
+  color: #e91515;
 
   @media (min-width: 900px) {
     margin: 18px -5px 0px;

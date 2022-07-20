@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Box } from "@chakra-ui/react";
+import { Button, Box, useColorModeValue } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { parse } from "query-string";
@@ -32,8 +32,7 @@ import {
   AssetBetaB,
 } from "containers/BetaLanding/styles";
 
-
-import RistekLogo from "assets/Beta/Beta_Logo.svg";
+import RistekLogo from "assets/Beta/Beta_Logo_Light.svg";
 import ChevronArrow from "assets/Beta/chevron-down.svg";
 import BetaAssetA from "assets/Beta/beta-landing-asset-1.svg";
 import BetaAssetB from "assets/Beta/beta-landing-asset-2.svg";
@@ -45,6 +44,7 @@ function getServiceUrl() {
 function Login({ history, location }) {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const theme = useColorModeValue("light", "dark");
 
   useEffect(() => {
     async function authenticate(ticket, serviceUrl) {
@@ -98,7 +98,7 @@ function Login({ history, location }) {
 
   return (
     <Box px={{ base: "0px", lg: "40px" }}>
-      <Bauhaus />
+      <Bauhaus mode={theme} />
 
       <HeroSection>
         <LogoRistek src={RistekLogo} alt="ristek-logo" />
@@ -159,7 +159,7 @@ function Login({ history, location }) {
             >
               <Button
                 disabled
-                _hover={{ background: 'primary.Purple' }}
+                _hover={{ background: "primary.Purple" }}
                 m={{ base: "0 0 1rem 0", lg: "0 1rem 0 0" }}
                 w="fit-content"
               >

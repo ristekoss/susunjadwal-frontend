@@ -14,6 +14,7 @@ import {
   Flex,
   Text,
   Image,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import Helmet from "react-helmet";
@@ -25,6 +26,7 @@ import { makeAtLeastMs } from "utils/promise";
 import { BauhausSide } from "components/Bauhaus";
 import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
 import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
+import BauhausDarkDesktop from "assets/Beta/bauhaus-dark-lg.svg";
 import ScheduleDetail from "./ScheduleDetail";
 import { deleteSchedule } from "services/api";
 import { SuccessToast } from "components/Toast";
@@ -41,6 +43,7 @@ const ScheduleList = () => {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const shareModal = useDisclosure();
+  const theme = useColorModeValue("light", "dark");
   const [selectedId, setSelectedId] = useState("");
   const [selectedName, setSelectedName] = useState("");
   const [schedules, setSchedules] = useState();
@@ -112,7 +115,7 @@ const ScheduleList = () => {
     <Container>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={theme === "light" ? "white" : "dark.LightBlack"}>
           <ModalBody>Apakah kamu yakin ingin menghapus jadwal?</ModalBody>
 
           <ModalFooter>
@@ -131,7 +134,7 @@ const ScheduleList = () => {
 
       <Modal isOpen={shareModal.isOpen} onClose={shareModal.onClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={theme === "light" ? "white" : "dark.LightBlack"}>
           <ModalCloseButton />
           <ModalBody>
             <Flex flexDirection="column">
@@ -183,7 +186,9 @@ const ScheduleList = () => {
       {!!schedules?.length && (
         <>
           <BauhausSide />
-          <PageTitle mobile={isMobile}>Daftar Jadwal</PageTitle>
+          <PageTitle mobile={isMobile} mode={theme}>
+            Daftar Jadwal
+          </PageTitle>
         </>
       )}
 
@@ -211,16 +216,19 @@ const ScheduleList = () => {
               alt="bauhaus-sm"
             />
           ) : (
-            <AssetBauhaus src={BauhausDesktop} alt="bauhaus-lg" />
+            <AssetBauhaus
+              src={theme === "light" ? BauhausDesktop : BauhausDarkDesktop}
+              alt="bauhaus-lg"
+            />
           )}
           <Box pt="90px" mb={{ base: 16, md: "160px" }}>
             <div
               style={{ textAlign: isMobile ? "center" : "left", width: "100%" }}
             >
-              <PageTitleNoSchedule mobile={isMobile}>
+              <PageTitleNoSchedule mobile={isMobile} mode={theme}>
                 Daftar Jadwal
               </PageTitleNoSchedule>
-              <PageInfo mobile={isMobile}>
+              <PageInfo mobile={isMobile} mode={theme}>
                 Anda belum pernah membuat jadwal. Mulai susun jadwal anda
                 sekarang!
               </PageInfo>
@@ -230,6 +238,8 @@ const ScheduleList = () => {
                   width={{ base: "137px", md: "194px" }}
                   ml={{ md: 12 }}
                   fontSize={{ base: "14px", md: "18px" }}
+                  bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+                  color={theme === "light" ? "white" : "dark.White"}
                 >
                   Buat Jadwal
                 </Button>
@@ -252,7 +262,7 @@ const PageTitle = styled.h1`
   font-size: ${({ mobile }) => (mobile ? "1.7rem" : "2rem")};
   text-align: center;
   font-weight: bold;
-  color: #5038bc;
+  color: ${({ mode }) => (mode === "light" ? "#5038bc" : "#917DEC")};
   @media (min-width: 900px) {
     text-align: left;
   }
@@ -261,20 +271,19 @@ const PageTitle = styled.h1`
 const PageTitleNoSchedule = styled.h1`
   font-size: ${({ mobile }) => (mobile ? "50px" : "64px")};
   font-weight: bold;
-  color: #5038bc;
+  color: ${({ mode }) => (mode === "light" ? "#5038bc" : "#917DEC")};
   margin: ${({ mobile }) => (mobile ? "2rem" : "32px 48px 16px 48px")};
 `;
 
 const PageInfo = styled.h2`
   font-size: ${({ mobile }) => (mobile ? "14px" : "18px")};
   margin: ${({ mobile }) => (mobile ? "2rem" : "32px 48px 48px 48px")};
-  color: #333333;
+  color: ${({ mode }) => (mode === "light" ? "#333333" : "#D0D0D0")};
 `;
 
 const CardContainer = styled.div`
   padding: ${(props) => (props.theme.mobile ? "1rem 3rem 0 3rem" : "0 48px")};
   width: 100%;
-  background-color: #ffffff;
 `;
 
 const AssetBauhaus = styled.img`
