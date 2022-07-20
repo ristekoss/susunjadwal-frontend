@@ -40,7 +40,7 @@ export function postAuthTicket(ticket, serviceUrl) {
 export function postRenameSchedule(userId, scheduleId, name) {
   return instance.post(
     `/users/${userId}/user_schedules/${scheduleId}/change_name`,
-    { name }
+    { name },
   );
 }
 
@@ -61,36 +61,38 @@ export const postBetaTesterData = async function (data) {
       headers: {
         Authorization: `Bearer ${process.env.REACT_APP_BETA_AIRTABLE_API_KEY}`,
       },
-    }
+    },
   );
 };
 
-export const postScrapeSchedule = async ({ username, password }) => (
-  await instance.post('/scrape-schedule', {
+export const postScrapeSchedule = async ({ username, password }) =>
+  await instance.post("/scrape-schedule", {
     username: username,
     password: password,
-  })
-);
+  });
 
-export const postSsoCompletionData = async ({ completionId, npm, kdOrg }) => (
-  await instance.post('/auth/completion/', {
+export const postSsoCompletionData = async ({ completionId, npm, kdOrg }) =>
+  await instance.post("/auth/completion/", {
     completion_id: completionId,
     npm: npm,
-    kd_org: kdOrg
-  })
-);
+    kd_org: kdOrg,
+  });
 
-export const getContributors = async () => (
-  await axios.get('https://api.github.com/repos/ristekoss/susunjadwal/contributors')
-)
+export const getContributorsFrontend = async () =>
+  await axios.get(
+    "https://api.github.com/repos/ristekoss/susunjadwal-frontend/contributors",
+  );
+export const getContributorsBackend = async () =>
+  await axios.get(
+    "https://api.github.com/repos/ristekoss/susunjadwal-backend/contributors",
+  );
 
-export const getAnnouncement = async () => (
+export const getAnnouncement = async () =>
   await axios.get(
     `https://api.airtable.com/v0/${process.env.REACT_APP_BETA_AIRTABLE_BASE_ID}/${process.env.REACT_APP_AIRTABLE_NOTIFICATION_CONFIG_TABLE_NAME}`,
     {
       headers: {
         Authorization: `Bearer ${process.env.REACT_APP_BETA_AIRTABLE_API_KEY}`,
       },
-    }
-  )
-);
+    },
+  );
