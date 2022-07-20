@@ -5,23 +5,53 @@ import { Link } from "react-router-dom";
 import Helmet from "react-helmet";
 
 import { ContributorCard } from "components/Cards";
-import { getContributors } from "services/api";
+import { getContributorsFrontend, getContributorsBackend } from "services/api";
 
 const Contributors = () => {
-  const [contributors, setContributors] = useState();
+  const [contributorsFE, setContributorsFE] = useState();
+  const [contributorsBE, setContributorsBE] = useState();
+
   const theme = useColorModeValue("light", "dark");
   const fetchContributors = useCallback(async () => {
     try {
-      const { data } = await getContributors();
-      setContributors(data);
+      const dataFE = await getContributorsFrontend();
+      const dataBE = await getContributorsBackend();
+      setContributorsFE(dataFE.data);
+      setContributorsBE(dataBE.data);
     } catch (error) {
-      alert("error");
+      alert(error);
     }
   }, []);
 
   useEffect(() => {
     fetchContributors();
   }, [fetchContributors]);
+
+  if (contributorsFE && contributorsBE) {
+    // if contributors from FE and BE fetched
+    // get unique username from FE
+    var usernames = new Set(contributorsFE?.map((c) => c.login));
+
+    // for each username in FE, if username in BE then add contributions on FE user
+    usernames.forEach((username) => {
+      if (
+        contributorsBE.some((contributorBE) => contributorBE.login === username)
+      ) {
+        const indexFE = contributorsFE.findIndex((fe) => fe.login === username);
+        const indexBE = contributorsBE.findIndex((be) => be.login === username);
+
+        contributorsFE[indexFE].contributions +=
+          contributorsBE[indexBE].contributions;
+      }
+    });
+
+    // merge contributor in FE and contributor BE(except username exist in FE)
+    // then sort from most contributions
+    var contributors = [
+      ...contributorsFE,
+      ...contributorsBE?.filter((d) => !usernames.has(d.login)),
+    ].sort((a, b) => (a.contributions > b.contributions ? -1 : 1));
+  }
 
   const contributionList = contributors?.map((user) => (
     <ContributorCard
