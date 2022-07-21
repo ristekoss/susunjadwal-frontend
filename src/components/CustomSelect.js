@@ -14,7 +14,7 @@ export const CustomSelect = ({
   <Flex mr={mr} ml={ml} mb="3" h="57px" flex="50%">
     <Text
       display="flex"
-      bg={mode === "light" ? "#E5E5E5" : "primary.LightBlack"}
+      bg={mode === "light" ? "#E5E5E5" : "#222222"}
       alignItems="center"
       justifyContent="center"
       maxW="158px"
@@ -37,6 +37,7 @@ export const CustomSelect = ({
       color={mode === "light" ? "#000000" : "#ffffff"}
       textTransform="capitalize"
       h="57px"
+      bg={mode === "light" ? "transparent" : "#222222"}
       borderRadius="8px"
       borderLeftRadius="0"
       borderWidth="2px"

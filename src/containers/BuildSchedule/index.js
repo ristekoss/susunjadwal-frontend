@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, useColorModeValue, Flex } from "@chakra-ui/react";
+import {
+  Button,
+  useColorModeValue,
+  Flex,
+  Input,
+  Image,
+} from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
@@ -19,6 +25,9 @@ import Detail from "./Detail";
 import FACULTIES from "utils/faculty-base.json";
 import { useForm } from "react-hook-form";
 import { CustomSelect } from "components/CustomSelect";
+import searchImg from "assets/Search.svg";
+import searchImgDark from "assets/Search-dark.svg";
+import arrowImg from "assets/Arrow.svg";
 
 function BuildSchedule() {
   const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
@@ -117,6 +126,50 @@ function BuildSchedule() {
                 )}`}</option>
               ))}
           </CustomSelect>
+        </Flex>
+
+        {/* SEARCH BAR */}
+        <Flex h="57px" mb="2rem">
+          <Flex position="relative" w="full">
+            <Flex
+              position="absolute"
+              alignItems="center"
+              justifyContent="center"
+              h="full"
+              pl="20px"
+              pointerEvents="none"
+            >
+              <Image
+                alt=""
+                src={theme === "light" ? searchImg : searchImgDark}
+              />
+            </Flex>
+            <Input
+              placeholder="Cari matkul"
+              color={theme === "light" ? "#000000" : "#ffffff"}
+              w="full"
+              h="full"
+              pl="58px"
+              pr="20px"
+              borderRadius="8px"
+              borderRightRadius="0"
+              borderColor={
+                theme === "light" ? "primary.Purple" : "primary.LightPurple"
+              }
+              bg="transparent"
+              _hover={{ bg: "transparent" }}
+            />
+            <Button
+              type="submit"
+              w="95px"
+              h="full"
+              borderLeftRadius="0"
+              bg={theme === "light" ? "primary.Purple" : "primary.LightPurple"}
+            >
+              Cari
+              <Image alt="" src={arrowImg} ml="9px" />
+            </Button>
+          </Flex>
         </Flex>
 
         {!isCoursesDetail && (
