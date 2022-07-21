@@ -125,7 +125,7 @@ function Header() {
           {isMobile && auth && (
             <>
               <WrapperHamburger open={isOpen} onClick={toggleMenu}>
-                <HamburgerIcon />
+                <HamburgerIcon mode={theme} />
               </WrapperHamburger>
               <SideBar pathname={pathname} onClose={onClose} isOpen={isOpen} />
             </>
