@@ -34,6 +34,9 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import alertImg from "assets/Alert2.svg";
 import linkImg from "assets/Link.svg";
 import copyImg from "assets/Copy.svg";
+import alertDarkImg from "assets/Alert-dark.svg";
+import linkDarkImg from "assets/Link-dark.svg";
+import copyDarkImg from "assets/Copy-dark.svg";
 import { copyImageToClipboard } from "copy-image-clipboard";
 
 const ScheduleList = () => {
@@ -119,12 +122,21 @@ const ScheduleList = () => {
           <ModalBody>Apakah kamu yakin ingin menghapus jadwal?</ModalBody>
 
           <ModalFooter>
-            <Button onClick={onClose} variant="outline">
+            <Button
+              onClick={onClose}
+              variant="outline"
+              borderColor={
+                theme === "light" ? "primary.Purple" : "dark.LightPurple"
+              }
+              color={theme === "light" ? "primary.Purple" : "dark.Purple"}
+            >
               Batal
             </Button>
             <Button
               onClick={() => confirmDeleteSchedule(selectedId)}
               variant="danger"
+              bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+              color={theme === "light" ? "white" : "dark.White"}
             >
               Hapus
             </Button>
@@ -154,19 +166,40 @@ const ScheduleList = () => {
                 >
                   <Button
                     variant="outline"
+                    borderColor={
+                      theme === "light" ? "primary.Purple" : "dark.LightPurple"
+                    }
+                    color={theme === "light" ? "primary.Purple" : "dark.Purple"}
                     mb={isMobile ? "8px !important" : "0"}
                   >
-                    <img src={linkImg} style={{ marginRight: "4px" }} alt="" />
+                    <img
+                      src={theme === "light" ? linkImg : linkDarkImg}
+                      style={{ marginRight: "4px" }}
+                      alt=""
+                    />
                     Copy Link
                   </Button>
                 </CopyToClipboard>
-                <Button variant="solid" onClick={copyImage}>
-                  <img src={copyImg} style={{ marginRight: "8px" }} alt="" />
+                <Button
+                  variant="solid"
+                  onClick={copyImage}
+                  bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+                  color={theme === "light" ? "white" : "dark.White"}
+                >
+                  <img
+                    src={theme === "light" ? copyImg : copyDarkImg}
+                    style={{ marginRight: "8px" }}
+                    alt=""
+                  />
                   Copy Image
                 </Button>
               </Flex>
               <Flex mt="1rem">
-                <img src={alertImg} style={{ height: "24px" }} alt="" />
+                <img
+                  src={theme === "light" ? alertImg : alertDarkImg}
+                  style={{ height: "24px" }}
+                  alt=""
+                />
                 <Text>
                   <b>Copy Image</b> akan menyalin gambar ke clipboard sementara{" "}
                   <b>Copy Link</b> akan menyalin link jadwal

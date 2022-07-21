@@ -30,7 +30,7 @@ export const WrapperHamburger = styled(Box).attrs({
 export const HamburgerIcon = styled(Box).attrs({
   width: 6,
   height: 1,
-  bg: "primary.Purple",
+  bg: ({ mode }) => (mode === "light" ? "primary.Purple" : "dark.Purple"),
   borderRadius: "10px",
 })`
   transition: all 0.5s ease-in-out;
@@ -41,7 +41,7 @@ export const HamburgerIcon = styled(Box).attrs({
     width: 1.25rem;
     height: 0.25rem;
     border-radius: 9999px;
-    background: #5038bc;
+    background: ${({ mode }) => (mode === "light" ? "#5038bc" : "#917DEC")};
     transition: all 0.5s ease-in-out;
   }
   &:before {

@@ -2,10 +2,12 @@ import React from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
 import { withRouter } from "react-router";
-import { Button, useColorModeValue } from "@chakra-ui/react";
+
 import { useSelector, useDispatch } from "react-redux";
 
 import {
+  Button,
+  useColorModeValue,
   Modal,
   ModalOverlay,
   ModalContent as ChakraModalContent,
@@ -139,7 +141,14 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
           <ModalBody>Apakah kamu yakin ingin menyimpan jadwal?</ModalBody>
 
           <ModalFooter>
-            <Button onClick={onClose} variant="outline">
+            <Button
+              onClick={onClose}
+              variant="outline"
+              borderColor={
+                theme === "light" ? "primary.Purple" : "dark.LightPurple"
+              }
+              color={theme === "light" ? "primary.Purple" : "dark.Purple"}
+            >
               Batal
             </Button>
             <Button
@@ -151,6 +160,8 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
                   : updateSchedule()
               }
               variant="solid"
+              bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+              color={theme === "light" ? "white" : "dark.White"}
             >
               Simpan
             </Button>
