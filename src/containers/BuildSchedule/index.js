@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, useColorModeValue } from "@chakra-ui/react";
+import { Button, useColorModeValue, Flex } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
@@ -15,6 +15,10 @@ import { BauhausSide } from "components/Bauhaus";
 import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
+
+import FACULTIES from "utils/faculty-base.json";
+import { useForm } from "react-hook-form";
+import { CustomSelect } from "components/CustomSelect";
 
 function BuildSchedule() {
   const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
@@ -53,6 +57,9 @@ function BuildSchedule() {
     fetchCourses(majorId);
   }, [auth.majorId, dispatch, fetchCourses]);
 
+  const { register, watch } = useForm();
+  const selectedFaculty = watch("fakultas");
+
   return (
     <Container>
       <BauhausSide />
@@ -75,6 +82,42 @@ function BuildSchedule() {
             </span>
           </h6>
         )}
+
+        <Flex flexDir={{ base: "column", lg: "row" }}>
+          <CustomSelect
+            name="fakultas"
+            label="Fakultas"
+            register={register}
+            mr={{ base: "0", lg: "7px" }}
+            mode={theme}
+          >
+            {Object.keys(FACULTIES).map((faculty) => (
+              <option key={faculty} value={faculty}>
+                {faculty.toLowerCase()}
+              </option>
+            ))}
+          </CustomSelect>
+
+          <CustomSelect
+            name="program_studi"
+            label="Program Studi"
+            register={register}
+            disabled={!selectedFaculty}
+            ml={{ base: "0", lg: "7px" }}
+            mode={theme}
+          >
+            {selectedFaculty &&
+              FACULTIES[selectedFaculty].map((prodi) => (
+                <option key={prodi.kd_org}>{`${prodi.study_program.replace(
+                  / *\([^)]*\) */g,
+                  "",
+                )}, ${prodi.educational_program.replace(
+                  / *\([^)]*\) */g,
+                  "",
+                )}`}</option>
+              ))}
+          </CustomSelect>
+        </Flex>
 
         {!isCoursesDetail && (
           <InfoContent mode={theme}>
