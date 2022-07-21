@@ -77,6 +77,10 @@ export const postSsoCompletionData = async ({ completionId, npm, kdOrg }) =>
     npm: npm,
     kd_org: kdOrg,
   });
+export const getContributorsOldSunjad = async () =>
+  await axios.get(
+    "https://api.github.com/repos/ristekoss/susunjadwal/contributors",
+  );
 
 export const getContributorsFrontend = async () =>
   await axios.get(

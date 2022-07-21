@@ -5,19 +5,26 @@ import { Link } from "react-router-dom";
 import Helmet from "react-helmet";
 
 import { ContributorCard } from "components/Cards";
-import { getContributorsFrontend, getContributorsBackend } from "services/api";
+import {
+  getContributorsFrontend,
+  getContributorsBackend,
+  getContributorsOldSunjad,
+} from "services/api";
 
 const Contributors = () => {
   const [contributorsFE, setContributorsFE] = useState();
   const [contributorsBE, setContributorsBE] = useState();
+  const [contributorsSunjad, setContributorsSunjad] = useState();
 
   const theme = useColorModeValue("light", "dark");
   const fetchContributors = useCallback(async () => {
     try {
       const dataFE = await getContributorsFrontend();
       const dataBE = await getContributorsBackend();
+      const dataOldSunjad = await getContributorsOldSunjad();
       setContributorsFE(dataFE.data);
       setContributorsBE(dataBE.data);
+      setContributorsSunjad(dataOldSunjad.data);
     } catch (error) {
       alert(error);
     }
@@ -27,33 +34,51 @@ const Contributors = () => {
     fetchContributors();
   }, [fetchContributors]);
 
-  if (contributorsFE && contributorsBE) {
-    // if contributors from FE and BE fetched
-    // get unique username from FE
-    var usernames = new Set(contributorsFE?.map((c) => c.login));
+  const MergeContributors = (contributors, otherContributors) => {
+    if (contributors && otherContributors) {
+      // if contributors from repoA and repoB fetched
+      // get unique username from repoA
+      var usernames = new Set(contributors?.map((c) => c.login));
 
-    // for each username in FE, if username in BE then add contributions on FE user
-    usernames.forEach((username) => {
-      if (
-        contributorsBE.some((contributorBE) => contributorBE.login === username)
-      ) {
-        const indexFE = contributorsFE.findIndex((fe) => fe.login === username);
-        const indexBE = contributorsBE.findIndex((be) => be.login === username);
+      // for each username in repoA, if username in repoB then add contributions on repoA user
+      usernames.forEach((username) => {
+        if (
+          otherContributors.some(
+            (contributor) => contributor.login === username,
+          )
+        ) {
+          const indexA = contributors.findIndex(
+            (contributor) => contributor.login === username,
+          );
+          const indexB = otherContributors.findIndex(
+            (contributor) => contributor.login === username,
+          );
 
-        contributorsFE[indexFE].contributions +=
-          contributorsBE[indexBE].contributions;
-      }
-    });
+          contributors[indexA].contributions +=
+            otherContributors[indexB].contributions;
+        }
+      });
 
-    // merge contributor in FE and contributor BE(except username exist in FE)
-    // then sort from most contributions
-    var contributors = [
-      ...contributorsFE,
-      ...contributorsBE?.filter((d) => !usernames.has(d.login)),
-    ].sort((a, b) => (a.contributions > b.contributions ? -1 : 1));
-  }
+      // merge contributors in repoA and contributor repoB(except username exist in repoA)
+      // then sort from most contributions
+      var contributorsMerged = [
+        ...contributors,
+        ...otherContributors?.filter((d) => !usernames.has(d.login)),
+      ].sort((a, b) => (a.contributions > b.contributions ? -1 : 1));
+      return contributorsMerged;
+    }
+  };
 
-  const contributionList = contributors?.map((user) => (
+  // merge Sunjad FE and Sunjad Be repo contributors
+  const mergedNewSunjad = MergeContributors(contributorsFE, contributorsBE);
+
+  // merge Sunjad FE&BE and inactive Sunjad repo
+  const mergedOldNewSunjad = MergeContributors(
+    mergedNewSunjad,
+    contributorsSunjad,
+  );
+
+  const contributionList = mergedOldNewSunjad?.map((user) => (
     <ContributorCard
       key={user.id}
       name={user.login}
