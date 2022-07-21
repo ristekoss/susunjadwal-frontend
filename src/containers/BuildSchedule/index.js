@@ -39,6 +39,10 @@ function BuildSchedule() {
   const [courses, setCourses] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isCoursesDetail, setCoursesDetail] = useState(null);
+  const [value, setValue] = useState("");
+
+  const [suggestions, setSuggestions] = useState([]);
+
   const theme = useColorModeValue("light", "dark");
 
   const fetchCourses = useCallback(
@@ -48,7 +52,9 @@ function BuildSchedule() {
       try {
         const { data } = await getCourses(majorId);
         setCourses(data.courses);
+
         setCoursesDetail(data.is_detail);
+
         setLastUpdated(new Date(data.last_update_at));
         dispatch(reduxSetCourses(data.courses));
       } catch (e) {
@@ -66,8 +72,40 @@ function BuildSchedule() {
     fetchCourses(majorId);
   }, [auth.majorId, dispatch, fetchCourses]);
 
+  // const handleChange = (e) => setValueTemporary(e.target.value);
+
   const { register, watch } = useForm();
   const selectedFaculty = watch("fakultas");
+
+  const filteredCourse = courses?.filter((c) => {
+    if (value === "") {
+      //if value is empty
+      return c;
+    } else if (c.name.toLowerCase().includes(value.toLowerCase())) {
+      //returns filtered array
+      return c;
+    } else {
+      return null;
+    }
+  });
+
+  const onChangeHandler = (value) => {
+    let matches = [];
+
+    matches = courses?.filter((c) => {
+      if (value === "") {
+        //if value is empty
+        return [];
+      } else if (c.name.toLowerCase().startsWith(value.toLowerCase())) {
+        //returns filtered array
+        return c;
+      } else {
+        return null;
+      }
+    });
+
+    setSuggestions(matches);
+  };
 
   return (
     <Container>
@@ -127,51 +165,66 @@ function BuildSchedule() {
               ))}
           </CustomSelect>
         </Flex>
+        <div style={{ position: "relative" }}>
+          <Flex h="57px" mb="2rem">
+            <Flex position="relative" w="full">
+              <Flex
+                position="absolute"
+                alignItems="center"
+                justifyContent="center"
+                h="full"
+                pl="20px"
+                pointerEvents="none"
+              >
+                <Image
+                  alt=""
+                  src={theme === "light" ? searchImg : searchImgDark}
+                />
+              </Flex>
 
-        {/* SEARCH BAR */}
-        <Flex h="57px" mb="2rem">
-          <Flex position="relative" w="full">
-            <Flex
-              position="absolute"
-              alignItems="center"
-              justifyContent="center"
-              h="full"
-              pl="20px"
-              pointerEvents="none"
-            >
-              <Image
-                alt=""
-                src={theme === "light" ? searchImg : searchImgDark}
+              <Input
+                // onBlur={handleChange}
+                id="input"
+                onBlur={(e) => onChangeHandler(e.target.value)}
+                placeholder="Cari matkul"
+                color={theme === "light" ? "#000000" : "#ffffff"}
+                w="full"
+                h="full"
+                pl="58px"
+                pr="20px"
+                borderRadius="8px"
+                borderRightRadius="0"
+                borderColor={
+                  theme === "light" ? "primary.Purple" : "primary.LightPurple"
+                }
+                bg="transparent"
+                _hover={{ bg: "transparent" }}
               />
+              <Button
+                type="submit"
+                w="95px"
+                h="full"
+                borderLeftRadius="0"
+                bg={
+                  theme === "light" ? "primary.Purple" : "primary.LightPurple"
+                }
+              >
+                Cari
+                <Image alt="" src={arrowImg} ml="9px" />
+              </Button>
             </Flex>
-            <Input
-              placeholder="Cari matkul"
-              color={theme === "light" ? "#000000" : "#ffffff"}
-              w="full"
-              h="full"
-              pl="58px"
-              pr="20px"
-              borderRadius="8px"
-              borderRightRadius="0"
-              borderColor={
-                theme === "light" ? "primary.Purple" : "primary.LightPurple"
-              }
-              bg="transparent"
-              _hover={{ bg: "transparent" }}
-            />
-            <Button
-              type="submit"
-              w="95px"
-              h="full"
-              borderLeftRadius="0"
-              bg={theme === "light" ? "primary.Purple" : "primary.LightPurple"}
-            >
-              Cari
-              <Image alt="" src={arrowImg} ml="9px" />
-            </Button>
           </Flex>
-        </Flex>
-
+          {suggestions.length > 0 ? (
+            <SuggestionsBox>
+              {suggestions &&
+                suggestions.map((suggestion, i) => (
+                  <SuggestionsBoxItem onClick={() => setValue(suggestion.name)}>
+                    {suggestion.name}
+                  </SuggestionsBoxItem>
+                ))}
+            </SuggestionsBox>
+          ) : null}
+        </div>
         {!isCoursesDetail && (
           <InfoContent mode={theme}>
             <p>
@@ -209,8 +262,8 @@ function BuildSchedule() {
           </InfoContent>
         )}
 
-        {courses &&
-          courses.map((course, idx) => (
+        {filteredCourse &&
+          filteredCourse.map((course, idx) => (
             <Course key={`${course.name}-${idx}`} course={course} />
           ))}
       </CoursePickerContainer>
@@ -241,6 +294,28 @@ function BuildSchedule() {
 }
 
 export default BuildSchedule;
+
+export const SuggestionsBox = styled.div`
+  position: absolute;
+  z-index: 50;
+  width: 100%;
+  height: auto;
+  background: #e5e5e5;
+  top: 58px;
+  border-radius: 8px;
+  border: 0.5px solid #333333;
+  padding-top: 10px;
+  padding-bottom: 10px;
+`;
+export const SuggestionsBoxItem = styled.div`
+  :hover {
+    background: #d4d4d4;
+  }
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 60px;
+  padding-right: 60px;
+`;
 
 export const Container = styled.div`
   display: flex;
