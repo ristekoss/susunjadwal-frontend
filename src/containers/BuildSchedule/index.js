@@ -8,6 +8,8 @@ import {
   Image,
   InputGroup,
   InputLeftElement,
+  Center,
+  Text,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -30,6 +32,8 @@ import { CustomSelect } from "components/CustomSelect";
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";
 import arrowImg from "assets/Arrow.svg";
+import notFoundImg from "assets/NotFound.svg";
+import notFoundDarkImg from "assets/NotFound-dark.svg";
 
 function BuildSchedule() {
   const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
@@ -272,8 +276,23 @@ function BuildSchedule() {
         )}
 
         {filteredCourse &&
-          filteredCourse.map((course, idx) => (
-            <Course key={`${course.name}-${idx}`} course={course} />
+          (filteredCourse?.length === 0 ? (
+            <Center flexDirection="column" mt="3.5rem">
+              <Image
+                alt=""
+                src={theme === "light" ? notFoundImg : notFoundDarkImg}
+              />
+              <Text
+                mt="20px"
+                color={theme === "light" ? "#33333399" : "#FFFFFF99"}
+              >
+                Mata kuliah yang dicari tidak ditemukan
+              </Text>
+            </Center>
+          ) : (
+            filteredCourse.map((course, idx) => (
+              <Course key={`${course.name}-${idx}`} course={course} />
+            ))
           ))}
       </CoursePickerContainer>
 
