@@ -30,7 +30,7 @@ export const WrapperHamburger = styled(Box).attrs({
 export const HamburgerIcon = styled(Box).attrs({
   width: 6,
   height: 1,
-  bg: "primary.Purple",
+  bg: ({ mode }) => (mode === "light" ? "primary.Purple" : "dark.Purple"),
   borderRadius: "10px",
 })`
   transition: all 0.5s ease-in-out;
@@ -41,7 +41,7 @@ export const HamburgerIcon = styled(Box).attrs({
     width: 1.25rem;
     height: 0.25rem;
     border-radius: 9999px;
-    background: #5038bc;
+    background: ${({ mode }) => (mode === "light" ? "#5038bc" : "#917DEC")};
     transition: all 0.5s ease-in-out;
   }
   &:before {
@@ -91,17 +91,32 @@ export const HeaderLink = styled(NavLink)`
   white-space: nowrap;
   color: ${(props) =>
     props.isCurrent
-      ? "var(--chakra-colors-primary-Purple)"
-      : "var(--chakra-colors-secondary-Gray)"};
+      ? ({ mode }) =>
+          mode === "light"
+            ? (props) => props.theme.color.primaryPurple
+            : (props) => props.theme.color.darkPurple
+      : ({ mode }) =>
+          mode === "light"
+            ? (props) => props.theme.color.secondaryGray
+            : (props) => props.theme.color.darkWhite}
 
   &:hover {
-    color: var(--chakra-colors-primary-Purple);
+    color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.primaryPurple
+        : (props) => props.theme.color.darkPurple};
   }
   &:focus {
     color: ${(props) =>
       props.isCurrent
-        ? "var(--chakra-colors-primary-Purple)"
-        : "var(--chakra-colors-secondary-Gray)"};
+        ? ({ mode }) =>
+            mode === "light"
+              ? (props) => props.theme.color.primaryPurple
+              : (props) => props.theme.color.darkPurple
+        : ({ mode }) =>
+            mode === "light"
+              ? (props) => props.theme.color.secondaryGray
+              : (props) => props.theme.color.darkWhite}
     outline: none;
   }
   @media only screen and (max-width: 900px) {

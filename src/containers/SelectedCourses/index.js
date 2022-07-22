@@ -2,10 +2,12 @@ import React from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
 import { withRouter } from "react-router";
-import { Button } from "@chakra-ui/react";
+
 import { useSelector, useDispatch } from "react-redux";
 
 import {
+  Button,
+  useColorModeValue,
   Modal,
   ModalOverlay,
   ModalContent as ChakraModalContent,
@@ -44,7 +46,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  const theme = useColorModeValue("light", "dark");
   const totalCredits = schedules.reduce((prev, { credit }) => prev + credit, 0);
 
   async function saveSchedule() {
@@ -109,7 +111,11 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     ));
 
     return (
-      <TableContentRow key={idx} inverted={isCurrentScheduleConflict}>
+      <TableContentRow
+        key={idx}
+        inverted={isCurrentScheduleConflict}
+        mode={theme}
+      >
         <div className="courseName">{labelName}</div>
         <div>
           <ul>{classesTimes}</ul>
@@ -140,11 +146,18 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     <>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={theme === "light" ? "white" : "dark.LightBlack"}>
           <ModalBody>Apakah kamu yakin ingin menyimpan jadwal?</ModalBody>
 
           <ModalFooter>
-            <Button onClick={onClose} variant="outline">
+            <Button
+              onClick={onClose}
+              variant="outline"
+              borderColor={
+                theme === "light" ? "primary.Purple" : "dark.LightPurple"
+              }
+              color={theme === "light" ? "primary.Purple" : "dark.Purple"}
+            >
               Batal
             </Button>
             <Button
@@ -156,6 +169,8 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
                   : updateSchedule()
               }
               variant="solid"
+              bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+              color={theme === "light" ? "white" : "dark.White"}
             >
               Simpan
             </Button>
@@ -163,10 +178,10 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         </ModalContent>
       </Modal>
 
-      <Container>
+      <Container mode={theme}>
         <h3>Kelas Pilihan</h3>
 
-        <TableHeader>
+        <TableHeader mode={theme}>
           <div>Kelas</div>
           <div>Waktu</div>
           <div>
@@ -178,7 +193,9 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
         <TableCreditSum>
           <div>
-            <span>Total SKS</span>
+            <span style={{ color: theme === "light" ? "#FFFFFF" : "#D0D0D0" }}>
+              Total SKS
+            </span>
           </div>
           <div>
             <span>{totalCredits}</span>
@@ -188,8 +205,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         {isConflict && (
           <MessageContainer>
             <p>
-              Ada jadwal yang bertabrakan. Perbaiki terlebih dahulu sebelum
-              menyimpan.{" "}
+              Ada jadwal yang bertabrakan. Perbaiki terlebih dahulu sebelum menyimpan.
             </p>
           </MessageContainer>
         )}
@@ -236,9 +252,11 @@ const ModalFooter = styled(ChakraModalFooter).attrs({
 const Container = styled.div`
   width: 100%;
   color: #333333;
-
   h3 {
-    color: ${(props) => props.theme.color.primaryPurple};
+    color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.primaryPurple
+        : (props) => props.theme.color.darkPurple};
     margin-bottom: 16px;
     text-align: center;
     font-weight: bold;
@@ -248,12 +266,19 @@ const Container = styled.div`
   > button {
     margin-top: 16px;
     width: 100%;
+    background-color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.primaryPurple
+        : (props) => props.theme.color.darkLightPurple};
+    color: ${({ mode }) =>
+      mode === "light" ? "#FFFFFF" : (props) => props.theme.color.darkWhite};
   }
 
   button:disabled,
   button[disabled] {
     background: #bdbdbd;
     opacity: 100%;
+    color: #ffffff;
   }
 
   button:disabled:hover,
@@ -269,7 +294,10 @@ const TableHeader = styled.div`
   border-bottom: 1px solid #bdbdbd;
   align-items: center;
   font-weight: 600;
-
+  color: ${({ mode }) =>
+    mode === "light"
+      ? (props) => props.theme.color.secondaryMineshaft
+      : (props) => props.theme.color.darkWhite};
   div {
     padding: 0.5rem 0;
     &:nth-child(1) {
@@ -289,19 +317,36 @@ const TableContentRow = styled.div`
   :nth-child(odd) {
     background: ${({ inverted }) =>
       inverted
-        ? "rgba(235, 87, 87, 0.2)"
-        : (props) => props.theme.color.primaryWhite};
+        ? ({ mode }) =>
+            mode === "light"
+              ? "rgba(235, 87, 87, 0.2)"
+              : (props) => props.theme.color.darkRed
+        : ({ mode }) =>
+            mode === "light"
+              ? (props) => props.theme.color.primaryWhite
+              : (props) => props.theme.color.darkBlack};
   }
-
   :nth-child(even) {
     background: ${({ inverted }) =>
-      inverted ? "rgba(235, 87, 87, 0.2)" : "#F5F5F5"};
+      inverted
+        ? ({ mode }) =>
+            mode === "light"
+              ? "rgba(235, 87, 87, 0.2)"
+              : (props) => props.theme.color.darkRed
+        : ({ mode }) =>
+            mode === "light"
+              ? "#F5F5F5"
+              : (props) => props.theme.color.darkBlack};
   }
 
   display: flex;
   min-height: 70px;
   font-size: 0.75rem;
 
+  color: ${({ mode }) =>
+    mode === "light"
+      ? (props) => props.theme.color.secondaryMineshaft
+      : (props) => props.theme.color.primaryWhite};
   div {
     padding: 0.5rem 0;
     display: flex;

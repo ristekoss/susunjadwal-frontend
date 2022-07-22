@@ -1,12 +1,14 @@
 import { TableIcon, CalendarIcon } from "@heroicons/react/solid";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import { useSelector, useDispatch } from "react-redux";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
 import ReactGA from "react-ga";
+import CopyToClipboard from "react-copy-to-clipboard";
+import * as htmlToImage from "html-to-image";
+import { copyImageToClipboard } from "copy-image-clipboard";
 
 import {
   Button,
@@ -16,6 +18,11 @@ import {
   ModalFooter as ChakraModalFooter,
   ModalBody,
   useDisclosure,
+  ModalCloseButton,
+  Text,
+  Flex,
+  Image,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
 import { getSchedule, postRenameSchedule, deleteSchedule } from "services/api";
@@ -25,16 +32,26 @@ import Schedule from "./Schedule";
 import ControlledInput from "./ControlledInput";
 import { decodeHtmlEntity } from "utils/string";
 
+import alertImg from "assets/Alert2.svg";
+import linkImg from "assets/Link.svg";
+import copyImg from "assets/Copy.svg";
+import alertDarkImg from "assets/Alert-dark.svg";
+import linkDarkImg from "assets/Link-dark.svg";
+import copyDarkImg from "assets/Copy-dark.svg";
+import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
 import { SuccessToast } from "components/Toast";
+import Icons from "components/Icons";
 
 import getFormattedSchedule from "utils/schedule";
 import ScheduleList from "./ScheduleList";
 
 function ViewSchedule({ match, history }) {
   const isMobile = useSelector((state) => state.appState.isMobile);
+  const theme = useColorModeValue("light", "dark");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const shareModal = useDisclosure();
   const auth = useSelector((state) => state.auth);
   const { scheduleId } = useParams();
   const dispatch = useDispatch();
@@ -42,6 +59,7 @@ function ViewSchedule({ match, history }) {
   const [schedule, setSchedule] = useState(null);
   const [createdAt, setCreatedAt] = useState(null);
   const [isDisplayTimetable, setIsDisplayTimetable] = useState(true);
+  const [imageURL, setImageURL] = useState(null);
 
   let formattedSchedule = {};
   let totalCredits = 0;
@@ -72,21 +90,18 @@ function ViewSchedule({ match, history }) {
 
   const scheduleName = schedule && schedule.name;
 
-  const showAlertCopy = () => {
+  const showAlertCopy = (type) => {
     ReactGA.event({
       category: "Bagikan Jadwal",
-      action: "Copied a schedule's URL"
+      action: "Copied a schedule's URL",
     });
-    SuccessToast(
-      "Link berhasil disalin!",
-      isMobile
-    );
+    SuccessToast(`${type} berhasil disalin!`, isMobile);
   };
 
   const performDeleteSchedule = async (userId, scheduleId) => {
     ReactGA.event({
       category: "Hapus Jadwal",
-      action: "Deleted a schedule"
+      action: "Deleted a schedule",
     });
     dispatch(setLoading(true));
     await makeAtLeastMs(deleteSchedule(userId, scheduleId), 1000);
@@ -97,15 +112,45 @@ function ViewSchedule({ match, history }) {
     performDeleteSchedule(auth.userId, scheduleId);
   };
 
+  const refs = useRef(null);
+
+  const downloadImage = async () => {
+    const dataUrl = await htmlToImage.toPng(refs.current);
+
+    const link = document.createElement("a");
+    link.download = scheduleName + ".png";
+    link.href = dataUrl;
+    link.click();
+  };
+
+  const openShareModal = async () => {
+    const dataUrl = await htmlToImage.toPng(refs.current);
+    setImageURL(dataUrl);
+    shareModal.onOpen();
+  };
+
+  const copyImage = () => {
+    copyImageToClipboard(imageURL)
+      .then(() => showAlertCopy("Gambar"))
+      .catch((e) => {});
+  };
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={theme === "light" ? "white" : "dark.LightBlack"}>
           <ModalBody>Apakah kamu yakin ingin menghapus jadwal?</ModalBody>
 
           <ModalFooter>
-            <Button onClick={onClose} variant="outline">
+            <Button
+              onClick={onClose}
+              variant="outline"
+              borderColor={
+                theme === "light" ? "primary.Purple" : "dark.LightPurple"
+              }
+              color={theme === "light" ? "primary.Purple" : "dark.Purple"}
+            >
               Batal
             </Button>
             <Button
@@ -114,6 +159,72 @@ function ViewSchedule({ match, history }) {
             >
               Hapus
             </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={shareModal.isOpen} onClose={shareModal.onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent bg={theme === "light" ? "white" : "dark.LightBlack"}>
+          <ModalCloseButton />
+          <ModalBody>
+            <Flex flexDirection="column">
+              <Text mb="8px">
+                Bagikan Jadwal <b>{scheduleName}</b>
+              </Text>
+              <Image alt="" src={imageURL} maxH="30vh" objectFit="contain" />
+            </Flex>
+          </ModalBody>
+
+          <ModalFooter>
+            <Flex flexDirection="column">
+              <Flex flexDirection={isMobile ? "column" : "row"}>
+                <CopyToClipboard
+                  text={`${window.location.href}/${scheduleId}`}
+                  onCopy={() => showAlertCopy("Link")}
+                >
+                  <Button
+                    variant="outline"
+                    mb={isMobile ? "8px !important" : "0"}
+                    borderColor={
+                      theme === "light" ? "primary.Purple" : "dark.LightPurple"
+                    }
+                    color={theme === "light" ? "primary.Purple" : "dark.Purple"}
+                  >
+                    <img
+                      src={theme === "light" ? linkImg : linkDarkImg}
+                      style={{ marginRight: "4px" }}
+                      alt=""
+                    />
+                    Copy Link
+                  </Button>
+                </CopyToClipboard>
+                <Button
+                  variant="solid"
+                  onClick={copyImage}
+                  bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+                  color={theme === "light" ? "white" : "dark.White"}
+                >
+                  <img
+                    src={theme === "light" ? copyImg : copyDarkImg}
+                    style={{ marginRight: "8px" }}
+                    alt=""
+                  />
+                  Copy Image
+                </Button>
+              </Flex>
+              <Flex mt="1rem">
+                <img
+                  src={theme === "light" ? alertImg : alertDarkImg}
+                  style={{ height: "24px" }}
+                  alt=""
+                />
+                <Text>
+                  <b>Copy Image</b> akan menyalin gambar ke clipboard sementara{" "}
+                  <b>Copy Link</b> akan menyalin link jadwal
+                </Text>
+              </Flex>
+            </Flex>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -130,6 +241,7 @@ function ViewSchedule({ match, history }) {
               {schedule.has_edit_access ? (
                 <ScheduleNameEditable>
                   <ControlledInput
+                    style={{ color: theme === "light" ? "aqua" : "orange" }}
                     name={decodeHtmlEntity(schedule.name)}
                     slug={match.params.scheduleId}
                     rename={onRename}
@@ -140,35 +252,53 @@ function ViewSchedule({ match, history }) {
                       "/" +
                       (createdAt?.getMonth() + 1) +
                       "/" +
-                      createdAt?.getFullYear()} • {totalCredits} SKS
+                      createdAt?.getFullYear()}{" "}
+                    • {totalCredits} SKS
                   </p>
                 </ScheduleNameEditable>
               ) : (
-                <ScheduleName>{decodeHtmlEntity(schedule.name)}</ScheduleName>
+                <ScheduleName mode={theme}>
+                  {decodeHtmlEntity(schedule.name)}
+                </ScheduleName>
               )}
 
               <IconContainer isAuthenticated={Boolean(auth)}>
-                <CopyToClipboard
-                  text={`${window.location.href}/${schedule.id}`}
-                  onCopy={showAlertCopy}
-                >
-                  <ImageButton>
-                    <img src={clipboardImg} alt="copy" />
-                  </ImageButton>
-                </CopyToClipboard>
-                <ImageButton onClick={onOpen}>
-                  <img src={deleteImg} alt="delete" />
-                </ImageButton>
+                <Icons
+                  Items={[
+                    {
+                      desc: "Download Jadwal",
+                      icon: downloadImg,
+                      alt: "download",
+                      action: downloadImage,
+                    },
+                    {
+                      desc: "Share Jadwal",
+                      icon: clipboardImg,
+                      alt: "copy",
+                      action: openShareModal,
+                    },
+                    {
+                      desc: "Delete Jadwal",
+                      icon: deleteImg,
+                      alt: "delete",
+                      action: onOpen,
+                    },
+                  ]}
+                />
               </IconContainer>
             </HeaderContainer>
 
             <ButtonContainer isAuthenticated={Boolean(auth)}>
               <Link to={`/edit/${scheduleId}`}>
                 <Button
-                  mr={{ base: '0rem', lg: '1rem' }}
+                  mr={{ base: "0rem", lg: "1rem" }}
                   intent="primary"
                   variant="outline"
                   onClick={() => null}
+                  borderColor={
+                    theme === "light" ? "primary.Purple" : "dark.LightPurple"
+                  }
+                  color={theme === "light" ? "primary.Purple" : "dark.Purple"}
                 >
                   {schedule.has_edit_access ? "Edit" : "Copy"}
                 </Button>
@@ -178,12 +308,14 @@ function ViewSchedule({ match, history }) {
                 <ViewListContainer
                   isActive={!isDisplayTimetable}
                   onClick={() => setIsDisplayTimetable(false)}
+                  mode={theme}
                 >
                   <TableIcon width={20} />
                 </ViewListContainer>
                 <ViewCalendarContainer
                   isActive={isDisplayTimetable}
                   onClick={() => setIsDisplayTimetable(true)}
+                  mode={theme}
                 >
                   <CalendarIcon width={20} />
                 </ViewCalendarContainer>
@@ -192,23 +324,25 @@ function ViewSchedule({ match, history }) {
           </Container>
         )}
 
-        {isDisplayTimetable ? (
-          <Schedule
-            width="100%"
-            pxPerMinute={isMobile ? 0.7 : 0.9}
-            schedule={schedule}
-            startHour={7}
-            endHour={21}
-            showHeader
-            showLabel
-            showRoom
-          />
-        ) : (
-          <ScheduleList
-            formattedSchedule={formattedSchedule}
-            totalCredits={totalCredits}
-          />
-        )}
+        <div ref={refs}>
+          {isDisplayTimetable ? (
+            <Schedule
+              width="100%"
+              pxPerMinute={isMobile ? 0.7 : 0.9}
+              schedule={schedule}
+              startHour={7}
+              endHour={21}
+              showHeader
+              showLabel
+              showRoom
+            />
+          ) : (
+            <ScheduleList
+              formattedSchedule={formattedSchedule}
+              totalCredits={totalCredits}
+            />
+          )}
+        </div>
       </MainContainer>
     </>
   );
@@ -270,11 +404,10 @@ const HeaderContainer = styled.div`
 const IconContainer = styled.div`
   display: flex;
   flex-direction: row;
+  margin-right: 1rem;
 
-  ${props => props.isAuthenticated
-    ? 'visibility: visible;'
-    : 'visibility: hidden;'
-  }
+  ${(props) =>
+    props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
 `;
 
 const ButtonContainer = styled.div`
@@ -284,10 +417,8 @@ const ButtonContainer = styled.div`
   display: flex;
 
   a {
-    ${props => props.isAuthenticated
-      ? 'visibility: visible;'
-      : 'visibility: hidden;'
-    }
+    ${(props) =>
+      props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
   }
 
   @media (min-width: 900px) {
@@ -311,14 +442,10 @@ const ScheduleNameEditable = styled.div`
 
 const ScheduleName = styled.div`
   font-size: 32px;
-  color: ${props => props.theme.color.secondaryMineShaft};
-`;
-
-const ImageButton = styled.div`
-  justify-content: center;
-  margin-right: 1rem;
-  cursor: pointer;
-  display: flex;
+  color: ${(props) =>
+    props.mode === "light"
+      ? props.theme.color.secondaryMineShaft
+      : props.theme.color.darkWhite};
 `;
 
 const ViewToggleContainer = styled.div`
@@ -332,7 +459,9 @@ const ViewListContainer = styled.div`
   background-color: ${(props) =>
     props.isActive
       ? props.theme.color.primaryPurple
-      : props.theme.color.primaryWhite};
+      : props.mode === "light"
+      ? props.theme.color.primaryWhite
+      : props.theme.color.darkBlack};
   padding: 10px 1rem;
   border-top-left-radius: 1em;
   border-bottom-left-radius: 1em;
@@ -343,8 +472,7 @@ const ViewListContainer = styled.div`
     color: ${(props) =>
       props.isActive
         ? props.theme.color.primaryWhite
-        : props.theme.color.primaryPurple
-    };
+        : props.theme.color.primaryPurple};
   }
 `;
 
@@ -352,7 +480,9 @@ const ViewCalendarContainer = styled.div`
   background-color: ${(props) =>
     props.isActive
       ? props.theme.color.primaryPurple
-      : props.theme.color.primaryWhite};
+      : props.mode === "light"
+      ? props.theme.color.primaryWhite
+      : props.theme.color.darkBlack};
   padding: 10px 1rem;
   border-top-right-radius: 1em;
   border-bottom-right-radius: 1em;
@@ -364,8 +494,7 @@ const ViewCalendarContainer = styled.div`
     color: ${(props) =>
       props.isActive
         ? props.theme.color.primaryWhite
-        : props.theme.color.primaryPurple
-    };
+        : props.theme.color.primaryPurple};
   }
 `;
 

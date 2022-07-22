@@ -1,9 +1,4 @@
-
-
 export const ListIcon = [
-  {
-    url: "https://www.facebook.com/RistekCSUI",
-  },
   {
     url: "https://www.instagram.com/ristek.csui/",
   },

@@ -1,21 +1,32 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Text, Box, Button, Flex } from "@chakra-ui/react";
+import { Text, Box, Button, Flex, useColorModeValue } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import Helmet from "react-helmet";
 
 import { ContributorCard } from "components/Cards";
-import { getContributors } from "services/api";
+import {
+  getContributorsFrontend,
+  getContributorsBackend,
+  getContributorsOldSunjad,
+} from "services/api";
 
 const Contributors = () => {
-  const [contributors, setContributors] = useState();
+  const [contributorsFE, setContributorsFE] = useState();
+  const [contributorsBE, setContributorsBE] = useState();
+  const [contributorsSunjad, setContributorsSunjad] = useState();
 
+  const theme = useColorModeValue("light", "dark");
   const fetchContributors = useCallback(async () => {
     try {
-      const { data } = await getContributors();
-      setContributors(data);
+      const dataFE = await getContributorsFrontend();
+      const dataBE = await getContributorsBackend();
+      const dataOldSunjad = await getContributorsOldSunjad();
+      setContributorsFE(dataFE.data);
+      setContributorsBE(dataBE.data);
+      setContributorsSunjad(dataOldSunjad.data);
     } catch (error) {
-      alert("error");
+      alert(error);
     }
   }, []);
 
@@ -23,7 +34,51 @@ const Contributors = () => {
     fetchContributors();
   }, [fetchContributors]);
 
-  const contributionList = contributors?.map((user) => (
+  const MergeContributors = (contributors, otherContributors) => {
+    if (contributors && otherContributors) {
+      // if contributors from repoA and repoB fetched
+      // get unique username from repoA
+      var usernames = new Set(contributors?.map((c) => c.login));
+
+      // for each username in repoA, if username in repoB then add contributions on repoA user
+      usernames.forEach((username) => {
+        if (
+          otherContributors.some(
+            (contributor) => contributor.login === username,
+          )
+        ) {
+          const indexA = contributors.findIndex(
+            (contributor) => contributor.login === username,
+          );
+          const indexB = otherContributors.findIndex(
+            (contributor) => contributor.login === username,
+          );
+
+          contributors[indexA].contributions +=
+            otherContributors[indexB].contributions;
+        }
+      });
+
+      // merge contributors in repoA and contributor repoB(except username exist in repoA)
+      // then sort from most contributions
+      var contributorsMerged = [
+        ...contributors,
+        ...otherContributors?.filter((d) => !usernames.has(d.login)),
+      ].sort((a, b) => (a.contributions > b.contributions ? -1 : 1));
+      return contributorsMerged;
+    }
+  };
+
+  // merge Sunjad FE and Sunjad Be repo contributors
+  const mergedNewSunjad = MergeContributors(contributorsFE, contributorsBE);
+
+  // merge Sunjad FE&BE and inactive Sunjad repo
+  const mergedOldNewSunjad = MergeContributors(
+    mergedNewSunjad,
+    contributorsSunjad,
+  );
+
+  const contributionList = mergedOldNewSunjad?.map((user) => (
     <ContributorCard
       key={user.id}
       name={user.login}
@@ -34,20 +89,31 @@ const Contributors = () => {
   ));
 
   return (
-    <Box mt={{ base: 'calc(-5rem)', lg: '-4rem' }}>
+    <Box mt={{ base: "calc(-5rem)", lg: "-4rem" }}>
       <Helmet title="Kontributor SusunJadwal" />
 
       <Link to="/">
-        <Text fontSize={{base: 'sm', md:"lg"}} color="primary.Purple" ml="-9px">
+        <Text
+          fontSize={{ base: "sm", md: "lg" }}
+          color={theme === "light" ? "primary.Purple" : "dark.Purple"}
+          ml="-9px"
+        >
           <ChevronLeftIcon w={8} h={8} />
           Kembali ke Halaman Utama
         </Text>
       </Link>
 
-      <Box textAlign="center" mt={{ base: '1rem', lg: '2rem' }}>
-        <Text fontWeight="bold" fontSize={{base: 'x-large', md:"xx-large"}} color="primary.Purple">
+      <Box textAlign="center" mt={{ base: "1rem", lg: "2rem" }}>
+        <Text
+          fontWeight="bold"
+          fontSize={{ base: "x-large", md: "xx-large" }}
+          color={theme === "light" ? "primary.Purple" : "dark.Purple"}
+        >
           Kontributor{" "}
-          <Box as="span" color="secondary.MineShaft">
+          <Box
+            as="span"
+            color={theme === "light" ? "secondary.MineShaft" : "dark.White"}
+          >
             Susun
           </Box>
           Jadwal
@@ -56,13 +122,20 @@ const Contributors = () => {
           mt="1.5rem"
           fontSize={{ base: "xs", md: "md" }}
           px={{ md: "8rem" }}
+          color={theme === "light" ? "black" : "dark.White"}
         >
           Kami menyambut segala bentuk kontribusi, besar maupun kecil, untuk
           membantu menciptakan teknologi yang memberi dampak positif bagi
           kehidupan mahasiswa Universitas Indonesia.
         </Text>
 
-        <Button m="2rem auto 3rem">Gabung Discord SusunJadwal</Button>
+        <Button
+          m="2rem auto 3rem"
+          bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+          color={theme === "light" ? "white" : "dark.White"}
+        >
+          Gabung Discord SusunJadwal
+        </Button>
       </Box>
 
       <Flex

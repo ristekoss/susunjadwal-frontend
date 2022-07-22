@@ -1,5 +1,3 @@
-
-
 const Button = {
   baseStyle: {
     fontWeight: "600",
@@ -10,13 +8,13 @@ const Button = {
   sizes: {
     sm: {
       fontSize: "sm",
-      px: '26px', // <-- px is short for paddingLeft and paddingRight
-      py: '12px', // <-- py is short for paddingTop and paddingBottom
+      px: "26px", // <-- px is short for paddingLeft and paddingRight
+      py: "12px", // <-- py is short for paddingTop and paddingBottom
     },
     md: {
       fontSize: "md",
-      px: '40px', // <-- these values are tokens from the design system
-      py: '16px', // <-- these values are tokens from the design system
+      px: "40px", // <-- these values are tokens from the design system
+      py: "16px", // <-- these values are tokens from the design system
     },
   },
   // Two variants: outline and solid
@@ -66,4 +64,4 @@ const Button = {
   },
 };
 
-export default Button
+export default Button;

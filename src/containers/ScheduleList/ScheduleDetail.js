@@ -1,28 +1,25 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { CalendarIcon, ViewListIcon } from "@heroicons/react/solid";
 import { decodeHtmlEntity } from "utils/string";
-import getFormattedSchedule from "utils/schedule";
-import EditIcon from "assets/EditSchedule/EditIcon";
 import clipboardImg from "assets/Clipboard.svg";
 import deleteImg from "assets/Delete.svg";
-import ScheduleList from "containers/ViewSchedule/ScheduleList";
 import Schedule from "containers/ViewSchedule/Schedule";
-import Dropdown from "components/Dropdown";
+import Icons from "components/Icons";
+import downloadImg from "assets/Download.svg";
+import { Button, useColorModeValue } from "@chakra-ui/react";
+import * as htmlToImage from "html-to-image";
+
 const ScheduleDetail = ({
   schedule,
   idx,
   showModal,
-  alertCopy,
   editSchedule,
+  showShareModal,
 }) => {
   const isMobile = useSelector((state) => state.appState.isMobile);
-  const [isDisplayTimetable, setIsDisplayTimetable] = useState(true);
-
-  const [formattedSchedule, totalCredits] = getFormattedSchedule(schedule);
-
+  const theme = useColorModeValue("light", "dark");
   const convertDate = (date) => {
     const dateNew = new Date(date);
     return `${dateNew.getDate()}/${
@@ -30,66 +27,99 @@ const ScheduleDetail = ({
     }/${dateNew.getFullYear()}`;
   };
 
+  const refs = useRef(null);
+
+  const downloadImage = async (name) => {
+    const dataUrl = await htmlToImage.toPng(refs.current);
+
+    const link = document.createElement("a");
+    link.download = name + ".png";
+    link.href = dataUrl;
+    link.click();
+  };
+
+  const openShareModal = async (id, name) => {
+    const dataUrl = await htmlToImage.toPng(refs.current);
+    showShareModal(id, name, dataUrl);
+  };
+
   return (
     <>
-      <Card key={`${schedule.name}-${idx}`}>
-        <div className="headerInfo">
-          <div>
-            <div style={{ display: "flex", gap: "13px", alignItems: "center" }}>
-              <Link to={`/jadwal/${schedule.id}`}>
+      <Link to={`/jadwal/${schedule.id}`}>
+        <Card key={`${schedule.name}-${idx}`} mode={theme}>
+          <div className="headerInfo">
+            <div>
+              <div
+                style={{ display: "flex", gap: "13px", alignItems: "center" }}
+              >
                 <h2>
                   {schedule.name ? decodeHtmlEntity(schedule.name) : "Untitled"}
                 </h2>
-              </Link>
-              <Dropdown
-                DropdownWidth="200px"
-                DropdownItems={[
-                  {
-                    text: "Bagikan Jadwal",
-                    icon: <ImageButton src={clipboardImg} />,
-                    action: alertCopy,
-                    copy: true,
-                    scheduleId: schedule.id,
-                  },
-
-                  {
-                    text: "Edit Jadwal",
-                    icon: <EditIcon style={{ marginRight: "6px" }} />,
-                    action: () => editSchedule(schedule.id),
-                  },
-                  {
-                    text: "Delete Jadwal",
-                    icon: <ImageButton src={deleteImg} />,
-                    action: () => showModal(schedule.id),
-                  },
-                ]}
-              ></Dropdown>
+              </div>
+              <h4>Dibuat pada {convertDate(schedule.created_at)}</h4>
             </div>
-            <h4>
-              Dibuat pada {convertDate(schedule.created_at)} • {totalCredits}{" "}
-              SKS
-            </h4>
+
+            <Link to={null} style={{ display: "flex" }}>
+              <CardActionContainer>
+                <IconContainer>
+                  <Icons
+                    Items={[
+                      {
+                        desc: "Download Jadwal",
+                        icon: downloadImg,
+                        alt: "download",
+                        action: () =>
+                          downloadImage(
+                            schedule.name != null ? schedule.name : "Untitled",
+                          ),
+                      },
+                      {
+                        desc: "Share Jadwal",
+                        icon: clipboardImg,
+                        alt: "copy",
+                        action: () =>
+                          openShareModal(schedule.id, schedule.name),
+                      },
+                      {
+                        desc: "Delete Jadwal",
+                        icon: deleteImg,
+                        alt: "delete",
+                        action: () => showModal(schedule.id),
+                      },
+                    ]}
+                  />
+                </IconContainer>
+
+                <Button
+                  mx="1rem"
+                  intent="primary"
+                  variant="outline"
+                  onClick={() => editSchedule(schedule.id)}
+                  display={isMobile ? "none" : "flex"}
+                  borderColor={
+                    theme === "light" ? "primary.Purple" : "dark.LightPurple"
+                  }
+                  color={theme === "light" ? "primary.Purple" : "dark.Purple"}
+                >
+                  Edit Jadwal
+                </Button>
+              </CardActionContainer>
+            </Link>
           </div>
-
-          <CardActionContainer>
-            <ViewToggleContainer>
-              <ViewListContainer
-                isActive={!isDisplayTimetable}
-                onClick={() => setIsDisplayTimetable(false)}
-              >
-                <ViewListIcon width={20} />
-              </ViewListContainer>
-
-              <ViewCalendarContainer
-                isActive={isDisplayTimetable}
-                onClick={() => setIsDisplayTimetable(true)}
-              >
-                <CalendarIcon width={20} />
-              </ViewCalendarContainer>
-            </ViewToggleContainer>
-          </CardActionContainer>
-        </div>
-        {isDisplayTimetable ? (
+          <div style={{ overflow: "hidden", height: "0" }}>
+            <div ref={refs}>
+              <Schedule
+                startHour={7}
+                endHour={21}
+                schedule={schedule}
+                pxPerMinute={isMobile ? 0.7 : 0.9}
+                width="100%"
+                showRoom
+                showHeader
+                showLabel
+              />
+            </div>
+          </div>
           <Schedule
             startHour={7}
             endHour={21}
@@ -98,26 +128,28 @@ const ScheduleDetail = ({
             width="100%"
             showRoom
           />
-        ) : (
-          <ScheduleList
-            formattedSchedule={formattedSchedule}
-            totalCredits={totalCredits}
-          />
-        )}
-      </Card>
+        </Card>
+      </Link>
     </>
   );
 };
 const Card = styled.div`
-  border: 0.05px solid #e5e5e5;
+  border: 0.05px solid ${({ mode }) =>
+    mode === "light" ? "#e5e5e5" : "#363636"};
   border-radius: 8px;
   h2 {
-    color: #333333;
+    color:  ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.secondaryMineShaft
+        : (props) => props.theme.color.darkWhite}
     font-weight: bold;
     font-size: 18px;
   }
   h4 {
-    color: #333333;
+    color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.secondaryMineShaft
+        : (props) => props.theme.color.darkWhite}
     font-size: 12px;
   }
   .headerInfo {
@@ -125,7 +157,8 @@ const Card = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    background-color: #f5f5f5;
+    background-color: ${({ mode }) =>
+      mode === "light" ? "#f5f5f5" : "#333333"}
     border-radius: 8px 8px 0 0;
   }
 
@@ -151,62 +184,9 @@ const CardActionContainer = styled.div`
   }
 `;
 
-const ImageButton = styled.button`
-  background: url(${({ src }) => src}) no-repeat;
-  cursor: pointer;
-  height: 24px;
-  width: 24px;
-  border: none;
-  & + & {
-    margin-left: 8px;
-  }
-`;
-
-const ViewToggleContainer = styled.div`
+const IconContainer = styled.div`
   display: flex;
-  margin-left: 5%;
   flex-direction: row;
-  cursor: pointer;
-  border-radius: 1em;
-`;
-
-const ViewListContainer = styled.div`
-  background-color: ${(props) =>
-    props.isActive
-      ? props.theme.color.primaryPurple
-      : props.theme.color.primaryWhite};
-  padding: 10px 1rem;
-  border-top-left-radius: 1em;
-  border-bottom-left-radius: 1em;
-  border-left: 1px solid ${(props) => props.theme.color.primaryPurple};
-  border-top: 2px solid ${(props) => props.theme.color.primaryPurple};
-  border-bottom: 2px solid ${(props) => props.theme.color.primaryPurple};
-  svg {
-    color: ${(props) =>
-      props.isActive
-        ? props.theme.color.primaryWhite
-        : props.theme.color.primaryPurple};
-  }
-`;
-
-const ViewCalendarContainer = styled.div`
-  background-color: ${(props) =>
-    props.isActive
-      ? props.theme.color.primaryPurple
-      : props.theme.color.primaryWhite};
-  padding: 10px 1rem;
-  border-top-right-radius: 1em;
-  border-bottom-right-radius: 1em;
-  border-right: 1px solid ${(props) => props.theme.color.primaryPurple};
-  border-top: 2px solid ${(props) => props.theme.color.primaryPurple};
-  border-bottom: 2px solid ${(props) => props.theme.color.primaryPurple};
-
-  svg {
-    color: ${(props) =>
-      props.isActive
-        ? props.theme.color.primaryWhite
-        : props.theme.color.primaryPurple};
-  }
 `;
 
 export default ScheduleDetail;

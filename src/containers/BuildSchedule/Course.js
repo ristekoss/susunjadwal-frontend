@@ -1,23 +1,22 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-
+import { useColorModeValue } from "@chakra-ui/react";
 import CourseClass from "./CourseClass";
 function Course({ course }) {
-  const isMobile = useSelector(state => state.appState.isMobile);
-
+  const isMobile = useSelector((state) => state.appState.isMobile);
+  const theme = useColorModeValue("light", "dark");
   return (
     <div>
-      <CourseTitle>
+      <CourseTitle mode={theme}>
         {course.name}
         <span>
-          {" "}
           ({course.credit}&nbsp;SKS,&nbsp;Term&nbsp;{course.term})
         </span>
       </CourseTitle>
       <CourseContainer>
         {!isMobile && (
-          <Header>
+          <Header mode={theme}>
             <div>Pilih</div>
             <div>Nama Kelas</div>
             <div>Waktu</div>
@@ -25,7 +24,7 @@ function Course({ course }) {
             <div>Pengajar</div>
           </Header>
         )}
-        {course.classes.map(currentClass => (
+        {course.classes.map((currentClass) => (
           <CourseClass
             key={currentClass.name}
             course={course}
@@ -38,15 +37,18 @@ function Course({ course }) {
 }
 
 const CourseContainer = styled.div`
-  border: 1px solid ${props => props.theme.color.primaryMineShaft};
+  border: 1px solid ${(props) => props.theme.color.primaryMineShaft};
   box-sizing: border-box;
   margin-bottom: 24px;
   border-radius: 4px;
 `;
 
 const Header = styled.div`
-  background-color: ${props => props.theme.color.primaryPurple};
-  color: ${props => props.theme.color.primaryWhite};
+  background-color : ${({ mode }) =>
+    mode === "light"
+      ? (props) => props.theme.color.primaryPurple
+      : (props) => props.theme.color.darkLightPurple}
+  color: ${(props) => props.theme.color.primaryWhite};
   font-weight: 600;
   display: flex;
 
@@ -74,7 +76,10 @@ const Header = styled.div`
 `;
 
 const CourseTitle = styled.h2`
-  color: ${props => props.theme.color.primaryMineShaft};
+color: ${({ mode }) =>
+  mode === "light"
+    ? (props) => props.theme.color.primaryMineShaft
+    : (props) => props.theme.color.darkWhite}
   margin-bottom: 8px;
   font-weight: bold;
   font-size: 18px;
@@ -83,7 +88,10 @@ const CourseTitle = styled.h2`
   display: flex;
 
   span {
-    color: ${props => props.theme.color.primaryMineShaft};
+    ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.primaryMineShaft
+        : (props) => props.theme.color.darkWhite}
     font-weight: 600;
     margin-left: 7.5px;
     display: inline;
@@ -92,7 +100,7 @@ const CourseTitle = styled.h2`
 
   @media (min-width: 900px) {
     margin-bottom: 12px;
-    font-size: 24px ;
+    font-size: 24px;
 
     span {
       font-size: 18px;

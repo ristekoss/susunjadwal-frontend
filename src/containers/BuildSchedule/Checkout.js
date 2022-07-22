@@ -1,28 +1,29 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { useColorModeValue } from "@chakra-ui/react";
 import { isScheduleConflict } from "containers/SelectedCourses/utils";
 
 function Checkout({ onClickDetail }) {
-  const schedules = useSelector(state => state.schedules);
-  const isMobile = useSelector(state => state.appState.isMobile);
-
+  const schedules = useSelector((state) => state.schedules);
+  const isMobile = useSelector((state) => state.appState.isMobile);
+  const theme = useColorModeValue("light", "dark");
   const totalCredits = schedules.reduce((prev, { credit }) => prev + credit, 0);
 
   if (!isMobile || schedules.length === 0) {
     return null;
-  };
+  }
 
-  const conflict = schedules.find(schedule =>
-    isScheduleConflict(schedules, schedule)
+  const conflict = schedules.find((schedule) =>
+    isScheduleConflict(schedules, schedule),
   );
 
   function goToDetail() {
     onClickDetail(conflict);
-  };
+  }
 
   return (
-    <CheckoutContainer conflict={conflict} onClick={goToDetail}>
+    <CheckoutContainer conflict={conflict} onClick={goToDetail} mode={theme}>
       <div>
         <h2>
           {schedules.length} Mata Kuliah | {totalCredits} SKS
@@ -41,13 +42,15 @@ function Checkout({ onClickDetail }) {
 }
 
 const CheckoutContainer = styled.div`
-  color: ${props => props.theme.color.primaryWhite};
+  color: ${(props) => props.theme.color.primaryWhite};
 
-  background: ${props => (
+  background: ${(props) =>
     props.conflict
-      ? props => props.theme.color.stateError
-      : props => props.theme.color.primaryPurple
-  )};
+      ? (props) => props.theme.color.stateError
+      : (props) =>
+          props.mode === "light"
+            ? props.theme.color.primaryPurple
+            : props.theme.color.darkLightPurple};
 
   justify-content: space-between;
   position: fixed;

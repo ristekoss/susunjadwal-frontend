@@ -2,21 +2,20 @@ import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { addSchedule, removeSchedule } from "redux/modules/schedules";
+import { useColorModeValue } from "@chakra-ui/react";
+import checkmark from "assets/Beta/checkmark.svg";
 
-import checkmark from 'assets/Beta/checkmark.svg';
-
-const CourseClassMobile = props => {
+const CourseClassMobile = (props) => {
+  const theme = useColorModeValue("light", "dark");
   return (
-    <CouseClassMobileContainer onClick={props.handleChange}>
+    <CouseClassMobileContainer onClick={props.handleChange} mode={theme}>
       <h2>{props.name}</h2>
       <h3>Pengajar</h3>
       <ul>
         {props.lecturer[0] === "" ? (
           <span>Pengajar belum tersedia</span>
         ) : (
-          props.lecturer.map(lecturer => (
-            <li key={lecturer}>{lecturer}</li>
-          ))
+          props.lecturer.map((lecturer) => <li key={lecturer}>{lecturer}</li>)
         )}
       </ul>
       <h3>Jadwal</h3>
@@ -32,7 +31,8 @@ const CourseClassMobile = props => {
   );
 };
 
-const CourseClassDesktop = props => {
+const CourseClassDesktop = (props) => {
+  const theme = useColorModeValue("light", "dark");
   const classSchedules = props.schedule_items.map((item, idx) => (
     <li key={idx}>
       {item.day}, {item.start}-{item.end}
@@ -51,37 +51,39 @@ const CourseClassDesktop = props => {
             style={{
               display: "block",
               textAlign: "center",
-              paddingRight: "15%"
+              paddingRight: "15%",
             }}
           >
             –
           </span>
         ) : (
-          props.lecturer.map((lecturer, idx) => (
-            <li key={idx}>{lecturer}</li>
-          ))
+          props.lecturer.map((lecturer, idx) => <li key={idx}>{lecturer}</li>)
         )}
       </>
-    )
-  }
+    );
+  };
 
   return (
-    <CourseClassContainer onClick={props.handleChange}>
+    <CourseClassContainer onClick={props.handleChange} mode={theme}>
       <CourseClassItem flex={1}>
         <Radio active={props.isActive} />
       </CourseClassItem>
       <CourseClassItem flex={3}>{props.name}</CourseClassItem>
-      <CourseClassItem flex={3}><ul>{classSchedules}</ul></CourseClassItem>
+      <CourseClassItem flex={3}>
+        <ul>{classSchedules}</ul>
+      </CourseClassItem>
       <CourseClassItem flex={1}>{rooms}</CourseClassItem>
-      <CourseClassItem flex={4}><ul>{lecturers()}</ul></CourseClassItem>
+      <CourseClassItem flex={4}>
+        <ul>{lecturers()}</ul>
+      </CourseClassItem>
     </CourseClassContainer>
   );
 };
 
 function CourseClass({ course, courseClass }) {
   const key = `${course.name}-${courseClass.name}`;
-  const isActive = useSelector(state => state.courses[key]);
-  const isMobile = useSelector(state => state.appState.isMobile);
+  const isActive = useSelector((state) => state.courses[key]);
+  const isMobile = useSelector((state) => state.appState.isMobile);
   const dispatch = useDispatch();
 
   const handleChange = () => {
@@ -89,7 +91,7 @@ function CourseClass({ course, courseClass }) {
       ...courseClass,
       credit: course.credit,
       parentName: course.name,
-      term: course.term
+      term: course.term,
     };
 
     if (isActive) {
@@ -105,14 +107,18 @@ function CourseClass({ course, courseClass }) {
 }
 
 const CourseClassContainer = styled.div`
+background-color:${({ mode }) =>
+  mode === "light"
+    ? (props) => props.theme.color.primaryWhite
+    : (props) => props.theme.color.darkLightBlack}
   display: flex;
   flex-direction: row;
-  color: #333333;
+  color: ${({ mode }) =>
+    mode === "light"
+      ? (props) => props.theme.color.secondaryMineShaft
+      : (props) => props.theme.color.darkWhite}
   cursor: pointer;
-
-  &:hover {
-    background-color: #ffffff;
-  }
+  border-top: 1px solid ${(props) => props.theme.color.secondaryMineShaft};
 `;
 
 const CourseClassItem = styled.div`
@@ -134,7 +140,7 @@ const CourseClassItem = styled.div`
   }
 
   li::before {
-    content: '•';
+    content: "•";
     position: absolute;
     left: -12px;
     font-size: 16px;
@@ -148,17 +154,12 @@ const Radio = styled.div`
   height: 24px;
   width: 24px;
 
-  border: ${({ active }) => (
-    !active
-      ? '1.5px solid #828282'
-      : 'none'
-  )};
+  border: ${({ active }) => (!active ? "1.5px solid #828282" : "none")};
 
-  background-color: ${({ active }) => (
+  background-color: ${({ active }) =>
     active
-      ? props => props.theme.color.primaryPurple
-      : props => props.theme.color.primaryWhite
-  )};
+      ? (props) => props.theme.color.primaryPurple
+      : (props) => props.theme.color.primaryWhite};
 
   &:before {
     content: url(${checkmark});
@@ -176,13 +177,20 @@ const Radio = styled.div`
 `;
 
 const CouseClassMobileContainer = styled.div`
+  background-color:${({ mode }) =>
+    mode === "light"
+      ? (props) => props.theme.color.primaryWhite
+      : (props) => props.theme.color.darkLightBlack}
   flex-direction: column;
   position: relative;
   display: flex;
   padding: 12px;
 
   h2 {
-    color: ${props => props.theme.color.secondaryMineShaft};
+    color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.secondaryMineShaft
+        : (props) => props.theme.color.darkWhite}
     font-weight: 600;
     font-size: 18px;
     margin: 0 0 4px 0;
@@ -191,6 +199,10 @@ const CouseClassMobileContainer = styled.div`
   h3 {
     margin: 12px 0 0 0;
     font-size: 14px;
+    color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.secondaryMineShaft
+        : (props) => props.theme.color.darkWhite}
   }
 
   ${Radio} {
@@ -206,6 +218,10 @@ const CouseClassMobileContainer = styled.div`
   ul {
     margin-left: 16px;
     font-size: 14px;
+    color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.secondaryMineShaft
+        : (props) => props.theme.color.darkWhite}
   }
 
   li {
@@ -214,7 +230,7 @@ const CouseClassMobileContainer = styled.div`
   }
 
   li::before {
-    content: '•';
+    content: "•";
     position: absolute;
     left: -12px;
     font-size: 16px;

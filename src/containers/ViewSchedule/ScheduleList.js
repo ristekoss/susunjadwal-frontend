@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-
+import { useColorModeValue } from "@chakra-ui/react";
 const ScheduleList = ({ formattedSchedule, totalCredits }) => {
-
+  const theme = useColorModeValue("light", "dark");
 
   return (
-    <ClassTableContainer>
-      <ClassHeaderContainer>
+    <ClassTableContainer mode={theme}>
+      <ClassHeaderContainer mode={theme}>
         <div>Nama Kelas</div>
         <div>Waktu</div>
         <div>Ruang</div>
@@ -14,7 +14,7 @@ const ScheduleList = ({ formattedSchedule, totalCredits }) => {
         <div>SKS</div>
       </ClassHeaderContainer>
       {Object.keys(formattedSchedule).map((scheduleName) => (
-        <ClassItemContainer>
+        <ClassItemContainer mode={theme}>
           <div>{formattedSchedule[scheduleName].name}</div>
           <div>
             {formattedSchedule[scheduleName].time.map((dayItem) => (
@@ -30,13 +30,13 @@ const ScheduleList = ({ formattedSchedule, totalCredits }) => {
           <div>{formattedSchedule[scheduleName].sks}</div>
         </ClassItemContainer>
       ))}
-        <TotalCreditsContainer>
-          <div>Total SKS</div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div>{totalCredits} SKS</div>
-        </TotalCreditsContainer>
+      <TotalCreditsContainer mode={theme}>
+        <div>Total SKS</div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div>{totalCredits} SKS</div>
+      </TotalCreditsContainer>
     </ClassTableContainer>
   );
 };
@@ -46,7 +46,10 @@ const ClassHeaderContainer = styled.div`
   flex-direction: row;
   align-items: center;
 
-  background-color: ${(props) => props.theme.color.primaryPurple};
+  background-color: ${(props) =>
+    props.mode === "light"
+      ? props.theme.color.primaryPurple
+      : props.theme.color.darkLightPurple};
   color: ${(props) => props.theme.color.primaryWhite};
 
   height: 40.56px;
@@ -73,7 +76,8 @@ const ClassItemContainer = styled.tr`
   display: flex;
   flex-direction: row;
   align-items: center;
-
+  color: ${(props) => (props.mode === "light" ? "black" : "#D0D0D0")};
+  border-top: 1.5px solid ${(props) => props.theme.color.secondaryMineShaft};
   div {
     flex: 1;
     font-size: 0.5rem;
@@ -101,7 +105,10 @@ const TotalCreditsContainer = styled.tr`
   align-items: center;
 
   div {
-    background-color: ${(props) => props.theme.color.primaryPurple};
+    background-color: ${(props) =>
+      props.mode === "light"
+        ? props.theme.color.primaryPurple
+        : props.theme.color.darkLightPurple};
     color: ${(props) => props.theme.color.primaryWhite};
 
     display: flex;
@@ -129,18 +136,32 @@ const TotalCreditsContainer = styled.tr`
 `;
 
 const ClassTableContainer = styled.div`
-  border-top: 1px solid ${(props) => props.theme.color.primaryMineShaft};
-  border-bottom: 1px solid ${(props) => props.theme.color.primaryMineShaft};
+  border-top: 1px solid
+    ${(props) =>
+      props.mode === "light"
+        ? props.theme.color.primaryMineShaft
+        : props.theme.color.darkBlack};
+  border-bottom: 1px solid
+    ${(props) =>
+      props.mode === "light"
+        ? props.theme.color.primaryMineShaft
+        : props.theme.color.darkBlack};
   box-sizing: border-box;
   margin-bottom: 24px;
 
   hyphens: auto;
 
   tr:nth-child(even) {
-    background: ${(props) => props.theme.color.primaryAlabaster};
+    background: ${(props) =>
+      props.mode === "light"
+        ? props.theme.color.primaryAlabaster
+        : props.theme.color.darkLightBlack};
   }
   tr:nth-child(odd) {
-    background: ${(props) => props.theme.color.primaryWhite};
+    background: ${(props) =>
+      props.mode === "light"
+        ? props.theme.color.primaryWhite
+        : props.theme.color.darkLightBlack};
   }
 `;
 
