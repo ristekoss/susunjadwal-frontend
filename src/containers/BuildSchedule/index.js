@@ -6,6 +6,8 @@ import {
   Flex,
   Input,
   Image,
+  InputGroup,
+  InputLeftElement,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -22,7 +24,7 @@ import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
 
-import FACULTIES from "utils/faculty-base.json";
+import FACULTIES from "utils/faculty-base-additional-info.json";
 import { useForm } from "react-hook-form";
 import { CustomSelect } from "components/CustomSelect";
 import searchImg from "assets/Search.svg";
@@ -39,9 +41,10 @@ function BuildSchedule() {
   const [courses, setCourses] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isCoursesDetail, setCoursesDetail] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
   const [value, setValue] = useState("");
-
   const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestion, setShowSuggestion] = useState(true);
 
   const theme = useColorModeValue("light", "dark");
 
@@ -90,12 +93,13 @@ function BuildSchedule() {
   });
 
   const onChangeHandler = (value) => {
+    setSearchValue(value);
     let matches = [];
 
     matches = courses?.filter((c) => {
       if (value === "") {
         //if value is empty
-        return [];
+        return null;
       } else if (c.name.toLowerCase().startsWith(value.toLowerCase())) {
         //returns filtered array
         return c;
@@ -105,6 +109,12 @@ function BuildSchedule() {
     });
 
     setSuggestions(matches);
+  };
+
+  const suggestionClicked = (name) => {
+    setSearchValue(name);
+    setValue(name);
+    setShowSuggestion(false);
   };
 
   return (
@@ -166,59 +176,58 @@ function BuildSchedule() {
           </CustomSelect>
         </Flex>
         <div style={{ position: "relative" }}>
-          <Flex h="57px" mb="2rem">
-            <Flex position="relative" w="full">
-              <Flex
-                position="absolute"
-                alignItems="center"
-                justifyContent="center"
-                h="full"
-                pl="20px"
-                pointerEvents="none"
-              >
+          <InputGroup h="57px" mb="26px">
+            <InputLeftElement
+              h="full"
+              pl="20px"
+              pointerEvents="none"
+              children={
                 <Image
                   alt=""
                   src={theme === "light" ? searchImg : searchImgDark}
                 />
-              </Flex>
-
-              <Input
-                // onBlur={handleChange}
-                id="input"
-                onBlur={(e) => onChangeHandler(e.target.value)}
-                placeholder="Cari matkul"
-                color={theme === "light" ? "#000000" : "#ffffff"}
-                w="full"
-                h="full"
-                pl="58px"
-                pr="20px"
-                borderRadius="8px"
-                borderRightRadius="0"
-                borderColor={
-                  theme === "light" ? "primary.Purple" : "primary.LightPurple"
-                }
-                bg="transparent"
-                _hover={{ bg: "transparent" }}
-              />
-              <Button
-                type="submit"
-                w="95px"
-                h="full"
-                borderLeftRadius="0"
-                bg={
-                  theme === "light" ? "primary.Purple" : "primary.LightPurple"
-                }
-              >
-                Cari
-                <Image alt="" src={arrowImg} ml="9px" />
-              </Button>
-            </Flex>
-          </Flex>
+              }
+            />
+            <Input
+              // onBlur={handleChange}
+              id="input"
+              value={searchValue}
+              onChange={(e) => onChangeHandler(e.target.value)}
+              onBlur={() => setShowSuggestion(false)}
+              onMouseDown={() => setShowSuggestion(true)}
+              placeholder="Cari matkul"
+              color={theme === "light" ? "#000000" : "#ffffff"}
+              h="full"
+              pl="58px"
+              pr="20px"
+              borderRadius="8px"
+              borderRightRadius="0"
+              borderColor={
+                theme === "light" ? "primary.Purple" : "primary.LightPurple"
+              }
+              bg="transparent"
+              _hover={{}}
+            />
+            <Button
+              w="95px"
+              h="full"
+              borderLeftRadius="0"
+              bg={theme === "light" ? "primary.Purple" : "primary.LightPurple"}
+              onMouseDown={() => setValue(searchValue)}
+            >
+              Cari
+              <Image alt="" src={arrowImg} ml="9px" />
+            </Button>
+          </InputGroup>
           {suggestions.length > 0 ? (
-            <SuggestionsBox>
+            <SuggestionsBox
+              style={{ visibility: showSuggestion ? "visible" : "hidden" }}
+            >
               {suggestions &&
                 suggestions.map((suggestion, i) => (
-                  <SuggestionsBoxItem onClick={() => setValue(suggestion.name)}>
+                  <SuggestionsBoxItem
+                    onMouseDown={() => suggestionClicked(suggestion.name)}
+                  >
                     {suggestion.name}
                   </SuggestionsBoxItem>
                 ))}
@@ -315,6 +324,7 @@ export const SuggestionsBoxItem = styled.div`
   padding-bottom: 4px;
   padding-left: 60px;
   padding-right: 60px;
+  cursor: pointer;
 `;
 
 export const Container = styled.div`
