@@ -4,7 +4,6 @@ import {
   Button,
   useColorModeValue,
   Flex,
-  Input,
   Image,
   InputGroup,
   InputLeftElement,
@@ -25,7 +24,7 @@ import { BauhausSide } from "components/Bauhaus";
 import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
-
+import SearchInput from "./SearchInput";
 import FACULTIES from "utils/faculty-base-additional-info.json";
 import { useForm } from "react-hook-form";
 import { CustomSelect } from "components/CustomSelect";
@@ -46,8 +45,6 @@ function BuildSchedule() {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isCoursesDetail, setCoursesDetail] = useState(null);
   const [value, setValue] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [showSuggestion, setShowSuggestion] = useState(true);
 
   const theme = useColorModeValue("light", "dark");
 
@@ -94,30 +91,6 @@ function BuildSchedule() {
       return null;
     }
   });
-
-  const onChangeHandler = (value) => {
-    let matches = [];
-
-    matches = courses?.filter((c) => {
-      if (value === "") {
-        //if value is empty
-        return null;
-      } else if (c.name.toLowerCase().startsWith(value.toLowerCase())) {
-        //returns filtered array
-        return c;
-      } else {
-        return null;
-      }
-    });
-
-    setSuggestions(matches);
-  };
-
-  const suggestionClicked = (name) => {
-    document.getElementById("input").value = name;
-    setValue(name);
-    setShowSuggestion(false);
-  };
 
   return (
     <Container>
@@ -192,27 +165,13 @@ function BuildSchedule() {
                 />
               }
             />
-            <Input
-              // onBlur={handleChange}
-              id="input"
-              onChange={(e) => onChangeHandler(e.target.value)}
-              onBlur={() => setShowSuggestion(false)}
-              onMouseDown={() => setShowSuggestion(true)}
-              placeholder="Cari matkul"
-              color={theme === "light" ? "#000000" : "#ffffff"}
-              h="full"
-              pl={isMobile ? "52px" : "58px"}
-              pr="20px"
-              borderRadius="8px"
-              borderRightRadius="0"
-              borderColor={
-                theme === "light" ? "primary.Purple" : "primary.LightPurple"
-              }
-              bg="transparent"
-              _hover={{}}
-              textOverflow="ellipsis"
-              fontSize={isMobile && "14px"}
+            <SearchInput
+              isMobile={isMobile}
+              theme={theme}
+              courses={courses}
+              setValue={setValue}
             />
+
             <Button
               w="95px"
               h="full"
@@ -228,20 +187,6 @@ function BuildSchedule() {
               <Image alt="" src={arrowImg} ml="9px" />
             </Button>
           </InputGroup>
-          {suggestions.length > 0 ? (
-            <SuggestionsBox
-              style={{ visibility: showSuggestion ? "visible" : "hidden" }}
-            >
-              {suggestions &&
-                suggestions.map((suggestion, i) => (
-                  <SuggestionsBoxItem
-                    onMouseDown={() => suggestionClicked(suggestion.name)}
-                  >
-                    {suggestion.name}
-                  </SuggestionsBoxItem>
-                ))}
-            </SuggestionsBox>
-          ) : null}
         </div>
         {!isCoursesDetail && (
           <InfoContent mode={theme}>
@@ -327,29 +272,6 @@ function BuildSchedule() {
 }
 
 export default BuildSchedule;
-
-export const SuggestionsBox = styled.div`
-  position: absolute;
-  z-index: 50;
-  width: 100%;
-  height: auto;
-  background: #e5e5e5;
-  top: 58px;
-  border-radius: 8px;
-  border: 0.5px solid #333333;
-  padding-top: 10px;
-  padding-bottom: 10px;
-`;
-export const SuggestionsBoxItem = styled.div`
-  :hover {
-    background: #d4d4d4;
-  }
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 60px;
-  padding-right: 60px;
-  cursor: pointer;
-`;
 
 export const Container = styled.div`
   display: flex;
