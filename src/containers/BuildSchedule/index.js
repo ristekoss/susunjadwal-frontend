@@ -45,7 +45,6 @@ function BuildSchedule() {
   const [courses, setCourses] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isCoursesDetail, setCoursesDetail] = useState(null);
-  const [searchValue, setSearchValue] = useState("");
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestion, setShowSuggestion] = useState(true);
@@ -97,7 +96,6 @@ function BuildSchedule() {
   });
 
   const onChangeHandler = (value) => {
-    setSearchValue(value);
     let matches = [];
 
     matches = courses?.filter((c) => {
@@ -116,7 +114,7 @@ function BuildSchedule() {
   };
 
   const suggestionClicked = (name) => {
-    setSearchValue(name);
+    document.getElementById("input").value = name;
     setValue(name);
     setShowSuggestion(false);
   };
@@ -151,6 +149,7 @@ function BuildSchedule() {
             register={register}
             mr={{ base: "0", lg: "7px" }}
             mode={theme}
+            isMobile={isMobile}
           >
             {Object.keys(FACULTIES).map((faculty) => (
               <option key={faculty} value={faculty}>
@@ -166,6 +165,7 @@ function BuildSchedule() {
             disabled={!selectedFaculty}
             ml={{ base: "0", lg: "7px" }}
             mode={theme}
+            isMobile={isMobile}
           >
             {selectedFaculty &&
               FACULTIES[selectedFaculty].map((prodi) => (
@@ -180,10 +180,10 @@ function BuildSchedule() {
           </CustomSelect>
         </Flex>
         <div style={{ position: "relative" }}>
-          <InputGroup h="57px" mb="26px">
+          <InputGroup h={isMobile ? "44px" : "57px"} mb="26px">
             <InputLeftElement
               h="full"
-              pl="20px"
+              pl={isMobile ? "14px" : "20px"}
               pointerEvents="none"
               children={
                 <Image
@@ -195,14 +195,13 @@ function BuildSchedule() {
             <Input
               // onBlur={handleChange}
               id="input"
-              value={searchValue}
               onChange={(e) => onChangeHandler(e.target.value)}
               onBlur={() => setShowSuggestion(false)}
               onMouseDown={() => setShowSuggestion(true)}
               placeholder="Cari matkul"
               color={theme === "light" ? "#000000" : "#ffffff"}
               h="full"
-              pl="58px"
+              pl={isMobile ? "52px" : "58px"}
               pr="20px"
               borderRadius="8px"
               borderRightRadius="0"
@@ -211,13 +210,19 @@ function BuildSchedule() {
               }
               bg="transparent"
               _hover={{}}
+              textOverflow="ellipsis"
+              fontSize={isMobile && "14px"}
             />
             <Button
               w="95px"
               h="full"
               borderLeftRadius="0"
               bg={theme === "light" ? "primary.Purple" : "primary.LightPurple"}
-              onMouseDown={() => setValue(searchValue)}
+              onMouseDown={() =>
+                setValue(document.getElementById("input").value)
+              }
+              fontSize={isMobile && "14px"}
+              px={isMobile && "4px"}
             >
               Cari
               <Image alt="" src={arrowImg} ml="9px" />
