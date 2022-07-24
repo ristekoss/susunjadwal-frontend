@@ -1,4 +1,11 @@
-import { Box, Flex, Image, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Image,
+  Text,
+  useColorModeValue,
+  Center,
+} from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import React from "react";
 import {
@@ -81,7 +88,7 @@ const Footer = () => {
               <StyledPartnerTitle mode={theme}>
                 Official Learning Partner
               </StyledPartnerTitle>
-              <div style={{ display: "flex" }}>
+              <Center>
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
@@ -103,11 +110,10 @@ const Footer = () => {
                   <Image
                     w={{ base: "20", lg: "24" }}
                     src={theme === "light" ? GotoLogo : GotoDarkLogo}
-                    style={{ transform: `translateY(-20%)` }}
                     alt="logo GoTo"
                   />
                 </a>
-              </div>
+              </Center>
             </div>
             <a
               style={{
