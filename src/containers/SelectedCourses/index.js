@@ -23,7 +23,7 @@ import { postSaveSchedule } from "services/api";
 import { deleteSchedule } from "services/api";
 import { makeAtLeastMs } from "utils/promise";
 
-import { isScheduleConflict } from "./utils";
+import { isScheduleConflict, listScheduleConflicts } from "./utils";
 
 import TrashIcon from "assets/Trash.svg";
 
@@ -133,6 +133,15 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     );
   });
 
+  const listConflicts = listScheduleConflicts(schedules);
+  const conflicts = listConflicts.map((conflict, idx) => {
+    return (
+      <p>
+        {conflict[0]} bertabrakan dengan {conflict[1]}
+      </p>
+    );
+  });
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -196,11 +205,12 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         {isConflict && (
           <MessageContainer>
             <p>
-              Ada jadwal yang bertabrakan. Perbaiki terlebih dahulu sebelum
-              menyimpan.
+              Ada jadwal yang bertabrakan. Perbaiki terlebih dahulu sebelum menyimpan.
             </p>
           </MessageContainer>
         )}
+
+        {isConflict && <MessageContainer>{conflicts}</MessageContainer>}
 
         {!isConflict && totalCredits > 24 && (
           <MessageContainer>
