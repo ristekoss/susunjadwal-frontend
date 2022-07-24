@@ -94,7 +94,7 @@ const ScheduleList = () => {
       category: "Bagikan Jadwal",
       action: "Copied a schedule's URL",
     });
-    SuccessToast(`${type} berhasil disalin!`, isMobile);
+    SuccessToast(`${type} berhasil disalin!`, isMobile, theme);
   };
 
   const handleClickEditJadwal = (idJadwal) => {

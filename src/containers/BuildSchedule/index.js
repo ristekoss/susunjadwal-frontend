@@ -182,9 +182,12 @@ function BuildSchedule() {
               }
               fontSize={isMobile && "14px"}
               px={isMobile && "4px"}
+              display={isMobile && "none"}
             >
-              Cari
-              <Image alt="" src={arrowImg} ml="9px" />
+              <Center>
+                Cari
+                <Image alt="" src={arrowImg} ml="9px" />
+              </Center>
             </Button>
           </InputGroup>
         </div>

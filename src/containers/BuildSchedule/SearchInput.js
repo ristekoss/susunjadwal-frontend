@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Input } from "@chakra-ui/react";
+import { Input, Box } from "@chakra-ui/react";
 import styled from "styled-components";
 function SearchInput({ theme, isMobile, courses, setValue }) {
   const [suggestions, setSuggestions] = useState([]);
@@ -42,7 +42,7 @@ function SearchInput({ theme, isMobile, courses, setValue }) {
         pl={isMobile ? "52px" : "58px"}
         pr="20px"
         borderRadius="8px"
-        borderRightRadius="0"
+        borderRightRadius={!isMobile && "0"}
         borderColor={
           theme === "light" ? "primary.Purple" : "primary.LightPurple"
         }
@@ -51,19 +51,34 @@ function SearchInput({ theme, isMobile, courses, setValue }) {
         textOverflow="ellipsis"
         fontSize={isMobile && "14px"}
         style={{ position: "relative" }}
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            setValue(e.target.value);
+          }
+        }}
       />
 
       {suggestions.length > 0 ? (
         <SuggestionsBox
-          style={{ visibility: showSuggestions ? "visible" : "hidden" }}
+          style={{
+            visibility: showSuggestions ? "visible" : "hidden",
+            background: theme === "light" ? "#E4E4E4" : "#1D1D1D",
+            color: theme === "light" ? "#000000" : "#FFFFFFCC",
+          }}
         >
           {suggestions &&
             suggestions.map((suggestion, i) => (
-              <SuggestionsBoxItem
-                onMouseDown={() => suggestionClicked(suggestion.name)}
+              <Box
+                _hover={{
+                  background: theme === "light" ? "#DED2FF" : "#674DE066",
+                }}
               >
-                {suggestion.name}
-              </SuggestionsBoxItem>
+                <SuggestionsBoxItem
+                  onMouseDown={() => suggestionClicked(suggestion.name)}
+                >
+                  {suggestion.name}
+                </SuggestionsBoxItem>
+              </Box>
             ))}
         </SuggestionsBox>
       ) : null}
@@ -74,20 +89,16 @@ export default SearchInput;
 
 export const SuggestionsBox = styled.div`
   position: absolute;
-  z-index: 50;
+  z-index: 4;
   width: 100%;
   height: auto;
-  background: #e5e5e5;
   top: 58px;
   border-radius: 8px;
-  border: 0.5px solid #333333;
+  border: 1px solid #82828299;
   padding-top: 10px;
   padding-bottom: 10px;
 `;
 export const SuggestionsBoxItem = styled.div`
-  :hover {
-    background: #d4d4d4;
-  }
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 60px;
