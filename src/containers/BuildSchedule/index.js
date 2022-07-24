@@ -4,8 +4,11 @@ import {
   Button,
   useColorModeValue,
   Flex,
-  Input,
   Image,
+  InputGroup,
+  InputLeftElement,
+  Center,
+  Text,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -21,13 +24,15 @@ import { BauhausSide } from "components/Bauhaus";
 import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
-
-import FACULTIES from "utils/faculty-base.json";
+import SearchInput from "./SearchInput";
+import FACULTIES from "utils/faculty-base-additional-info.json";
 import { useForm } from "react-hook-form";
 import { CustomSelect } from "components/CustomSelect";
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";
 import arrowImg from "assets/Arrow.svg";
+import notFoundImg from "assets/NotFound.svg";
+import notFoundDarkImg from "assets/NotFound-dark.svg";
 
 function BuildSchedule() {
   const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
@@ -39,6 +44,8 @@ function BuildSchedule() {
   const [courses, setCourses] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isCoursesDetail, setCoursesDetail] = useState(null);
+  const [value, setValue] = useState("");
+
   const theme = useColorModeValue("light", "dark");
 
   const fetchCourses = useCallback(
@@ -48,7 +55,9 @@ function BuildSchedule() {
       try {
         const { data } = await getCourses(majorId);
         setCourses(data.courses);
+
         setCoursesDetail(data.is_detail);
+
         setLastUpdated(new Date(data.last_update_at));
         dispatch(reduxSetCourses(data.courses));
       } catch (e) {
@@ -66,8 +75,22 @@ function BuildSchedule() {
     fetchCourses(majorId);
   }, [auth.majorId, dispatch, fetchCourses]);
 
+  // const handleChange = (e) => setValueTemporary(e.target.value);
+
   const { register, watch } = useForm();
   const selectedFaculty = watch("fakultas");
+
+  const filteredCourse = courses?.filter((c) => {
+    if (value === "") {
+      //if value is empty
+      return c;
+    } else if (c.name.toLowerCase().includes(value.toLowerCase())) {
+      //returns filtered array
+      return c;
+    } else {
+      return null;
+    }
+  });
 
   return (
     <Container>
@@ -99,6 +122,7 @@ function BuildSchedule() {
             register={register}
             mr={{ base: "0", lg: "7px" }}
             mode={theme}
+            isMobile={isMobile}
           >
             {Object.keys(FACULTIES).map((faculty) => (
               <option key={faculty} value={faculty}>
@@ -114,6 +138,7 @@ function BuildSchedule() {
             disabled={!selectedFaculty}
             ml={{ base: "0", lg: "7px" }}
             mode={theme}
+            isMobile={isMobile}
           >
             {selectedFaculty &&
               FACULTIES[selectedFaculty].map((prodi) => (
@@ -127,51 +152,45 @@ function BuildSchedule() {
               ))}
           </CustomSelect>
         </Flex>
-
-        {/* SEARCH BAR */}
-        <Flex h="57px" mb="2rem">
-          <Flex position="relative" w="full">
-            <Flex
-              position="absolute"
-              alignItems="center"
-              justifyContent="center"
+        <div style={{ position: "relative" }}>
+          <InputGroup h={isMobile ? "44px" : "57px"} mb="26px">
+            <InputLeftElement
               h="full"
-              pl="20px"
+              pl={isMobile ? "14px" : "20px"}
               pointerEvents="none"
-            >
-              <Image
-                alt=""
-                src={theme === "light" ? searchImg : searchImgDark}
-              />
-            </Flex>
-            <Input
-              placeholder="Cari matkul"
-              color={theme === "light" ? "#000000" : "#ffffff"}
-              w="full"
-              h="full"
-              pl="58px"
-              pr="20px"
-              borderRadius="8px"
-              borderRightRadius="0"
-              borderColor={
-                theme === "light" ? "primary.Purple" : "primary.LightPurple"
+              children={
+                <Image
+                  alt=""
+                  src={theme === "light" ? searchImg : searchImgDark}
+                />
               }
-              bg="transparent"
-              _hover={{ bg: "transparent" }}
             />
+            <SearchInput
+              isMobile={isMobile}
+              theme={theme}
+              courses={courses}
+              setValue={setValue}
+            />
+
             <Button
-              type="submit"
               w="95px"
               h="full"
               borderLeftRadius="0"
               bg={theme === "light" ? "primary.Purple" : "primary.LightPurple"}
+              onMouseDown={() =>
+                setValue(document.getElementById("input").value)
+              }
+              fontSize={isMobile && "14px"}
+              px={isMobile && "4px"}
+              display={isMobile && "none"}
             >
-              Cari
-              <Image alt="" src={arrowImg} ml="9px" />
+              <Center>
+                Cari
+                <Image alt="" src={arrowImg} ml="9px" />
+              </Center>
             </Button>
-          </Flex>
-        </Flex>
-
+          </InputGroup>
+        </div>
         {!isCoursesDetail && (
           <InfoContent mode={theme}>
             <p>
@@ -209,9 +228,24 @@ function BuildSchedule() {
           </InfoContent>
         )}
 
-        {courses &&
-          courses.map((course, idx) => (
-            <Course key={`${course.name}-${idx}`} course={course} />
+        {filteredCourse &&
+          (filteredCourse?.length === 0 ? (
+            <Center flexDirection="column" mt="3.5rem">
+              <Image
+                alt=""
+                src={theme === "light" ? notFoundImg : notFoundDarkImg}
+              />
+              <Text
+                mt="20px"
+                color={theme === "light" ? "#33333399" : "#FFFFFF99"}
+              >
+                Mata kuliah yang dicari tidak ditemukan
+              </Text>
+            </Center>
+          ) : (
+            filteredCourse.map((course, idx) => (
+              <Course key={`${course.name}-${idx}`} course={course} />
+            ))
           ))}
       </CoursePickerContainer>
 
