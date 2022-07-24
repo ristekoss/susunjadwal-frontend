@@ -161,43 +161,6 @@ const EditSchedule = ({ match }) => {
               </Link>
             </InfoContent>
           )}
-          <Flex flexDir={{ base: "column", lg: "row" }}>
-            <CustomSelect
-              name="fakultas"
-              label="Fakultas"
-              register={register}
-              mr={{ base: "0", lg: "7px" }}
-              mode={theme}
-              isMobile={isMobile}
-            >
-              {Object.keys(FACULTIES).map((faculty) => (
-                <option key={faculty} value={faculty}>
-                  {faculty.toLowerCase()}
-                </option>
-              ))}
-            </CustomSelect>
-
-            <CustomSelect
-              name="program_studi"
-              label="Program Studi"
-              register={register}
-              disabled={!selectedFaculty}
-              ml={{ base: "0", lg: "7px" }}
-              mode={theme}
-              isMobile={isMobile}
-            >
-              {selectedFaculty &&
-                FACULTIES[selectedFaculty].map((prodi) => (
-                  <option key={prodi.kd_org}>{`${prodi.study_program.replace(
-                    / *\([^)]*\) */g,
-                    "",
-                  )}, ${prodi.educational_program.replace(
-                    / *\([^)]*\) */g,
-                    "",
-                  )}`}</option>
-                ))}
-            </CustomSelect>
-          </Flex>
           <div style={{ position: "relative" }}>
             <InputGroup h={isMobile ? "44px" : "57px"} mb="26px">
               <InputLeftElement
