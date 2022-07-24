@@ -54,6 +54,9 @@ function SearchInput({ theme, isMobile, courses, setValue }) {
         onKeyPress={(e) => {
           if (e.key === "Enter") {
             setValue(e.target.value);
+            setShowSuggestions(false);
+          } else {
+            setShowSuggestions(true);
           }
         }}
       />
@@ -64,6 +67,8 @@ function SearchInput({ theme, isMobile, courses, setValue }) {
             visibility: showSuggestions ? "visible" : "hidden",
             background: theme === "light" ? "#E4E4E4" : "#1D1D1D",
             color: theme === "light" ? "#000000" : "#FFFFFFCC",
+            top: isMobile ? "45px" : "58px",
+            fontSize: isMobile && "14px",
           }}
         >
           {suggestions &&
@@ -75,6 +80,9 @@ function SearchInput({ theme, isMobile, courses, setValue }) {
               >
                 <SuggestionsBoxItem
                   onMouseDown={() => suggestionClicked(suggestion.name)}
+                  style={{
+                    paddingLeft: isMobile ? "52px" : "58px",
+                  }}
                 >
                   {suggestion.name}
                 </SuggestionsBoxItem>
@@ -92,7 +100,6 @@ export const SuggestionsBox = styled.div`
   z-index: 4;
   width: 100%;
   height: auto;
-  top: 58px;
   border-radius: 8px;
   border: 1px solid #82828299;
   padding-top: 10px;
@@ -101,7 +108,6 @@ export const SuggestionsBox = styled.div`
 export const SuggestionsBoxItem = styled.div`
   padding-top: 4px;
   padding-bottom: 4px;
-  padding-left: 60px;
-  padding-right: 60px;
+  padding-right: 20px;
   cursor: pointer;
 `;
