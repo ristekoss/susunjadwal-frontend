@@ -118,7 +118,7 @@ function ViewSchedule({ match, history }) {
     const dataUrl = await htmlToImage.toPng(refs.current);
 
     const link = document.createElement("a");
-    link.download = scheduleName + ".png";
+    link.download = !scheduleName ? "Untitled" + ".png" : scheduleName + ".png";
     link.href = dataUrl;
     link.click();
   };
