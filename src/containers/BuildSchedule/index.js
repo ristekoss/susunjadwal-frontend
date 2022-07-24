@@ -26,7 +26,7 @@ import Course from "./Course";
 import Detail from "./Detail";
 import SearchInput from "./SearchInput";
 // import FACULTIES from "utils/faculty-base-additional-info.json";
-import { useForm } from "react-hook-form";
+// import { useForm } from "react-hook-form";
 // import { CustomSelect } from "components/CustomSelect";
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";

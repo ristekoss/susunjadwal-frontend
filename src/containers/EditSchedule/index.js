@@ -33,7 +33,7 @@ import { getSchedule, getCourses } from "services/api";
 import { BauhausSide } from "components/Bauhaus";
 import { makeAtLeastMs } from "utils/promise";
 // import FACULTIES from "utils/faculty-base-additional-info.json";
-import { useForm } from "react-hook-form";
+// import { useForm } from "react-hook-form";
 // import { CustomSelect } from "components/CustomSelect";
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";
