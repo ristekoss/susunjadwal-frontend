@@ -91,7 +91,7 @@ const Announcement = () => {
       mode={theme}
     >
       <CTATextContainer>{ctaText}</CTATextContainer>
-      <div style={{ color: theme === "light" ? "#FFFFFF" : "#D0D0D0" }}>
+      <div style={{ color: theme === "light" ? "black" : "#D0D0D0" }}>
         {notificationText} <span style={{ marginRight: "5px" }}>-</span>
         <CTALinkContainer target="_blank" href={notificationLink} mode={theme}>
           {linkText}
