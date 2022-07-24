@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   Button,
   useColorModeValue,
-  Flex,
+  // Flex,
   Image,
   InputGroup,
   InputLeftElement,
@@ -25,9 +25,9 @@ import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
 import SearchInput from "./SearchInput";
-import FACULTIES from "utils/faculty-base-additional-info.json";
+// import FACULTIES from "utils/faculty-base-additional-info.json";
 import { useForm } from "react-hook-form";
-import { CustomSelect } from "components/CustomSelect";
+// import { CustomSelect } from "components/CustomSelect";
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";
 import arrowImg from "assets/Arrow.svg";
@@ -77,8 +77,8 @@ function BuildSchedule() {
 
   // const handleChange = (e) => setValueTemporary(e.target.value);
 
-  const { register, watch } = useForm();
-  const selectedFaculty = watch("fakultas");
+  // const { register, watch } = useForm();
+  // const selectedFaculty = watch("fakultas");
 
   const filteredCourse = courses?.filter((c) => {
     if (value === "") {

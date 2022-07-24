@@ -5,7 +5,7 @@ import {
   Button,
   useColorModeValue,
   Text,
-  Flex,
+  // Flex,
   Image,
   InputGroup,
   InputLeftElement,
@@ -32,9 +32,9 @@ import SelectedCourses from "containers/SelectedCourses";
 import { getSchedule, getCourses } from "services/api";
 import { BauhausSide } from "components/Bauhaus";
 import { makeAtLeastMs } from "utils/promise";
-import FACULTIES from "utils/faculty-base-additional-info.json";
+// import FACULTIES from "utils/faculty-base-additional-info.json";
 import { useForm } from "react-hook-form";
-import { CustomSelect } from "components/CustomSelect";
+// import { CustomSelect } from "components/CustomSelect";
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";
 import arrowImg from "assets/Arrow.svg";
@@ -94,8 +94,8 @@ const EditSchedule = ({ match }) => {
     fetchCourses(majorId);
   }, [auth.majorId, dispatch, fetchCourses]);
 
-  const { register, watch } = useForm();
-  const selectedFaculty = watch("fakultas");
+  // const { register, watch } = useForm();
+  // const selectedFaculty = watch("fakultas");
 
   const filteredCourse = courses?.filter((c) => {
     if (value === "") {
