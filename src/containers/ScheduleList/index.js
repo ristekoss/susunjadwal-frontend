@@ -94,7 +94,7 @@ const ScheduleList = () => {
       category: "Bagikan Jadwal",
       action: "Copied a schedule's URL",
     });
-    SuccessToast(`${type} berhasil disalin!`, isMobile);
+    SuccessToast(`${type} berhasil disalin!`, isMobile, theme);
   };
 
   const handleClickEditJadwal = (idJadwal) => {
@@ -151,7 +151,8 @@ const ScheduleList = () => {
           <ModalBody>
             <Flex flexDirection="column">
               <Text mb="8px">
-                Bagikan Jadwal <b>{selectedName}</b>
+                Bagikan Jadwal{" "}
+                <b>{!selectedName ? "Untitled" : selectedName}</b>
               </Text>
               <Image alt="" src={imageURL} maxH="30vh" objectFit="contain" />
             </Flex>
