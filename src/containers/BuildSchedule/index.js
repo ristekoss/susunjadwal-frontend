@@ -115,6 +115,42 @@ function BuildSchedule() {
           </h6>
         )}
 
+        {!isCoursesDetail && (
+          <InfoContent mode={theme}>
+            <p>
+              Uh oh, sepertinya kami belum memiliki jadwal untuk jurusan kamu.
+              Silahkan coba untuk melakukan <span>Update Matkul</span> dengan
+              menekan tombol di bawah ini!
+            </p>
+            <Link to="/update">
+              <Button
+                mt={{ base: "1rem", lg: "1.5rem" }}
+                bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+                color={theme === "light" ? "white" : "dark.White"}
+              >
+                Update Matkul
+              </Button>
+            </Link>
+          </InfoContent>
+        )}
+
+        {courses?.length === 0 && (
+          <InfoContent mode={theme}>
+            <p>
+              Uh oh, sepertinya jadwal jurusan kamu belum tersedia. Silahkan
+              coba untuk melakukan <span>Update Matkul</span> lagi nanti!
+            </p>
+            <Link to="/update">
+              <Button
+                mt={{ base: "1rem", lg: "1.5rem" }}
+                bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+                color={theme === "light" ? "white" : "dark.White"}
+              >
+                Update Matkul
+              </Button>
+            </Link>
+          </InfoContent>
+        )}
         <Flex flexDir={{ base: "column", lg: "row" }}>
           <CustomSelect
             name="fakultas"
@@ -191,43 +227,6 @@ function BuildSchedule() {
             </Button>
           </InputGroup>
         </div>
-        {!isCoursesDetail && (
-          <InfoContent mode={theme}>
-            <p>
-              Uh oh, sepertinya kami belum memiliki jadwal untuk jurusan kamu.
-              Silahkan coba untuk melakukan <span>Update Matkul</span> dengan
-              menekan tombol di bawah ini!
-            </p>
-            <Link to="/update">
-              <Button
-                mt={{ base: "1rem", lg: "1.5rem" }}
-                bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
-                color={theme === "light" ? "white" : "dark.White"}
-              >
-                Update Matkul
-              </Button>
-            </Link>
-          </InfoContent>
-        )}
-
-        {courses?.length === 0 && (
-          <InfoContent mode={theme}>
-            <p>
-              Uh oh, sepertinya jadwal jurusan kamu belum tersedia. Silahkan
-              coba untuk melakukan <span>Update Matkul</span> lagi nanti!
-            </p>
-            <Link to="/update">
-              <Button
-                mt={{ base: "1rem", lg: "1.5rem" }}
-                bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
-                color={theme === "light" ? "white" : "dark.White"}
-              >
-                Update Matkul
-              </Button>
-            </Link>
-          </InfoContent>
-        )}
-
         {filteredCourse &&
           (filteredCourse?.length === 0 ? (
             <Center flexDirection="column" mt="3.5rem">
