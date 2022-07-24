@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
+import { useColorModeValue } from "@chakra-ui/react";
 import { setAnnouncement } from "redux/modules/appState";
 import { getAnnouncement } from "services/api";
 
@@ -9,7 +9,8 @@ const AnnouncementContainer = styled.div`
   width: "100%";
   display: ${(props) =>
     props.disabled ? "none" : props.isMobile ? "none" : "flex"};
-  background-color: ${(props) => props.theme.color.primaryWhite};
+  background-color: ${(props) =>
+    props.mode === "light" ? props.theme.color.primaryWhite : "#2c2c2c"};
   flex-direction: ${(props) => (props.isMobile ? "row" : "row")};
   align-items: center;
   font-size: 15px;
@@ -20,12 +21,16 @@ const AnnouncementContainer = styled.div`
 
 const CTATextContainer = styled.div`
   background-color: ${(props) => props.theme.color.secondaryGolden};
+  color: ${(props) => (props.mode === "light" ? "white" : "#2c2c2c")}
   padding: 5px;
   border-radius: 5px;
 `;
 
 const CTALinkContainer = styled.a`
-  color: ${(props) => props.theme.color.primaryPurple};
+  color: ${(props) =>
+    props.mode === "light"
+      ? props.theme.color.primaryPurple
+      : props.theme.color.darkPurple};
   font-weight: bold;
   text-decoration: underline;
 `;
@@ -33,6 +38,7 @@ const CTALinkContainer = styled.a`
 const Announcement = () => {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const dispatch = useDispatch();
+  const theme = useColorModeValue("light", "dark");
 
   const [config, setConfig] = useState(null);
   const [isShowNotification, setIsShowNotification] = useState(false);
@@ -45,7 +51,7 @@ const Announcement = () => {
     const fetchAnnouncement = async () => {
       const response = await getAnnouncement();
       setConfig(response.data.records);
-    }
+    };
 
     fetchAnnouncement();
   }, []);
@@ -79,11 +85,15 @@ const Announcement = () => {
   }, [config, dispatch]);
 
   return (
-    <AnnouncementContainer disabled={!isShowNotification} isMobile={isMobile}>
+    <AnnouncementContainer
+      disabled={!isShowNotification}
+      isMobile={isMobile}
+      mode={theme}
+    >
       <CTATextContainer>{ctaText}</CTATextContainer>
-      <div>
+      <div style={{ color: theme === "light" ? "#FFFFFF" : "#D0D0D0" }}>
         {notificationText} <span style={{ marginRight: "5px" }}>-</span>
-        <CTALinkContainer target="_blank" href={notificationLink}>
+        <CTALinkContainer target="_blank" href={notificationLink} mode={theme}>
           {linkText}
         </CTALinkContainer>
       </div>
