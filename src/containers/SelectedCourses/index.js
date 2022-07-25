@@ -205,7 +205,8 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         {isConflict && (
           <MessageContainer>
             <p>
-              Ada jadwal yang bertabrakan. Perbaiki terlebih dahulu sebelum menyimpan.
+              Ada jadwal yang bertabrakan. Perbaiki terlebih dahulu sebelum
+              menyimpan.
             </p>
           </MessageContainer>
         )}
@@ -286,7 +287,7 @@ const Container = styled.div`
     background: rgba(189, 189, 189, 0.8);
   }
 
-  padding-bottom: 32px;
+  padding-bottom: 36vh;
 `;
 
 const TableHeader = styled.div`

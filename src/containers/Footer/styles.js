@@ -6,6 +6,7 @@ export const StyledFooterContainer = styled(Box).attrs({
   bg: ({ mode }) => (mode === "light" ? "primary.Alabaster" : "#222222"),
   px: { base: 6, lg: 20 },
   py: { base: 8, lg: 12 },
+  position: "sticky",
 })``;
 
 export const StyledFooterDesc = styled(Box).attrs({
