@@ -41,7 +41,7 @@ import copyDarkImg from "assets/Copy-dark.svg";
 import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
-import { SuccessToast } from "components/Toast";
+import { SuccessToast, ErrorToast } from "components/Toast";
 import Icons from "components/Icons";
 
 import getFormattedSchedule from "utils/schedule";
@@ -98,6 +98,18 @@ function ViewSchedule({ match, history }) {
     SuccessToast(`${type} berhasil disalin!`, isMobile, theme);
   };
 
+  const showErrorCopy = () => {
+    ReactGA.event({
+      category: "Bagikan Jadwal",
+      action: "Copied a schedule's image",
+    });
+    ErrorToast(
+      "Uh oh, terjadi kesalahan. Gambar gagal disalin.",
+      isMobile,
+      theme,
+    );
+  };
+
   const performDeleteSchedule = async (userId, scheduleId) => {
     ReactGA.event({
       category: "Hapus Jadwal",
@@ -124,7 +136,7 @@ function ViewSchedule({ match, history }) {
   };
 
   const openShareModal = async () => {
-    const dataUrl = await htmlToImage.toPng(refs.current);
+    const dataUrl = await htmlToImage.toJpeg(refs.current);
     setImageURL(dataUrl);
     shareModal.onOpen();
   };
@@ -132,7 +144,7 @@ function ViewSchedule({ match, history }) {
   const copyImage = () => {
     copyImageToClipboard(imageURL)
       .then(() => showAlertCopy("Gambar"))
-      .catch((e) => {});
+      .catch((e) => showErrorCopy());
   };
 
   return (
