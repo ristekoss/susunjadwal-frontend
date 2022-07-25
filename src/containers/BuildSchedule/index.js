@@ -118,6 +118,7 @@ function BuildSchedule() {
           style={{
             display:
               courses === null || courses?.length === 0 ? "none" : "block",
+            marginTop: !isCoursesDetail && majorSelected ? "20px" : "0",
           }}
         >
           <SelectMajor
@@ -193,7 +194,7 @@ function BuildSchedule() {
           </Center>
         )}
 
-        {(courses === null || courses?.length === 0) && (
+        {courses === null && (
           <InfoContent mode={theme}>
             <p>
               Uh oh, sepertinya jadwal jurusan kamu belum tersedia. Silahkan
