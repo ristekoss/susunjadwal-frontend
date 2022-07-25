@@ -1,27 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Input, Box } from "@chakra-ui/react";
 import styled from "styled-components";
 function SearchInput({ theme, isMobile, courses, setValue }) {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  const onChangeHandler = (value) => {
-    let matches = [];
+  const onChangeHandler = useCallback(
+    (value) => {
+      let matches = [];
 
-    matches = courses?.filter((c) => {
-      if (value === "") {
-        //if value is empty
-        return null;
-      } else if (c.name.toLowerCase().startsWith(value.toLowerCase())) {
-        //returns suggestions array
-        return c;
-      } else {
-        return null;
-      }
-    });
+      matches = courses?.filter((c) => {
+        if (value === "") {
+          //if value is empty
+          return null;
+        } else if (c.name.toLowerCase().startsWith(value.toLowerCase())) {
+          //returns suggestions array
+          return c;
+        } else {
+          return null;
+        }
+      });
 
-    setSuggestions(matches);
-  };
+      setSuggestions(matches);
+    },
+    [courses],
+  );
+  useEffect(() => {
+    onChangeHandler("");
+  }, [onChangeHandler]);
 
   const suggestionClicked = (name) => {
     document.getElementById("input").value = name;
@@ -61,7 +67,7 @@ function SearchInput({ theme, isMobile, courses, setValue }) {
         }}
       />
 
-      {suggestions.length > 0 ? (
+      {suggestions && suggestions.length > 0 ? (
         <SuggestionsBox
           style={{
             visibility: showSuggestions ? "visible" : "hidden",
