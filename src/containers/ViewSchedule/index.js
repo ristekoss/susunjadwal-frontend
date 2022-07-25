@@ -104,7 +104,7 @@ function ViewSchedule({ match, history }) {
       action: "Copied a schedule's image",
     });
     ErrorToast(
-      "Uh oh, terjadi kesalahan. Gambar gagal disalin.",
+      "Uh oh, terjadi kesalahan. Browser atau device tidak support.",
       isMobile,
       theme,
     );
@@ -136,7 +136,7 @@ function ViewSchedule({ match, history }) {
   };
 
   const openShareModal = async () => {
-    const dataUrl = await htmlToImage.toJpeg(refs.current);
+    const dataUrl = await htmlToImage.toPng(refs.current);
     setImageURL(dataUrl);
     shareModal.onOpen();
   };
@@ -231,7 +231,7 @@ function ViewSchedule({ match, history }) {
                   style={{ height: "24px" }}
                   alt=""
                 />
-                <Text>
+                <Text fontSize={isMobile && "12px"}>
                   <b>Copy Image</b> akan menyalin gambar ke clipboard sementara{" "}
                   <b>Copy Link</b> akan menyalin link jadwal
                 </Text>

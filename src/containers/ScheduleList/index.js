@@ -103,7 +103,7 @@ const ScheduleList = () => {
       action: "Copied a schedule's image",
     });
     ErrorToast(
-      "Uh oh, terjadi kesalahan. Gambar gagal disalin.",
+      "Uh oh, terjadi kesalahan. Browser atau device tidak support.",
       isMobile,
       theme,
     );
@@ -212,7 +212,7 @@ const ScheduleList = () => {
                   style={{ height: "24px" }}
                   alt=""
                 />
-                <Text>
+                <Text fontSize={isMobile && "12px"}>
                   <b>Copy Image</b> akan menyalin gambar ke clipboard sementara{" "}
                   <b>Copy Link</b> akan menyalin link jadwal
                 </Text>
