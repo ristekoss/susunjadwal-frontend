@@ -161,47 +161,50 @@ const EditSchedule = ({ match }) => {
               </Link>
             </InfoContent>
           )}
-          <div style={{ position: "relative" }}>
-            <InputGroup h={isMobile ? "44px" : "57px"} mb="26px">
-              <InputLeftElement
-                h="full"
-                pl={isMobile ? "14px" : "20px"}
-                pointerEvents="none"
-                children={
-                  <Image
-                    alt=""
-                    src={theme === "light" ? searchImg : searchImgDark}
-                  />
-                }
-              />
-              <SearchInput
-                isMobile={isMobile}
-                theme={theme}
-                courses={courses}
-                setValue={setValue}
-              />
+          {filteredCourse && (
+            <div style={{ position: "relative" }}>
+              <InputGroup h={isMobile ? "44px" : "57px"} mb="26px">
+                <InputLeftElement
+                  h="full"
+                  pl={isMobile ? "14px" : "20px"}
+                  pointerEvents="none"
+                  children={
+                    <Image
+                      alt=""
+                      src={theme === "light" ? searchImg : searchImgDark}
+                    />
+                  }
+                />
+                <SearchInput
+                  isMobile={isMobile}
+                  theme={theme}
+                  courses={courses}
+                  setValue={setValue}
+                />
 
-              <Button
-                w="95px"
-                h="full"
-                borderLeftRadius="0"
-                bg={
-                  theme === "light" ? "primary.Purple" : "primary.LightPurple"
-                }
-                onMouseDown={() =>
-                  setValue(document.getElementById("input").value)
-                }
-                fontSize={isMobile && "14px"}
-                px={isMobile && "4px"}
-                display={isMobile && "none"}
-              >
-                <Center>
-                  Cari
-                  <Image alt="" src={arrowImg} ml="9px" />
-                </Center>
-              </Button>
-            </InputGroup>
-          </div>
+                <Button
+                  w="95px"
+                  h="full"
+                  borderLeftRadius="0"
+                  bg={
+                    theme === "light" ? "primary.Purple" : "primary.LightPurple"
+                  }
+                  onMouseDown={() =>
+                    setValue(document.getElementById("input").value)
+                  }
+                  fontSize={isMobile && "14px"}
+                  px={isMobile && "4px"}
+                  display={isMobile && "none"}
+                >
+                  <Center>
+                    Cari
+                    <Image alt="" src={arrowImg} ml="9px" />
+                  </Center>
+                </Button>
+              </InputGroup>
+            </div>
+          )}
+
           {filteredCourse &&
             (filteredCourse?.length === 0 ? (
               <Center flexDirection="column" mt="3.5rem">
