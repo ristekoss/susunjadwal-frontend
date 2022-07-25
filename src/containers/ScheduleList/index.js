@@ -29,7 +29,7 @@ import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
 import BauhausDarkDesktop from "assets/Beta/bauhaus-dark-lg.svg";
 import ScheduleDetail from "./ScheduleDetail";
 import { deleteSchedule } from "services/api";
-import { SuccessToast } from "components/Toast";
+import { SuccessToast, ErrorToast } from "components/Toast";
 import CopyToClipboard from "react-copy-to-clipboard";
 import alertImg from "assets/Alert2.svg";
 import linkImg from "assets/Link.svg";
@@ -97,6 +97,18 @@ const ScheduleList = () => {
     SuccessToast(`${type} berhasil disalin!`, isMobile, theme);
   };
 
+  const showErrorCopy = () => {
+    ReactGA.event({
+      category: "Bagikan Jadwal",
+      action: "Copied a schedule's image",
+    });
+    ErrorToast(
+      "Uh oh, terjadi kesalahan. Gambar gagal disalin.",
+      isMobile,
+      theme,
+    );
+  };
+
   const handleClickEditJadwal = (idJadwal) => {
     history.push(`/edit/${idJadwal}`);
   };
@@ -111,7 +123,7 @@ const ScheduleList = () => {
   const copyImage = () => {
     copyImageToClipboard(imageURL)
       .then(() => showAlertCopy("Gambar"))
-      .catch((e) => {});
+      .catch((e) => showErrorCopy());
   };
 
   return (
@@ -151,8 +163,7 @@ const ScheduleList = () => {
           <ModalBody>
             <Flex flexDirection="column">
               <Text mb="8px">
-                Bagikan Jadwal{" "}
-                <b>{!selectedName ? "Untitled" : selectedName}</b>
+                Bagikan Jadwal <b>{selectedName}</b>
               </Text>
               <Image alt="" src={imageURL} maxH="30vh" objectFit="contain" />
             </Flex>
