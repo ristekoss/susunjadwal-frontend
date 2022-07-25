@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   Button,
   useColorModeValue,
-  // Flex,
   Image,
   InputGroup,
   InputLeftElement,
@@ -17,7 +16,7 @@ import Helmet from "react-helmet";
 import { setCourses as reduxSetCourses } from "redux/modules/courses";
 import { clearSchedule } from "redux/modules/schedules";
 import { setLoading } from "redux/modules/appState";
-import { getCourses } from "services/api";
+import { getCourses, getCoursesByKd } from "services/api";
 
 import SelectedCourses from "containers/SelectedCourses";
 import { BauhausSide } from "components/Bauhaus";
@@ -25,21 +24,20 @@ import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
 import SearchInput from "./SearchInput";
-// import FACULTIES from "utils/faculty-base-additional-info.json";
-// import { useForm } from "react-hook-form";
-// import { CustomSelect } from "components/CustomSelect";
+
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";
 import arrowImg from "assets/Arrow.svg";
 import notFoundImg from "assets/NotFound.svg";
 import notFoundDarkImg from "assets/NotFound-dark.svg";
+import SelectMajor from "./SelectMajor";
 
 function BuildSchedule() {
   const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
   const isMobile = useSelector((state) => state.appState.isMobile);
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  const [majorSelected, setMajorSelected] = useState();
   const [detailData, setDetailData] = useState(null);
   const [courses, setCourses] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -49,11 +47,14 @@ function BuildSchedule() {
   const theme = useColorModeValue("light", "dark");
 
   const fetchCourses = useCallback(
-    async (majorId) => {
+    async (majorId, majorSelected) => {
       dispatch(setLoading(true));
 
       try {
-        const { data } = await getCourses(majorId);
+        const { data } = majorSelected
+          ? await getCoursesByKd(majorSelected.kd_org)
+          : await getCourses(majorId);
+
         setCourses(data.courses);
 
         setCoursesDetail(data.is_detail);
@@ -70,17 +71,16 @@ function BuildSchedule() {
   );
 
   useEffect(() => {
+    document.getElementById("input").value = "";
+    setValue("");
     dispatch(clearSchedule());
     const majorId = auth.majorId;
-    fetchCourses(majorId);
-  }, [auth.majorId, dispatch, fetchCourses]);
+    fetchCourses(majorId, majorSelected);
+  }, [auth.majorId, majorSelected, dispatch, fetchCourses, setValue]);
 
   // const handleChange = (e) => setValueTemporary(e.target.value);
 
-  // const { register, watch } = useForm();
-  // const selectedFaculty = watch("fakultas");
-
-  const filteredCourse = courses?.filter((c) => {
+  let filteredCourse = courses?.filter((c) => {
     if (value === "") {
       //if value is empty
       return c;
@@ -100,7 +100,7 @@ function BuildSchedule() {
       <CoursePickerContainer isMobile={isMobile} mode={theme}>
         <h1>Buat Jadwal</h1>
 
-        {lastUpdated && (
+        {lastUpdated && courses && (
           <h6>
             Jadwal terakhir diperbarui pada {isMobile ? <br /> : " "}
             <span>
@@ -114,45 +114,22 @@ function BuildSchedule() {
             </span>
           </h6>
         )}
-
-        {!isCoursesDetail && (
-          <InfoContent mode={theme}>
-            <p>
-              Uh oh, sepertinya kami belum memiliki jadwal untuk jurusan kamu.
-              Silahkan coba untuk melakukan <span>Update Matkul</span> dengan
-              menekan tombol di bawah ini!
-            </p>
-            <Link to="/update">
-              <Button
-                mt={{ base: "1rem", lg: "1.5rem" }}
-                bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
-                color={theme === "light" ? "white" : "dark.White"}
-              >
-                Update Matkul
-              </Button>
-            </Link>
-          </InfoContent>
-        )}
-
-        {courses?.length === 0 && (
-          <InfoContent mode={theme}>
-            <p>
-              Uh oh, sepertinya jadwal jurusan kamu belum tersedia. Silahkan
-              coba untuk melakukan <span>Update Matkul</span> lagi nanti!
-            </p>
-            <Link to="/update">
-              <Button
-                mt={{ base: "1rem", lg: "1.5rem" }}
-                bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
-                color={theme === "light" ? "white" : "dark.White"}
-              >
-                Update Matkul
-              </Button>
-            </Link>
-          </InfoContent>
-        )}
-        {filteredCourse && (
-          <div style={{ position: "relative" }}>
+        <div
+          style={{
+            display: courses === null ? "none" : "block",
+            marginTop: !isCoursesDetail && majorSelected ? "20px" : "0",
+          }}
+        >
+          <SelectMajor
+            theme={theme}
+            isMobile={isMobile}
+            setMajorSelected={setMajorSelected}
+          />
+          <div
+            style={{
+              position: "relative",
+            }}
+          >
             <InputGroup h={isMobile ? "44px" : "57px"} mb="26px">
               <InputLeftElement
                 h="full"
@@ -193,6 +170,45 @@ function BuildSchedule() {
               </Button>
             </InputGroup>
           </div>
+        </div>
+
+        {!isCoursesDetail && majorSelected && (
+          <Center flexDirection="column" mt="3.5rem">
+            <Image
+              alt=""
+              src={theme === "light" ? notFoundImg : notFoundDarkImg}
+            />
+            <Text
+              mt="20px"
+              color={theme === "light" ? "#33333399" : "#FFFFFF99"}
+            >
+              Silakan{" "}
+              <Link to="/update">
+                <Text color={theme === "light" ? "#5038BC" : "#917DEC"} as="u">
+                  <span>update matkul</span>
+                </Text>
+              </Link>{" "}
+              terlebih dahulu
+            </Text>
+          </Center>
+        )}
+
+        {courses === null && (
+          <InfoContent mode={theme}>
+            <p>
+              Uh oh, sepertinya jadwal jurusan kamu belum tersedia. Silahkan
+              coba untuk melakukan <span>Update Matkul</span> lagi nanti!
+            </p>
+            <Link to="/update">
+              <Button
+                mt={{ base: "1rem", lg: "1.5rem" }}
+                bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+                color={theme === "light" ? "white" : "dark.White"}
+              >
+                Update Matkul
+              </Button>
+            </Link>
+          </InfoContent>
         )}
 
         {filteredCourse &&

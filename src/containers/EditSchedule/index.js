@@ -5,7 +5,6 @@ import {
   Button,
   useColorModeValue,
   Text,
-  // Flex,
   Image,
   InputGroup,
   InputLeftElement,
@@ -18,6 +17,7 @@ import Course from "../BuildSchedule/Course";
 import Detail from "../BuildSchedule/Detail";
 import Checkout from "../BuildSchedule/Checkout";
 import SearchInput from "../BuildSchedule/SearchInput";
+import SelectMajor from "../BuildSchedule/SelectMajor";
 import {
   Container,
   InfoContent,
@@ -29,12 +29,9 @@ import { setCourses as reduxSetCourses } from "redux/modules/courses";
 import { addSchedule, clearSchedule } from "redux/modules/schedules";
 import { generateScheduledCourseListFromSchedule } from "./utils";
 import SelectedCourses from "containers/SelectedCourses";
-import { getSchedule, getCourses } from "services/api";
+import { getSchedule, getCourses, getCoursesByKd } from "services/api";
 import { BauhausSide } from "components/Bauhaus";
 import { makeAtLeastMs } from "utils/promise";
-// import FACULTIES from "utils/faculty-base-additional-info.json";
-// import { useForm } from "react-hook-form";
-// import { CustomSelect } from "components/CustomSelect";
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";
 import arrowImg from "assets/Arrow.svg";
@@ -48,7 +45,7 @@ const EditSchedule = ({ match }) => {
   const { scheduleId } = useParams();
   const dispatch = useDispatch();
   const theme = useColorModeValue("light", "dark");
-
+  const [majorSelected, setMajorSelected] = useState();
   const [courses, setCourses] = useState(null);
   const [detailData, setDetailData] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -76,23 +73,30 @@ const EditSchedule = ({ match }) => {
   }, [match, dispatch, courses, auth.majorId]);
 
   const fetchCourses = useCallback(
-    async (majorId) => {
+    async (majorId, majorSelected) => {
       dispatch(setLoading(true));
-      const { data } = await getCourses(majorId);
+      const { data } = majorSelected
+        ? await getCoursesByKd(majorSelected.kd_org)
+        : await getCourses(majorId);
       setCourses(data.courses);
       setCoursesDetail(data.is_detail);
       setLastUpdated(new Date(data.last_update_at));
-      dispatch(reduxSetCourses(data.courses));
+      if (courses) {
+        dispatch(reduxSetCourses(data.courses));
+      }
+
       setTimeout(() => dispatch(setLoading(false)), 2000);
     },
-    [dispatch],
+    [courses, dispatch],
   );
 
   useEffect(() => {
+    document.getElementById("input").value = "";
+    setValue("");
     dispatch(clearSchedule());
     const majorId = auth.majorId;
-    fetchCourses(majorId);
-  }, [auth.majorId, dispatch, fetchCourses]);
+    fetchCourses(majorId, majorSelected);
+  }, [auth.majorId, dispatch, fetchCourses, setValue, majorSelected]);
 
   // const { register, watch } = useForm();
   // const selectedFaculty = watch("fakultas");
@@ -118,13 +122,13 @@ const EditSchedule = ({ match }) => {
         <CoursePickerContainer isMobile={isMobile} mode={theme}>
           <h1>Edit Jadwal</h1>
 
-          {lastUpdated && (
+          {lastUpdated && courses && (
             <h6>
               Jadwal terakhir diperbarui pada {isMobile ? <br /> : " "}
               <span>
                 {lastUpdated?.getDate() +
                   "/" +
-                  lastUpdated?.getMonth() +
+                  (lastUpdated?.getMonth() + 1) +
                   "/" +
                   lastUpdated?.getFullYear() +
                   " " +
@@ -132,37 +136,22 @@ const EditSchedule = ({ match }) => {
               </span>
             </h6>
           )}
-
-          {!isCoursesDetail && (
-            <InfoContent mode={theme}>
-              <p>
-                Uh oh, sepertinya kami belum memiliki jadwal untuk jurusan kamu.
-                Silahkan coba untuk melakukan <span>Update Matkul</span> dengan
-                menekan tombol di bawah ini!
-              </p>
-              <Link to="/update">
-                <Button mt={{ base: "1rem", lg: "1.5rem" }}>
-                  Update Matkul
-                </Button>
-              </Link>
-            </InfoContent>
-          )}
-
-          {courses?.length === 0 && (
-            <InfoContent mode={theme}>
-              <p>
-                Uh oh, sepertinya jadwal jurusan kamu belum tersedia. Silahkan
-                coba untuk melakukan <span>Update Matkul</span> lagi nanti!
-              </p>
-              <Link to="/update">
-                <Button mt={{ base: "1rem", lg: "1.5rem" }}>
-                  Update Matkul
-                </Button>
-              </Link>
-            </InfoContent>
-          )}
-          {filteredCourse && (
-            <div style={{ position: "relative" }}>
+          <div
+            style={{
+              display: courses === null ? "none" : "block",
+              marginTop: !isCoursesDetail && majorSelected ? "20px" : "0",
+            }}
+          >
+            <SelectMajor
+              theme={theme}
+              isMobile={isMobile}
+              setMajorSelected={setMajorSelected}
+            />
+            <div
+              style={{
+                position: "relative",
+              }}
+            >
               <InputGroup h={isMobile ? "44px" : "57px"} mb="26px">
                 <InputLeftElement
                   h="full"
@@ -203,6 +192,48 @@ const EditSchedule = ({ match }) => {
                 </Button>
               </InputGroup>
             </div>
+          </div>
+
+          {!isCoursesDetail && majorSelected && (
+            <Center flexDirection="column" mt="3.5rem">
+              <Image
+                alt=""
+                src={theme === "light" ? notFoundImg : notFoundDarkImg}
+              />
+              <Text
+                mt="20px"
+                color={theme === "light" ? "#33333399" : "#FFFFFF99"}
+              >
+                Silakan{" "}
+                <Link to="/update">
+                  <Text
+                    color={theme === "light" ? "#5038BC" : "#917DEC"}
+                    as="u"
+                  >
+                    <span>update matkul</span>
+                  </Text>
+                </Link>{" "}
+                terlebih dahulu
+              </Text>
+            </Center>
+          )}
+
+          {courses === null && (
+            <InfoContent mode={theme}>
+              <p>
+                Uh oh, sepertinya jadwal jurusan kamu belum tersedia. Silahkan
+                coba untuk melakukan <span>Update Matkul</span> lagi nanti!
+              </p>
+              <Link to="/update">
+                <Button
+                  mt={{ base: "1rem", lg: "1.5rem" }}
+                  bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+                  color={theme === "light" ? "white" : "dark.White"}
+                >
+                  Update Matkul
+                </Button>
+              </Link>
+            </InfoContent>
           )}
 
           {filteredCourse &&
@@ -225,7 +256,6 @@ const EditSchedule = ({ match }) => {
               ))
             ))}
         </CoursePickerContainer>
-
         {!isMobile && (
           <SelectedCoursesContainer
             isAnnouncement={isAnnouncement}
