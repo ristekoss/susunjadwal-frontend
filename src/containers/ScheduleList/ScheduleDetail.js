@@ -39,7 +39,7 @@ const ScheduleDetail = ({
   };
 
   const openShareModal = async (id, name) => {
-    const dataUrl = await htmlToImage.toJpeg(refs.current);
+    const dataUrl = await htmlToImage.toPng(refs.current);
     showShareModal(id, name, dataUrl);
   };
 
