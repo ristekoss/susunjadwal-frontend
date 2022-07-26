@@ -14,7 +14,6 @@ import styled from "styled-components";
 import Helmet from "react-helmet";
 
 import { setCourses as reduxSetCourses } from "redux/modules/courses";
-import { clearSchedule } from "redux/modules/schedules";
 import { setLoading } from "redux/modules/appState";
 import { getCourses, getCoursesByKd } from "services/api";
 
@@ -73,7 +72,6 @@ function BuildSchedule() {
   useEffect(() => {
     document.getElementById("input").value = "";
     setValue("");
-    dispatch(clearSchedule());
     const majorId = auth.majorId;
     fetchCourses(majorId, majorSelected);
   }, [auth.majorId, majorSelected, dispatch, fetchCourses, setValue]);
