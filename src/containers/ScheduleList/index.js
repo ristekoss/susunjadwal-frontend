@@ -103,7 +103,7 @@ const ScheduleList = () => {
       action: "Copied a schedule's image",
     });
     ErrorToast(
-      "Uh oh, terjadi kesalahan. Browser atau device tidak support.",
+      "Uh oh, terjadi kesalahan. Coba ganti browser atau device yang Anda gunakan.",
       isMobile,
       theme,
     );

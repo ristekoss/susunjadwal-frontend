@@ -179,14 +179,17 @@ function BuildSchedule() {
             <Text
               mt="20px"
               color={theme === "light" ? "#33333399" : "#FFFFFF99"}
+              textAlign="center"
+              maxW="450px"
             >
-              Silakan{" "}
+              Oops, belum ada mahasiswa dari jurusan{" "}
+              {majorSelected.study_program.replace(/ *\([^)]*\) */g, "")} yang
+              melakukan{" "}
               <Link to="/update">
                 <Text color={theme === "light" ? "#5038BC" : "#917DEC"} as="u">
                   <span>update matkul</span>
                 </Text>
-              </Link>{" "}
-              terlebih dahulu
+              </Link>
             </Text>
           </Center>
         )}
