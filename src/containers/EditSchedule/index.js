@@ -26,7 +26,7 @@ import {
 } from "../BuildSchedule";
 
 import { setCourses as reduxSetCourses } from "redux/modules/courses";
-import { addSchedule, clearSchedule } from "redux/modules/schedules";
+import { addSchedule } from "redux/modules/schedules";
 import { generateScheduledCourseListFromSchedule } from "./utils";
 import SelectedCourses from "containers/SelectedCourses";
 import { getSchedule, getCourses, getCoursesByKd } from "services/api";
@@ -81,25 +81,21 @@ const EditSchedule = ({ match }) => {
       setCourses(data.courses);
       setCoursesDetail(data.is_detail);
       setLastUpdated(new Date(data.last_update_at));
-      if (courses) {
+      if (data.courses) {
         dispatch(reduxSetCourses(data.courses));
       }
 
       setTimeout(() => dispatch(setLoading(false)), 2000);
     },
-    [courses, dispatch],
+    [dispatch],
   );
 
   useEffect(() => {
     document.getElementById("input").value = "";
     setValue("");
-    dispatch(clearSchedule());
     const majorId = auth.majorId;
     fetchCourses(majorId, majorSelected);
   }, [auth.majorId, dispatch, fetchCourses, setValue, majorSelected]);
-
-  // const { register, watch } = useForm();
-  // const selectedFaculty = watch("fakultas");
 
   const filteredCourse = courses?.filter((c) => {
     if (value === "") {
