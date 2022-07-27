@@ -1,6 +1,8 @@
-import { ErrorToast, SuccessToast } from "components/Toast";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useColorModeValue } from "@chakra-ui/react";
+
+import { ErrorToast } from "components/Toast";
 import { dayToColumn, getDayOfCurrentWeek } from "utils/date";
 import getFormattedSchedule from "utils/schedule";
 import useDidUpdate from "./useDidUpdate";
@@ -10,19 +12,21 @@ const useDownloadCalendar = () => {
   const [schedule, setSchedule] = useState();
   const [error, setError] = useState("");
   const [data, setData] = useState("");
+
   const isMobile = useSelector((state) => state.appState.isMobile);
+  const theme = useColorModeValue("light", "dark");
+
   const fn = () =>
     ics.createEvents(parseFormattedScheduleToEvent(schedule), (error, value) => {
       if (error) {
         console.error(error.message);
-        ErrorToast("Terjadi kesalahan, silakan dicoba kembali.", isMobile);
+        ErrorToast("Terjadi kesalahan, silakan dicoba kembali.", isMobile, theme);
         setError(error);
         return error;
       }
       setData(value);
       const dlurl = `data:text/calendar;charset=utf-8,${value}`;
-      download(dlurl, `${schedule.name || 'Untitled'}_calendar_susunjadwal.ics`);
-      SuccessToast("Berhasil download jadwal!", isMobile);
+      download(dlurl, `${schedule.name || 'Untitled'} - SusunJadwal.ics`);
       return value;
     });
 

@@ -2,14 +2,18 @@ import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { decodeHtmlEntity } from "utils/string";
-import clipboardImg from "assets/Clipboard.svg";
-import deleteImg from "assets/Delete.svg";
-import Schedule from "containers/ViewSchedule/Schedule";
-import Icons from "components/Icons";
-import downloadImg from "assets/Download.svg";
 import { Button, useColorModeValue } from "@chakra-ui/react";
 import * as htmlToImage from "html-to-image";
+
+import Schedule from "containers/ViewSchedule/Schedule";
+import Icons from "components/Icons";
+import useDownloadCalendar from "hooks/useDownloadCalendar";
+import { decodeHtmlEntity } from "utils/string";
+
+import exportToIcsImg from "assets/ExportToIcs.svg";
+import clipboardImg from "assets/Clipboard.svg";
+import downloadImg from "assets/Download.svg";
+import deleteImg from "assets/Delete.svg";
 
 const ScheduleDetail = ({
   schedule,
@@ -20,6 +24,8 @@ const ScheduleDetail = ({
 }) => {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const theme = useColorModeValue("light", "dark");
+  const { generateICalendarFile } = useDownloadCalendar(theme);
+
   const convertDate = (date) => {
     const dateNew = new Date(date);
     return `${dateNew.getDate()}/${
@@ -72,6 +78,12 @@ const ScheduleDetail = ({
                           downloadImage(
                             !schedule.name ? "Untitled" : schedule.name,
                           ),
+                      },
+                      {
+                        desc: "Ekspor ke .ics (Google Calendar/Apple Calendar)",
+                        icon: exportToIcsImg,
+                        alt: "export-to-ics",
+                        action: () => generateICalendarFile(schedule)
                       },
                       {
                         desc: "Share Jadwal",

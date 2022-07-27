@@ -20,28 +20,25 @@ import { useSelector, useDispatch } from "react-redux";
 import Helmet from "react-helmet";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { CopyToClipboard } from "react-copy-to-clipboard";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { copyImageToClipboard } from "copy-image-clipboard";
 
-import { getSchedules } from "services/api";
+import ScheduleDetail from "./ScheduleDetail";
 import { setLoading } from "redux/modules/appState";
+import { getSchedules, deleteSchedule } from "services/api";
 import { makeAtLeastMs } from "utils/promise";
-import Schedule from "containers/ViewSchedule/Schedule";
-import { decodeHtmlEntity } from 'utils/string';
+import { SuccessToast, ErrorToast } from "components/Toast";
 import { BauhausSide } from 'components/Bauhaus';
+
 import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
 import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
 import BauhausDarkDesktop from "assets/Beta/bauhaus-dark-lg.svg";
-import ScheduleDetail from "./ScheduleDetail";
-import { deleteSchedule } from "services/api";
-import { SuccessToast, ErrorToast } from "components/Toast";
-import CopyToClipboard from "react-copy-to-clipboard";
 import alertImg from "assets/Alert2.svg";
 import linkImg from "assets/Link.svg";
 import copyImg from "assets/Copy.svg";
 import alertDarkImg from "assets/Alert-dark.svg";
 import linkDarkImg from "assets/Link-dark.svg";
 import copyDarkImg from "assets/Copy-dark.svg";
-import { copyImageToClipboard } from "copy-image-clipboard";
 
 const ScheduleList = () => {
   const dispatch = useDispatch();
@@ -55,8 +52,6 @@ const ScheduleList = () => {
   const [selectedName, setSelectedName] = useState("");
   const [schedules, setSchedules] = useState();
   const [imageURL, setImageURL] = useState("");
-
-  const { generateICalendarFile } = useDownloadCalendar();
 
   useEffect(() => {
     const fetchSchedules = async () => {
