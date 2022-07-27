@@ -446,7 +446,7 @@ const PageHeader = styled.div`
 const PeriodTitle = styled.h1`
   margin-top: 24px;
   margin-bottom: 24px;
-  font-size: ${({ mobile }) => (mobile ? "1.5rem" : "2rem")};
+  font-size: ${({ mobile }) => (mobile ? "1.5rem" : "1.75rem")};
   font-weight: bold;
   color: ${({ mode }) =>
       mode === "light"
