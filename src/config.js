@@ -11,7 +11,7 @@ const config = {
     BASE_URL: "/"
   },
   development: {
-    API_BASE_URL: "http://localhost:5000/susunjadwal/api",
+    API_BASE_URL: "https://api.susunjadwal.cs.ui.ac.id/susunjadwal/api",
     BASE_URL: "/"
   }
 };

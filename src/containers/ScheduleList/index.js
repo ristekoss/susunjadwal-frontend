@@ -4,6 +4,9 @@ import { useHistory } from "react-router";
 import {
   Button,
   Box,
+  Center,
+  InputGroup,
+  InputLeftElement,
   Modal,
   ModalOverlay,
   ModalContent as ChakraModalContent,
@@ -39,6 +42,12 @@ import linkDarkImg from "assets/Link-dark.svg";
 import copyDarkImg from "assets/Copy-dark.svg";
 import { copyImageToClipboard } from "copy-image-clipboard";
 import { convertPeriodToLiteral, groupScheduleByPeriod } from "utils/schedule";
+import SearchInput from "components/SearchInput";
+import searchImg from "assets/Search.svg";
+import searchImgDark from "assets/Search-dark.svg";
+import arrowImg from "assets/Arrow.svg";
+import notFoundImg from "assets/NotFound.svg";
+import notFoundDarkImg from "assets/NotFound-dark.svg";
 
 const ScheduleList = () => {
   const dispatch = useDispatch();
@@ -48,11 +57,17 @@ const ScheduleList = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const shareModal = useDisclosure();
   const theme = useColorModeValue("light", "dark");
+
   const [selectedId, setSelectedId] = useState("");
   const [selectedName, setSelectedName] = useState("");
+
+  const [query, setQuery] = useState("");
   const [schedules, setSchedules] = useState();
+  const [filteredSchedules, setFilteredSchedules] = useState([]);
+  const [scheduleTitles, setScheduleTitles] = useState();
   const [groupedSchedule, setGroupedSchedule] = useState();
   const [periods, setPeriods] = useState();
+
   const [imageURL, setImageURL] = useState("");
 
   useEffect(() => {
@@ -61,10 +76,15 @@ const ScheduleList = () => {
       const {
         data: { user_schedules },
       } = await makeAtLeastMs(getSchedules(auth.userId), 1000);
+
       setSchedules(user_schedules);
+      setFilteredSchedules(user_schedules);
       const [grouped, periods] = groupScheduleByPeriod(user_schedules)
+
+      setScheduleTitles(user_schedules.filter(schedule => schedule.name))
       setGroupedSchedule(grouped);
       setPeriods(periods.reverse());
+
       dispatch(setLoading(false));
     };
 
@@ -72,8 +92,21 @@ const ScheduleList = () => {
   }, [dispatch, auth]);
 
   useEffect(() => {
-    console.log(schedules)
-  }, [schedules])
+    if (query != "") {
+      setFilteredSchedules(schedules.filter(
+        schedule => schedule.name.toLowerCase().includes(query.toLowerCase())))
+    } else {
+      setFilteredSchedules(schedules)
+    }
+  }, [query])
+
+  useEffect(() => {
+    if (filteredSchedules?.length > 0) {
+      const [grouped, periods] = groupScheduleByPeriod(filteredSchedules)
+      setGroupedSchedule(grouped);
+      setPeriods(periods.reverse());
+    }
+  }, [filteredSchedules])
 
   const performDeleteSchedule = async (userId, scheduleId) => {
     ReactGA.event({
@@ -243,44 +276,90 @@ const ScheduleList = () => {
           <PageTitle mobile={isMobile} mode={theme}>
             Daftar Jadwal
           </PageTitle>
+          <PageHeader>
+            <InputGroup h={isMobile ? "44px" : "57px"} mb="26px">
+              <InputLeftElement
+                h="full"
+                pl={isMobile ? "14px" : "20px"}
+                pointerEvents="none"
+                children={
+                  <Image
+                    alt=""
+                    src={theme === "light" ? searchImg : searchImgDark}
+                  />
+                }
+              />
+              <SearchInput
+                isMobile={isMobile}
+                placeholder="Cari Jadwal Kuliah"
+                theme={theme}
+                options={scheduleTitles}
+                setValue={setQuery}
+              />
+              <Button
+                w="95px"
+                h="full"
+                borderLeftRadius="0"
+                bg={
+                  theme === "light" ? "primary.Purple" : "primary.LightPurple"
+                }
+                onMouseDown={() =>
+                  setQuery(document.getElementById("input").value)
+                }
+                fontSize={isMobile && "14px"}
+                px={isMobile && "4px"}
+                display={isMobile && "none"}
+              >
+                <Center>
+                  Cari
+                  <Image alt="" src={arrowImg} ml="9px" />
+                </Center>
+              </Button>
+            </InputGroup>
+          </PageHeader>
         </>
       )}
 
       {!!schedules?.length ? (
-        <CardContainer>
-          {/* {schedules?.map((schedule, idx) => {
-            return (
-              <ScheduleDetail
-                schedule={schedule}
-                idx={idx}
-                key={schedule.id}
-                showModal={showDialogDelete}
-                editSchedule={handleClickEditJadwal}
-                showShareModal={showDialogShare}
-              />
-            );
-          })} */}
-          {periods?.map((period, idx) => {
-            return (
-              <>
-                <PeriodTitle mobile={isMobile} mode={theme}>
-                  {convertPeriodToLiteral(period)}
-                </PeriodTitle>
+        <>
+          {!!filteredSchedules?.length > 0 ? (
+            <CardContainer>
+              {periods?.map((period) => {
+                return (
+                  <>
+                    <PeriodTitle mobile={isMobile} mode={theme}>
+                      {convertPeriodToLiteral(period)}
+                    </PeriodTitle>
 
-                {groupedSchedule[period]?.map((schedule, idx) => (
-                  <ScheduleDetail
-                    schedule={schedule}
-                    idx={idx}
-                    key={schedule.id}
-                    showModal={showDialogDelete}
-                    editSchedule={handleClickEditJadwal}
-                    showShareModal={showDialogShare}
-                  />
-                ))}
-              </>
-            );
-          })}
-        </CardContainer>
+                    {groupedSchedule[period]?.map((schedule, idx) => (
+                      <ScheduleDetail
+                        schedule={schedule}
+                        idx={idx}
+                        key={schedule.id}
+                        showModal={showDialogDelete}
+                        editSchedule={handleClickEditJadwal}
+                        showShareModal={showDialogShare}
+                      />
+                    ))}
+                  </>
+                );
+              })}
+            </CardContainer>
+          ) : (
+            <Center flexDirection="column" mt="3.5rem">
+              <Image
+                alt=""
+                src={theme === "light" ? notFoundImg : notFoundDarkImg}
+              />
+              <Text
+                mt="20px"
+                color={theme === "light" ? "#33333399" : "#FFFFFF99"}
+              >
+                Jadwal yang dicari tidak ditemukan
+              </Text>
+            </Center>
+          )}
+        </>
       ) : (
         <>
           {isMobile ? (
@@ -352,14 +431,24 @@ const PageInfo = styled.h2`
   color: ${({ mode }) => (mode === "light" ? "#333333" : "#D0D0D0")};
 `;
 
+const PageHeader = styled.div`
+  padding: ${(props) => (props.theme.mobile ? "1rem 3rem 0 3rem" : "0 48px")};
+  width: 100%;
+`;
+
 const PeriodTitle = styled.h1`
+  margin-top: 0px;
   margin-bottom: 24px;
-  font-size: ${({ mobile }) => (mobile ? "1.7rem" : "2rem")};
+  font-size: ${({ mobile }) => (mobile ? "1.5rem" : "2rem")};
   font-weight: bold;
   color: ${({ mode }) =>
       mode === "light"
         ? (props) => props.theme.color.secondaryMineShaft
-        : (props) => props.theme.color.darkWhite}
+        : (props) => props.theme.color.darkWhite};
+
+  @media (min-width: 900px) {
+    margin-top: 48px;
+  }
 `;
 
 const CardContainer = styled.div`
