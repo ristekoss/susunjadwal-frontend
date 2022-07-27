@@ -37,8 +37,12 @@ function SelectMajor({ theme, isMobile, setMajorSelected }) {
         isMobile={isMobile}
       >
         {Object.keys(FACULTIES).map((faculty) => (
-          <option key={faculty} value={faculty}>
-            {faculty.toLowerCase()}
+          <option
+            key={faculty}
+            value={faculty}
+            style={{ textTransform: "capitalize" }}
+          >
+            {faculty.charAt(0) + faculty.toLowerCase().slice(1)}
           </option>
         ))}
       </CustomSelect>

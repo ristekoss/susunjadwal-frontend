@@ -183,8 +183,9 @@ function BuildSchedule() {
               maxW="450px"
             >
               Oops, belum ada mahasiswa dari jurusan{" "}
-              {majorSelected.study_program.replace(/ *\([^)]*\) */g, "")} yang
-              melakukan{" "}
+              {majorSelected.study_program.replace(/ *\([^)]*\) */g, "")},{" "}
+              {majorSelected.educational_program.replace(/ *\([^)]*\) */g, "")}{" "}
+              yang melakukan{" "}
               <Link to="/update">
                 <Text color={theme === "light" ? "#5038BC" : "#917DEC"} as="u">
                   <span>update matkul</span>
