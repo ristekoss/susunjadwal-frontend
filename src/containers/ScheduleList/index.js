@@ -20,10 +20,14 @@ import { useSelector, useDispatch } from "react-redux";
 import Helmet from "react-helmet";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+
 import { getSchedules } from "services/api";
 import { setLoading } from "redux/modules/appState";
 import { makeAtLeastMs } from "utils/promise";
-import { BauhausSide } from "components/Bauhaus";
+import Schedule from "containers/ViewSchedule/Schedule";
+import { decodeHtmlEntity } from 'utils/string';
+import { BauhausSide } from 'components/Bauhaus';
 import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
 import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
 import BauhausDarkDesktop from "assets/Beta/bauhaus-dark-lg.svg";
@@ -51,6 +55,8 @@ const ScheduleList = () => {
   const [selectedName, setSelectedName] = useState("");
   const [schedules, setSchedules] = useState();
   const [imageURL, setImageURL] = useState("");
+
+  const { generateICalendarFile } = useDownloadCalendar();
 
   useEffect(() => {
     const fetchSchedules = async () => {
