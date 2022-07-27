@@ -48,6 +48,7 @@ import searchImgDark from "assets/Search-dark.svg";
 import arrowImg from "assets/Arrow.svg";
 import notFoundImg from "assets/NotFound.svg";
 import notFoundDarkImg from "assets/NotFound-dark.svg";
+import SortByTermButton from "components/SortByTermButton";
 
 const ScheduleList = () => {
   const dispatch = useDispatch();
@@ -105,7 +106,7 @@ const ScheduleList = () => {
     if (filteredSchedules?.length > 0) {
       const [grouped, periods] = groupScheduleByPeriod(filteredSchedules)
       setGroupedSchedule(grouped);
-      setPeriods(isSortByLatest ? periods.sort() : periods.reverse());
+      setPeriods(isSortByLatest ? periods.reverse() : periods.sort());
     }
   }, [filteredSchedules, isSortByLatest])
 
@@ -278,7 +279,7 @@ const ScheduleList = () => {
             Daftar Jadwal
           </PageTitle>
           <PageHeader>
-            <InputGroup h={isMobile ? "44px" : "57px"} mb="26px">
+            <InputGroup h={isMobile ? "44px" : "57px"}>
               <InputLeftElement
                 h="full"
                 pl={isMobile ? "14px" : "20px"}
@@ -317,6 +318,10 @@ const ScheduleList = () => {
                 </Center>
               </Button>
             </InputGroup>
+            <SortByTermButton
+              isSortByLatest={isSortByLatest}
+              setSortByLatest={setSortByLatest}
+            />
           </PageHeader>
         </>
       )}
@@ -435,10 +440,11 @@ const PageInfo = styled.h2`
 const PageHeader = styled.div`
   padding: ${(props) => (props.theme.mobile ? "1rem 3rem 0 3rem" : "0 48px")};
   width: 100%;
+  display: flex;
 `;
 
 const PeriodTitle = styled.h1`
-  margin-top: 0px;
+  margin-top: 24px;
   margin-bottom: 24px;
   font-size: ${({ mobile }) => (mobile ? "1.5rem" : "2rem")};
   font-weight: bold;
