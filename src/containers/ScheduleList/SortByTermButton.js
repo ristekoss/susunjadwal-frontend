@@ -27,6 +27,12 @@ const SortByTermButton = ({ isSortByLatest, setSortByLatest }) => {
         bg={
           theme === "light" ? "primary.Purple" : "primary.LightPurple"
         }
+        _hover={{
+          bg: theme === "light" ? "primary.Purple" : "primary.LightPurple",
+        }}
+        _active={{
+          bg: theme === "light" ? "primary.Purple" : "primary.LightPurple",
+        }}
         cursor="pointer"
         borderRadius="8px"
         display="flex"

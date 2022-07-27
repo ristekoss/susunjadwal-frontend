@@ -48,7 +48,7 @@ import searchImgDark from "assets/Search-dark.svg";
 import arrowImg from "assets/Arrow.svg";
 import notFoundImg from "assets/NotFound.svg";
 import notFoundDarkImg from "assets/NotFound-dark.svg";
-import SortByTermButton from "components/SortByTermButton";
+import SortByTermButton from "containers/ScheduleList/SortByTermButton";
 
 const ScheduleList = () => {
   const dispatch = useDispatch();
