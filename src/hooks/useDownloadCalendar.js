@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useColorModeValue } from "@chakra-ui/react";
 
 import { ErrorToast } from "components/Toast";
-import { dayToColumn, getDayOfCurrentWeek } from "utils/date";
-import getFormattedSchedule from "utils/schedule";
-import useDidUpdate from "./useDidUpdate";
+import { parseFormattedScheduleToEvent } from "utils/schedule";
+
 const ics = require("ics");
 
 const useDownloadCalendar = () => {
@@ -16,7 +15,7 @@ const useDownloadCalendar = () => {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const theme = useColorModeValue("light", "dark");
 
-  const fn = () =>
+  const fn = useCallback(() => {
     ics.createEvents(
       parseFormattedScheduleToEvent(schedule),
       (error, value) => {
@@ -30,41 +29,21 @@ const useDownloadCalendar = () => {
           setError(error);
           return error;
         }
+
         setData(value);
         const dlurl = `data:text/calendar;charset=utf-8,${value}`;
         download(dlurl, `${schedule.name || "Untitled"} - SusunJadwal.ics`);
         return value;
       },
     );
+  }, [schedule, isMobile, theme]);
 
-  const parseFormattedScheduleToEvent = (schedule) => {
-    const [formattedSchedule] = getFormattedSchedule(schedule);
-    const classes = [];
-    Object.keys(formattedSchedule).forEach((subject) => {
-      formattedSchedule[subject].time.forEach((item) => {
-        const calendarDate = getDayOfCurrentWeek(dayToColumn(item.day));
-        const year = calendarDate.getFullYear();
-        const month = calendarDate.getMonth() + 1;
-        const day = calendarDate.getDate();
-        const [startHour, startMinute] = item.start.split(".").map((item) => {
-          return parseInt(item, 10);
-        });
-        const [endHour, endMinute] = item.end.split(".").map((item) => {
-          return parseInt(item, 10);
-        });
-        const data = {
-          start: [year, month, day, startHour, startMinute],
-          end: [year, month, day, endHour, endMinute],
-          title: formattedSchedule[subject].name,
-          location: item.room,
-        };
-        classes.push(data);
-      });
-    });
-    return classes;
-  };
-
-  useDidUpdate(fn, [schedule]);
+  useEffect(() => {
+    if (schedule != null) {
+      fn();
+      setSchedule(null);
+    }
+  }, [schedule, fn]);
 
   return {
     generateICalendarFile: setSchedule,
