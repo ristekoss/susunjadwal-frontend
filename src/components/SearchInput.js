@@ -1,30 +1,34 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Input, Box } from "@chakra-ui/react";
 import styled from "styled-components";
-function SearchInput({ theme, isMobile, courses, setValue }) {
+
+const filterMethod = (options, value) => {
+  return options?.filter((option) => {
+    const queryIsNotEmpty = value != ""
+    const isQueryMatch = option.name.toLowerCase().startsWith(value.toLowerCase())
+
+    // When value is not empty & matches the query
+    if (queryIsNotEmpty && isQueryMatch) {
+      return option;
+    }
+
+    return null;
+  })
+}
+
+function SearchInput({ theme, isMobile, options, setValue, placeholder, customFilter = filterMethod  }) {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const onChangeHandler = useCallback(
     (value) => {
       let matches = [];
-
-      matches = courses?.filter((c) => {
-        if (value === "") {
-          //if value is empty
-          return null;
-        } else if (c.name.toLowerCase().startsWith(value.toLowerCase())) {
-          //returns suggestions array
-          return c;
-        } else {
-          return null;
-        }
-      });
-
+      matches = customFilter(options, value)
       setSuggestions(matches);
     },
-    [courses],
+    [options],
   );
+
   useEffect(() => {
     onChangeHandler("");
   }, [onChangeHandler]);
@@ -42,7 +46,7 @@ function SearchInput({ theme, isMobile, courses, setValue }) {
         onChange={(e) => onChangeHandler(e.target.value)}
         onBlur={() => setShowSuggestions(false)}
         onMouseDown={() => setShowSuggestions(true)}
-        placeholder="Cari matkul"
+        placeholder={placeholder}
         color={theme === "light" ? "#000000" : "#ffffff"}
         h="full"
         pl={isMobile ? "52px" : "58px"}
@@ -78,8 +82,9 @@ function SearchInput({ theme, isMobile, courses, setValue }) {
           }}
         >
           {suggestions &&
-            suggestions.map((suggestion, i) => (
+            suggestions.map((suggestion, idx) => (
               <Box
+                key={idx}
                 _hover={{
                   background: theme === "light" ? "#DED2FF" : "#674DE066",
                 }}
@@ -111,6 +116,7 @@ export const SuggestionsBox = styled.div`
   padding-top: 10px;
   padding-bottom: 10px;
 `;
+
 export const SuggestionsBoxItem = styled.div`
   padding-top: 4px;
   padding-bottom: 4px;
