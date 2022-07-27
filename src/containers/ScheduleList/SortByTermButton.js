@@ -20,7 +20,6 @@ const SortByTermButton = ({ isSortByLatest, setSortByLatest }) => {
         aria-label='Options'
         icon={isSortByLatest ? <SortDescendingIcon {...sortIconProps} /> : <SortAscendingIcon {...sortIconProps} />}
         variant='outline'
-        p="5px"
         h={isMobile ? "44px" : "57px"}
         w={isMobile ? "44px" : "57px"}
         ml={isMobile ? "0.75rem" : "1rem"}
