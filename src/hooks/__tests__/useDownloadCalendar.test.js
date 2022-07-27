@@ -1,9 +1,11 @@
 import { fireEvent } from "@testing-library/react";
 import React from "react";
-const { createEvents } = require("ics");
+
 import useDownloadCalendar from "../useDownloadCalendar";
-import { mockFormattedSchedule } from "../__mocks__";
+import { mockUserSchedules } from "../__mocks__";
 import { render } from "../../utils/test-utils";
+
+const { createEvents } = require("ics");
 
 jest.mock("ics", () => {
   return {
@@ -16,14 +18,16 @@ describe("useDownloadCalendar", () => {
 
   beforeEach(() => {
     App = function () {
-      const { parseFormattedScheduleToEvent, generateICalendarFile } =
+      const { generateICalendarFile, parseFormattedScheduleToEvent } =
         useDownloadCalendar();
       return (
         <div>
           <button
             data-testid="trigger-btn"
             onClick={() =>
-              generateICalendarFile(parseFormattedScheduleToEvent(mockFormattedSchedule))
+              generateICalendarFile(
+                parseFormattedScheduleToEvent(mockUserSchedules[0]),
+              )
             }
           >
             Generate

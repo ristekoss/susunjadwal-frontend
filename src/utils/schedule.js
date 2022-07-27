@@ -9,6 +9,10 @@ const getFormattedSchedule = (schedule) => {
   const formattedSchedule = {};
   let totalCredits = 0;
 
+  if (!schedule.schedule_items) {
+    return [formattedSchedule, totalCredits];
+  }
+
   schedule.schedule_items.forEach(
     ({ name, start, end, day, room, course_name, sks, lecturer }) => {
       const scheduleKey = `${course_name}-${name}`;

@@ -66,8 +66,8 @@ function download(fileURL, fileName) {
       bubbles: true,
       cancelable: false,
     });
-    save.dispatchEvent(evt);
 
+    save.dispatchEvent(evt);
     (window.URL || window.webkitURL).revokeObjectURL(save.href);
   }
 }

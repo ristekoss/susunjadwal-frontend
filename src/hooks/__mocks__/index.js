@@ -28,6 +28,7 @@ export const mockUserSchedules = [
     created_at: "Thu, 07 Oct 2021 14:01:18 GMT",
     id: "615efdaea4fd317044ab8e85",
     name: "Plan A",
+    period: "2021-1",
     schedule_items: [
       {
         course_name: "Analisis Numerik",
