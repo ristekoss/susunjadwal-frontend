@@ -38,6 +38,7 @@ import alertDarkImg from "assets/Alert-dark.svg";
 import linkDarkImg from "assets/Link-dark.svg";
 import copyDarkImg from "assets/Copy-dark.svg";
 import { copyImageToClipboard } from "copy-image-clipboard";
+import { convertPeriodToLiteral, groupScheduleByPeriod } from "utils/schedule";
 
 const ScheduleList = () => {
   const dispatch = useDispatch();
@@ -50,6 +51,8 @@ const ScheduleList = () => {
   const [selectedId, setSelectedId] = useState("");
   const [selectedName, setSelectedName] = useState("");
   const [schedules, setSchedules] = useState();
+  const [groupedSchedule, setGroupedSchedule] = useState();
+  const [periods, setPeriods] = useState();
   const [imageURL, setImageURL] = useState("");
 
   useEffect(() => {
@@ -59,11 +62,18 @@ const ScheduleList = () => {
         data: { user_schedules },
       } = await makeAtLeastMs(getSchedules(auth.userId), 1000);
       setSchedules(user_schedules);
+      const [grouped, periods] = groupScheduleByPeriod(user_schedules)
+      setGroupedSchedule(grouped);
+      setPeriods(periods.reverse());
       dispatch(setLoading(false));
     };
 
     fetchSchedules();
   }, [dispatch, auth]);
+
+  useEffect(() => {
+    console.log(schedules)
+  }, [schedules])
 
   const performDeleteSchedule = async (userId, scheduleId) => {
     ReactGA.event({
@@ -238,7 +248,7 @@ const ScheduleList = () => {
 
       {!!schedules?.length ? (
         <CardContainer>
-          {schedules?.map((schedule, idx) => {
+          {/* {schedules?.map((schedule, idx) => {
             return (
               <ScheduleDetail
                 schedule={schedule}
@@ -248,6 +258,26 @@ const ScheduleList = () => {
                 editSchedule={handleClickEditJadwal}
                 showShareModal={showDialogShare}
               />
+            );
+          })} */}
+          {periods?.map((period, idx) => {
+            return (
+              <>
+                <PeriodTitle mobile={isMobile} mode={theme}>
+                  {convertPeriodToLiteral(period)}
+                </PeriodTitle>
+
+                {groupedSchedule[period]?.map((schedule, idx) => (
+                  <ScheduleDetail
+                    schedule={schedule}
+                    idx={idx}
+                    key={schedule.id}
+                    showModal={showDialogDelete}
+                    editSchedule={handleClickEditJadwal}
+                    showShareModal={showDialogShare}
+                  />
+                ))}
+              </>
             );
           })}
         </CardContainer>
@@ -307,9 +337,6 @@ const PageTitle = styled.h1`
   text-align: center;
   font-weight: bold;
   color: ${({ mode }) => (mode === "light" ? "#5038bc" : "#917DEC")};
-  @media (min-width: 900px) {
-    text-align: left;
-  }
 `;
 
 const PageTitleNoSchedule = styled.h1`
@@ -323,6 +350,16 @@ const PageInfo = styled.h2`
   font-size: ${({ mobile }) => (mobile ? "14px" : "18px")};
   margin: ${({ mobile }) => (mobile ? "2rem" : "32px 48px 48px 48px")};
   color: ${({ mode }) => (mode === "light" ? "#333333" : "#D0D0D0")};
+`;
+
+const PeriodTitle = styled.h1`
+  margin-bottom: 24px;
+  font-size: ${({ mobile }) => (mobile ? "1.7rem" : "2rem")};
+  font-weight: bold;
+  color: ${({ mode }) =>
+      mode === "light"
+        ? (props) => props.theme.color.secondaryMineShaft
+        : (props) => props.theme.color.darkWhite}
 `;
 
 const CardContainer = styled.div`
@@ -345,6 +382,7 @@ const AssetBauhaus = styled.img`
     }
   `}
 `;
+
 const ModalContent = styled(ChakraModalContent).attrs({
   padding: { base: "16px 24px", lg: "20px 24px" },
   width: { base: "90%", lg: "initial" },
@@ -361,4 +399,5 @@ const ModalFooter = styled(ChakraModalFooter).attrs({
     margin: 0px 4px;
   }
 `;
+
 export default ScheduleList;

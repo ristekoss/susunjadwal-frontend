@@ -38,3 +38,29 @@ const getFormattedSchedule = (schedule) => {
 };
 
 export default getFormattedSchedule;
+
+export const groupScheduleByPeriod = (schedules) => {
+  const groupedSchedule = {}
+  const periods = []
+
+  schedules.forEach((schedule, id) => {
+    const period = schedule.period
+
+    if (!periods.includes(period)) {
+      periods.push(period)
+      groupedSchedule[period] = [schedule]
+    } else {
+      groupedSchedule[period] = [schedule, ...groupedSchedule[period]]
+    }
+  })
+
+  return [groupedSchedule, periods]
+}
+
+
+export const convertPeriodToLiteral = (period) => {
+  const [year, term] = period.split('-')
+  const semester = term == 1 ? 'Ganjil' : 'Genap'
+
+  return `${semester} ${year}/${Number(year) + 1}`
+}
