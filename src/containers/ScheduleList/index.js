@@ -67,6 +67,7 @@ const ScheduleList = () => {
   const [scheduleTitles, setScheduleTitles] = useState();
   const [groupedSchedule, setGroupedSchedule] = useState();
   const [periods, setPeriods] = useState();
+  const [isSortByLatest, setSortByLatest] = useState(true);
 
   const [imageURL, setImageURL] = useState("");
 
@@ -92,21 +93,21 @@ const ScheduleList = () => {
   }, [dispatch, auth]);
 
   useEffect(() => {
-    if (query != "") {
+    if (query !== "") {
       setFilteredSchedules(schedules.filter(
         schedule => schedule.name.toLowerCase().includes(query.toLowerCase())))
     } else {
       setFilteredSchedules(schedules)
     }
-  }, [query])
+  }, [query, schedules])
 
   useEffect(() => {
     if (filteredSchedules?.length > 0) {
       const [grouped, periods] = groupScheduleByPeriod(filteredSchedules)
       setGroupedSchedule(grouped);
-      setPeriods(periods.reverse());
+      setPeriods(isSortByLatest ? periods.sort() : periods.reverse());
     }
-  }, [filteredSchedules])
+  }, [filteredSchedules, isSortByLatest])
 
   const performDeleteSchedule = async (userId, scheduleId) => {
     ReactGA.event({

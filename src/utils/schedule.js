@@ -60,7 +60,7 @@ export const groupScheduleByPeriod = (schedules) => {
 
 export const convertPeriodToLiteral = (period) => {
   const [year, term] = period.split('-')
-  const semester = term == 1 ? 'Ganjil' : 'Genap'
+  const semester = term === 1 ? 'Ganjil' : 'Genap'
 
   return `${semester} ${year}/${Number(year) + 1}`
 }

@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const filterMethod = (options, value) => {
   return options?.filter((option) => {
-    const queryIsNotEmpty = value != ""
+    const queryIsNotEmpty = value !== ""
     const isQueryMatch = option.name.toLowerCase().startsWith(value.toLowerCase())
 
     // When value is not empty & matches the query
@@ -26,7 +26,7 @@ function SearchInput({ theme, isMobile, options, setValue, placeholder, customFi
       matches = customFilter(options, value)
       setSuggestions(matches);
     },
-    [options],
+    [options, customFilter],
   );
 
   useEffect(() => {
