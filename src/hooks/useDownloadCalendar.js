@@ -17,18 +17,25 @@ const useDownloadCalendar = () => {
   const theme = useColorModeValue("light", "dark");
 
   const fn = () =>
-    ics.createEvents(parseFormattedScheduleToEvent(schedule), (error, value) => {
-      if (error) {
-        console.error(error.message);
-        ErrorToast("Terjadi kesalahan, silakan dicoba kembali.", isMobile, theme);
-        setError(error);
-        return error;
-      }
-      setData(value);
-      const dlurl = `data:text/calendar;charset=utf-8,${value}`;
-      download(dlurl, `${schedule.name || 'Untitled'} - SusunJadwal.ics`);
-      return value;
-    });
+    ics.createEvents(
+      parseFormattedScheduleToEvent(schedule),
+      (error, value) => {
+        if (error) {
+          console.error(error.message);
+          ErrorToast(
+            "Terjadi kesalahan saat mengunduh jadwal.",
+            isMobile,
+            theme,
+          );
+          setError(error);
+          return error;
+        }
+        setData(value);
+        const dlurl = `data:text/calendar;charset=utf-8,${value}`;
+        download(dlurl, `${schedule.name || "Untitled"} - SusunJadwal.ics`);
+        return value;
+      },
+    );
 
   const parseFormattedScheduleToEvent = (schedule) => {
     const [formattedSchedule] = getFormattedSchedule(schedule);
