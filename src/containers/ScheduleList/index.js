@@ -23,32 +23,33 @@ import { useSelector, useDispatch } from "react-redux";
 import Helmet from "react-helmet";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getSchedules } from "services/api";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { copyImageToClipboard } from "copy-image-clipboard";
+
+import ScheduleDetail from "./ScheduleDetail";
+import SearchInput from "components/SearchInput";
+import SortByTermButton from "containers/ScheduleList/SortByTermButton";
 import { setLoading } from "redux/modules/appState";
+import { getSchedules, deleteSchedule } from "services/api";
+import { convertPeriodToLiteral, groupScheduleByPeriod } from "utils/schedule";
 import { makeAtLeastMs } from "utils/promise";
+import { SuccessToast, ErrorToast } from "components/Toast";
 import { BauhausSide } from "components/Bauhaus";
+
 import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
 import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
 import BauhausDarkDesktop from "assets/Beta/bauhaus-dark-lg.svg";
-import ScheduleDetail from "./ScheduleDetail";
-import { deleteSchedule } from "services/api";
-import { SuccessToast, ErrorToast } from "components/Toast";
-import CopyToClipboard from "react-copy-to-clipboard";
 import alertImg from "assets/Alert2.svg";
 import linkImg from "assets/Link.svg";
 import copyImg from "assets/Copy.svg";
 import alertDarkImg from "assets/Alert-dark.svg";
 import linkDarkImg from "assets/Link-dark.svg";
 import copyDarkImg from "assets/Copy-dark.svg";
-import { copyImageToClipboard } from "copy-image-clipboard";
-import { convertPeriodToLiteral, groupScheduleByPeriod } from "utils/schedule";
-import SearchInput from "components/SearchInput";
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";
 import arrowImg from "assets/Arrow.svg";
 import notFoundImg from "assets/NotFound.svg";
 import notFoundDarkImg from "assets/NotFound-dark.svg";
-import SortByTermButton from "containers/ScheduleList/SortByTermButton";
 
 const ScheduleList = () => {
   const dispatch = useDispatch();
@@ -81,9 +82,9 @@ const ScheduleList = () => {
 
       setSchedules(user_schedules);
       setFilteredSchedules(user_schedules);
-      const [grouped, periods] = groupScheduleByPeriod(user_schedules)
+      const [grouped, periods] = groupScheduleByPeriod(user_schedules);
 
-      setScheduleTitles(user_schedules.filter(schedule => schedule.name))
+      setScheduleTitles(user_schedules.filter((schedule) => schedule.name));
       setGroupedSchedule(grouped);
       setPeriods(periods.reverse());
 
@@ -95,20 +96,23 @@ const ScheduleList = () => {
 
   useEffect(() => {
     if (query !== "") {
-      setFilteredSchedules(schedules.filter(
-        schedule => schedule.name.toLowerCase().includes(query.toLowerCase())))
+      setFilteredSchedules(
+        schedules.filter((schedule) =>
+          schedule.name.toLowerCase().includes(query.toLowerCase()),
+        ),
+      );
     } else {
-      setFilteredSchedules(schedules)
+      setFilteredSchedules(schedules);
     }
-  }, [query, schedules])
+  }, [query, schedules]);
 
   useEffect(() => {
     if (filteredSchedules?.length > 0) {
-      const [grouped, periods] = groupScheduleByPeriod(filteredSchedules)
+      const [grouped, periods] = groupScheduleByPeriod(filteredSchedules);
       setGroupedSchedule(grouped);
       setPeriods(isSortByLatest ? periods.reverse() : periods.sort());
     }
-  }, [filteredSchedules, isSortByLatest])
+  }, [filteredSchedules, isSortByLatest]);
 
   const performDeleteSchedule = async (userId, scheduleId) => {
     ReactGA.event({
@@ -449,9 +453,9 @@ const PeriodTitle = styled.h1`
   font-size: ${({ mobile }) => (mobile ? "1.5rem" : "1.75rem")};
   font-weight: bold;
   color: ${({ mode }) =>
-      mode === "light"
-        ? (props) => props.theme.color.secondaryMineShaft
-        : (props) => props.theme.color.darkWhite};
+    mode === "light"
+      ? (props) => props.theme.color.secondaryMineShaft
+      : (props) => props.theme.color.darkWhite};
 
   @media (min-width: 900px) {
     margin-top: 48px;

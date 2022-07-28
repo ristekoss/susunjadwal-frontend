@@ -13,6 +13,7 @@
     "copy-image-clipboard": "^2.1.2",
     "framer-motion": "^4",
     "html-to-image": "^1.9.0",
+    "ics": "^2.31.0",
     "query-string": "^6.8.1",
     "react": "^16.8.6",
     "react-burger-menu": "^2.6.10",
@@ -34,7 +35,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
+    "test:coverage": "react-scripts test --env=jest-environment-jsdom-sixteen --coverage",
     "eject": "react-scripts eject",
     "prepare": "husky install"
   },
@@ -54,12 +56,15 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.1.2",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.25.3",
     "eslint-plugin-unused-imports": "^1.1.4",
     "husky": "^7.0.0",
+    "jest-environment-jsdom-sixteen": "^2.0.0",
     "lint-staged": "^11.1.2",
     "prettier": "^2.4.1",
     "react-icons": "^4.2.0"

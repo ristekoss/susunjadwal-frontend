@@ -25,11 +25,16 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 
-import { getSchedule, postRenameSchedule, deleteSchedule } from "services/api";
-import { makeAtLeastMs } from "utils/promise";
-import { setLoading } from "redux/modules/appState";
 import Schedule from "./Schedule";
+import ScheduleList from "./ScheduleList";
 import ControlledInput from "./ControlledInput";
+import { SuccessToast, ErrorToast } from "components/Toast";
+import Icons from "components/Icons";
+import { getSchedule, postRenameSchedule, deleteSchedule } from "services/api";
+import useDownloadCalendar from "hooks/useDownloadCalendar";
+import { setLoading } from "redux/modules/appState";
+import getFormattedSchedule from "utils/schedule";
+import { makeAtLeastMs } from "utils/promise";
 import { decodeHtmlEntity } from "utils/string";
 
 import alertImg from "assets/Alert2.svg";
@@ -38,14 +43,10 @@ import copyImg from "assets/Copy.svg";
 import alertDarkImg from "assets/Alert-dark.svg";
 import linkDarkImg from "assets/Link-dark.svg";
 import copyDarkImg from "assets/Copy-dark.svg";
+import exportToIcsImg from "assets/ExportToIcs.svg";
 import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
-import { SuccessToast, ErrorToast } from "components/Toast";
-import Icons from "components/Icons";
-
-import getFormattedSchedule from "utils/schedule";
-import ScheduleList from "./ScheduleList";
 
 function ViewSchedule({ match, history }) {
   const isMobile = useSelector((state) => state.appState.isMobile);
@@ -55,6 +56,7 @@ function ViewSchedule({ match, history }) {
   const auth = useSelector((state) => state.auth);
   const { scheduleId } = useParams();
   const dispatch = useDispatch();
+  const { generateICalendarFile } = useDownloadCalendar(theme);
 
   const [schedule, setSchedule] = useState(null);
   const [createdAt, setCreatedAt] = useState(null);
@@ -282,6 +284,12 @@ function ViewSchedule({ match, history }) {
                       icon: downloadImg,
                       alt: "download",
                       action: downloadImage,
+                    },
+                    {
+                      desc: "Ekspor ke .ics (Google Calendar/Apple Calendar)",
+                      icon: exportToIcsImg,
+                      alt: "export-to-ics",
+                      action: () => generateICalendarFile(schedule),
                     },
                     {
                       desc: "Share Jadwal",
