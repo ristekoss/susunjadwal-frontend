@@ -2,7 +2,7 @@ import {
   dayToColumn,
   generateStartingMonth,
   generateRecurrenceRule,
-  getFirstDateOfNDayInAMonth,
+  getFirstDateOfNthDayInAMonth,
 } from "utils/date";
 
 const getFormattedSchedule = (schedule) => {
@@ -61,7 +61,7 @@ export const parseFormattedScheduleToEvent = (schedule) => {
     formattedSchedule[subject].time.forEach((item) => {
       const term = schedule.period.split("-").pop();
       const dayOfTheWeek = dayToColumn(item.day);
-      const calendarDate = getFirstDateOfNDayInAMonth(
+      const calendarDate = getFirstDateOfNthDayInAMonth(
         dayOfTheWeek,
         generateStartingMonth(term) - 1,
         new Date().getFullYear(),
