@@ -8,14 +8,10 @@ import ReactGA from "react-ga";
 
 import { setAuth } from "redux/modules/auth";
 import { makeAtLeastMs } from "utils/promise";
-import FACULTIES from "utils/faculty-base.json";
+import FACULTIES from "utils/faculty-base-additional-info.json";
 import { setLoading } from "redux/modules/appState";
 import { postSsoCompletionData } from "services/api";
-import {
-  persistAuth,
-  loadCompletion,
-  persistCompletion
-} from "utils/auth";
+import { persistAuth, loadCompletion, persistCompletion } from "utils/auth";
 
 import { InputSelect, InputText } from "components/Forms";
 import { Bauhaus } from "components/Bauhaus";
@@ -28,7 +24,7 @@ const CompleteForm = ({ history }) => {
     watch,
   } = useForm();
 
-  const auth = useSelector(state => state.auth);
+  const auth = useSelector((state) => state.auth);
   const selectedFaculty = watch("fakultas");
   const dispatch = useDispatch();
 
@@ -38,11 +34,11 @@ const CompleteForm = ({ history }) => {
   const [fullname, setFullname] = useState(null);
 
   const onSubmit = async (value) => {
-    const { npm, jurusan } = value
-    const kdOrg = jurusan.split(" - ")[2]
+    const { npm, jurusan } = value;
+    const kdOrg = jurusan.split(" - ")[2];
 
     try {
-      dispatch(setLoading(true))
+      dispatch(setLoading(true));
 
       const {
         data: {
@@ -50,15 +46,18 @@ const CompleteForm = ({ history }) => {
           user_id: userId,
           token,
           err: isPeriodMissing,
-        }
-      } = await makeAtLeastMs(postSsoCompletionData({ completionId, npm, kdOrg }), 1000);
+        },
+      } = await makeAtLeastMs(
+        postSsoCompletionData({ completionId, npm, kdOrg }),
+        1000,
+      );
 
       dispatch(setAuth({ majorId, userId, token }));
       persistAuth({ majorId, userId, token });
       persistCompletion();
       ReactGA.event({
         category: "Lengkapi SSO",
-        action: "Completed SSO Data"
+        action: "Completed SSO Data",
       });
       if (isPeriodMissing) {
         dispatch(setLoading(false));
@@ -76,21 +75,25 @@ const CompleteForm = ({ history }) => {
 
   useEffect(() => {
     const completion = loadCompletion();
-    setCompletionData(completion)
-  }, [])
+    setCompletionData(completion);
+  }, []);
 
   useEffect(() => {
     setUsername(completionData?.username);
     setFullname(completionData?.fullname);
     setCompletionId(completionData?.completionId);
-  }, [completionData])
+  }, [completionData]);
 
   return (
     <>
       <Bauhaus />
-      <Box width={{lg:'80%', xl: '70%'}}>
+      <Box width={{ lg: "80%", xl: "70%" }}>
         <Link to="/">
-          <Text color="var(--chakra-colors-primary-Purple)" fontSize="lg" ml='-9px'>
+          <Text
+            color="var(--chakra-colors-primary-Purple)"
+            fontSize="lg"
+            ml="-9px"
+          >
             <ChevronLeftIcon w={8} h={8} />
             Kembali ke Halaman Utama
           </Text>
@@ -98,9 +101,10 @@ const CompleteForm = ({ history }) => {
             fontSize="3xl"
             fontWeight="bold"
             mt="4"
-            textAlign={{sm: 'center', lg: 'left'}}
+            textAlign={{ sm: "center", lg: "left" }}
           >
-            Lengkapi Informasi untuk Susun<span style={{ color: "#5038BC" }}>Jadwal</span>
+            Lengkapi Informasi untuk Susun
+            <span style={{ color: "#5038BC" }}>Jadwal</span>
           </Text>
         </Link>
 
@@ -112,7 +116,7 @@ const CompleteForm = ({ history }) => {
             register={register}
             disabled={true}
             placeholder={fullname}
-            validator={{required: false}}
+            validator={{ required: false }}
             errors={errors}
           />
 
@@ -123,7 +127,7 @@ const CompleteForm = ({ history }) => {
             register={register}
             disabled={true}
             placeholder={username}
-            validator={{required: false}}
+            validator={{ required: false }}
             errors={errors}
           />
 
@@ -145,8 +149,10 @@ const CompleteForm = ({ history }) => {
             validator={{ required: `Harap Pilih` }}
             errors={errors}
           >
-            {Object.keys(FACULTIES).map(faculty => (
-              <option key={faculty} value={faculty}>{faculty}</option>
+            {Object.keys(FACULTIES).map((faculty) => (
+              <option key={faculty} value={faculty}>
+                {faculty}
+              </option>
             ))}
           </InputSelect>
 
@@ -160,11 +166,12 @@ const CompleteForm = ({ history }) => {
             errors={errors}
             disabled={!selectedFaculty}
           >
-            {selectedFaculty && FACULTIES[selectedFaculty].map(jurusan => (
-              <option key={jurusan.kd_org}>
-                {`${jurusan.educational_program} - ${jurusan.study_program} - ${jurusan.kd_org}`}
-              </option>
-            ))}
+            {selectedFaculty &&
+              FACULTIES[selectedFaculty].map((jurusan) => (
+                <option key={jurusan.kd_org}>
+                  {`${jurusan.educational_program} - ${jurusan.study_program} - ${jurusan.kd_org}`}
+                </option>
+              ))}
           </InputSelect>
 
           <Button
@@ -173,7 +180,7 @@ const CompleteForm = ({ history }) => {
             isLoading={isSubmitting}
             type="submit"
             disabled={isSubmitSuccessful}
-            w={{sm: '100%', lg: 'unset'}}
+            w={{ sm: "100%", lg: "unset" }}
           >
             Daftar
           </Button>
@@ -181,6 +188,6 @@ const CompleteForm = ({ history }) => {
       </Box>
     </>
   );
-}
+};
 
 export default CompleteForm;
