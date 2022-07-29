@@ -6,7 +6,7 @@ import { Box, Text, Button } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 import { postBetaTesterData } from "services/api";
-import FACULTIES from "utils/faculty-base.json";
+import FACULTIES from "utils/faculty-base-additional-info.json";
 
 import { Bauhaus } from "components/Bauhaus";
 import { InfoToast, SuccessToast } from "components/Toast";
@@ -27,13 +27,13 @@ const BetaForm = ({ history }) => {
       await postBetaTesterData(values);
       SuccessToast(
         "Terima Kasih sudah menjadi Beta Tester kami. Tim kami akan segera menghubungi Kamu.",
-        isMobile
+        isMobile,
       );
       history.push("/");
     } catch (error) {
       InfoToast(
         "Maaf ada sedikit kesalahan nih, silakan coba beberapa saat lagi atau hubungi contact person",
-        isMobile
+        isMobile,
       );
       throw error;
     }
@@ -43,7 +43,7 @@ const BetaForm = ({ history }) => {
     <>
       <Bauhaus />
       <Box
-        width={{ base: '100%', lg: '60%' }}
+        width={{ base: "100%", lg: "60%" }}
         mt={{ base: "0px", lg: "-40px" }}
       >
         <Link to="/">
