@@ -16,7 +16,7 @@ import { Helmet } from "react-helmet";
 import Course from "../BuildSchedule/Course";
 import Detail from "../BuildSchedule/Detail";
 import Checkout from "../BuildSchedule/Checkout";
-import SearchInput from "../BuildSchedule/SearchInput";
+import SearchInput from "../../components/SearchInput";
 import SelectMajor from "../BuildSchedule/SelectMajor";
 import {
   Container,
@@ -162,8 +162,9 @@ const EditSchedule = ({ match }) => {
                 />
                 <SearchInput
                   isMobile={isMobile}
+                  placeholder="Cari Mata Kuliah"
                   theme={theme}
-                  courses={courses}
+                  options={courses}
                   setValue={setValue}
                 />
 

@@ -22,7 +22,7 @@ import { BauhausSide } from "components/Bauhaus";
 import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
-import SearchInput from "./SearchInput";
+import SearchInput from "../../components/SearchInput";
 
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";
@@ -142,8 +142,9 @@ function BuildSchedule() {
               />
               <SearchInput
                 isMobile={isMobile}
+                placeholder="Cari Mata Kuliah"
                 theme={theme}
-                courses={courses}
+                options={courses}
                 setValue={setValue}
               />
 
