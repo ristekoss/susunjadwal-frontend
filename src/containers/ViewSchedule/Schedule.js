@@ -105,10 +105,9 @@ function Schedule({
                     mixBlendMode: "normal",
                   }}
                 >
-                  {/* {(String(name).includes(course_name) || !course_name)
-                  ? name
-                  : `${course_name} - ${name}`} */}
-                  {name}
+                  {String(name).includes(course_name) || !course_name
+                    ? name
+                    : `${course_name} - ${name}`}
                 </span>
               </div>
             </ScheduleItem>
