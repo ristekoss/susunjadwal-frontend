@@ -81,7 +81,8 @@ const CourseClassDesktop = (props) => {
 };
 
 function CourseClass({ course, courseClass }) {
-  const key = `${course.name}-${courseClass.name}`;
+  const key = `${course.name}-${courseClass.name}-${course.term}-${courseClass.schedule_items[0].room}`;
+
   const isActive = useSelector((state) => state.courses[key]);
   const isMobile = useSelector((state) => state.appState.isMobile);
   const dispatch = useDispatch();

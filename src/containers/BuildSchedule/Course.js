@@ -26,7 +26,7 @@ function Course({ course }) {
         )}
         {course.classes.map((currentClass) => (
           <CourseClass
-            key={currentClass.name}
+            key={`${currentClass.name}`}
             course={course}
             courseClass={currentClass}
           />
