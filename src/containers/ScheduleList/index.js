@@ -98,7 +98,7 @@ const ScheduleList = () => {
     if (query !== "") {
       setFilteredSchedules(
         schedules.filter((schedule) =>
-          schedule.name.toLowerCase().includes(query.toLowerCase()),
+          schedule?.name?.toLowerCase().includes(query.toLowerCase()),
         ),
       );
     } else {
