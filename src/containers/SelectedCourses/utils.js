@@ -24,12 +24,22 @@ export function isScheduleConflict(schedules, schedule) {
     });
 }
 
+function scheduleName(schedule) {
+  return String(schedule.name).includes(schedule.parentName) ||
+    !schedule.parentName
+    ? schedule.name
+    : `${schedule.parentName} - ${schedule.name}`;
+}
+
 export function listScheduleConflicts(schedules) {
   const listConflicts = [];
   for (let i = 0; i < schedules.length; i++) {
     for (let j = i + 1; j < schedules.length; j++) {
       if (checkIfTwoScheduleConflict(schedules[i], schedules[j])) {
-        listConflicts.push([schedules[i].name, schedules[j].name]);
+        listConflicts.push([
+          scheduleName(schedules[i]),
+          scheduleName(schedules[j]),
+        ]);
       }
     }
   }
