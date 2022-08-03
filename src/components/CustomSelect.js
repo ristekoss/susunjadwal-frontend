@@ -29,6 +29,7 @@ export const CustomSelect = ({
       w="45%"
       fontSize={isMobile && "14px"}
       lineHeight="20px"
+      px="4px"
     >
       {label}
     </Text>
