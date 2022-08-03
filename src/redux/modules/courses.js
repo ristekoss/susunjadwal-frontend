@@ -11,19 +11,21 @@ export default function reducer(state = {}, { type, payload }) {
   switch (type) {
     case SET_COURSES:
       const result = {};
-      payload.forEach(course => {
-        course.classes.forEach(class_ => {
-          const key = `${course.name}-${class_.name}`;
+
+      payload.forEach((course) => {
+        course.classes.forEach((class_) => {
+          const key = `${course.name}-${class_.name}-${course.term}-${class_.schedule_items[0].room}`;
           result[key] = !!state[key];
         });
       });
+
       return result;
 
     case ADD_SCHEDULE:
     case REMOVE_SCHEDULE:
       const nextState = { ...state };
-      const activatedKey = `${payload.parentName}-${payload.name}`;
-      Object.keys(state).forEach(key => {
+      const activatedKey = `${payload.parentName}-${payload.name}-${payload.term}-${payload.schedule_items[0].room}`;
+      Object.keys(state).forEach((key) => {
         if (key.indexOf(payload.parentName) === 0) {
           nextState[key] = type !== REMOVE_SCHEDULE && key === activatedKey;
         }

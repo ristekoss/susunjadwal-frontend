@@ -3,7 +3,7 @@ export const REMOVE_SCHEDULE = "REMOVE_SCHEDULE";
 export const CLEAR_SCHEDULE = "CLEAR_SCHEDULE";
 
 function filterSchedule(schedules, { parentName }) {
-  return schedules.filter(schedule => schedule.parentName !== parentName);
+  return schedules.filter((schedule) => schedule.parentName !== parentName);
 }
 
 export default function reducer(state = [], { type, payload }) {
