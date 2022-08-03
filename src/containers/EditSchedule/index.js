@@ -37,6 +37,8 @@ import searchImgDark from "assets/Search-dark.svg";
 import arrowImg from "assets/Arrow.svg";
 import notFoundImg from "assets/NotFound.svg";
 import notFoundDarkImg from "assets/NotFound-dark.svg";
+import settingsImg from "assets/Settings.svg";
+import settingsDarkImg from "assets/Settings-dark.svg";
 
 const EditSchedule = ({ match }) => {
   const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
@@ -51,6 +53,7 @@ const EditSchedule = ({ match }) => {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isCoursesDetail, setCoursesDetail] = useState(null);
   const [value, setValue] = useState("");
+  const [showSelectMajor, setShowSelectMajor] = useState(false);
 
   useEffect(() => {
     async function fetchSchedule() {
@@ -142,6 +145,7 @@ const EditSchedule = ({ match }) => {
               theme={theme}
               isMobile={isMobile}
               setMajorSelected={setMajorSelected}
+              show={isMobile ? showSelectMajor : true}
             />
             <div
               style={{
@@ -186,6 +190,21 @@ const EditSchedule = ({ match }) => {
                     Cari
                     <Image alt="" src={arrowImg} ml="9px" />
                   </Center>
+                </Button>
+                <Button
+                  variant="outline"
+                  marginLeft="10px"
+                  height="44px"
+                  width="44px"
+                  p="0"
+                  display={isMobile ? "flex" : "none"}
+                  onClick={() => setShowSelectMajor(!showSelectMajor)}
+                  borderColor={theme === "dark" && "primary.LightPurple"}
+                >
+                  <Image
+                    alt="Show"
+                    src={theme === "light" ? settingsImg : settingsDarkImg}
+                  />
                 </Button>
               </InputGroup>
             </div>

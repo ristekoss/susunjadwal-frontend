@@ -23,7 +23,12 @@ function Checkout({ onClickDetail }) {
   }
 
   return (
-    <CheckoutContainer conflict={conflict} onClick={goToDetail} mode={theme}>
+    <CheckoutContainer
+      conflict={conflict}
+      onClick={goToDetail}
+      mode={theme}
+      style={{ zIndex: "4" }}
+    >
       <div>
         <h2>
           {schedules.length} Mata Kuliah | {totalCredits} SKS
