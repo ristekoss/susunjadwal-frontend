@@ -136,9 +136,9 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
   const listConflicts = listScheduleConflicts(schedules);
   const conflicts = listConflicts.map((conflict, idx) => {
     return (
-      <p>
-        {conflict[0]} bertabrakan dengan {conflict[1]}
-      </p>
+      <li>
+        {conflict[0]} dengan {conflict[1]}
+      </li>
     );
   });
 
@@ -204,14 +204,19 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
         {isConflict && (
           <MessageContainer>
-            <p>
-              Ada jadwal yang bertabrakan. Perbaiki terlebih dahulu sebelum
-              menyimpan.
-            </p>
+            <p>Ada jadwal yang bertabrakan:</p>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                margin: "0 20px",
+              }}
+            >
+              <ul style={{ textAlign: "left" }}>{conflicts}</ul>
+            </div>
           </MessageContainer>
         )}
-
-        {isConflict && <MessageContainer>{conflicts}</MessageContainer>}
 
         {!isConflict && totalCredits > 24 && (
           <MessageContainer>
@@ -226,6 +231,12 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         >
           Simpan Jadwal
         </Button>
+
+        {isConflict && (
+          <MessageContainer>
+            <p>Perbaiki jadwal terlebih dahulu sebelum menyimpan</p>
+          </MessageContainer>
+        )}
       </Container>
     </>
   );
