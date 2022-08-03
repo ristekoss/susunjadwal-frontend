@@ -179,6 +179,7 @@ function BuildSchedule() {
                 p="0"
                 display={isMobile ? "flex" : "none"}
                 onClick={() => setShowSelectMajor(!showSelectMajor)}
+                borderColor={theme === "dark" && "primary.LightPurple"}
               >
                 <Image
                   alt="Show"
