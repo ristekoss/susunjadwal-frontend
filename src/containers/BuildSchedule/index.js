@@ -30,6 +30,8 @@ import arrowImg from "assets/Arrow.svg";
 import notFoundImg from "assets/NotFound.svg";
 import notFoundDarkImg from "assets/NotFound-dark.svg";
 import SelectMajor from "./SelectMajor";
+import settingsImg from "assets/Settings.svg";
+import settingsDarkImg from "assets/Settings-dark.svg";
 
 function BuildSchedule() {
   const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
@@ -42,6 +44,7 @@ function BuildSchedule() {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isCoursesDetail, setCoursesDetail] = useState(null);
   const [value, setValue] = useState("");
+  const [showSelectMajor, setShowSelectMajor] = useState(false);
 
   const theme = useColorModeValue("light", "dark");
 
@@ -122,6 +125,7 @@ function BuildSchedule() {
             theme={theme}
             isMobile={isMobile}
             setMajorSelected={setMajorSelected}
+            show={isMobile ? showSelectMajor : true}
           />
           <div
             style={{
@@ -166,6 +170,20 @@ function BuildSchedule() {
                   Cari
                   <Image alt="" src={arrowImg} ml="9px" />
                 </Center>
+              </Button>
+              <Button
+                variant="outline"
+                marginLeft="10px"
+                height="44px"
+                width="44px"
+                p="0"
+                display={isMobile ? "flex" : "none"}
+                onClick={() => setShowSelectMajor(!showSelectMajor)}
+              >
+                <Image
+                  alt="Show"
+                  src={theme === "light" ? settingsImg : settingsDarkImg}
+                />
               </Button>
             </InputGroup>
           </div>

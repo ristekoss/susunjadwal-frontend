@@ -210,7 +210,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
-                margin: "0 20px",
+                margin: "10px 20px",
               }}
             >
               <ul style={{ textAlign: "left" }}>{conflicts}</ul>
@@ -298,7 +298,7 @@ const Container = styled.div`
     background: rgba(189, 189, 189, 0.8);
   }
 
-  padding-bottom: 36vh;
+  padding-bottom: 32px;
 `;
 
 const TableHeader = styled.div`

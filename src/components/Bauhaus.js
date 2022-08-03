@@ -29,6 +29,7 @@ const AssetBauhausSide = styled.img`
   height: 100vh;
   top: -2px;
   left: 0;
+  z-index: 4;
 
   ${(props) => props.isMobile && "display: none;"}
 `;

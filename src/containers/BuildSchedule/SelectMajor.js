@@ -4,7 +4,7 @@ import FACULTIES from "utils/faculty-base-additional-info.json";
 import { useForm } from "react-hook-form";
 import { CustomSelect } from "components/CustomSelect";
 
-function SelectMajor({ theme, isMobile, setMajorSelected }) {
+function SelectMajor({ theme, isMobile, setMajorSelected, show }) {
   const { register, watch } = useForm();
 
   const selectedFaculty = watch("fakultas");
@@ -27,7 +27,10 @@ function SelectMajor({ theme, isMobile, setMajorSelected }) {
   }
 
   return (
-    <Flex flexDir={{ base: "column", lg: "row" }}>
+    <Flex
+      flexDir={{ base: "column", lg: "row" }}
+      display={show ? "flex" : "none"}
+    >
       <CustomSelect
         name="fakultas"
         label="Fakultas"

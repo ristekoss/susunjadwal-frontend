@@ -31,7 +31,8 @@ const ImageButton = styled.div`
   &:before {
     content: attr(data-hover);
     width: max-content;
-    height: 32px;
+    max-width: 210px;
+    min-height: 32px;
     background-color: #4e4e4e;
     color: #ffffff;
     text-align: center;
@@ -45,7 +46,7 @@ const ImageButton = styled.div`
     content: "";
     border-style: solid;
     border-color: #4e4e4e transparent;
-    border-width: 0 8px 10px;
+    border-width: 0 8px 12px;
     top: 100%;
     right: 3px;
   }
