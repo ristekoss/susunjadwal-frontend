@@ -129,9 +129,14 @@ function ViewSchedule({ match, history }) {
   const refs = useRef(null);
 
   const downloadImage = async () => {
-    const dataUrl = await htmlToImage.toPng(refs.current);
+    ReactGA.event({
+      category: "Download Jadwal Image",
+      action: "Downloaded a schedule's image",
+    });
 
+    const dataUrl = await htmlToImage.toPng(refs.current);
     const link = document.createElement("a");
+
     link.download = !scheduleName ? "Untitled.png" : scheduleName + ".png";
     link.href = dataUrl;
     link.click();

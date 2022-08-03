@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Button, useColorModeValue } from "@chakra-ui/react";
 import * as htmlToImage from "html-to-image";
+import ReactGA from "react-ga";
 
 import Schedule from "containers/ViewSchedule/Schedule";
 import Icons from "components/Icons";
@@ -36,9 +37,14 @@ const ScheduleDetail = ({
   const refs = useRef(null);
 
   const downloadImage = async (name) => {
-    const dataUrl = await htmlToImage.toPng(refs.current);
+    ReactGA.event({
+      category: "Download Jadwal Image",
+      action: "Downloaded a schedule's image",
+    });
 
+    const dataUrl = await htmlToImage.toPng(refs.current);
     const link = document.createElement("a");
+
     link.download = name + ".png";
     link.href = dataUrl;
     link.click();
