@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useColorModeValue } from "@chakra-ui/react";
+import ReactGA from "react-ga";
 
 import { ErrorToast } from "components/Toast";
 import { parseFormattedScheduleToEvent } from "utils/schedule";
@@ -55,7 +56,13 @@ const useDownloadCalendar = () => {
 
 function download(fileURL, fileName) {
   const isIE = window.ActiveXObject;
+
   if (!isIE) {
+    ReactGA.event({
+      category: "Download Jadwal's ICS",
+      action: "Downloaded a schedule's ICS",
+    });
+
     let save = document.createElement("a");
     save.href = fileURL;
     save.target = "_blank";
