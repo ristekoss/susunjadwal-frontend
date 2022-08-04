@@ -356,7 +356,7 @@ const ScheduleList = () => {
               })}
             </CardContainer>
           ) : (
-            <Center flexDirection="column" mt="3.5rem">
+            <Center flexDirection="column" mt="3.5rem" marginX="48px">
               <Image
                 alt=""
                 src={theme === "light" ? notFoundImg : notFoundDarkImg}
@@ -364,6 +364,7 @@ const ScheduleList = () => {
               <Text
                 mt="20px"
                 color={theme === "light" ? "#33333399" : "#FFFFFF99"}
+                textAlign="center"
               >
                 Jadwal yang dicari tidak ditemukan
               </Text>
