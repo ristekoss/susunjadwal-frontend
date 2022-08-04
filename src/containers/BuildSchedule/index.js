@@ -243,6 +243,7 @@ function BuildSchedule() {
               <Text
                 mt="20px"
                 color={theme === "light" ? "#33333399" : "#FFFFFF99"}
+                textAlign="center"
               >
                 Mata kuliah yang dicari tidak ditemukan
               </Text>
