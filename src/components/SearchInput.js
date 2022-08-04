@@ -4,8 +4,10 @@ import styled from "styled-components";
 
 const filterMethod = (options, value) => {
   return options?.filter((option) => {
-    const queryIsNotEmpty = value !== ""
-    const isQueryMatch = option.name.toLowerCase().startsWith(value.toLowerCase())
+    const queryIsNotEmpty = value !== "";
+    const isQueryMatch = option.name
+      .toLowerCase()
+      .startsWith(value.toLowerCase());
 
     // When value is not empty & matches the query
     if (queryIsNotEmpty && isQueryMatch) {
@@ -13,17 +15,24 @@ const filterMethod = (options, value) => {
     }
 
     return null;
-  })
-}
+  });
+};
 
-function SearchInput({ theme, isMobile, options, setValue, placeholder, customFilter = filterMethod  }) {
+function SearchInput({
+  theme,
+  isMobile,
+  options,
+  setValue,
+  placeholder,
+  customFilter = filterMethod,
+}) {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const onChangeHandler = useCallback(
     (value) => {
       let matches = [];
-      matches = customFilter(options, value)
+      matches = customFilter(options, value);
       setSuggestions(matches);
     },
     [options, customFilter],
@@ -79,6 +88,7 @@ function SearchInput({ theme, isMobile, options, setValue, placeholder, customFi
             color: theme === "light" ? "#000000" : "#FFFFFFCC",
             top: isMobile ? "45px" : "58px",
             fontSize: isMobile && "14px",
+            width: isMobile && document.getElementById("input").offsetWidth,
           }}
         >
           {suggestions &&
