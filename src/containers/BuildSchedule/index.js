@@ -16,7 +16,7 @@ import Helmet from "react-helmet";
 import { setCourses as reduxSetCourses } from "redux/modules/courses";
 import { setLoading } from "redux/modules/appState";
 import { getCourses, getCoursesByKd } from "services/api";
-
+import { clearSchedule } from "redux/modules/schedules";
 import SelectedCourses from "containers/SelectedCourses";
 import { BauhausSide } from "components/Bauhaus";
 import Checkout from "./Checkout";
@@ -57,10 +57,12 @@ function BuildSchedule() {
           ? await getCoursesByKd(majorSelected.kd_org)
           : await getCourses(majorId);
 
+        if (!majorSelected) {
+          dispatch(clearSchedule());
+        }
+
         setCourses(data.courses);
-
         setCoursesDetail(data.is_detail);
-
         setLastUpdated(new Date(data.last_update_at));
         dispatch(reduxSetCourses(data.courses));
       } catch (e) {

@@ -26,7 +26,8 @@ import {
 } from "../BuildSchedule";
 
 import { setCourses as reduxSetCourses } from "redux/modules/courses";
-import { addSchedule } from "redux/modules/schedules";
+
+import { addSchedule, clearSchedule } from "redux/modules/schedules";
 import { generateScheduledCourseListFromSchedule } from "./utils";
 import SelectedCourses from "containers/SelectedCourses";
 import { getSchedule, getCourses, getCoursesByKd } from "services/api";
@@ -81,6 +82,10 @@ const EditSchedule = ({ match }) => {
       const { data } = majorSelected
         ? await getCoursesByKd(majorSelected.kd_org)
         : await getCourses(majorId);
+
+      if (!majorSelected) {
+        dispatch(clearSchedule());
+      }
       setCourses(data.courses);
       setCoursesDetail(data.is_detail);
       setLastUpdated(new Date(data.last_update_at));
