@@ -151,7 +151,7 @@ const Footer = () => {
           fontSize="sm"
           color={theme === "light" ? "secondary.MineShaft" : "dark.White"}
         >
-          © 2022 RISTEK Fasilkom
+          © 2023 RISTEK Fasilkom
         </Text>
         <SocialContainer />
       </Box>
