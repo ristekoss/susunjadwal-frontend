@@ -66,9 +66,7 @@ const Footer = () => {
             align={{ base: "center", md: "left" }}
             color={theme === "light" ? "secondary.MineShaft" : "dark.White"}
           >
-            RISTEK is a United States of America fiscally sponsored 501(c)(3)
-            non-profit organization established by students from Faculty of
-            Computer Science, Universitas Indonesia.
+            RISTEK is a student-founded non-profit organization from Universitas Indonesia's Faculty of Computer Science, supported by a United States of America 501(c)(3) non-profit.
           </Text>
           <Text
             fontWeight="normal"
@@ -78,7 +76,7 @@ const Footer = () => {
             color={theme === "light" ? "secondary.MineShaft" : "dark.White"}
           >
             <p style={{ fontWeight: 600 }}>Contact us (Email): </p>
-            team@ristek.cs.ui.ac.id
+            help@ristek.cs.ui.ac.id
           </Text>
         </StyledFooterDesc>
 
