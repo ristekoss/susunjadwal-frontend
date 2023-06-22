@@ -66,7 +66,9 @@ const Footer = () => {
             align={{ base: "center", md: "left" }}
             color={theme === "light" ? "secondary.MineShaft" : "dark.White"}
           >
-            RISTEK is a student-founded non-profit organization from Universitas Indonesia's Faculty of Computer Science, supported by a United States of America 501(c)(3) non-profit.
+            RISTEK is a student-founded non-profit organization from Universitas
+            Indonesia's Faculty of Computer Science, supported by a United
+            States of America 501(c)(3) non-profit.
           </Text>
           <Text
             fontWeight="normal"
@@ -149,7 +151,7 @@ const Footer = () => {
           fontSize="sm"
           color={theme === "light" ? "secondary.MineShaft" : "dark.White"}
         >
-          © 2022 RISTEK Fasilkom
+          © {new Date().getFullYear()} RISTEK Fasilkom
         </Text>
         <SocialContainer />
       </Box>

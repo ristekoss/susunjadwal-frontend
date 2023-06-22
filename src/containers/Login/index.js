@@ -152,20 +152,19 @@ function Login({ history, location }) {
             Universitas Indonesia!
           </Paragraph>
           <LinkBox>
-            <Link
-              href="https://discord.com/"
+            <a
+              href="https://ristek.link/oss-discord"
               rel="noopener noreferrer"
               target="_blank"
             >
               <Button
-                disabled
                 _hover={{ background: "primary.Purple" }}
                 m={{ base: "0 0 1rem 0", lg: "0 1rem 0 0" }}
                 w="fit-content"
               >
                 Gabung Discord
               </Button>
-            </Link>
+            </a>
             <Link to="/kontributor">
               <Button variant="outline" w="fit-content">
                 Lihat kontributor

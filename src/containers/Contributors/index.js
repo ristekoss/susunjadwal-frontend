@@ -128,14 +128,19 @@ const Contributors = () => {
           membantu menciptakan teknologi yang memberi dampak positif bagi
           kehidupan mahasiswa Universitas Indonesia.
         </Text>
-
-        <Button
-          m="2rem auto 3rem"
-          bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
-          color={theme === "light" ? "white" : "dark.White"}
+        <a
+          href="https://ristek.link/oss-discord"
+          rel="noopener noreferrer"
+          target="_blank"
         >
-          Gabung Discord SusunJadwal
-        </Button>
+          <Button
+            m="2rem auto 3rem"
+            bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
+            color={theme === "light" ? "white" : "dark.White"}
+          >
+            Gabung Discord SusunJadwal
+          </Button>
+        </a>
       </Box>
 
       <Flex
