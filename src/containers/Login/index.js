@@ -143,8 +143,7 @@ function Login({ history, location }) {
         </FlexItem>
         <TextBox>
           <Title>
-            Bergabung dengan Komunitas SusunJadwal di Discord.{" "}
-            <span>Soon!</span>
+            Bergabung dengan Komunitas SusunJadwal di Discord.
           </Title>
           <Paragraph>
             Bantu kami dengan menjadi kontributor untuk meningkatkan kualitas
