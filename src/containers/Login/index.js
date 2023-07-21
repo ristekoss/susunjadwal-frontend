@@ -19,9 +19,12 @@ import link from "assets/Beta/link.svg";
 import totalUser from "assets/Beta/total-user.svg";
 import totalJadwal from "assets/Beta/total-jadwal.svg";
 import discordDesktop from "assets/Beta/discord-lg.svg";
+import discordMobile from "assets/Beta/discord-sm.svg";
 
 import {
   Header,
+  Number,
+  NumberDesc,
   LinkBox,
   LogoRistek,
   HeroSection,
@@ -29,6 +32,15 @@ import {
   Description,
   CTAButtonDesktop,
   CTAButtonMobile,
+  SubHead,
+  SubHeadDesktop,
+  SubHeadMobile,
+  DiscDesktop,
+  DiscMobile,
+  Icon,
+  Card,
+  CardHover,
+  SubBody,
 } from "./styles";
 
 import { FlexBox } from "containers/BetaLanding/styles";
@@ -138,11 +150,23 @@ function Login({ history, location }) {
         </a>
       </HeroSection>
 
-      <FlexBox id="content" flexDir="column" justifyContent="center">
-        <h1 style={{ fontWeight: "700", fontSize: "32px" }}>
+      <Box
+        display="flex"
+        id="content"
+        flexDir="column"
+        justifyContent="center"
+        marginTop={{ base: "12rem", md: "6rem" }}
+      >
+        <SubHeadDesktop>
           Kami telah membantu civitas UI selama
-          <span style={{ color: "#5038BC" }}> 10 tahun</span>
-        </h1>
+          <span> 10 tahun</span>
+        </SubHeadDesktop>
+
+        <SubHeadMobile>
+          <span>Our impact </span>
+          in numbers...
+        </SubHeadMobile>
+
         <Box
           style={{
             display: "flex",
@@ -150,34 +174,25 @@ function Login({ history, location }) {
             alignItems: "center",
           }}
           flexDir={{ base: "column", lg: "row" }}
-          mt="24px"
         >
-          <Box
-            style={{
-              position: "relative",
-              width: "632px",
-              height: "auto",
-              borderRadius: "56px",
-              backgroundColor: "#E1E5FE",
-            }}
-          >
+          <Card>
+            <CardHover _hover={{ opacity: "0" }}></CardHover>
             <Box
               style={{
                 display: "flex",
                 flexDirection: "column",
                 position: "relative",
-                width: "100%",
                 height: "150px",
                 padding: "40px",
+                pointerEvents: "none",
               }}
             >
-              <img src={totalUser} style={{ width: "64px" }}></img>
+              <Icon src={totalUser}></Icon>
               <h2
                 style={{
                   fontWeight: "700",
                   color: "#A8ADF9",
                   fontSize: "20px",
-                  marginTop: "12px",
                 }}
               >
                 Total User
@@ -186,56 +201,47 @@ function Login({ history, location }) {
 
             <Box
               style={{
-                display: "flex",
-                flexDirection: "column",
+                display: "block",
+                overflow: "auto",
                 position: "relative",
                 width: "auto",
-                height: "224px",
                 borderRadius: "0 0 51px 51px",
                 backgroundColor: "#FFFFFF",
                 padding: "0 40px 40px 40px",
                 margin: "5px",
+                pointerEvents: "none",
               }}
             >
-              <Header color="#5038BC" width="auto">
-                9.999.999
-              </Header>
-              <p>
+              <Number>10.000++</Number>
+              <NumberDesc>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
                 enim ad minim veniam, quis nostrud exercitation ullamco laboris
                 nisi ut aliquip ex ea commodo consequat.
-              </p>
+              </NumberDesc>
             </Box>
-          </Box>
+          </Card>
 
-          <Box
-            style={{
-              position: "relative",
-              width: "632px",
-              height: "auto",
-              borderRadius: "56px",
-              backgroundColor: "#E1E5FE",
-              marginLeft: "16px",
-            }}
-          >
+          <div style={{ minWidth: "16px", minHeight: "16px" }}></div>
+
+          <Card>
+            <CardHover _hover={{ opacity: "0" }}></CardHover>
             <Box
               style={{
                 display: "flex",
                 flexDirection: "column",
                 position: "relative",
-                width: "100%",
                 height: "150px",
                 padding: "40px",
+                pointerEvents: "none",
               }}
             >
-              <img src={totalJadwal} style={{ width: "64px" }}></img>
+              <Icon src={totalJadwal}></Icon>
               <h2
                 style={{
                   fontWeight: "700",
                   color: "#A8ADF9",
                   fontSize: "20px",
-                  marginTop: "12px",
                 }}
               >
                 Jadwal Created
@@ -244,38 +250,36 @@ function Login({ history, location }) {
 
             <Box
               style={{
-                display: "flex",
-                flexDirection: "column",
+                display: "block",
+                overflow: "auto",
                 position: "relative",
                 width: "auto",
-                height: "224px",
                 borderRadius: "0 0 51px 51px",
                 backgroundColor: "#FFFFFF",
                 padding: "0 40px 40px 40px",
                 margin: "5px",
+                pointerEvents: "none",
               }}
             >
-              <Header color="#5038BC" width="auto">
-                9.999.999
-              </Header>
-              <p>
+              <Number>26.000++</Number>
+              <NumberDesc>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
                 enim ad minim veniam, quis nostrud exercitation ullamco laboris
                 nisi ut aliquip ex ea commodo consequat.
-              </p>
+              </NumberDesc>
             </Box>
-          </Box>
+          </Card>
         </Box>
-      </FlexBox>
+      </Box>
 
       <FlexBox flexDir="column" alignItems="center">
-        <h1 style={{ fontWeight: "700", fontSize: "32px" }}>
+        <SubHead>
           Kamu Seorang
-          <span style={{ color: "#5038BC" }}> Hacker</span>?
-        </h1>
+          <span> Hacker</span>?
+        </SubHead>
 
-        <p style={{ marginTop: "12px" }}>
+        <SubBody>
           Berkontribusi ke
           <span style={{ fontWeight: "700" }}>
             {" "}
@@ -284,23 +288,25 @@ function Login({ history, location }) {
             Open Source{" "}
           </span>
           lewat RISTEK OSS
-        </p>
+        </SubBody>
 
         <Button
-          mt="24px"
+          margin="24px 0 24px 0"
           height="55px"
           onClick="/"
           bgColor="#5038bc10"
           color="#5038BC"
           _hover={{ background: "#5038bc1c" }}
+          fontSize={{ base: "14px", md: "18px" }}
         >
           <img src={link} style={{ marginRight: "0.5rem" }}></img>
           https://ini-link-ristek-oss
         </Button>
 
-        <img src={discordDesktop} style={{ marginTop: "24px" }}></img>
+        <DiscDesktop src={discordDesktop}></DiscDesktop>
+        <DiscMobile src={discordMobile}></DiscMobile>
 
-        <LinkBox>
+        <LinkBox alignItems="center">
           <a
             href="https://ristek.link/oss-discord"
             rel="noopener noreferrer"
@@ -308,7 +314,7 @@ function Login({ history, location }) {
           >
             <Button
               _hover={{ background: "primary.Purple" }}
-              m={{ base: "0 0 1rem 0", lg: "0 1rem 0 0" }}
+              m={{ base: "0 0 1rem 0", md: "0 1rem 0 0" }}
               w="fit-content"
               h="57px"
             >
