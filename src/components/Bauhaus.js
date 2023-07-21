@@ -11,7 +11,12 @@ const AssetBauhaus = styled.img`
   position: absolute;
   right: 0;
   top: ${({ isPrivate }) => (isPrivate ? "81px" : "0")};
-  width: 40rem;
+  display:none
+
+  @media (min-width: 1200px) {
+    display: block
+    width: 40rem;
+  }
 
   ${(props) =>
     props.isMobile &&
@@ -44,13 +49,13 @@ export const Bauhaus = ({ isPrivate }) => {
         <AssetBauhaus
           isMobile={isMobile}
           src={illustrationMobile}
-          alt="bauhaus-sm"
+          alt="illustration-sm"
         />
       ) : (
         <AssetBauhaus
           isPrivate={isPrivate}
           src={illustrationDesktop}
-          alt="bauhaus-lg"
+          alt="illustration-lg"
         />
       )}
     </>

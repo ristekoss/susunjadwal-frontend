@@ -27,11 +27,11 @@ import {
   HeroSection,
   AssetChevron,
   Description,
+  CTAButtonDesktop,
+  CTAButtonMobile,
 } from "./styles";
 
-import {
-  FlexBox,
-} from "containers/BetaLanding/styles";
+import { FlexBox } from "containers/BetaLanding/styles";
 
 import RistekLogo from "assets/Beta/Beta_Logo_Light.svg";
 import ChevronArrow from "assets/Beta/chevron-down.svg";
@@ -112,20 +112,26 @@ function Login({ history, location }) {
           <br />
           Gausah takut lagi!
           <span> Susun</span>
-          <span style={{ color: "#5038BC" }}>Jadwal</span> by RISTEK hadir buat
-          kamu yang mau merencanakan kelas semester depan dengan mudah!
+          <span style={{ color: "#5038BC" }}>Jadwal </span>
+          by RISTEK hadir buat kamu yang mau merencanakan kelas semester depan
+          dengan mudah!
         </Description>
 
         <Announcement />
 
-        <Button
-          mt={{ base: "4rem", lg: "4.5rem" }}
+        <CTAButtonDesktop height="55px" onClick={redirectToSSOLogin}>
+          <img src={makara} style={{ marginRight: "0.5rem" }}></img>
+          Rencanakan SIAKWAR Sekarang
+        </CTAButtonDesktop>
+
+        <CTAButtonMobile
           height="55px"
+          width="319px"
           onClick={redirectToSSOLogin}
         >
           <img src={makara} style={{ marginRight: "0.5rem" }}></img>
-          Rencanakan SIAKWAR Sekarang
-        </Button>
+          Masuk Dengan SSO
+        </CTAButtonMobile>
 
         <a href="#content">
           <AssetChevron src={ChevronArrow} alt="chevron-down" />
