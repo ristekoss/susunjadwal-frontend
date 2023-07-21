@@ -3,14 +3,15 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 
 import BauhausLeft from "assets/Beta/bauhaus-left.svg";
-import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
-import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
-import BauhausDarkDesktop from "assets/Beta/bauhaus-dark-lg.svg";
+
+import illustrationDesktop from "assets/Beta/illustration-lg.svg";
+import illustrationMobile from "assets/Beta/illustration-sm.svg";
 
 const AssetBauhaus = styled.img`
   position: absolute;
   right: 0;
   top: ${({ isPrivate }) => (isPrivate ? "81px" : "0")};
+  width: 40rem;
 
   ${(props) =>
     props.isMobile &&
@@ -34,7 +35,7 @@ const AssetBauhausSide = styled.img`
   ${(props) => props.isMobile && "display: none;"}
 `;
 
-export const Bauhaus = ({ isPrivate, mode }) => {
+export const Bauhaus = ({ isPrivate }) => {
   const isMobile = useSelector((state) => state.appState.isMobile);
 
   return (
@@ -42,13 +43,13 @@ export const Bauhaus = ({ isPrivate, mode }) => {
       {isMobile ? (
         <AssetBauhaus
           isMobile={isMobile}
-          src={BauhausMobile}
+          src={illustrationMobile}
           alt="bauhaus-sm"
         />
       ) : (
         <AssetBauhaus
           isPrivate={isPrivate}
-          src={mode === "light" ? BauhausDesktop : BauhausDarkDesktop}
+          src={illustrationDesktop}
           alt="bauhaus-lg"
         />
       )}
