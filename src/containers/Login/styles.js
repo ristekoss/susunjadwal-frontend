@@ -40,7 +40,8 @@ export const Header = styled(Text).attrs({
   fontWeight: "700",
   marginBottom: "16px",
 })`
-  font-size: 2.75rem @media (min-width: 640px) {
+  font-size: 2.75rem;
+  @media (min-width: 640px) {
     font-size: 4rem;
   }
 
@@ -154,9 +155,7 @@ export const AssetChevronDown = styled.img`
 `;
 
 export const AssetChevronUp = styled.img`
-  position: fixed;
   display: none;
-  bottom: 120px;
   right: 120px;
   z-index: 1;
 
@@ -181,7 +180,9 @@ export const Description = styled(Text).attrs({
   lineHeight: "1.5625rem",
 })`
   text-align: center;
-  font-size: 0.875rem @media (min-width: 1200px) {
+  font-size: 0.875rem;
+
+  @media (min-width: 1200px) {
     align-items: flex-start;
     text-align: left;
   }

@@ -111,11 +111,10 @@ function Login({ history, location }) {
     if (auth?.token) history.push("/susun");
   }, [auth, history]);
 
-  //
-
-  //
+  // ScrollToTop
 
   const [Visible, setVisible] = useState(false);
+  const [Stick, setToStick] = useState(false);
 
   useEffect(() => {
     window.addEventListener("scroll", listenToScroll);
@@ -124,6 +123,8 @@ function Login({ history, location }) {
 
   const listenToScroll = () => {
     let showLimit = 800;
+    let stickLimit = 1470;
+
     const winScroll =
       document.body.scrollTop || document.documentElement.scrollTop;
 
@@ -131,6 +132,12 @@ function Login({ history, location }) {
       setVisible(true);
     } else {
       setVisible(false);
+    }
+
+    if (winScroll > stickLimit) {
+      setToStick(true);
+    } else {
+      setToStick(false);
     }
   };
 
@@ -339,7 +346,7 @@ function Login({ history, location }) {
                   "0++"
                 )}
               </Number>
-              <NumberDesc id="ea">
+              <NumberDesc>
                 SusunJadwal by RISTEK telah berhasil menciptakan lebih dari
                 26.000 jadwal kuliah untuk menghadapi SiakWAR di mana pengguna
                 dapat membuat berbagai skema jadwal.
@@ -402,7 +409,14 @@ function Login({ history, location }) {
 
       <Fade in={Visible}>
         <a href="#">
-          <AssetChevronUp src={ChevronUp} alt="chevron-up" />
+          <AssetChevronUp
+            src={ChevronUp}
+            alt="chevron-up"
+            style={{
+              position: Stick ? "absolute" : "fixed",
+              bottom: Stick ? "380px" : "120px",
+            }}
+          />
         </a>
       </Fade>
     </Box>
