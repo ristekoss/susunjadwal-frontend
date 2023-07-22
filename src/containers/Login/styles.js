@@ -236,7 +236,9 @@ export const CTAButtonMobile = styled(Button).attrs({})`
 export const DiscordButton = styled(Button).attrs({})`
   width: 320px !important;
   height: 44px !important;
-  font-size: 14px @media (min-width: 768px) {
+  font-size: 14px;
+
+  @media (min-width: 768px) {
     height: 57px !important;
     font-size: 16px;
   }
