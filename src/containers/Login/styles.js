@@ -25,10 +25,9 @@ export const Icon = styled.img`
 `;
 
 export const LogoRistek = styled.img`
-  margin-bottom: 4.5rem;
   width: 178px;
 
-  @media (min-width: 480px) {
+  @media (min-width: 640px) {
     width: initial;
   }
 
@@ -39,8 +38,12 @@ export const LogoRistek = styled.img`
 
 export const Header = styled(Text).attrs({
   fontWeight: "700",
-  fontSize: { base: "2.75rem", md: "4rem" },
+  marginBottom: "16px",
 })`
+  font-size: 2.75rem @media (min-width: 640px) {
+    font-size: 4rem;
+  }
+
   span {
     color: #5038bc;
   }
@@ -49,7 +52,9 @@ export const Header = styled(Text).attrs({
 export const SubHead = styled(Text).attrs({
   fontWeight: "700",
 })`
-  font-size: 24px @media (min-width: 768px) {
+  font-size: 24px;
+
+  @media (min-width: 640px) {
     font-size: 32px;
   }
 
@@ -64,7 +69,7 @@ export const SubBody = styled(Text).attrs({
     font-size: 12px
     text-align: center
 
-    @media (min-width: 768px) {
+    @media (min-width: 640px) {
         font-size: 16px
     }
     `;
@@ -81,7 +86,7 @@ export const SubHeadDesktop = styled(Text).attrs({
     text-align: left;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     display: block !important;
   }
 
@@ -102,7 +107,7 @@ export const SubHeadMobile = styled(Text).attrs({
     text-align: left;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     display: none !important;
   }
 
@@ -137,7 +142,7 @@ export const CardHover = styled(Box).attrs({
   transition: "0.2s ease-in",
 })``;
 
-export const AssetChevron = styled.img`
+export const AssetChevronDown = styled.img`
   position: absolute;
   left: calc(50% - 19px);
   bottom: 5%;
@@ -148,22 +153,41 @@ export const AssetChevron = styled.img`
   }
 `;
 
+export const AssetChevronUp = styled.img`
+  position: fixed;
+  display: none;
+  bottom: 120px;
+  right: 120px;
+  z-index: 1;
+
+  @media (min-width: 1080px) {
+    display: block;
+  }
+`;
+
 export const LinkBox = styled(Box).attrs({
   display: "flex",
-  flexDir: { base: "column", md: "row" },
-  mt: { base: "1.25rem ", md: "3rem " },
-})``;
+  mt: "1.5rem",
+})`
+  flex-direction: column;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+  }
+`;
 
 export const Description = styled(Text).attrs({
   width: { base: "80%", md: "500px" },
-  fontSize: { base: "0.875rem", md: "1rem" },
   lineHeight: "1.5625rem",
 })`
   text-align: center;
-
-  @media (min-width: 1200px) {
+  font-size: 0.875rem @media (min-width: 1200px) {
     align-items: flex-start;
     text-align: left;
+  }
+
+  @media (min-width: 640px) {
+    font-size: 1rem;
   }
 
   span {
@@ -171,11 +195,25 @@ export const Description = styled(Text).attrs({
   }
 `;
 
+export const DiscDesktop = styled.img`
+  display: none !important;
+  @media (min-width: 640px) {
+    display: block !important;
+  }
+`;
+
+export const DiscMobile = styled.img`
+  display: block !important;
+  @media (min-width: 640px) {
+    display: none !important;
+  }
+`;
+
 export const CTAButtonDesktop = styled(Button).attrs({})`
   margin-top: 2.5rem;
   display: none !important;
 
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     margin-top: 4.5rem;
     display: inline-flex !important;
   }
@@ -185,22 +223,24 @@ export const CTAButtonMobile = styled(Button).attrs({})`
   margin-top: 2.5rem;
   display: inline-flex !important;
 
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
+    display: none !important;
+  }
+
+  @media (min-width: 480px) {
     margin-top: 4.5rem;
-    display: none !important;
   }
 `;
 
-export const DiscDesktop = styled.img`
-  display: none !important;
-  @media (min-width: 768px) {
-    display: block !important;
+export const DiscordButton = styled(Button).attrs({})`
+  width: 320px !important;
+  height: 44px !important;
+  font-size: 14px @media (min-width: 768px) {
+    height: 57px !important;
+    font-size: 16px;
   }
-`;
 
-export const DiscMobile = styled.img`
-  display: block !important;
-  @media (min-width: 768px) {
-    display: none !important;
+  @media (min-width: 640px) {
+    width: fit-content !important;
   }
 `;

@@ -1,8 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Box, useColorModeValue } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import { Fade, Button, Box, useColorModeValue } from "@chakra-ui/react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
 import { parse } from "query-string";
+import CountUp from "react-countup";
 
 import { persistAuth, persistCompletion } from "utils/auth";
 import { setLoading } from "redux/modules/appState";
@@ -11,7 +12,7 @@ import { makeAtLeastMs } from "utils/promise";
 import { postAuthTicket } from "services/api";
 import { setAuth } from "redux/modules/auth";
 
-import { Bauhaus } from "components/Bauhaus";
+import { Illustration } from "components/Illustration";
 import Announcement from "components/Announcement";
 
 import makara from "assets/Beta/makara.svg";
@@ -28,7 +29,8 @@ import {
   LinkBox,
   LogoRistek,
   HeroSection,
-  AssetChevron,
+  AssetChevronDown,
+  AssetChevronUp,
   Description,
   CTAButtonDesktop,
   CTAButtonMobile,
@@ -41,12 +43,14 @@ import {
   Card,
   CardHover,
   SubBody,
+  DiscordButton,
 } from "./styles";
 
 import { FlexBox } from "containers/BetaLanding/styles";
 
 import RistekLogo from "assets/Beta/Beta_Logo_Light.svg";
-import ChevronArrow from "assets/Beta/chevron-down.svg";
+import ChevronDown from "assets/Beta/chevron-down.svg";
+import ChevronUp from "assets/Beta/chevron-up.svg";
 
 function getServiceUrl() {
   return window.location.href.split("?")[0];
@@ -107,9 +111,72 @@ function Login({ history, location }) {
     if (auth?.token) history.push("/susun");
   }, [auth, history]);
 
+  //
+
+  //
+
+  const [Visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener("scroll", listenToScroll);
+    return () => window.removeEventListener("scroll", listenToScroll);
+  }, []);
+
+  const listenToScroll = () => {
+    let showLimit = 800;
+    const winScroll =
+      document.body.scrollTop || document.documentElement.scrollTop;
+
+    if (winScroll > showLimit) {
+      setVisible(true);
+    } else {
+      setVisible(false);
+    }
+  };
+
+  // Number Counting Animation
+
+  const userNumber = useRef(null);
+  const jadwalNumber = useRef(null);
+
+  const [userCountLocked, userCountLock] = useState(false);
+  const [jadwalCountLocked, jadwalCountLock] = useState(false);
+
+  function useIsInViewport(ref, source) {
+    const [isIntersecting, setIsIntersecting] = useState(false);
+
+    const observer = useMemo(
+      () =>
+        new IntersectionObserver(([entry]) =>
+          setIsIntersecting(entry.isIntersecting),
+        ),
+      [],
+    );
+
+    useEffect(() => {
+      observer.observe(ref.current);
+
+      return () => {
+        observer.disconnect();
+      };
+    }, [ref, observer]);
+
+    useEffect(() => {
+      if (isIntersecting & (source === "user")) {
+        userCountLock(true);
+      }
+
+      if (isIntersecting & (source === "jadwal")) {
+        jadwalCountLock(true);
+      }
+    }, [isIntersecting, source]);
+
+    return isIntersecting;
+  }
+
   return (
     <Box px={{ base: "0px", lg: "40px" }}>
-      <Bauhaus mode={theme} />
+      <Illustration />
 
       <HeroSection>
         <LogoRistek src={RistekLogo} alt="ristek-logo" />
@@ -120,13 +187,14 @@ function Login({ history, location }) {
 
         <Description>
           Kamu pernah merasa frustrasi karena kalah SIAKWAR?
-          <br />
-          <br />
+          <div style={{ height: "12px" }}></div>
           Gausah takut lagi!
           <span> Susun</span>
           <span style={{ color: "#5038BC" }}>Jadwal </span>
           by RISTEK hadir buat kamu yang mau merencanakan kelas semester depan
           dengan mudah!
+          <div style={{ height: "12px" }}></div>
+          Dengan SusunJadwal, peluang kamu menang SIAKWar akan lebih besar!
         </Description>
 
         <Announcement />
@@ -137,7 +205,7 @@ function Login({ history, location }) {
         </CTAButtonDesktop>
 
         <CTAButtonMobile
-          height="55px"
+          height={{ base: "44px", md: "55px" }}
           width="319px"
           onClick={redirectToSSOLogin}
         >
@@ -146,7 +214,7 @@ function Login({ history, location }) {
         </CTAButtonMobile>
 
         <a href="#content">
-          <AssetChevron src={ChevronArrow} alt="chevron-down" />
+          <AssetChevronDown src={ChevronDown} alt="chevron-down" />
         </a>
       </HeroSection>
 
@@ -204,7 +272,6 @@ function Login({ history, location }) {
                 display: "block",
                 overflow: "auto",
                 position: "relative",
-                width: "auto",
                 borderRadius: "0 0 51px 51px",
                 backgroundColor: "#FFFFFF",
                 padding: "0 40px 40px 40px",
@@ -212,12 +279,17 @@ function Login({ history, location }) {
                 pointerEvents: "none",
               }}
             >
-              <Number>10.000++</Number>
+              <Number ref={userNumber}>
+                {userCountLocked | useIsInViewport(userNumber, "user") ? (
+                  <CountUp end={10000} separator="." suffix="++" />
+                ) : (
+                  "0++"
+                )}
+              </Number>
               <NumberDesc>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+                SusunJadwal by RISTEK telah dipercaya oleh lebih dari 10.000
+                mahasiswa Universitas Indonesia yang berhasil merencanakan
+                jadwal kuliah mereka dengan sukses.
               </NumberDesc>
             </Box>
           </Card>
@@ -253,7 +325,6 @@ function Login({ history, location }) {
                 display: "block",
                 overflow: "auto",
                 position: "relative",
-                width: "auto",
                 borderRadius: "0 0 51px 51px",
                 backgroundColor: "#FFFFFF",
                 padding: "0 40px 40px 40px",
@@ -261,12 +332,17 @@ function Login({ history, location }) {
                 pointerEvents: "none",
               }}
             >
-              <Number>26.000++</Number>
-              <NumberDesc>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+              <Number ref={jadwalNumber}>
+                {jadwalCountLocked | useIsInViewport(jadwalNumber, "jadwal") ? (
+                  <CountUp end={26000} separator="." suffix="++" />
+                ) : (
+                  "0++"
+                )}
+              </Number>
+              <NumberDesc id="ea">
+                SusunJadwal by RISTEK telah berhasil menciptakan lebih dari
+                26.000 jadwal kuliah untuk menghadapi SiakWAR di mana pengguna
+                dapat membuat berbagai skema jadwal.
               </NumberDesc>
             </Box>
           </Card>
@@ -292,11 +368,12 @@ function Login({ history, location }) {
 
         <Button
           margin="24px 0 24px 0"
-          height="55px"
+          height={{ base: "44px", md: "55px" }}
           onClick="/"
           bgColor="#5038bc10"
           color="#5038BC"
           _hover={{ background: "#5038bc1c" }}
+          _active={{ background: "#5038bc2c" }}
           fontSize={{ base: "14px", md: "18px" }}
         >
           <img src={link} style={{ marginRight: "0.5rem" }}></img>
@@ -312,22 +389,22 @@ function Login({ history, location }) {
             rel="noopener noreferrer"
             target="_blank"
           >
-            <Button
-              _hover={{ background: "primary.Purple" }}
-              m={{ base: "0 0 1rem 0", md: "0 1rem 0 0" }}
-              w="fit-content"
-              h="57px"
-            >
+            <DiscordButton _hover={{ background: "primary.Purple" }}>
               Gabung Discord
-            </Button>
+            </DiscordButton>
           </a>
+          <div style={{ minWidth: "16px", minHeight: "16px" }}></div>
           <Link to="/kontributor">
-            <Button variant="outline" w="fit-content" h="55px">
-              Lihat kontributor
-            </Button>
+            <DiscordButton variant="outline">Lihat kontributor</DiscordButton>
           </Link>
         </LinkBox>
       </FlexBox>
+
+      <Fade in={Visible}>
+        <a href="#">
+          <AssetChevronUp src={ChevronUp} alt="chevron-up" />
+        </a>
+      </Fade>
     </Box>
   );
 }
