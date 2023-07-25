@@ -144,13 +144,16 @@ export const CardHover = styled(Box).attrs({
 })``;
 
 export const AssetChevronDown = styled.img`
-  position: absolute;
+  position: relative;
   left: calc(50% - 19px);
   bottom: 5%;
-  top: 104%;
 
   @media (min-width: 480px) {
     top: auto;
+  }
+
+  @media (min-width: 1200px) {
+    position: absolute;
   }
 `;
 
@@ -212,16 +215,22 @@ export const DiscMobile = styled.img`
 
 export const CTAButtonDesktop = styled(Button).attrs({})`
   margin-top: 2.5rem;
+  margin-bottom: 36px;
   display: none !important;
 
   @media (min-width: 640px) {
     margin-top: 4.5rem;
     display: inline-flex !important;
   }
+
+  @media (min-width: 1200px) {
+    margin-bottom: 5rem;
+  }
 `;
 
 export const CTAButtonMobile = styled(Button).attrs({})`
   margin-top: 2.5rem;
+  margin-bottom: 36px;
   display: inline-flex !important;
 
   @media (min-width: 640px) {

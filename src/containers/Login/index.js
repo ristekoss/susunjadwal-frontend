@@ -201,7 +201,7 @@ function Login({ history, location }) {
           by RISTEK hadir buat kamu yang mau merencanakan kelas semester depan
           dengan mudah!
           <div style={{ height: "12px" }}></div>
-          Dengan SusunJadwal, peluang kamu menang SIAKWar akan lebih besar!
+          Dengan SusunJadwal, peluang kamu menang SIAKWAR akan lebih besar!
         </Description>
 
         <Announcement />
@@ -348,7 +348,7 @@ function Login({ history, location }) {
               </Number>
               <NumberDesc>
                 SusunJadwal by RISTEK telah berhasil menciptakan lebih dari
-                26.000 jadwal kuliah untuk menghadapi SiakWAR di mana pengguna
+                26.000 jadwal kuliah untuk menghadapi SIAKWAR di mana pengguna
                 dapat membuat berbagai skema jadwal.
               </NumberDesc>
             </Box>
