@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useColorModeValue } from "@chakra-ui/react";
 const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -87,29 +87,51 @@ function Schedule({
               day={dayToColumn(day)}
               mode={theme}
             >
-              {!isMobile && (
-                <div className="header">
-                  <span>
-                    {start} - {end}
-                  </span>
-                  {showRoom && <span className="room">{room}</span>}
+              {isMobile && (
+                <div className="wrapper">
+                  {String(name).includes(course_name) || !course_name ? (
+                    <p className="details-mobile">{name}</p>
+                  ) : (
+                    <p className="details-mobile">
+                      <span
+                        style={{
+                          color: "#F7B500",
+                          mixBlendMode: "normal",
+                        }}
+                      >
+                        {name}
+                      </span>
+                      {" - " + course_name}
+                    </p>
+                  )}
                 </div>
               )}
 
-              <div className="content">
-                {showRoom && isMobile && <span className="room">{room}</span>}
-                <span
-                  style={{
-                    fontSize: isMobile ? "8px" : "12px",
-                    color: "#F7B500",
-                    mixBlendMode: "normal",
-                  }}
-                >
-                  {String(name).includes(course_name) || !course_name
-                    ? name
-                    : `${course_name} - ${name}`}
-                </span>
-              </div>
+              {!isMobile && (
+                <div className="wrapper">
+                  <div className="header">
+                    <span>
+                      {start} - {end}
+                    </span>
+                    {showRoom && <span className="room">{room}</span>}
+                  </div>
+                  {String(name).includes(course_name) || !course_name ? (
+                    <p className="details-desktop">{name}</p>
+                  ) : (
+                    <p className="details-desktop">
+                      <span
+                        style={{
+                          color: "#F7B500",
+                          mixBlendMode: "normal",
+                        }}
+                      >
+                        {name}
+                      </span>
+                      {" - " + course_name}
+                    </p>
+                  )}
+                </div>
+              )}
             </ScheduleItem>
           ),
         )}
@@ -173,16 +195,41 @@ const ScheduleItem = styled.div`
   end} /
     ${({ day }) => day + 1};
   border-radius: 8px;
+  // overflow-y: hidden;
+
+  .wrapper {
+    overflow: hidden;
+    padding: 8px;
+  }
+  .details-mobile{
+    font-size: 8px;
+    font-weight: bold;
+    overflow: hidden;
+    // Condition based on start and end time
+    --max-lines: ${({ end, start }) => {
+      if (end - start > 100) {
+        return 11;
+      } else if (end - start >= 60) {
+        return 5;
+      } else {
+        return 2;
+      }
+    }}
+    --lh: 1.4;
+    line-height: var(--lh);
+    display: -webkit-box;
+    -webkit-line-clamp: var(--max-lines);
+    -webkit-box-orient: vertical;
+  }
 
   .header {
-    padding: 0 4px !important;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     font-size: 10px;
     font-weight: lighter;
-    margin-top: 5px;
+    margin-bottom: 4px;
     .room {
       overflow: hidden;
       white-space: nowrap;
@@ -190,26 +237,33 @@ const ScheduleItem = styled.div`
       max-width: 40%;
     }
   }
-
-  .content {
-    padding: 2px 4px;
+  .details-desktop{
     font-weight: bold;
-    ${(isMobile) =>
-      isMobile &&
-      css`
-        display: flex;
-        flex-direction: column;
-
-        span {
-          font-size: 7px;
-        }
-      `}
-    .room {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      max-width: 10ch;
-    }
+    font-size: 12px;
+    overflow: hidden;
+    // Condition based on start and end time
+    --max-lines: ${({ end, start }) => {
+      if (end - start > 100) {
+        return 6;
+      } else if (end - start === 100) {
+        return 4;
+      } else if (end - start === 60) {
+        return 2;
+      } else {
+        return 1;
+      }
+    }}
+    --lh: 1.1;
+    line-height: var(--lh);
+    display: -webkit-box;
+    -webkit-line-clamp: var(--max-lines);
+    -webkit-box-orient: vertical;
+  }
+  .room {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 10ch;
   }
 `;
 
