@@ -67,13 +67,13 @@ export const SubHead = styled(Text).attrs({
 export const SubBody = styled(Text).attrs({
   marginTop: "12px",
 })`
-    font-size: 12px
-    text-align: center
+  font-size: 12px;
+  text-align: center;
 
-    @media (min-width: 640px) {
-        font-size: 16px
-    }
-    `;
+  @media (min-width: 640px) {
+    font-size: 16px;
+  }
+`;
 
 export const SubHeadDesktop = styled(Text).attrs({
   fontWeight: "700",
