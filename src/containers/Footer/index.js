@@ -86,7 +86,7 @@ const Footer = () => {
           <StyledSpanWrapper>
             <div>
               <StyledPartnerTitle mode={theme}>
-                Official Learning Partner
+                Official Learning Partners
               </StyledPartnerTitle>
               <Center>
                 <a
