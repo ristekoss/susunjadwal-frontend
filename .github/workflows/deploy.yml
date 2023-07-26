@@ -1,39 +1,20 @@
-name: deploy vercel
+name: Deploy to vercel
 on:
   push:
     branches:
       - main
-      - staging
-  pull_request_target:
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: amondnet/vercel-action@v19
-        id: deploy-pr
-        if: github.event_name == 'pull_request_target'
+      - uses: ngduc/vercel-deploy-action@master
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
-      - name: production or not
-        id: prod_or_not
-        run: |
-          if [ "$REF" == 'refs/heads/master' ]
-          then
-              echo "::set-output name=vercel-args::--prod"
-          else
-              echo "::set-output name=vercel-args::"
-          fi
+          vercel-cli: vercel
+          vercel-token: ${{ secrets.WEBDEV_VERCEL_TOKEN }}
+          vercel-args: "--prod"
+          vercel-org-id: ${{ secrets.ORG_ID}}
+          vercel-project-id: ${{ secrets.PROJECT_ID}}
+          working-directory: ./
         env:
-          REF: ${{ github.ref }}
-      - uses: amondnet/vercel-action@v19
-        id: deploy-prod
-        if: github.event_name == 'push'
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: ${{ steps.prod_or_not.outputs.vercel-args }}
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
