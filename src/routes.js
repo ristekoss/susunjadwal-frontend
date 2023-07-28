@@ -39,7 +39,7 @@ function Routes() {
 
   return (
     <ThemeProvider theme={{ mobile: isMobile, ...theme }}>
-      <Box bgColor="#F8F8F8">
+      <Box>
         <Box
           pt={{ base: "120px", lg: paddingTopLargeScreen }}
           mb={{ base: 16, md: "108px" }}

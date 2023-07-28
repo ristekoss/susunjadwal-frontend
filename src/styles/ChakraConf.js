@@ -13,7 +13,7 @@ const styles = {
     // styles for the `body`
     body: {
       fontFamily: "Poppins",
-      backgroundColor: props.colorMode === "light" ? "white" : "dark.Black",
+      backgroundColor: props.colorMode === "light" ? "#F8F8F8" : "dark.Black",
     },
   }),
 };
