@@ -2,8 +2,8 @@ name: Deploy to Vercel
 
 on:
   push:
-    branches:
-      - staging
+    branches-ignore:
+      - main
 
 jobs:
   deploy:
