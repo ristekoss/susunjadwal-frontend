@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useColorModeValue } from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
+import DetailsModal from "./DetailsModal";
 const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
 const pad = (val) => {
@@ -18,6 +20,9 @@ function Schedule({
   showHeader,
   showRoom,
 }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedCourse, setSelectedCourse] = useState(null);
+
   const isMobile = useSelector((state) => state.appState.isMobile);
   const theme = useColorModeValue("light");
   const rowToDisplay = (minute) => {
@@ -55,6 +60,11 @@ function Schedule({
     </>
   );
 
+  const handleClickedCourse = (course) => {
+    setSelectedCourse(course);
+    onOpen();
+  };
+
   return (
     <Container
       pxPerMinute={pxPerMinute}
@@ -62,6 +72,19 @@ function Schedule({
       showLabel={showLabel}
       mode={theme}
     >
+      <DetailsModal
+        isOpen={isOpen}
+        onClose={onClose}
+        name={selectedCourse?.name}
+        courseName={selectedCourse?.course_name}
+        day={selectedCourse?.day}
+        sks={selectedCourse?.sks}
+        start={selectedCourse?.start}
+        end={selectedCourse?.end}
+        room={selectedCourse?.room}
+        lecturer={selectedCourse?.lecturer.join(", ")}
+      />
+
       {showHeader && renderHeader()}
       {TIME_MARKERS.map((_, idx) => (
         <TimeMarker
@@ -86,6 +109,7 @@ function Schedule({
               end={displayToMinute(end)}
               day={dayToColumn(day)}
               mode={theme}
+              onClick={() => handleClickedCourse(schedule.schedule_items[idx])}
             >
               {isMobile && (
                 <div className="wrapper">
@@ -187,15 +211,14 @@ const Header = styled.div`
 `;
 
 const ScheduleItem = styled.div`
-  z-index: 1;
-  width: 95%;
-  background-color: ${({ mode }) => (mode === "light" ? "#5038bc" : "#674DE0")} 
-  color: white;
-  grid-area: ${({ start }) => start} / ${({ day }) => day} / ${({ end }) =>
-  end} /
+z-index: 1;
+width: 95%;
+background-color: ${({ mode }) => (mode === "light" ? "#5038bc" : "#674DE0")} 
+color: white;
+grid-area: ${({ start }) => start} / ${({ day }) => day} / ${({ end }) => end} /
     ${({ day }) => day + 1};
-  border-radius: 8px;
-  // overflow-y: hidden;
+border-radius: 8px;
+cursor: pointer;
 
   .wrapper {
     overflow: hidden;
