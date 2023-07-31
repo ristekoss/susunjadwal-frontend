@@ -121,6 +121,7 @@ function Schedule({
                         style={{
                           color: "#F7B500",
                           mixBlendMode: "normal",
+                          fontWeight: "bold",
                         }}
                       >
                         {name}
@@ -147,6 +148,7 @@ function Schedule({
                         style={{
                           color: "#F7B500",
                           mixBlendMode: "normal",
+                          fontWeight: "bold",
                         }}
                       >
                         {name}
@@ -219,6 +221,7 @@ grid-area: ${({ start }) => start} / ${({ day }) => day} / ${({ end }) => end} /
     ${({ day }) => day + 1};
 border-radius: 8px;
 cursor: pointer;
+font-weight: 600;
 
   .wrapper {
     overflow: hidden;
@@ -226,7 +229,6 @@ cursor: pointer;
   }
   .details-mobile{
     font-size: 8px;
-    font-weight: bold;
     overflow: hidden;
     // Condition based on start and end time
     --max-lines: ${({ end, start }) => {
@@ -261,7 +263,6 @@ cursor: pointer;
     }
   }
   .details-desktop{
-    font-weight: bold;
     font-size: 12px;
     overflow: hidden;
     // Condition based on start and end time
