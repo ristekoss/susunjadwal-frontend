@@ -111,7 +111,7 @@ function Schedule({
               mode={theme}
               onClick={() => handleClickedCourse(schedule.schedule_items[idx])}
             >
-              {isMobile && (
+              {isMobile ? (
                 <div className="wrapper">
                   {String(name).includes(course_name) || !course_name ? (
                     <p className="details-mobile">{name}</p>
@@ -120,7 +120,6 @@ function Schedule({
                       <span
                         style={{
                           color: "#F7B500",
-                          mixBlendMode: "normal",
                           fontWeight: "bold",
                         }}
                       >
@@ -130,33 +129,57 @@ function Schedule({
                     </p>
                   )}
                 </div>
-              )}
-
-              {!isMobile && (
-                <div className="wrapper">
-                  <div className="header">
-                    <span>
-                      {start} - {end}
-                    </span>
-                    {showRoom && <span className="room">{room}</span>}
-                  </div>
-                  {String(name).includes(course_name) || !course_name ? (
-                    <p className="details-desktop">{name}</p>
+              ) : (
+                // Desktop mode
+                <>
+                  {displayToMinute(end) - displayToMinute(start) >= 50 ? (
+                    <div className="wrapper">
+                      <div className="header">
+                        <span>
+                          {start} - {end}
+                        </span>
+                        {showRoom && <span className="room">{room}</span>}
+                      </div>
+                      {String(name).includes(course_name) || !course_name ? (
+                        <p className="details-desktop">{name}</p>
+                      ) : (
+                        <p className="details-desktop">
+                          <span
+                            style={{
+                              color: "#F7B500",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {name}
+                          </span>
+                          {" - " + course_name}
+                        </p>
+                      )}
+                    </div>
                   ) : (
-                    <p className="details-desktop">
-                      <span
-                        style={{
-                          color: "#F7B500",
-                          mixBlendMode: "normal",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {name}
-                      </span>
-                      {" - " + course_name}
-                    </p>
+                    // Special condition for class with duration less than 50 minutes
+                    <div className="wrapper">
+                      {String(name).includes(course_name) || !course_name ? (
+                        <p className="details-desktop">
+                          <span style={{ fontWeight: "normal" }}>{room}</span>
+                          {" - " + name}
+                        </p>
+                      ) : (
+                        <p className="details-desktop">
+                          <span
+                            style={{
+                              color: "#F7B500",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {name}
+                          </span>
+                          {" - " + course_name}
+                        </p>
+                      )}
+                    </div>
                   )}
-                </div>
+                </>
               )}
             </ScheduleItem>
           ),
@@ -232,12 +255,14 @@ font-weight: 600;
     overflow: hidden;
     // Condition based on start and end time
     --max-lines: ${({ end, start }) => {
-      if (end - start > 100) {
+      if (end - start >= 170) {
         return 11;
-      } else if (end - start >= 60) {
+      } else if (end - start >= 100) {
         return 5;
-      } else {
+      } else if (end - start >= 50) {
         return 2;
+      } else {
+        return 1;
       }
     }}
     --lh: 1.4;
@@ -262,16 +287,15 @@ font-weight: 600;
       max-width: 40%;
     }
   }
+
   .details-desktop{
     font-size: 12px;
     overflow: hidden;
     // Condition based on start and end time
     --max-lines: ${({ end, start }) => {
-      if (end - start > 100) {
-        return 6;
-      } else if (end - start === 100) {
+      if (end - start >= 100) {
         return 4;
-      } else if (end - start === 60) {
+      } else if (end - start >= 60) {
         return 2;
       } else {
         return 1;
@@ -282,12 +306,6 @@ font-weight: 600;
     display: -webkit-box;
     -webkit-line-clamp: var(--max-lines);
     -webkit-box-orient: vertical;
-  }
-  .room {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 10ch;
   }
 `;
 
