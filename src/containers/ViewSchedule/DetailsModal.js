@@ -20,9 +20,13 @@ import {
 } from "@chakra-ui/react";
 
 import totalSksImg from "assets/Total-Sks.svg";
+import totalSksImgDark from "assets/Total-Sks-dark.svg";
 import jamMatkulImg from "assets/Jam-Matkul.svg";
+import jamMatkulImgDark from "assets/Jam-Matkul-dark.svg";
 import ruangKelasImg from "assets/Ruang-Kelas.svg";
+import ruangKelasImgDark from "assets/Ruang-Kelas-dark.svg";
 import namaDosenImg from "assets/Dosen.svg";
+import namaDosenImgDark from "assets/Dosen-dark.svg";
 
 const DetailsModal = ({
   isOpen,
@@ -37,7 +41,7 @@ const DetailsModal = ({
   lecturer,
 }) => {
   const isMobile = useSelector((state) => state.appState.isMobile);
-  const theme = useColorModeValue("light");
+  const theme = useColorModeValue("light", "dark");
 
   return (
     <>
@@ -55,6 +59,7 @@ const DetailsModal = ({
             paddingY="48px"
             maxHeight={"fit-content"}
             top={"auto !important"}
+            background={theme === "dark" ? "#27262E" : "white"}
           >
             <DrawerHeader
               display="flex"
@@ -91,14 +96,20 @@ const DetailsModal = ({
             <DrawerBody p={0} mt="32px">
               <VStack spacing="32px" align="start">
                 <Container>
-                  <img src={totalSksImg} alt="totalSks" />
+                  <img
+                    src={theme === "light" ? totalSksImg : totalSksImgDark}
+                    alt="totalSks"
+                  />
                   <Content>
                     <p className="header">Total SKS</p>
                     <p className="desc">{sks}</p>
                   </Content>
                 </Container>
                 <Container>
-                  <img src={jamMatkulImg} alt="Jam Matkul Image" />
+                  <img
+                    src={theme === "light" ? jamMatkulImg : jamMatkulImgDark}
+                    alt="Jam Matkul Image"
+                  />
                   <Content>
                     <p className="header">Jam Matkul</p>
                     <p className="desc">
@@ -107,14 +118,20 @@ const DetailsModal = ({
                   </Content>
                 </Container>
                 <Container>
-                  <img src={ruangKelasImg} alt="Ruang Kelas Image" />
+                  <img
+                    src={theme === "light" ? ruangKelasImg : ruangKelasImgDark}
+                    alt="Ruang Kelas Image"
+                  />
                   <Content>
                     <p className="header">Ruang Kelas</p>
                     <p className="desc">{room}</p>
                   </Content>
                 </Container>
                 <Container>
-                  <img src={namaDosenImg} alt="Nama Dosen Image" />
+                  <img
+                    src={theme === "light" ? namaDosenImg : namaDosenImgDark}
+                    alt="Nama Dosen Image"
+                  />
                   <Content>
                     <p className="header">Nama Dosen</p>
                     <p className="desc">{lecturer}</p>
@@ -127,9 +144,19 @@ const DetailsModal = ({
       )}
 
       {!isMobile && (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg">
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          isCentered
+          size="lg"
+          autoFocus={false}
+        >
           <ModalOverlay />
-          <ModalContent borderRadius="24px" padding="48px">
+          <ModalContent
+            borderRadius="24px"
+            padding="48px"
+            background={theme === "dark" ? "#27262E" : "white"}
+          >
             <ModalHeader
               display="flex"
               justifyContent="space-between"
@@ -165,14 +192,20 @@ const DetailsModal = ({
             <ModalBody p={0} mt="40px">
               <VStack spacing="32px" align="start">
                 <Container>
-                  <img src={totalSksImg} alt="totalSks" />
+                  <img
+                    src={theme === "light" ? totalSksImg : totalSksImgDark}
+                    alt="totalSks"
+                  />
                   <Content>
                     <p className="header">Total SKS</p>
                     <p className="desc">{sks}</p>
                   </Content>
                 </Container>
                 <Container>
-                  <img src={jamMatkulImg} alt="Jam Matkul Image" />
+                  <img
+                    src={theme === "light" ? jamMatkulImg : jamMatkulImgDark}
+                    alt="Jam Matkul Image"
+                  />
                   <Content>
                     <p className="header">Jam Matkul</p>
                     <p className="desc">
@@ -181,14 +214,20 @@ const DetailsModal = ({
                   </Content>
                 </Container>
                 <Container>
-                  <img src={ruangKelasImg} alt="Ruang Kelas Image" />
+                  <img
+                    src={theme === "light" ? ruangKelasImg : ruangKelasImgDark}
+                    alt="Ruang Kelas Image"
+                  />
                   <Content>
                     <p className="header">Ruang Kelas</p>
                     <p className="desc">{room}</p>
                   </Content>
                 </Container>
                 <Container>
-                  <img src={namaDosenImg} alt="Nama Dosen Image" />
+                  <img
+                    src={theme === "light" ? namaDosenImg : namaDosenImgDark}
+                    alt="Nama Dosen Image"
+                  />
                   <Content>
                     <p className="header">Nama Dosen</p>
                     <p className="desc">{lecturer}</p>
@@ -205,6 +244,12 @@ const DetailsModal = ({
 const Container = styled.div`
   display: flex;
   flex-direction: row;
+  @media (min-width: 900px) {
+    img {
+      width: 44px;
+      height: 44px;
+    }
+  }
 `;
 
 const Content = styled.div`
