@@ -142,7 +142,7 @@ const ScheduleDetail = ({
             startHour={7}
             endHour={21}
             schedule={schedule}
-            pxPerMinute={isMobile ? 0.3 : 0.7}
+            pxPerMinute={isMobile ? 0.7 : 0.9}
             width="100%"
             showRoom
           />
