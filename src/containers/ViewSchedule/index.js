@@ -28,6 +28,7 @@ import {
 import Schedule from "./Schedule";
 import ScheduleList from "./ScheduleList";
 import ControlledInput from "./ControlledInput";
+import DownloadRef from "./DownloadRef";
 import { SuccessToast, ErrorToast } from "components/Toast";
 import Icons from "components/Icons";
 import { getSchedule, postRenameSchedule, deleteSchedule } from "services/api";
@@ -358,24 +359,37 @@ function ViewSchedule({ match, history }) {
           </>
         )}
 
-        <div ref={refs}>
-          {isDisplayTimetable ? (
-            <Schedule
-              width="100%"
-              pxPerMinute={isMobile ? 0.7 : 0.9}
+        {isDisplayTimetable ? (
+          <Schedule
+            width="100%"
+            pxPerMinute={isMobile ? 0.7 : 0.9}
+            schedule={schedule}
+            startHour={7}
+            endHour={21}
+            showHeader
+            showLabel
+            showRoom
+          />
+        ) : (
+          <ScheduleList
+            formattedSchedule={formattedSchedule}
+            totalCredits={totalCredits}
+          />
+        )}
+
+        <div style={{ overflow: "hidden", minWidth: "1440px", height: "0" }}>
+          <div ref={refs}>
+            <DownloadRef
+              pxPerMinute={0.9}
               schedule={schedule}
               startHour={7}
               endHour={21}
               showHeader
               showLabel
               showRoom
-            />
-          ) : (
-            <ScheduleList
               formattedSchedule={formattedSchedule}
-              totalCredits={totalCredits}
             />
-          )}
+          </div>
         </div>
       </MainContainer>
     </>
