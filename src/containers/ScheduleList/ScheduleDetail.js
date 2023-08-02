@@ -6,7 +6,7 @@ import { Button, useColorModeValue } from "@chakra-ui/react";
 import * as htmlToImage from "html-to-image";
 import ReactGA from "react-ga";
 
-import Schedule from "containers/ViewSchedule/Schedule";
+import SchedulePreview from "./SchedulePreview";
 import Icons from "components/Icons";
 import DownloadRef from "containers/ViewSchedule/DownloadRef";
 import getFormattedSchedule from "utils/schedule";
@@ -146,7 +146,7 @@ const ScheduleDetail = ({
               />
             </div>
           </div>
-          <Schedule
+          <SchedulePreview
             startHour={7}
             endHour={21}
             schedule={schedule}
