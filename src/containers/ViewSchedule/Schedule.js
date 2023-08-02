@@ -280,8 +280,8 @@ function Schedule({
                 )}
             </MobileSchedulePage>
 
-            <PageButtonContainer>
-              <PageButton onClick={() => executeScroll(pageTwo)}>
+            <PageButtonContainer mode={theme}>
+              <PageButton onClick={() => executeScroll(pageTwo)} mode={theme}>
                 <img src={caret} style={{ height: "28px" }}></img>
               </PageButton>
             </PageButtonContainer>
@@ -289,8 +289,8 @@ function Schedule({
 
           {/* Page Two */}
           <MobileScheduleContainer minWidth="calc(100% - 48px)">
-            <PageButtonContainer>
-              <PageButton onClick={() => executeScroll(pageOne)}>
+            <PageButtonContainer mode={theme}>
+              <PageButton onClick={() => executeScroll(pageOne)} mode={theme}>
                 <img
                   src={caret}
                   style={{ height: "28px", transform: "rotate(180deg)" }}
