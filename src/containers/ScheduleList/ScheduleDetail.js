@@ -8,6 +8,8 @@ import ReactGA from "react-ga";
 
 import Schedule from "containers/ViewSchedule/Schedule";
 import Icons from "components/Icons";
+import DownloadRef from "containers/ViewSchedule/DownloadRef";
+import getFormattedSchedule from "utils/schedule";
 import useDownloadCalendar from "hooks/useDownloadCalendar";
 import { decodeHtmlEntity } from "utils/string";
 
@@ -26,6 +28,12 @@ const ScheduleDetail = ({
   const isMobile = useSelector((state) => state.appState.isMobile);
   const theme = useColorModeValue("light", "dark");
   const { generateICalendarFile } = useDownloadCalendar(theme);
+  let formattedSchedule = {};
+  let totalCredits = 0;
+
+  if (schedule) {
+    [formattedSchedule, totalCredits] = getFormattedSchedule(schedule);
+  }
 
   const convertDate = (date) => {
     const dateNew = new Date(date);
@@ -124,17 +132,17 @@ const ScheduleDetail = ({
               </CardActionContainer>
             </Link>
           </div>
-          <div style={{ overflow: "hidden", height: "0" }}>
+          <div style={{ overflow: "hidden", minWidth: "1440px", height: "0" }}>
             <div ref={refs}>
-              <Schedule
+              <DownloadRef
+                pxPerMinute={0.9}
+                schedule={schedule}
                 startHour={7}
                 endHour={21}
-                schedule={schedule}
-                pxPerMinute={isMobile ? 0.7 : 0.9}
-                width="100%"
-                showRoom
                 showHeader
                 showLabel
+                showRoom
+                formattedSchedule={formattedSchedule}
               />
             </div>
           </div>
