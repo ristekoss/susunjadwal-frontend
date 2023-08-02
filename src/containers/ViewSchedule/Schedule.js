@@ -73,7 +73,6 @@ function Schedule({
     ref.current.scrollIntoView({
       behavior: "smooth",
       block: "nearest",
-      inline: "start",
     });
 
   return (
@@ -184,15 +183,7 @@ function Schedule({
 
       {/* Mobile View */}
       {isMobile && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            overflow: "auto",
-            height: "100%",
-            scrollSnapType: "x mandatory",
-          }}
-        >
+        <MobileContainer>
           <DetailsModal
             isOpen={isOpen}
             onClose={onClose}
@@ -225,15 +216,10 @@ function Schedule({
               ))}
           </MobileHourContainer>
 
-          <div
-            ref={pageOne}
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              minWidth: "100%",
-              scrollSnapAlign: "center",
-            }}
-          >
+          {/* Page One */}
+          <MobileScheduleContainer minWidth="100%">
+            <Anchor ref={pageOne} />
+
             <MobileSchedulePage
               pxPerMinute={pxPerMinute}
               width={width}
@@ -294,58 +280,23 @@ function Schedule({
                 )}
             </MobileSchedulePage>
 
-            <div
-              style={{
-                width: "48px",
-                backgroundColor: theme === "light" ? "#FFFFFF" : "#292929",
-              }}
-            >
-              <div
-                onClick={() => executeScroll(pageTwo)}
-                style={{
-                  display: "flex",
-                  height: "41px",
-                  backgroundColor: theme === "light" ? "#5038bc" : "#674DE0",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
+            <PageButtonContainer>
+              <PageButton onClick={() => executeScroll(pageTwo)}>
                 <img src={caret} style={{ height: "28px" }}></img>
-              </div>
-            </div>
-          </div>
+              </PageButton>
+            </PageButtonContainer>
+          </MobileScheduleContainer>
 
-          <div
-            ref={pageTwo}
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              minWidth: "calc(100% - 48px)",
-              scrollSnapAlign: "center",
-            }}
-          >
-            <div
-              style={{
-                width: "48px",
-                backgroundColor: theme === "light" ? "#FFFFFF" : "#292929",
-              }}
-            >
-              <div
-                onClick={() => executeScroll(pageOne)}
-                style={{
-                  display: "flex",
-                  height: "41px",
-                  backgroundColor: theme === "light" ? "#5038bc" : "#674DE0",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
+          {/* Page Two */}
+          <MobileScheduleContainer minWidth="calc(100% - 48px)">
+            <PageButtonContainer>
+              <PageButton onClick={() => executeScroll(pageOne)}>
                 <img
                   src={caret}
                   style={{ height: "28px", transform: "rotate(180deg)" }}
                 ></img>
-              </div>
-            </div>
+              </PageButton>
+            </PageButtonContainer>
 
             <MobileSchedulePage
               pxPerMinute={pxPerMinute}
@@ -405,8 +356,10 @@ function Schedule({
                     ),
                 )}
             </MobileSchedulePage>
-          </div>
-        </div>
+
+            <Anchor ref={pageTwo} />
+          </MobileScheduleContainer>
+        </MobileContainer>
       )}
     </>
   );
@@ -414,6 +367,14 @@ function Schedule({
 
 const getContainerWidth = ({ showLabel }) => (showLabel ? "90%" : "100%");
 const getFirstColumnWidth = ({ showLabel }) => (showLabel ? "auto" : "");
+
+const MobileContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+  height: 100%;
+  scroll-snap-type: x mandatory;
+`;
 
 const MobileHourContainer = styled.div`
   position: absolute;
@@ -426,12 +387,38 @@ const MobileHourContainer = styled.div`
   border-radius: 0 0 0 8px;
 `;
 
+const MobileScheduleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  scroll-snap-align: center;
+  min-width: ${({ minWidth }) => minWidth};
+`;
+
 const MobileSchedulePage = styled.div`
   display: grid;
   grid-template-columns: repeat(3, calc(100% / 3));
   grid-template-rows: repeat(990, ${({ pxPerMinute }) => pxPerMinute}px);
   width: ${({ width }) => width};
   background-color: ${({ mode }) => (mode === "light" ? "#FFFFFF" : "#292929")};
+`;
+
+const Anchor = styled.div`
+  position: relative;
+  width: 0px;
+  height: 48px;
+`;
+
+const PageButtonContainer = styled.div`
+  width: 48px;
+  background-color: ${({ mode }) => (mode === "light" ? "#FFFFFF" : "#292929")};
+`;
+
+const PageButton = styled.div`
+  display: flex;
+  height: 41px;
+  background-color: ${({ mode }) => (mode === "light" ? "#5038bc" : "#674DE0")};
+  align-items: center;
+  justify-content: center;
 `;
 
 const Container = styled.div`
@@ -480,6 +467,7 @@ const Header = styled.div`
   z-index: 2;
 
   font-size: ${(props) => (props.theme.mobile ? "12px" : "16px")};
+  font-weight: 600;
 `;
 
 const ScheduleItem = styled.div`
