@@ -371,7 +371,7 @@ const getFirstColumnWidth = ({ showLabel }) => (showLabel ? "auto" : "");
 const MobileContainer = styled.div`
   display: flex;
   flex-direction: row;
-  overflow: auto;
+  overflow: hidden;
   height: 100%;
   scroll-snap-type: x mandatory;
 `;
@@ -415,7 +415,7 @@ const PageButtonContainer = styled.div`
 
 const PageButton = styled.div`
   display: flex;
-  height: 41px;
+  height: 41.02px;
   background-color: ${({ mode }) => (mode === "light" ? "#5038bc" : "#674DE0")};
   align-items: center;
   justify-content: center;
