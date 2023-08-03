@@ -156,11 +156,17 @@ function Schedule({
                       <div className="wrapper">
                         {String(name).includes(course_name) || !course_name ? (
                           <p className="details-desktop">
-                            <span style={{ fontWeight: "normal" }}>{room}</span>
+                            <span style={{ fontWeight: "normal" }}>
+                              {start} - {end}
+                            </span>
                             {" - " + name}
                           </p>
                         ) : (
                           <p className="details-desktop">
+                            <span style={{ fontWeight: "normal" }}>
+                              {start} - {end}
+                            </span>
+                            {" - "}
                             <span
                               style={{
                                 color: "#F7B500",
