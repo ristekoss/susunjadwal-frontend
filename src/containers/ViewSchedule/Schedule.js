@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useColorModeValue } from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
+import DetailsModal from "./DetailsModal";
 const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
 const pad = (val) => {
@@ -18,6 +20,9 @@ function Schedule({
   showHeader,
   showRoom,
 }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedCourse, setSelectedCourse] = useState(null);
+
   const isMobile = useSelector((state) => state.appState.isMobile);
   const theme = useColorModeValue("light");
   const rowToDisplay = (minute) => {
@@ -55,6 +60,11 @@ function Schedule({
     </>
   );
 
+  const handleClickedCourse = (course) => {
+    setSelectedCourse(course);
+    onOpen();
+  };
+
   return (
     <Container
       pxPerMinute={pxPerMinute}
@@ -62,6 +72,19 @@ function Schedule({
       showLabel={showLabel}
       mode={theme}
     >
+      <DetailsModal
+        isOpen={isOpen}
+        onClose={onClose}
+        name={selectedCourse?.name}
+        courseName={selectedCourse?.course_name}
+        day={selectedCourse?.day}
+        sks={selectedCourse?.sks}
+        start={selectedCourse?.start}
+        end={selectedCourse?.end}
+        room={selectedCourse?.room}
+        lecturer={selectedCourse?.lecturer.join(", ")}
+      />
+
       {showHeader && renderHeader()}
       {TIME_MARKERS.map((_, idx) => (
         <TimeMarker
@@ -86,8 +109,9 @@ function Schedule({
               end={displayToMinute(end)}
               day={dayToColumn(day)}
               mode={theme}
+              onClick={() => handleClickedCourse(schedule.schedule_items[idx])}
             >
-              {isMobile && (
+              {isMobile ? (
                 <div className="wrapper">
                   {String(name).includes(course_name) || !course_name ? (
                     <p className="details-mobile">{name}</p>
@@ -96,7 +120,7 @@ function Schedule({
                       <span
                         style={{
                           color: "#F7B500",
-                          mixBlendMode: "normal",
+                          fontWeight: "bold",
                         }}
                       >
                         {name}
@@ -105,32 +129,57 @@ function Schedule({
                     </p>
                   )}
                 </div>
-              )}
-
-              {!isMobile && (
-                <div className="wrapper">
-                  <div className="header">
-                    <span>
-                      {start} - {end}
-                    </span>
-                    {showRoom && <span className="room">{room}</span>}
-                  </div>
-                  {String(name).includes(course_name) || !course_name ? (
-                    <p className="details-desktop">{name}</p>
+              ) : (
+                // Desktop mode
+                <>
+                  {displayToMinute(end) - displayToMinute(start) >= 50 ? (
+                    <div className="wrapper">
+                      <div className="header">
+                        <span>
+                          {start} - {end}
+                        </span>
+                        {showRoom && <span className="room">{room}</span>}
+                      </div>
+                      {String(name).includes(course_name) || !course_name ? (
+                        <p className="details-desktop">{name}</p>
+                      ) : (
+                        <p className="details-desktop">
+                          <span
+                            style={{
+                              color: "#F7B500",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {name}
+                          </span>
+                          {" - " + course_name}
+                        </p>
+                      )}
+                    </div>
                   ) : (
-                    <p className="details-desktop">
-                      <span
-                        style={{
-                          color: "#F7B500",
-                          mixBlendMode: "normal",
-                        }}
-                      >
-                        {name}
-                      </span>
-                      {" - " + course_name}
-                    </p>
+                    // Special condition for class with duration less than 50 minutes
+                    <div className="wrapper">
+                      {String(name).includes(course_name) || !course_name ? (
+                        <p className="details-desktop">
+                          <span style={{ fontWeight: "normal" }}>{room}</span>
+                          {" - " + name}
+                        </p>
+                      ) : (
+                        <p className="details-desktop">
+                          <span
+                            style={{
+                              color: "#F7B500",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {name}
+                          </span>
+                          {" - " + course_name}
+                        </p>
+                      )}
+                    </div>
                   )}
-                </div>
+                </>
               )}
             </ScheduleItem>
           ),
@@ -187,15 +236,15 @@ const Header = styled.div`
 `;
 
 const ScheduleItem = styled.div`
-  z-index: 1;
-  width: 95%;
-  background-color: ${({ mode }) => (mode === "light" ? "#5038bc" : "#674DE0")} 
-  color: white;
-  grid-area: ${({ start }) => start} / ${({ day }) => day} / ${({ end }) =>
-  end} /
+z-index: 1;
+width: 95%;
+background-color: ${({ mode }) => (mode === "light" ? "#5038bc" : "#674DE0")} 
+color: white;
+grid-area: ${({ start }) => start} / ${({ day }) => day} / ${({ end }) => end} /
     ${({ day }) => day + 1};
-  border-radius: 8px;
-  // overflow-y: hidden;
+border-radius: 8px;
+cursor: pointer;
+font-weight: 600;
 
   .wrapper {
     overflow: hidden;
@@ -203,16 +252,17 @@ const ScheduleItem = styled.div`
   }
   .details-mobile{
     font-size: 8px;
-    font-weight: bold;
     overflow: hidden;
     // Condition based on start and end time
     --max-lines: ${({ end, start }) => {
-      if (end - start > 100) {
+      if (end - start >= 170) {
         return 11;
-      } else if (end - start >= 60) {
+      } else if (end - start >= 100) {
         return 5;
-      } else {
+      } else if (end - start >= 50) {
         return 2;
+      } else {
+        return 1;
       }
     }}
     --lh: 1.4;
@@ -237,17 +287,15 @@ const ScheduleItem = styled.div`
       max-width: 40%;
     }
   }
+
   .details-desktop{
-    font-weight: bold;
     font-size: 12px;
     overflow: hidden;
     // Condition based on start and end time
     --max-lines: ${({ end, start }) => {
-      if (end - start > 100) {
-        return 6;
-      } else if (end - start === 100) {
+      if (end - start >= 100) {
         return 4;
-      } else if (end - start === 60) {
+      } else if (end - start >= 60) {
         return 2;
       } else {
         return 1;
@@ -258,12 +306,6 @@ const ScheduleItem = styled.div`
     display: -webkit-box;
     -webkit-line-clamp: var(--max-lines);
     -webkit-box-orient: vertical;
-  }
-  .room {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 10ch;
   }
 `;
 
