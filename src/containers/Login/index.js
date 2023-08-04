@@ -373,19 +373,22 @@ function Login({ history, location }) {
           lewat RISTEK OSS
         </SubBody>
 
-        <Button
-          margin="24px 0 24px 0"
-          height={{ base: "44px", md: "55px" }}
-          onClick="/"
-          bgColor="#5038bc10"
-          color="#5038BC"
-          _hover={{ background: "#5038bc1c" }}
-          _active={{ background: "#5038bc2c" }}
-          fontSize={{ base: "14px", md: "18px" }}
+        <a
+          href="https://github.com/ristekoss"
+          style={{ margin: "24px 0 24px 0" }}
         >
-          <img src={link} style={{ marginRight: "0.5rem" }}></img>
-          https://ini-link-ristek-oss
-        </Button>
+          <Button
+            height={{ base: "44px", md: "55px" }}
+            bgColor="#5038bc10"
+            color="#5038BC"
+            _hover={{ background: "#5038bc1c" }}
+            _active={{ background: "#5038bc2c" }}
+            fontSize={{ base: "14px", md: "18px" }}
+          >
+            <img src={link} style={{ marginRight: "0.5rem" }}></img>
+            https://github.com/ristekoss
+          </Button>
+        </a>
 
         <DiscDesktop src={discordDesktop}></DiscDesktop>
         <DiscMobile src={discordMobile}></DiscMobile>
@@ -397,12 +400,12 @@ function Login({ history, location }) {
             target="_blank"
           >
             <DiscordButton _hover={{ background: "primary.Purple" }}>
-              Gabung Discord
+              Join Discord
             </DiscordButton>
           </a>
           <div style={{ minWidth: "16px", minHeight: "16px" }}></div>
           <Link to="/kontributor">
-            <DiscordButton variant="outline">Lihat kontributor</DiscordButton>
+            <DiscordButton variant="outline">Lihat Kontributor</DiscordButton>
           </Link>
         </LinkBox>
       </FlexBox>
