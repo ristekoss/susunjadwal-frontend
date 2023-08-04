@@ -7,7 +7,7 @@ const ScheduleList = ({ formattedSchedule, totalCredits }) => {
   return (
     <ClassTableContainer mode={theme}>
       <ClassHeaderContainer mode={theme}>
-        <div>Nama Kelas</div>
+        <div style={{ padding: "0px 8px 0px 32px" }}>Nama Kelas</div>
         <div>Waktu</div>
         <div>Ruang</div>
         <div>Dosen</div>
@@ -15,7 +15,9 @@ const ScheduleList = ({ formattedSchedule, totalCredits }) => {
       </ClassHeaderContainer>
       {Object.keys(formattedSchedule).map((scheduleName) => (
         <ClassItemContainer mode={theme}>
-          <div>{formattedSchedule[scheduleName].name}</div>
+          <div style={{ padding: "0px 8px 0px 32px" }}>
+            {formattedSchedule[scheduleName].name}
+          </div>
           <div>
             {formattedSchedule[scheduleName].time.map((dayItem) => (
               <div>{`${dayItem.day}, ${dayItem.start} - ${dayItem.end}`}</div>
@@ -31,7 +33,7 @@ const ScheduleList = ({ formattedSchedule, totalCredits }) => {
         </ClassItemContainer>
       ))}
       <TotalCreditsContainer mode={theme}>
-        <div>Total SKS</div>
+        <div style={{ padding: "0px 8px 0px 32px" }}>Total SKS</div>
         <div></div>
         <div></div>
         <div></div>

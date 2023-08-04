@@ -1,4 +1,4 @@
-import { TableIcon, CalendarIcon } from "@heroicons/react/solid";
+import { CalendarIcon } from "@heroicons/react/solid";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router";
@@ -28,6 +28,7 @@ import {
 import Schedule from "./Schedule";
 import ScheduleList from "./ScheduleList";
 import ControlledInput from "./ControlledInput";
+import DownloadRef from "./DownloadRef";
 import { SuccessToast, ErrorToast } from "components/Toast";
 import Icons from "components/Icons";
 import { getSchedule, postRenameSchedule, deleteSchedule } from "services/api";
@@ -47,6 +48,7 @@ import exportToIcsImg from "assets/ExportToIcs.svg";
 import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
+import { ListMatkulIcon } from "assets/ListMatkulIcon";
 
 function ViewSchedule({ match, history }) {
   const isMobile = useSelector((state) => state.appState.isMobile);
@@ -255,118 +257,139 @@ function ViewSchedule({ match, history }) {
         />
 
         {schedule && (
-          <Container>
-            <HeaderContainer>
-              {schedule.has_edit_access ? (
-                <ScheduleNameEditable>
-                  <ControlledInput
-                    style={{ color: theme === "light" ? "aqua" : "orange" }}
-                    name={decodeHtmlEntity(schedule.name)}
-                    slug={match.params.scheduleId}
-                    rename={onRename}
+          <>
+            <Container>
+              <HeaderContainer>
+                {schedule.has_edit_access ? (
+                  <ScheduleNameEditable>
+                    <ControlledInput
+                      style={{ color: theme === "light" ? "aqua" : "orange" }}
+                      name={decodeHtmlEntity(schedule.name)}
+                      slug={match.params.scheduleId}
+                      rename={onRename}
+                    />
+                    <p>
+                      Dibuat pada{" "}
+                      {createdAt?.getDate() +
+                        "/" +
+                        (createdAt?.getMonth() + 1) +
+                        "/" +
+                        createdAt?.getFullYear()}{" "}
+                      • {totalCredits} SKS
+                    </p>
+                  </ScheduleNameEditable>
+                ) : (
+                  <ScheduleName mode={theme}>
+                    {decodeHtmlEntity(schedule.name)}
+                  </ScheduleName>
+                )}
+
+                <IconContainer isAuthenticated={Boolean(auth)}>
+                  <Icons
+                    Items={[
+                      {
+                        desc: "Download Jadwal",
+                        icon: downloadImg,
+                        alt: "download",
+                        action: downloadImage,
+                      },
+                      {
+                        desc: "Ekspor ke .ics (Google Calendar/Apple Calendar)",
+                        icon: exportToIcsImg,
+                        alt: "export-to-ics",
+                        action: () => generateICalendarFile(schedule),
+                      },
+                      {
+                        desc: "Share Jadwal",
+                        icon: clipboardImg,
+                        alt: "copy",
+                        action: openShareModal,
+                      },
+                      {
+                        desc: "Delete Jadwal",
+                        icon: deleteImg,
+                        alt: "delete",
+                        action: onOpen,
+                      },
+                    ]}
                   />
-                  <p>
-                    Dibuat pada{" "}
-                    {createdAt?.getDate() +
-                      "/" +
-                      (createdAt?.getMonth() + 1) +
-                      "/" +
-                      createdAt?.getFullYear()}{" "}
-                    • {totalCredits} SKS
-                  </p>
-                </ScheduleNameEditable>
-              ) : (
-                <ScheduleName mode={theme}>
-                  {decodeHtmlEntity(schedule.name)}
-                </ScheduleName>
-              )}
+                </IconContainer>
+              </HeaderContainer>
 
-              <IconContainer isAuthenticated={Boolean(auth)}>
-                <Icons
-                  Items={[
-                    {
-                      desc: "Download Jadwal",
-                      icon: downloadImg,
-                      alt: "download",
-                      action: downloadImage,
-                    },
-                    {
-                      desc: "Ekspor ke .ics (Google Calendar/Apple Calendar)",
-                      icon: exportToIcsImg,
-                      alt: "export-to-ics",
-                      action: () => generateICalendarFile(schedule),
-                    },
-                    {
-                      desc: "Share Jadwal",
-                      icon: clipboardImg,
-                      alt: "copy",
-                      action: openShareModal,
-                    },
-                    {
-                      desc: "Delete Jadwal",
-                      icon: deleteImg,
-                      alt: "delete",
-                      action: onOpen,
-                    },
-                  ]}
-                />
-              </IconContainer>
-            </HeaderContainer>
-
-            <ButtonContainer isAuthenticated={Boolean(auth)}>
-              <Link to={`/edit/${scheduleId}`}>
-                <Button
-                  mr={{ base: "0rem", lg: "1rem" }}
-                  intent="primary"
-                  variant="outline"
-                  onClick={() => null}
-                  borderColor={
-                    theme === "light" ? "primary.Purple" : "dark.LightPurple"
-                  }
-                  color={theme === "light" ? "primary.Purple" : "dark.Purple"}
-                >
-                  {schedule.has_edit_access ? "Edit" : "Copy"}
-                </Button>
-              </Link>
-
-              <ViewToggleContainer>
-                <ViewListContainer
-                  isActive={!isDisplayTimetable}
-                  onClick={() => setIsDisplayTimetable(false)}
-                  mode={theme}
-                >
-                  <TableIcon width={20} />
-                </ViewListContainer>
-                <ViewCalendarContainer
-                  isActive={isDisplayTimetable}
-                  onClick={() => setIsDisplayTimetable(true)}
-                  mode={theme}
-                >
-                  <CalendarIcon width={20} />
-                </ViewCalendarContainer>
-              </ViewToggleContainer>
-            </ButtonContainer>
-          </Container>
+              <ButtonContainer isAuthenticated={Boolean(auth)}>
+                <Link to={`/edit/${scheduleId}`}>
+                  <Button
+                    width={"full"}
+                    mr={{ base: "0rem", lg: "1rem" }}
+                    intent="primary"
+                    variant="outline"
+                    onClick={() => null}
+                    borderColor={
+                      theme === "light" ? "primary.Purple" : "dark.LightPurple"
+                    }
+                    color={theme === "light" ? "primary.Purple" : "dark.Purple"}
+                  >
+                    {schedule.has_edit_access ? "Edit" : "Copy"}
+                  </Button>
+                </Link>
+              </ButtonContainer>
+            </Container>
+            <ViewToggleContainer>
+              <ViewListContainer
+                isActive={!isDisplayTimetable}
+                onClick={() => setIsDisplayTimetable(false)}
+                mode={theme}
+              >
+                <ListMatkulIcon />
+                <Text fontWeight="semibold" fontSize="14px">
+                  List Matkul
+                </Text>
+              </ViewListContainer>
+              <ViewCalendarContainer
+                isActive={isDisplayTimetable}
+                onClick={() => setIsDisplayTimetable(true)}
+                mode={theme}
+              >
+                <CalendarIcon width={20} />
+                <Text fontWeight="semibold" fontSize="14px">
+                  Kalender Matkul
+                </Text>
+              </ViewCalendarContainer>
+            </ViewToggleContainer>
+          </>
         )}
 
-        <div ref={refs}>
-          {isDisplayTimetable ? (
-            <Schedule
-              width="100%"
-              pxPerMinute={isMobile ? 0.7 : 0.9}
+        {isDisplayTimetable ? (
+          <Schedule
+            width="100%"
+            pxPerMinute={isMobile ? 0.7 : 0.9}
+            schedule={schedule}
+            startHour={7}
+            endHour={21}
+            showHeader
+            showLabel
+            showRoom
+          />
+        ) : (
+          <ScheduleList
+            formattedSchedule={formattedSchedule}
+            totalCredits={totalCredits}
+          />
+        )}
+
+        <div style={{ overflow: "hidden", minWidth: "1440px", height: "0" }}>
+          <div ref={refs}>
+            <DownloadRef
+              pxPerMinute={0.9}
               schedule={schedule}
               startHour={7}
               endHour={21}
               showHeader
               showLabel
               showRoom
-            />
-          ) : (
-            <ScheduleList
               formattedSchedule={formattedSchedule}
-              totalCredits={totalCredits}
             />
-          )}
+          </div>
         </div>
       </MainContainer>
     </>
@@ -400,13 +423,13 @@ const MainContainer = styled.div`
 `;
 
 const Container = styled.div`
-  padding: 24px 24px 28px;
+  padding: 24px 24px 0px;
 
   @media (min-width: 900px) {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 32px 80px 40px;
+    padding: 32px 80px 0px;
 
     & > :nth-child(1) {
       flex-grow: 1;
@@ -436,14 +459,12 @@ const IconContainer = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  justify-content: space-between;
   align-items: center;
   margin-top: 24px;
-  display: flex;
-
   a {
     ${(props) =>
       props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
+    width: 100%;
   }
 
   @media (min-width: 900px) {
@@ -478,9 +499,20 @@ const ViewToggleContainer = styled.div`
   flex-direction: row;
   cursor: pointer;
   border-radius: 1em;
+  justify-content: center;
+  padding: 24px 24px 28px;
+
+  @media (min-width: 900px) {
+    padding: 40px 80px ;
 `;
 
 const ViewListContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  column-gap: 8px;
+  justify-content: center;
+  align-items: center;
   background-color: ${(props) =>
     props.isActive
       ? props.theme.color.primaryPurple
@@ -493,7 +525,8 @@ const ViewListContainer = styled.div`
   border-left: 1px solid ${(props) => props.theme.color.primaryPurple};
   border-top: 2px solid ${(props) => props.theme.color.primaryPurple};
   border-bottom: 2px solid ${(props) => props.theme.color.primaryPurple};
-  svg {
+  svg,
+  p {
     color: ${(props) =>
       props.isActive
         ? props.theme.color.primaryWhite
@@ -502,6 +535,12 @@ const ViewListContainer = styled.div`
 `;
 
 const ViewCalendarContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  column-gap: 8px;
+  justify-content: center;
+  align-items: center;
   background-color: ${(props) =>
     props.isActive
       ? props.theme.color.primaryPurple
@@ -515,7 +554,8 @@ const ViewCalendarContainer = styled.div`
   border-top: 2px solid ${(props) => props.theme.color.primaryPurple};
   border-bottom: 2px solid ${(props) => props.theme.color.primaryPurple};
 
-  svg {
+  svg,
+  p {
     color: ${(props) =>
       props.isActive
         ? props.theme.color.primaryWhite
