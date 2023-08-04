@@ -495,6 +495,10 @@ const ScheduleItem = styled.div`
 }) => end} /
         ${({ day }) => day + 1}
     }
+    &:hover{
+      background-color: ${({ mode }) =>
+        mode === "light" ? "#674DE0" : "#5038bc"} 
+    }
 
     .wrapper {
         overflow: hidden;
