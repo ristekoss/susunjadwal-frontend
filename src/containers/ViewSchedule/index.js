@@ -47,7 +47,7 @@ import exportToIcsImg from "assets/ExportToIcs.svg";
 import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
-import { ListMatkulIcon } from "components/ListMatkulIcon";
+import { ListMatkulIcon } from "assets/ListMatkulIcon";
 
 function ViewSchedule({ match, history }) {
   const isMobile = useSelector((state) => state.appState.isMobile);
