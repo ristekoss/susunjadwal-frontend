@@ -251,7 +251,8 @@ grid-area: ${({ start }) => start} / ${({ day }) => day} / ${({ end }) => end} /
 border-radius: 8px;
 cursor: pointer;
 font-weight: 600;
-
+margin-left: 8px;
+margin-right: 8px;
   .wrapper {
     overflow: hidden;
     padding: 8px;

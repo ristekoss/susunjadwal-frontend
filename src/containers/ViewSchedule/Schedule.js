@@ -496,6 +496,8 @@ const ScheduleItem = styled.div`
 }) => end} /
         ${({ day }) => day + 1}
     }
+    margin-left: 8px;
+    margin-right: 8px;
     &:hover{
       background-color: ${({ mode }) =>
         mode === "light" ? "#674DE0" : "#5038bc"} 
