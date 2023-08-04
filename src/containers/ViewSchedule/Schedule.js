@@ -417,6 +417,7 @@ const Anchor = styled.div`
 const PageButtonContainer = styled.div`
   width: 48px;
   background-color: ${({ mode }) => (mode === "light" ? "#FFFFFF" : "#292929")};
+  cursor: pointer;
 `;
 
 const PageButton = styled.div`
