@@ -10,7 +10,7 @@ const pad = (val) => {
   return `0${val}`.substr(-2);
 };
 
-function Schedule({
+function SchedulePreview({
   startHour,
   endHour,
   schedule,
@@ -316,4 +316,4 @@ margin-right: 8px;
   }
 `;
 
-export default Schedule;
+export default SchedulePreview;
