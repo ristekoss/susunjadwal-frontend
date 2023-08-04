@@ -493,8 +493,7 @@ const ScheduleItem = styled.div`
     @media (min-width: 900px) {
         grid-area: ${({ start }) => start} / ${({ day }) => day} / ${({
   end,
-}) => end} /
-        ${({ day }) => day + 1}
+}) => end} / ${({ day }) => day + 1}
     }
     margin-left: 8px;
     margin-right: 8px;
