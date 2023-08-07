@@ -249,6 +249,13 @@ function BuildSchedule() {
               >
                 Mata kuliah yang dicari tidak ditemukan
               </Text>
+              <Text
+                fontWeight={"semibold"}
+                color={theme === "light" ? "#000000" : "#FFFFFF"}
+              >
+                Some users may experience missing course information. We are
+                currently fixing this problem.
+              </Text>
             </Center>
           ) : (
             filteredCourse.map((course, idx) => (
