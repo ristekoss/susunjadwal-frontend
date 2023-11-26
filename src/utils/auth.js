@@ -1,4 +1,5 @@
 import { setupAxiosInstance } from "services/api";
+import { useMixpanel } from "hooks/useMixpanel";
 
 export function persistAuth(auth) {
   if (!auth) {
@@ -6,6 +7,7 @@ export function persistAuth(auth) {
   } else {
     setupAxiosInstance(auth.token);
     localStorage.setItem("auth", JSON.stringify(auth));
+    useMixpanel.track("login_successful");
   }
 }
 
@@ -22,10 +24,8 @@ export function loadAuth() {
 }
 
 export function persistCompletion(completion) {
-  if (!completion)
-    localStorage.removeItem("completion")
-  else
-    localStorage.setItem("completion", JSON.stringify(completion))
+  if (!completion) localStorage.removeItem("completion");
+  else localStorage.setItem("completion", JSON.stringify(completion));
 }
 
 export function loadCompletion() {
@@ -34,5 +34,5 @@ export function loadCompletion() {
   if (!persistedCompletion) return null;
 
   const asJson = JSON.parse(persistedCompletion);
-  return asJson
+  return asJson;
 }

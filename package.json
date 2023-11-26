@@ -15,6 +15,7 @@
     "framer-motion": "^4",
     "html-to-image": "^1.9.0",
     "ics": "^2.31.0",
+    "mixpanel-browser": "^2.48.1",
     "query-string": "^6.8.1",
     "react": "^16.8.6",
     "react-burger-menu": "^2.6.10",

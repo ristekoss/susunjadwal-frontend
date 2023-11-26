@@ -1,5 +1,6 @@
 import { CalendarIcon } from "@heroicons/react/solid";
 import { useSelector, useDispatch } from "react-redux";
+import { useMixpanel } from "hooks/useMixpanel";
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
@@ -76,6 +77,7 @@ function ViewSchedule({ match, history }) {
     if (auth) {
       await postRenameSchedule(auth.userId, slug, value);
       setSchedule({ ...schedule, name: value });
+      useMixpanel.track("rename_jadwal");
     }
   }
 
@@ -142,18 +144,22 @@ function ViewSchedule({ match, history }) {
     link.download = !scheduleName ? "Untitled.png" : scheduleName + ".png";
     link.href = dataUrl;
     link.click();
+    useMixpanel.track("download_jadwal");
   };
 
   const openShareModal = async () => {
     const dataUrl = await htmlToImage.toPng(refs.current);
     setImageURL(dataUrl);
     shareModal.onOpen();
+    useMixpanel.track("open_share_jadwal");
   };
 
   const copyImage = () => {
     copyImageToClipboard(imageURL)
       .then(() => showAlertCopy("Gambar"))
       .catch((e) => showErrorCopy());
+
+    useMixpanel.track("share_copy_image");
   };
 
   return (
@@ -175,7 +181,10 @@ function ViewSchedule({ match, history }) {
               Batal
             </Button>
             <Button
-              onClick={() => confirmDeleteSchedule(schedule.id)}
+              onClick={() => {
+                confirmDeleteSchedule(schedule.id);
+                useMixpanel.track("delete_jadwal");
+              }}
               variant="danger"
             >
               Hapus
@@ -202,7 +211,10 @@ function ViewSchedule({ match, history }) {
               <Flex flexDirection={isMobile ? "column" : "row"}>
                 <CopyToClipboard
                   text={`${window.location.href}/${scheduleId}`}
-                  onCopy={() => showAlertCopy("Link")}
+                  onCopy={() => {
+                    showAlertCopy("Link");
+                    useMixpanel.track("share_copy_link");
+                  }}
                 >
                   <Button
                     variant="outline"
@@ -297,7 +309,10 @@ function ViewSchedule({ match, history }) {
                         desc: "Ekspor ke .ics (Google Calendar/Apple Calendar)",
                         icon: exportToIcsImg,
                         alt: "export-to-ics",
-                        action: () => generateICalendarFile(schedule),
+                        action: () => {
+                          generateICalendarFile(schedule);
+                          useMixpanel.track("export_jadwal");
+                        },
                       },
                       {
                         desc: "Share Jadwal",
@@ -323,7 +338,7 @@ function ViewSchedule({ match, history }) {
                     mr={{ base: "0rem", lg: "1rem" }}
                     intent="primary"
                     variant="outline"
-                    onClick={() => null}
+                    onClick={() => useMixpanel.track("edit_jadwal")}
                     borderColor={
                       theme === "light" ? "primary.Purple" : "dark.LightPurple"
                     }
@@ -337,7 +352,10 @@ function ViewSchedule({ match, history }) {
             <ViewToggleContainer>
               <ViewListContainer
                 isActive={!isDisplayTimetable}
-                onClick={() => setIsDisplayTimetable(false)}
+                onClick={() => {
+                  setIsDisplayTimetable(false);
+                  useMixpanel.track("list_matkul_view");
+                }}
                 mode={theme}
               >
                 <ListMatkulIcon />
@@ -347,7 +365,10 @@ function ViewSchedule({ match, history }) {
               </ViewListContainer>
               <ViewCalendarContainer
                 isActive={isDisplayTimetable}
-                onClick={() => setIsDisplayTimetable(true)}
+                onClick={() => {
+                  setIsDisplayTimetable(true);
+                  useMixpanel.track("kalender_matkul_view");
+                }}
                 mode={theme}
               >
                 <CalendarIcon width={20} />

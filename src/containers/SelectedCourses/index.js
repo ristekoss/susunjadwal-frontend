@@ -1,6 +1,7 @@
 import React from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
+import { useMixpanel } from "hooks/useMixpanel";
 import { withRouter } from "react-router";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -151,7 +152,10 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
           <ModalFooter>
             <Button
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                useMixpanel.track("cancel");
+              }}
               variant="outline"
               borderColor={
                 theme === "light" ? "primary.Purple" : "dark.LightPurple"
@@ -161,13 +165,15 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
               Batal
             </Button>
             <Button
-              onClick={() =>
+              onClick={() => {
                 !isEditing
                   ? saveSchedule()
                   : schedules.length === 0
                   ? handleDeleteSchedule()
-                  : updateSchedule()
-              }
+                  : updateSchedule();
+
+                useMixpanel.track("simpan_jadwal");
+              }}
               variant="solid"
               bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
               color={theme === "light" ? "white" : "dark.White"}
@@ -225,7 +231,10 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         )}
 
         <Button
-          onClick={onOpen}
+          onClick={() => {
+            useMixpanel.track("open_simpan_modal");
+            onOpen();
+          }}
           disabled={isConflict || totalCredits > 24 || schedules.length === 0}
           intent={schedules.length === 0 && isEditing && "danger"}
         >
