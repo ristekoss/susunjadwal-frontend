@@ -1,8 +1,10 @@
 import React from "react";
+import { useMixpanel } from "hooks/useMixpanel";
 import { Flex } from "@chakra-ui/react";
 import FACULTIES from "utils/faculty-base-additional-info.json";
 import { useForm } from "react-hook-form";
 import { CustomSelect } from "components/CustomSelect";
+import { useEffect } from "react";
 
 function SelectMajor({ theme, isMobile, setMajorSelected, show }) {
   const { register, watch } = useForm();
@@ -25,6 +27,14 @@ function SelectMajor({ theme, isMobile, setMajorSelected, show }) {
   if (selectedMajor && selectedMajor[0]) {
     setMajorSelected(selectedMajor[0]);
   }
+
+  useEffect(() => {
+    if (selectedFaculty) useMixpanel.track("select_faculty");
+  }, [selectedFaculty]);
+
+  useEffect(() => {
+    if (selectedMajorName) useMixpanel.track("select_prodi");
+  }, [selectedMajorName]);
 
   return (
     <Flex

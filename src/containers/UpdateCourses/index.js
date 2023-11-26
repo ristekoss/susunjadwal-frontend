@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactGA from "react-ga";
 import Helmet from "react-helmet";
+import { useMixpanel } from "hooks/useMixpanel";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -21,6 +22,7 @@ import { Bauhaus } from "components/Bauhaus";
 
 import Alert from "./Alert";
 import Info from "./Info";
+import { useState } from "react";
 
 const UpdateCourses = () => {
   const isMobile = useSelector((state) => state.appState.isMobile);
@@ -29,8 +31,33 @@ const UpdateCourses = () => {
   const {
     handleSubmit,
     register,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm();
+
+  const [isUsernameChanged, setIsUsernameChanged] = useState(false);
+  const [isPasswordChanged, setIsPasswordChanged] = useState(false);
+
+  const username = watch("username");
+  const password = watch("password");
+
+  useEffect(() => {
+    useMixpanel.track("open_update_matkul");
+  }, []);
+
+  useEffect(() => {
+    if (username && !isUsernameChanged) {
+      useMixpanel.track("update_matkul_fill_username");
+      setIsUsernameChanged(true);
+    }
+  }, [username, isUsernameChanged]);
+
+  useEffect(() => {
+    if (password && !isPasswordChanged) {
+      useMixpanel.track("update_matkul_fill_password");
+      setIsPasswordChanged(true);
+    }
+  }, [password, isPasswordChanged]);
 
   const onSubmit = async (values) => {
     try {
@@ -106,6 +133,7 @@ const UpdateCourses = () => {
             w={{ sm: "100%", lg: "unset" }}
             bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
             color={theme === "light" ? "white" : "dark.White"}
+            onClick={() => useMixpanel.track("update_matkul")}
           >
             Update Jadwal
           </Button>

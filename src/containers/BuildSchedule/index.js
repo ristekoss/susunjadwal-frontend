@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useMixpanel } from "hooks/useMixpanel";
 import {
   Button,
   useColorModeValue,
@@ -47,6 +48,7 @@ function BuildSchedule() {
   const [showSelectMajor, setShowSelectMajor] = useState(false);
 
   const theme = useColorModeValue("light", "dark");
+  const isInitialMount = useRef(true);
 
   const fetchCourses = useCallback(
     async (majorId, majorSelected) => {
@@ -94,6 +96,15 @@ function BuildSchedule() {
       return null;
     }
   });
+
+  useEffect(() => {
+    useMixpanel.track("open_buat_jadwal");
+  }, []);
+
+  useEffect(() => {
+    if (isInitialMount.current) isInitialMount.current = false;
+    else useMixpanel.track("search_course");
+  }, [value]);
 
   return (
     <Container>
