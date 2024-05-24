@@ -27,6 +27,7 @@ import { makeAtLeastMs } from "utils/promise";
 import { isScheduleConflict, listScheduleConflicts } from "./utils";
 
 import TrashIcon from "assets/Trash.svg";
+import { RistekAds } from "@ristek-kit/ads";
 
 function transformSchedules(schedules) {
   return schedules
@@ -183,6 +184,10 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      <div style={{ marginBottom: 24 }}>
+        <RistekAds />
+      </div>
 
       <Container mode={theme}>
         <h3>Kelas Pilihan</h3>
