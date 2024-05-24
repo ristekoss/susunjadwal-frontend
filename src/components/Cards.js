@@ -7,7 +7,7 @@ import {
   Icon,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { GoMarkGithub } from "react-icons/go";
+import { FaGithub } from "react-icons/fa6";
 
 export const ContributorCard = ({ name, avatar, github, contributions }) => {
   const theme = useColorModeValue("light", "dark");
@@ -61,7 +61,7 @@ export const ContributorCard = ({ name, avatar, github, contributions }) => {
           >
             <Icon
               boxSize={"1.2rem"}
-              as={GoMarkGithub}
+              as={FaGithub}
               color={theme === "light" ? "Black" : "dark.LightPurple"}
             />{" "}
             Github
