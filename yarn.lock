@@ -2541,10 +2541,10 @@
     "@react-spring/shared" "~9.7.3"
     "@react-spring/types" "~9.7.3"
 
-"@ristek-kit/ads@^1.2.4":
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/@ristek-kit/ads/-/ads-1.2.4.tgz#37346e4f35019417261006d54bf244a3d753e576"
-  integrity sha512-JyDWlY9vSAh9YhpWEEzH7b1qCqeoeWqsup60hjStDOolDQLyLDb9c3kRsGobJ04zNe7eXYrAXmBNjpzgCfiuAQ==
+"@ristek-kit/ads@^1.2.6":
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/@ristek-kit/ads/-/ads-1.2.6.tgz#f2050d1c72fbbfd53da7afc9a30f17a046d4cd68"
+  integrity sha512-jefOrK6+V5qwKRDE8GJwpu+Wuu7VOYS0O4XgrLJ6xePxpeYkyyyjYOUDDIQG3E4rtnEM1M/d0YWmHXlV21gPBg==
   dependencies:
     "@radix-ui/react-scroll-area" "^1.0.5"
     "@radix-ui/react-slot" "^1.0.2"
