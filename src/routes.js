@@ -1,5 +1,5 @@
 import { ThemeProvider } from "styled-components";
-import { Route, Switch, Redirect } from "react-router";
+import { Route, Switch, Redirect, useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { Box } from "@chakra-ui/react";
 import React from "react";
@@ -19,64 +19,81 @@ import UpdateCourses from "containers/UpdateCourses";
 import { theme } from "styles/StyledTheme";
 import CompleteForm from "containers/CompleteForm";
 import Contributors from "containers/Contributors";
+import Feedback from "containers/Feedback";
+import AdminLogin from "containers/Admin/Login";
+import AdminFeedbacks from "containers/Admin/Feedbacks";
 
 import withAnalytics from "utils/analytics";
 
 const ROUTES = [
   { path: "/susun", component: BuildSchedule, auth: true },
-  { path: "/jadwal/:scheduleId", component: ViewSchedule, auth: false },
+  { path: "/jadwal/:scheduleId", component: ViewSchedule, auth: true },
   { path: "/jadwal", component: ScheduleList, auth: true },
   { path: "/update", component: UpdateCourses, auth: true },
   { path: "/logout", component: Logout, auth: true },
   { path: "/edit/:scheduleId", component: EditSchedule, auth: true },
+  { path: "/ulasan", component: Feedback, auth: true },
 ];
+
+const ADMIN_ROUTES = [
+  { path: "/admin", component: AdminLogin, auth: false },
+  { path: "/feedback-recap", component: AdminFeedbacks, auth: false },
+];
+
 
 function Routes() {
   const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
   const isMobile = useSelector((state) => state.appState.isMobile);
-
+  const location = useLocation();
   const paddingTopLargeScreen = isAnnouncement ? "162px" : "120px";
+  const isAdminRoute = ADMIN_ROUTES.some(route => location.pathname.startsWith(route.path));
 
   return (
     <ThemeProvider theme={{ mobile: isMobile, ...theme }}>
       <Box>
-        <Box
-          pt={{ base: "120px", lg: paddingTopLargeScreen }}
-          mb={{ base: 16, md: "108px" }}
-          px={{ base: 6, lg: "80px" }}
-          overflowX="hidden !important"
-        >
-          <Switch>
-            <Route
-              path="/"
-              name="home"
-              component={withAnalytics(Login)}
-              exact
-            />
-            <Route
-              path="/beta"
-              name="beta"
-              component={withAnalytics(BetaLanding)}
-            />
-            <Route
-              path="/beta-form"
-              name="beta-form"
-              component={withAnalytics(BetaForm)}
-            />
-            <Route
-              path="/complete"
-              name="complete-form"
-              component={withAnalytics(CompleteForm)}
-            />
-            <Route
-              path="/kontributor"
-              name="kontributor"
-              component={withAnalytics(Contributors)}
-            />
-            <Route component={withAnalytics(RoutesWithNavbar)} />
-          </Switch>
-        </Box>
-        <Footer />
+        {isAdminRoute ? (
+          <AdminRoutes />
+        ) : (
+          <>
+            <Box
+              pt={{ base: "120px", lg: paddingTopLargeScreen }}
+              mb={{ base: 16, md: "108px" }}
+              px={{ base: 6, lg: "80px" }}
+              overflowX="hidden !important"
+            >
+              <Switch>
+                <Route
+                  path="/"
+                  name="home"
+                  component={withAnalytics(Login)}
+                  exact
+                />
+                <Route
+                  path="/beta"
+                  name="beta"
+                  component={withAnalytics(BetaLanding)}
+                />
+                <Route
+                  path="/beta-form"
+                  name="beta-form"
+                  component={withAnalytics(BetaForm)}
+                />
+                <Route
+                  path="/complete"
+                  name="complete-form"
+                  component={withAnalytics(CompleteForm)}
+                />
+                <Route
+                  path="/kontributor"
+                  name="kontributor"
+                  component={withAnalytics(Contributors)}
+                />
+                <Route component={withAnalytics(RoutesWithNavbar)} />
+              </Switch>
+            </Box>
+            <Footer />
+          </>
+        )}
       </Box>
     </ThemeProvider>
   );
@@ -111,6 +128,20 @@ function PrivateRoute({ component: Component, ...rest }) {
         )
       }
     />
+  );
+}
+
+function AdminRoutes() {
+  return (
+    <div>
+      <Switch>
+        {ADMIN_ROUTES.map((route) => {
+          const Component = route.auth ? PrivateRoute : Route;
+          return <Component key={route.path} {...route} />;
+        })}
+        <Route component={NotFoundPage} />
+      </Switch>
+    </div>
   );
 }
 
