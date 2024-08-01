@@ -1,5 +1,5 @@
 import { setupAxiosInstance } from "services/api";
-import { useMixpanel } from "hooks/useMixpanel";
+// import { useMixpanel } from "hooks/useMixpanel";
 
 export function persistAuth(auth) {
   if (!auth) {
@@ -7,7 +7,7 @@ export function persistAuth(auth) {
   } else {
     setupAxiosInstance(auth.token);
     localStorage.setItem("auth", JSON.stringify(auth));
-    useMixpanel.track("login_successful");
+    // useMixpanel.track("login_successful");
   }
 }
 

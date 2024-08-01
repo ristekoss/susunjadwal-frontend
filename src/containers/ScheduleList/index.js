@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import ReactGA from "react-ga";
-import { useMixpanel } from "hooks/useMixpanel";
+// import { useMixpanel } from "hooks/useMixpanel";
 import { useHistory } from "react-router";
 import {
   Button,
@@ -117,12 +117,12 @@ const ScheduleList = () => {
   }, [filteredSchedules, isSortByLatest]);
 
   useEffect(() => {
-    useMixpanel.track("open_daftar_jadwal");
+    // useMixpanel.track("open_daftar_jadwal");
   }, []);
 
   useEffect(() => {
     if (isInitialMount.current) isInitialMount.current = false;
-    else useMixpanel.track("search_daftar_jadwal");
+    // else useMixpanel.track("search_daftar_jadwal");
   }, [query]);
 
   const performDeleteSchedule = async (userId, scheduleId) => {
@@ -322,7 +322,7 @@ const ScheduleList = () => {
                 }
                 onMouseDown={() => {
                   setQuery(document.getElementById("input").value);
-                  useMixpanel.track("search_daftar_jadwal");
+                  // useMixpanel.track("search_daftar_jadwal");
                 }}
                 fontSize={isMobile && "14px"}
                 px={isMobile && "4px"}

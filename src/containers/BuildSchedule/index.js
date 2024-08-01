@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useMixpanel } from "hooks/useMixpanel";
+// import { useMixpanel } from "hooks/useMixpanel";
 import {
   Button,
   useColorModeValue,
@@ -97,13 +97,13 @@ function BuildSchedule() {
     }
   });
 
-  useEffect(() => {
-    useMixpanel.track("open_buat_jadwal");
-  }, []);
+  // useEffect(() => {
+  //   useMixpanel.track("open_buat_jadwal");
+  // }, []);
 
   useEffect(() => {
     if (isInitialMount.current) isInitialMount.current = false;
-    else useMixpanel.track("search_course");
+    // else useMixpanel.track("search_course");
   }, [value]);
 
   return (

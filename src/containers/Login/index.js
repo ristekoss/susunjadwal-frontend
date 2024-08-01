@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Fade, Button, Box, useColorModeValue } from "@chakra-ui/react";
-import { useMixpanel } from "hooks/useMixpanel";
+// import { useMixpanel } from "hooks/useMixpanel";
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
 import { parse } from "query-string";
@@ -399,7 +399,7 @@ function Login({ history, location }) {
             href="https://ristek.link/oss-discord"
             rel="noopener noreferrer"
             target="_blank"
-            onClick={() => useMixpanel.track("gabung_discord")}
+            // onClick={() => useMixpanel.track("gabung_discord")}
           >
             <DiscordButton _hover={{ background: "primary.Purple" }}>
               Join Discord
@@ -408,7 +408,7 @@ function Login({ history, location }) {
           <div style={{ minWidth: "16px", minHeight: "16px" }}></div>
           <Link
             to="/kontributor"
-            onClick={() => useMixpanel.track("see_contributor_detail")}
+            // onClick={() => useMixpanel.track("see_contributor_detail")}
           >
             <DiscordButton variant="outline">Lihat Kontributor</DiscordButton>
           </Link>

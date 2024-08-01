@@ -1,7 +1,7 @@
 import React from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
-import { useMixpanel } from "hooks/useMixpanel";
+// import { useMixpanel } from "hooks/useMixpanel";
 import { withRouter } from "react-router";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -62,7 +62,10 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         category: "Simpan Jadwal",
         action: "Created/edited a schedule",
       });
-      history.push(`/jadwal/${scheduleId}`);
+      history.push({
+        pathname: `/jadwal/${scheduleId}`,
+        state: { feedbackPopup: true }
+      });
     } catch (e) {
       /** TODO: handle error */
     }
@@ -81,7 +84,10 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         1000,
       );
       dispatch(clearSchedule());
-      history.push(`/jadwal/${data.user_schedule.id}`);
+      history.push({
+        pathname: `/jadwal/${data.user_schedule.id}`,
+        state: { feedbackPopup: true }
+      });
     } catch (e) {
       /** TODO: handle error */
     }
@@ -155,7 +161,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
             <Button
               onClick={() => {
                 onClose();
-                useMixpanel.track("cancel");
+                // useMixpanel.track("cancel");
               }}
               variant="outline"
               borderColor={
@@ -173,7 +179,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
                   ? handleDeleteSchedule()
                   : updateSchedule();
 
-                useMixpanel.track("simpan_jadwal");
+                // useMixpanel.track("simpan_jadwal");
               }}
               variant="solid"
               bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
@@ -237,7 +243,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
         <Button
           onClick={() => {
-            useMixpanel.track("open_simpan_modal");
+            // useMixpanel.track("open_simpan_modal");
             onOpen();
           }}
           disabled={isConflict || totalCredits > 24 || schedules.length === 0}
