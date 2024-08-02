@@ -15,36 +15,50 @@ import Helmet from 'react-helmet';
 import { StarIcon } from '@chakra-ui/icons';
 import styled from 'styled-components';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import bauhaus from 'assets/Feedback/Page/bauhaus-feedback-1.png';
 import bauhaus2 from 'assets/Feedback/Page/bauhaus-feedback-2.png';
 import bauhaus3 from 'assets/Feedback/Page/bauhaus-feedback-3.png';
 import bauhaus4 from 'assets/Feedback/Page/bauhaus-feedback-4.png';
+import { createReview } from 'services/api';
+import { makeAtLeastMs } from 'utils/promise';
+
 
 export default function Feedback() {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const theme = useColorModeValue("light", "dark");
   const toast = useToast();
+  const auth = useSelector((state) => state.auth);
 
   const handleRating = (rate) => {
     setRating(rate);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const ratingValue = rating;
     const message = comment;
-
-    // handle submit API
-
-    setRating(0);
-    setComment("");
-    toast({
-      title: "Thank you for your feedback!",
-      status: "success",
-      duration: 2500,
-      position: "bottom",
-    });
-  };
+    const userId = auth.userId;
+    try {
+      const response = await makeAtLeastMs(createReview(userId, ratingValue, message), 1000);
+      alert(response);
+      setRating(0);
+      setComment("");
+      toast({
+        title: "Thank you for your feedback!",
+        status: "success",
+        duration: 2500,
+        position: "bottom",
+      })
+    } catch (error) {
+      toast({
+        title: "Failed to submit feedback",
+        status: "error",
+        duration: 2500,
+        position: "bottom",
+      });
+    }
+  }
 
   return (
     <MainContainer>

@@ -17,33 +17,46 @@ import {
   Image,
   useToast,
 } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
 import { StarIcon } from "@chakra-ui/icons";
 import bauhaus from 'assets/Feedback/Modal/bauhaus-feedback-1.png';
 import bauhaus2 from 'assets/Feedback/Modal/bauhaus-feedback-2.svg';
+import { makeAtLeastMs } from "utils/promise";
+import { createReview } from "services/api";
 
 const FeedbackModal = ({ isOpen, onClose }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const theme = useColorModeValue("light", "dark");
   const toast = useToast();
+  const auth = useSelector((state) => state.auth);
 
   const handleRating = (rate) => {
     setRating(rate);
   };
 
-  const handleSubmit = () => {
-    const ratingValue = rating;
-    const message = comment;
+  const handleSubmit = async () => {
+    const userId = auth.userId;
 
-    // handle submit API
-
-    onClose();
-    toast({
-      title: "Thank you for your feedback!",
-      status: "success",
-      duration: 2500,
-      position: "bottom",
-    });
+    try {
+      await makeAtLeastMs(createReview(userId, rating, comment), 1000);
+    
+      onClose();
+      toast({
+        title: "Thank you for your feedback!",
+        status: "success",
+        duration: 2500,
+        position: "bottom",
+      });
+    }
+    catch (error) {
+      toast({
+        title: "Failed to submit feedback",
+        status: "error",
+        duration: 2500,
+        position: "bottom",
+      });
+    }
   };
 
   return (
