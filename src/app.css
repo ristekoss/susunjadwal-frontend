@@ -462,7 +462,6 @@ button {
   -moz-appearance: none;
   background: transparent;
   padding: 0;
-  border: 0;
   border-radius: 0;
   line-height: 1;
 }
@@ -603,7 +602,7 @@ button {
 }
 
 .small-offset-2 {
-  margin-left: 16.66667%
+  margin-left: 16.66667%;
 }
 
 .small-4 {
@@ -1974,7 +1973,7 @@ p + .stat {
 .entryJadwal {
   position: absolute;
   width: calc((100% / 6) - 0.5rem);
-  background: #F2994A;
+  background: #f2994a;
   color: #222222;
 }
 

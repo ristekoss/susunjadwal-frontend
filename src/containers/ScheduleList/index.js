@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactGA from "react-ga";
+// import { useMixpanel } from "hooks/useMixpanel";
 import { useHistory } from "react-router";
 import {
   Button,
@@ -72,6 +73,7 @@ const ScheduleList = () => {
   const [isSortByLatest, setSortByLatest] = useState(true);
 
   const [imageURL, setImageURL] = useState("");
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -113,6 +115,17 @@ const ScheduleList = () => {
       setPeriods(isSortByLatest ? periods.reverse() : periods.sort());
     }
   }, [filteredSchedules, isSortByLatest]);
+
+  useEffect(() => {
+    // TODO: Re-enable mixpanel or change to other analytics
+    // useMixpanel.track("open_daftar_jadwal");
+  }, []);
+
+  useEffect(() => {
+    if (isInitialMount.current) isInitialMount.current = false;
+    // TODO: Re-enable mixpanel or change to other analytics
+    // else useMixpanel.track("search_daftar_jadwal");
+  }, [query]);
 
   const performDeleteSchedule = async (userId, scheduleId) => {
     ReactGA.event({
@@ -309,9 +322,11 @@ const ScheduleList = () => {
                 bg={
                   theme === "light" ? "primary.Purple" : "primary.LightPurple"
                 }
-                onMouseDown={() =>
-                  setQuery(document.getElementById("input").value)
-                }
+                onMouseDown={() => {
+                  setQuery(document.getElementById("input").value);
+                  // TODO: Re-enable mixpanel or change to other analytics
+                  // useMixpanel.track("search_daftar_jadwal");
+                }}
                 fontSize={isMobile && "14px"}
                 px={isMobile && "4px"}
                 display={isMobile && "none"}

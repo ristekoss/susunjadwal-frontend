@@ -1,6 +1,7 @@
 import React from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
+// import { useMixpanel } from "hooks/useMixpanel";
 import { withRouter } from "react-router";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -26,6 +27,7 @@ import { makeAtLeastMs } from "utils/promise";
 import { isScheduleConflict, listScheduleConflicts } from "./utils";
 
 import TrashIcon from "assets/Trash.svg";
+import { RistekAds } from "@ristek-kit/ads";
 
 function transformSchedules(schedules) {
   return schedules
@@ -60,7 +62,10 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         category: "Simpan Jadwal",
         action: "Created/edited a schedule",
       });
-      history.push(`/jadwal/${scheduleId}`);
+      history.push({
+        pathname: `/jadwal/${scheduleId}`,
+        state: { feedbackPopup: true }
+      });
     } catch (e) {
       /** TODO: handle error */
     }
@@ -79,7 +84,10 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         1000,
       );
       dispatch(clearSchedule());
-      history.push(`/jadwal/${data.user_schedule.id}`);
+      history.push({
+        pathname: `/jadwal/${data.user_schedule.id}`,
+        state: { feedbackPopup: true }
+      });
     } catch (e) {
       /** TODO: handle error */
     }
@@ -151,7 +159,11 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
           <ModalFooter>
             <Button
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                // TODO: Re-enable mixpanel or change to other analytics
+                // useMixpanel.track("cancel");
+              }}
               variant="outline"
               borderColor={
                 theme === "light" ? "primary.Purple" : "dark.LightPurple"
@@ -161,13 +173,16 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
               Batal
             </Button>
             <Button
-              onClick={() =>
+              onClick={() => {
                 !isEditing
                   ? saveSchedule()
                   : schedules.length === 0
                   ? handleDeleteSchedule()
-                  : updateSchedule()
-              }
+                  : updateSchedule();
+
+                // TODO: Re-enable mixpanel or change to other analytics
+                // useMixpanel.track("simpan_jadwal");
+              }}
               variant="solid"
               bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
               color={theme === "light" ? "white" : "dark.White"}
@@ -177,6 +192,10 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      <div style={{ marginBottom: 24 }}>
+        <RistekAds />
+      </div>
 
       <Container mode={theme}>
         <h3>Kelas Pilihan</h3>
@@ -225,7 +244,11 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         )}
 
         <Button
-          onClick={onOpen}
+          onClick={() => {
+            // TODO: Re-enable mixpanel or change to other analytics
+            // useMixpanel.track("open_simpan_modal");
+            onOpen();
+          }}
           disabled={isConflict || totalCredits > 24 || schedules.length === 0}
           intent={schedules.length === 0 && isEditing && "danger"}
         >

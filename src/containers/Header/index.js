@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+// import { useMixpanel } from "hooks/useMixpanel";
 import React from "react";
 
 import {
@@ -32,6 +33,7 @@ const LINKS = [
   { to: "/susun", label: "Buat Jadwal" },
   { to: "/jadwal", label: "Daftar Jadwal" },
   { to: "/update", label: "Update Matkul" },
+  { to: "/ulasan", label: "Ulasan" },
   { to: "/kontributor", label: "Kontributor" },
 ];
 
@@ -87,7 +89,12 @@ function Header() {
             <label class="switch">
               <input
                 type="checkbox"
-                onClick={toggleColorMode}
+                onClick={() => {
+                  toggleColorMode();
+                  // TODO: Re-enable mixpanel or change to other analytics
+                  // if (theme === "light") useMixpanel.track("dark_mode");
+                  // else useMixpanel.track("light_mode");
+                }}
                 checked={theme === "light" ? false : true}
               />
               <span class="slider">

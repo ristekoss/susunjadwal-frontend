@@ -3,6 +3,7 @@ import { Provider } from "react-redux";
 import { Router } from "react-router";
 import { createBrowserHistory } from "history";
 
+import { AdsProvider } from "@ristek-kit/ads";
 import MediaQuery from "containers/MediaQuery";
 import Loading from "containers/Loading";
 
@@ -11,6 +12,7 @@ import store from "./redux/store";
 
 import config from "config";
 import "./app.css";
+import "@ristek-kit/ads/dist/styles.css";
 import ScrollToTop from "utils/scroll";
 
 const history = createBrowserHistory({ basename: config.BASE_URL });
@@ -20,7 +22,9 @@ function App() {
     <Router history={history}>
       <ScrollToTop />
       <Provider store={store}>
-        <Routes />
+        <AdsProvider platform="SusunJadwal" theme="light">
+          <Routes />
+        </AdsProvider>
         <MediaQuery />
         <Loading />
       </Provider>

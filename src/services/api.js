@@ -104,3 +104,11 @@ export const getAnnouncement = async () =>
       },
     },
   );
+
+export const createReview = async (userId, rating, comment) =>
+  await instance.post(
+    `/review/${userId}`, {
+      rating: rating,
+      comment: comment,
+    }
+  )

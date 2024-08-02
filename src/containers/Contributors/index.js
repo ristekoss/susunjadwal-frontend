@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+// import { useMixpanel } from "hooks/useMixpanel";
 import { Text, Box, Button, Flex, useColorModeValue } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
@@ -33,6 +34,11 @@ const Contributors = () => {
   useEffect(() => {
     fetchContributors();
   }, [fetchContributors]);
+
+  useEffect(() => {
+    // TODO: Re-enable mixpanel or change to other analytics
+    // useMixpanel.track("open_contributors");
+  }, []);
 
   const MergeContributors = (contributors, otherContributors) => {
     if (contributors && otherContributors) {
@@ -85,6 +91,8 @@ const Contributors = () => {
       avatar={user.avatar_url}
       github={user.html_url}
       contributions={user.contributions}
+      // TODO: Re-enable mixpanel or change to other analytics
+      // onClick={() => useMixpanel.track("see_contributor_detail")}
     />
   ));
 
@@ -131,6 +139,8 @@ const Contributors = () => {
         <a
           href="https://ristek.link/oss-discord"
           rel="noopener noreferrer"
+          // TODO: Re-enable mixpanel or change to other analytics
+          // onClick={() => useMixpanel.track("gabung_discord")}
           target="_blank"
         >
           <Button
