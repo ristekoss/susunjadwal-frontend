@@ -29,10 +29,12 @@ function SelectMajor({ theme, isMobile, setMajorSelected, show }) {
   }
 
   useEffect(() => {
+    // TODO: Re-enable mixpanel or change to other analytics
     // if (selectedFaculty) useMixpanel.track("select_faculty");
   }, [selectedFaculty]);
 
   useEffect(() => {
+    // TODO: Re-enable mixpanel or change to other analytics
     // if (selectedMajorName) useMixpanel.track("select_prodi");/
   }, [selectedMajorName]);
 

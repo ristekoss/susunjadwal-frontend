@@ -67,6 +67,7 @@ const ScheduleDetail = ({
   return (
     <>
       <Link
+      // TODO: Re-enable mixpanel or change to other analytics
         // onClick={() => useMixpanel.track("open_jadwal")}
         onClick={null}
         to={`/jadwal/${schedule.id}`}

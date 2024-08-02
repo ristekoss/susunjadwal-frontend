@@ -42,11 +42,13 @@ const UpdateCourses = () => {
   const password = watch("password");
 
   useEffect(() => {
+    // TODO: Re-enable mixpanel or change to other analytics
     // useMixpanel.track("open_update_matkul");
   }, []);
 
   useEffect(() => {
     if (username && !isUsernameChanged) {
+      // TODO: Re-enable mixpanel or change to other analytics
       // useMixpanel.track("update_matkul_fill_username");
       setIsUsernameChanged(true);
     }
@@ -54,6 +56,7 @@ const UpdateCourses = () => {
 
   useEffect(() => {
     if (password && !isPasswordChanged) {
+      // TODO: Re-enable mixpanel or change to other analytics
       // useMixpanel.track("update_matkul_fill_password");
       setIsPasswordChanged(true);
     }
@@ -133,6 +136,7 @@ const UpdateCourses = () => {
             w={{ sm: "100%", lg: "unset" }}
             bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
             color={theme === "light" ? "white" : "dark.White"}
+            // TODO: Re-enable mixpanel or change to other analytics
             // onClick={() => useMixpanel.track("update_matkul")}
           >
             Update Jadwal

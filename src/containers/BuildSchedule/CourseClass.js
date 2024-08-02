@@ -100,6 +100,7 @@ function CourseClass({ course, courseClass }) {
       dispatch(removeSchedule(item));
     } else {
       dispatch(addSchedule(item));
+      // TODO: Re-enable mixpanel or change to other analytics
       // useMixpanel.track("select_course");
     }
   };

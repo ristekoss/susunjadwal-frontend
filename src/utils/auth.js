@@ -7,6 +7,7 @@ export function persistAuth(auth) {
   } else {
     setupAxiosInstance(auth.token);
     localStorage.setItem("auth", JSON.stringify(auth));
+    // TODO: Re-enable mixpanel or change to other analytics
     // useMixpanel.track("login_successful");
   }
 }

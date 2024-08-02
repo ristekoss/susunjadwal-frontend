@@ -117,11 +117,13 @@ const ScheduleList = () => {
   }, [filteredSchedules, isSortByLatest]);
 
   useEffect(() => {
+    // TODO: Re-enable mixpanel or change to other analytics
     // useMixpanel.track("open_daftar_jadwal");
   }, []);
 
   useEffect(() => {
     if (isInitialMount.current) isInitialMount.current = false;
+    // TODO: Re-enable mixpanel or change to other analytics
     // else useMixpanel.track("search_daftar_jadwal");
   }, [query]);
 
@@ -322,6 +324,7 @@ const ScheduleList = () => {
                 }
                 onMouseDown={() => {
                   setQuery(document.getElementById("input").value);
+                  // TODO: Re-enable mixpanel or change to other analytics
                   // useMixpanel.track("search_daftar_jadwal");
                 }}
                 fontSize={isMobile && "14px"}

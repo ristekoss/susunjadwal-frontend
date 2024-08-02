@@ -399,6 +399,7 @@ function Login({ history, location }) {
             href="https://ristek.link/oss-discord"
             rel="noopener noreferrer"
             target="_blank"
+            // TODO: Re-enable mixpanel or change to other analytics
             // onClick={() => useMixpanel.track("gabung_discord")}
           >
             <DiscordButton _hover={{ background: "primary.Purple" }}>
@@ -408,6 +409,7 @@ function Login({ history, location }) {
           <div style={{ minWidth: "16px", minHeight: "16px" }}></div>
           <Link
             to="/kontributor"
+            // TODO: Re-enable mixpanel or change to other analytics
             // onClick={() => useMixpanel.track("see_contributor_detail")}
           >
             <DiscordButton variant="outline">Lihat Kontributor</DiscordButton>

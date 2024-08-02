@@ -161,6 +161,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
             <Button
               onClick={() => {
                 onClose();
+                // TODO: Re-enable mixpanel or change to other analytics
                 // useMixpanel.track("cancel");
               }}
               variant="outline"
@@ -179,6 +180,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
                   ? handleDeleteSchedule()
                   : updateSchedule();
 
+                // TODO: Re-enable mixpanel or change to other analytics
                 // useMixpanel.track("simpan_jadwal");
               }}
               variant="solid"
@@ -243,6 +245,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
         <Button
           onClick={() => {
+            // TODO: Re-enable mixpanel or change to other analytics
             // useMixpanel.track("open_simpan_modal");
             onOpen();
           }}

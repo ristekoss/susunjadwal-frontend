@@ -97,12 +97,14 @@ function BuildSchedule() {
     }
   });
 
+  // TODO: Re-enable mixpanel or change to other analytics
   // useEffect(() => {
   //   useMixpanel.track("open_buat_jadwal");
   // }, []);
 
   useEffect(() => {
     if (isInitialMount.current) isInitialMount.current = false;
+    // TODO: Re-enable mixpanel or change to other analytics
     // else useMixpanel.track("search_course");
   }, [value]);
 

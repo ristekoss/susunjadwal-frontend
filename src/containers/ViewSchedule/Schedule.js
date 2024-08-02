@@ -63,12 +63,14 @@ function Schedule({
   );
 
   const handleClickedCourse = (course) => {
+    // TODO: Re-enable mixpanel or change to other analytics
     // useMixpanel.track("open_course_detail");
     setSelectedCourse(course);
     onOpen();
   };
 
   const handleCloseModal = () => {
+    // TODO: Re-enable mixpanel or change to other analytics
     // useMixpanel.track("close_course_detail");
     onClose();
   };

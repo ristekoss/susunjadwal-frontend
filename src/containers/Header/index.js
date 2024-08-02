@@ -91,6 +91,7 @@ function Header() {
                 type="checkbox"
                 onClick={() => {
                   toggleColorMode();
+                  // TODO: Re-enable mixpanel or change to other analytics
                   // if (theme === "light") useMixpanel.track("dark_mode");
                   // else useMixpanel.track("light_mode");
                 }}
