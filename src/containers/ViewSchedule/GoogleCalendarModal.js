@@ -299,22 +299,6 @@ const StyledImage = styled(Image)`
   }
 `;
 
-const MinimizedButton = styled(Button)`
-  z-index: 1000;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #5038bc;
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
-  &:hover {
-    background-color: #674de0;
-  }
-`;
-
 const StyledModalContent = styled(ModalContent)`
   width: 100%;
   max-width: 570px;
