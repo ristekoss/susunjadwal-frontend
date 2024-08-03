@@ -1,5 +1,5 @@
 import React from "react";
-import { useMixpanel } from "hooks/useMixpanel";
+// import { useMixpanel } from "hooks/useMixpanel";
 import { useSelector } from "react-redux";
 import {
   Menu,
@@ -50,7 +50,8 @@ const SortByTermButton = ({ isSortByLatest, setSortByLatest }) => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        onClick={() => useMixpanel.track("sort_daftar_jadwal")}
+        // TODO: Re-enable mixpanel or change to other analytics
+        // onClick={() => useMixpanel.track("sort_daftar_jadwal")}
       />
       <MenuList>
         <MenuOptionGroup
@@ -61,7 +62,8 @@ const SortByTermButton = ({ isSortByLatest, setSortByLatest }) => {
           <MenuItemOption
             onClick={() => {
               setSortByLatest(true);
-              useMixpanel.track("sort_semester_terbaru");
+              // TODO: Re-enable mixpanel or change to other analytics
+              // useMixpanel.track("sort_semester_terbaru");
             }}
             value="desc"
           >
@@ -70,7 +72,8 @@ const SortByTermButton = ({ isSortByLatest, setSortByLatest }) => {
           <MenuItemOption
             onClick={() => {
               setSortByLatest(false);
-              useMixpanel.track("sort_semester_terlama");
+              // TODO: Re-enable mixpanel or change to other analytics
+              // useMixpanel.track("sort_semester_terlama");
             }}
             value="asc"
           >

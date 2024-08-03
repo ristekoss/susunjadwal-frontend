@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useMixpanel } from "hooks/useMixpanel";
+// import { useMixpanel } from "hooks/useMixpanel";
 import React from "react";
 
 import {
@@ -33,6 +33,7 @@ const LINKS = [
   { to: "/susun", label: "Buat Jadwal" },
   { to: "/jadwal", label: "Daftar Jadwal" },
   { to: "/update", label: "Update Matkul" },
+  { to: "/ulasan", label: "Ulasan" },
   { to: "/kontributor", label: "Kontributor" },
 ];
 
@@ -47,6 +48,8 @@ function Header() {
   function toggleMenu() {
     return isOpen ? onClose() : onOpen();
   }
+
+  if (["/admin"].includes(pathname)) return null;
 
   return (
     <Container
@@ -90,8 +93,9 @@ function Header() {
                 type="checkbox"
                 onClick={() => {
                   toggleColorMode();
-                  if (theme === "light") useMixpanel.track("dark_mode");
-                  else useMixpanel.track("light_mode");
+                  // TODO: Re-enable mixpanel or change to other analytics
+                  // if (theme === "light") useMixpanel.track("dark_mode");
+                  // else useMixpanel.track("light_mode");
                 }}
                 checked={theme === "light" ? false : true}
               />
@@ -149,11 +153,13 @@ const NavLinks = ({ pathname }) => {
   const theme = useColorModeValue("light", "dark");
   return (
     <NavLinkWrapper>
-      {LINKS.map(({ to, label }) => (
-        <HeaderLink isCurrent={pathname === to} key={to} to={to} mode={theme}>
-          {label}
-        </HeaderLink>
-      ))}
+      {pathname !== "/feedback-recap" && 
+        LINKS.map(({ to, label }) => (
+          <HeaderLink isCurrent={pathname === to} key={to} to={to} mode={theme}>
+            {label}
+          </HeaderLink>
+        ))
+      }
       <SignOutLink to="/logout">Sign Out</SignOutLink>
     </NavLinkWrapper>
   );

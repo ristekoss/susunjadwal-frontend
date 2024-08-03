@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useColorModeValue } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import DetailsModal from "./DetailsModal";
-import { useMixpanel } from "hooks/useMixpanel";
+// import { useMixpanel } from "hooks/useMixpanel";
 const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
 const pad = (val) => {
@@ -63,13 +63,15 @@ function Schedule({
   );
 
   const handleClickedCourse = (course) => {
-    useMixpanel.track("open_course_detail");
+    // TODO: Re-enable mixpanel or change to other analytics
+    // useMixpanel.track("open_course_detail");
     setSelectedCourse(course);
     onOpen();
   };
 
   const handleCloseModal = () => {
-    useMixpanel.track("close_course_detail");
+    // TODO: Re-enable mixpanel or change to other analytics
+    // useMixpanel.track("close_course_detail");
     onClose();
   };
 

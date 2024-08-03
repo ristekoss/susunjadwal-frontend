@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Fade, Button, Box, useColorModeValue } from "@chakra-ui/react";
-import { useMixpanel } from "hooks/useMixpanel";
+// import { useMixpanel } from "hooks/useMixpanel";
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
 import { parse } from "query-string";
@@ -49,7 +49,7 @@ import {
 
 import { FlexBox } from "containers/BetaLanding/styles";
 
-import RistekLogo from "assets/Beta/Beta_Logo_Light.svg";
+import RistekLogo from "assets/Logo/RistekLogo-light.svg";
 import ChevronDown from "assets/Beta/chevron-down.svg";
 import ChevronUp from "assets/Beta/chevron-up.svg";
 
@@ -399,7 +399,8 @@ function Login({ history, location }) {
             href="https://ristek.link/oss-discord"
             rel="noopener noreferrer"
             target="_blank"
-            onClick={() => useMixpanel.track("gabung_discord")}
+            // TODO: Re-enable mixpanel or change to other analytics
+            // onClick={() => useMixpanel.track("gabung_discord")}
           >
             <DiscordButton _hover={{ background: "primary.Purple" }}>
               Join Discord
@@ -408,7 +409,8 @@ function Login({ history, location }) {
           <div style={{ minWidth: "16px", minHeight: "16px" }}></div>
           <Link
             to="/kontributor"
-            onClick={() => useMixpanel.track("see_contributor_detail")}
+            // TODO: Re-enable mixpanel or change to other analytics
+            // onClick={() => useMixpanel.track("see_contributor_detail")}
           >
             <DiscordButton variant="outline">Lihat Kontributor</DiscordButton>
           </Link>

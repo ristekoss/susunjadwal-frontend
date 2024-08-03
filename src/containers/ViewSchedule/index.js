@@ -1,16 +1,12 @@
-import { CalendarIcon } from "@heroicons/react/solid";
-import { useSelector, useDispatch } from "react-redux";
-import { useMixpanel } from "hooks/useMixpanel";
 import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router";
-import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams, useLocation, Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
 import ReactGA from "react-ga";
 import CopyToClipboard from "react-copy-to-clipboard";
 import * as htmlToImage from "html-to-image";
 import { copyImageToClipboard } from "copy-image-clipboard";
-
 import {
   Button,
   Modal,
@@ -25,6 +21,7 @@ import {
   Image,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { CalendarIcon } from "@heroicons/react/solid";
 
 import Schedule from "./Schedule";
 import ScheduleList from "./ScheduleList";
@@ -51,11 +48,15 @@ import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
 import { ListMatkulIcon } from "assets/ListMatkulIcon";
 
+import FeedbackModal from "./FeedbackModal";
+import GoogleCalendarModal from "./GoogleCalendarModal";
+
 function ViewSchedule({ match, history }) {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const theme = useColorModeValue("light", "dark");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const shareModal = useDisclosure();
+  const feedbackModal = useDisclosure();
   const auth = useSelector((state) => state.auth);
   const { scheduleId } = useParams();
   const dispatch = useDispatch();
@@ -65,6 +66,8 @@ function ViewSchedule({ match, history }) {
   const [createdAt, setCreatedAt] = useState(null);
   const [isDisplayTimetable, setIsDisplayTimetable] = useState(true);
   const [imageURL, setImageURL] = useState(null);
+
+  const location = useLocation();
 
   let formattedSchedule = {};
   let totalCredits = 0;
@@ -77,7 +80,6 @@ function ViewSchedule({ match, history }) {
     if (auth) {
       await postRenameSchedule(auth.userId, slug, value);
       setSchedule({ ...schedule, name: value });
-      useMixpanel.track("rename_jadwal");
     }
   }
 
@@ -92,6 +94,9 @@ function ViewSchedule({ match, history }) {
       dispatch(setLoading(false));
     }
     fetchSchedule();
+    if (location.state?.feedbackPopup) {
+      feedbackModal.onOpen();
+    }
   }, [match, dispatch]);
 
   const scheduleName = schedule && schedule.name;
@@ -144,26 +149,32 @@ function ViewSchedule({ match, history }) {
     link.download = !scheduleName ? "Untitled.png" : scheduleName + ".png";
     link.href = dataUrl;
     link.click();
-    useMixpanel.track("download_jadwal");
   };
 
   const openShareModal = async () => {
     const dataUrl = await htmlToImage.toPng(refs.current);
     setImageURL(dataUrl);
     shareModal.onOpen();
-    useMixpanel.track("open_share_jadwal");
   };
 
   const copyImage = () => {
     copyImageToClipboard(imageURL)
       .then(() => showAlertCopy("Gambar"))
       .catch((e) => showErrorCopy());
+  };
 
-    useMixpanel.track("share_copy_image");
+  const handleFeedbackModalClose = () => {
+    feedbackModal.onClose();
+    history.replace({
+      ...location,
+      state: { ...location.state, feedbackPopup: false },
+    });
   };
 
   return (
     <>
+      <FeedbackModal isOpen={feedbackModal.isOpen} onClose={handleFeedbackModalClose} />
+
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent bg={theme === "light" ? "white" : "dark.LightBlack"}>
@@ -181,10 +192,7 @@ function ViewSchedule({ match, history }) {
               Batal
             </Button>
             <Button
-              onClick={() => {
-                confirmDeleteSchedule(schedule.id);
-                useMixpanel.track("delete_jadwal");
-              }}
+              onClick={() => confirmDeleteSchedule(schedule.id)}
               variant="danger"
             >
               Hapus
@@ -211,10 +219,7 @@ function ViewSchedule({ match, history }) {
               <Flex flexDirection={isMobile ? "column" : "row"}>
                 <CopyToClipboard
                   text={`${window.location.href}/${scheduleId}`}
-                  onCopy={() => {
-                    showAlertCopy("Link");
-                    useMixpanel.track("share_copy_link");
-                  }}
+                  onCopy={() => showAlertCopy("Link")}
                 >
                   <Button
                     variant="outline"
@@ -309,10 +314,7 @@ function ViewSchedule({ match, history }) {
                         desc: "Ekspor ke .ics (Google Calendar/Apple Calendar)",
                         icon: exportToIcsImg,
                         alt: "export-to-ics",
-                        action: () => {
-                          generateICalendarFile(schedule);
-                          useMixpanel.track("export_jadwal");
-                        },
+                        action: () => generateICalendarFile(schedule),
                       },
                       {
                         desc: "Share Jadwal",
@@ -338,7 +340,6 @@ function ViewSchedule({ match, history }) {
                     mr={{ base: "0rem", lg: "1rem" }}
                     intent="primary"
                     variant="outline"
-                    onClick={() => useMixpanel.track("edit_jadwal")}
                     borderColor={
                       theme === "light" ? "primary.Purple" : "dark.LightPurple"
                     }
@@ -352,10 +353,7 @@ function ViewSchedule({ match, history }) {
             <ViewToggleContainer>
               <ViewListContainer
                 isActive={!isDisplayTimetable}
-                onClick={() => {
-                  setIsDisplayTimetable(false);
-                  useMixpanel.track("list_matkul_view");
-                }}
+                onClick={() => setIsDisplayTimetable(false)}
                 mode={theme}
               >
                 <ListMatkulIcon />
@@ -365,10 +363,7 @@ function ViewSchedule({ match, history }) {
               </ViewListContainer>
               <ViewCalendarContainer
                 isActive={isDisplayTimetable}
-                onClick={() => {
-                  setIsDisplayTimetable(true);
-                  useMixpanel.track("kalender_matkul_view");
-                }}
+                onClick={() => setIsDisplayTimetable(true)}
                 mode={theme}
               >
                 <CalendarIcon width={20} />
@@ -413,6 +408,7 @@ function ViewSchedule({ match, history }) {
           </div>
         </div>
       </MainContainer>
+      <GoogleCalendarModal />
     </>
   );
 }
