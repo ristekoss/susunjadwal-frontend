@@ -74,7 +74,6 @@ const steps = [
 const GoogleCalendarModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isWidgetVisible, setIsWidgetVisible] = useState(true);
-  const [isMinimized, setIsMinimized] = useState(false);
   const [isClosed, setIsClosed] = useState(false);
   const [step, setStep] = useState(0);
   const theme = useColorModeValue("light", "dark");
@@ -85,15 +84,8 @@ const GoogleCalendarModal = () => {
   };
 
   const handleMinimizeModal = () => {
-    setIsMinimized(true);
     onClose();
     setIsWidgetVisible(true);
-  };
-
-  const handleMaximizeModal = () => {
-    setIsMinimized(false);
-    onOpen();
-    setIsWidgetVisible(false);
   };
 
   const handleCloseModal = () => {
@@ -168,16 +160,16 @@ const GoogleCalendarModal = () => {
           <ModalBody>
             {step === 0 ? (
               <ModalBodyContent>
-                <Text fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }} fontWeight="bold" textAlign="center" color={theme === "dark" ? "white" : "black"} marginTop={{ base: "20px", md: "0px" }}>
+                <Text fontSize={{ base: "xl", md: "3xl", lg: "4xl" }} fontWeight="bold" textAlign="center" color={theme === "dark" ? "white" : "black"} marginTop={{ base: "20px", md: "0px" }}>
                   Integrasikan <Text as="span" color={theme === 'dark' ? "primary.LightPurple" : "primary.Purple"}>Jadwalmu</Text> dengan Google Calendar
                 </Text>
-                <ImageContainer padding={step <= 3 ? "50px" : step === 4 ? "30px 0 0 0" : "0"}>
+                <ImageContainer padding={"30px"}>
                   <StyledImage src={MulaiImage} alt="Mulai" />
                 </ImageContainer>
               </ModalBodyContent>
             ) : (
               <ModalBodyContent>
-                <Text fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }} fontWeight="bold" textAlign="center" color={theme === "dark" ? "white" : "black"} marginTop={{ base: "20px", md: "0px" }}>
+                <Text fontSize={{ base: "xl", md: "3xl", lg: "4xl" }} fontWeight="bold" textAlign="center" color={theme === "dark" ? "white" : "black"} marginTop={{ base: "20px", md: "0px" }}>
                   Integrasikan <Text as="span" color={theme === 'dark' ? "primary.LightPurple" : "primary.Purple"}>Jadwalmu</Text> dengan Google Calendar
                 </Text>
                 <ImageContainer padding={step <= 3 ? "30px" : step >= 4 ? "30px 30px 0 30px" : "0"}>
@@ -301,21 +293,9 @@ const StyledImage = styled(Image)`
   width: ${props => props.size};
   height: ${props => props.height || "auto"};
   object-fit: cover;
-`;
-
-const MinimizedButton = styled(Button)`
-  z-index: 1000;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #5038bc;
-  color: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
-  &:hover {
-    background-color: #674de0;
+  @media (max-width: 768px) {
+    scale: 1.2;
+    padding: 8px;
   }
 `;
 

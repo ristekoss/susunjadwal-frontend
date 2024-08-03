@@ -49,6 +49,8 @@ function Header() {
     return isOpen ? onClose() : onOpen();
   }
 
+  if (["/admin"].includes(pathname)) return null;
+
   return (
     <Container
       style={{ backgroundColor: colorMode === "light" ? "#FFFFFF" : "#2c2c2c" }}
@@ -151,11 +153,13 @@ const NavLinks = ({ pathname }) => {
   const theme = useColorModeValue("light", "dark");
   return (
     <NavLinkWrapper>
-      {LINKS.map(({ to, label }) => (
-        <HeaderLink isCurrent={pathname === to} key={to} to={to} mode={theme}>
-          {label}
-        </HeaderLink>
-      ))}
+      {pathname !== "/feedback-recap" && 
+        LINKS.map(({ to, label }) => (
+          <HeaderLink isCurrent={pathname === to} key={to} to={to} mode={theme}>
+            {label}
+          </HeaderLink>
+        ))
+      }
       <SignOutLink to="/logout">Sign Out</SignOutLink>
     </NavLinkWrapper>
   );

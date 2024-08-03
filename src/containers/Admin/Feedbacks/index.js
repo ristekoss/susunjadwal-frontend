@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Box,
   Text,
-  Image,
   Flex,
   Table,
   Thead,
@@ -11,15 +10,12 @@ import {
   Th,
   Td,
   Select,
-  useColorModeValue,
   HStack,
-  Link,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet';
-import { NavLink } from 'react-router-dom';
 import { ChevronLeftIcon, ChevronRightIcon, StarIcon, ArrowUpIcon, ArrowDownIcon } from '@chakra-ui/icons';
 import styled from 'styled-components';
-import LogoSunjad from 'assets/Beta/LogoSunjad-light.svg';
 import { dummyFeedbacks, feedbackStats } from './feedback';
 
 const AdminFeedbacks = () => {
@@ -29,8 +25,6 @@ const AdminFeedbacks = () => {
 
   const totalPages = Math.ceil(dummyFeedbacks.length / feedbacksPerPage);
   const sortedFeedbacks = [...dummyFeedbacks];
-
-
 
   const sortedData = () => {
     if (sortConfig.key !== null) {
@@ -118,20 +112,16 @@ const AdminFeedbacks = () => {
     return sortConfig.direction === 'asc' ? <ArrowUpIcon ml={2} /> : <ArrowDownIcon ml={2} />;
   };
 
-  return (
-    <Box minH="100vh" bg={useColorModeValue('white', 'gray.800')}>
-      <Helmet title="Feedback Recap"/>
-      <Container>
-        <Flex justifyContent="space-between" alignItems="center" w="100%">
-          <Link href="/">
-            <Image src={LogoSunjad} alt="logo" objectFit="contain" w={{ base: '140px', lg: 'initial' }} />
-          </Link>
-          <SignOutLink to="/admin">Sign Out</SignOutLink>
-        </Flex>
-      </Container>
+  const tableBg = useColorModeValue('primary.White', 'dark.LightBlack');
+  const tableTextColor = useColorModeValue('secondary.MineShaft', 'dark.White');
+  const selectBg = useColorModeValue('primary.White', 'dark.LightBlack');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
 
+  return (
+    <Box minH="100vh">
+      <Helmet title="Feedback Recap"/>
       <Box p={8} mx={{ xl: 20 }}>
-        <Text fontSize={{ base: '2xl', md: '5xl' }} fontWeight="bold" textAlign="center" mb={6} mt={20} color="primary.Purple">
+        <Text fontSize={{ base: '2xl', md: '5xl' }} fontWeight="bold" textAlign="center" mb={6} color="primary.Purple">
           Rating & Ulasan User
         </Text>
 
@@ -146,7 +136,7 @@ const AdminFeedbacks = () => {
                 .map((_, i) => (
                   <StarIcon
                     key={i}
-                    color={i < Math.floor(averageRating) ? 'yellow.400' : i < Math.floor(averageRating) ? 'yellow.400' : 'gray.300'}
+                    color={i < Math.floor(averageRating) ? 'yellow.400' : 'gray.300'}
                     boxSize={{ base: 3, md: 6 }}
                     padding={{ base: 0, md: 1 }}
                   />
@@ -170,7 +160,7 @@ const AdminFeedbacks = () => {
           </Flex>
         </Flex>
 
-        <Box overflowX="auto" my={10} border="1px" borderColor="gray.200" borderRadius="lg" fontSize={{ base: 'sm', md: 'lg' }} width="100%">
+        <Box overflowX="auto" my={10} border="1px" borderColor={borderColor} borderRadius="lg" fontSize={{ base: 'sm', md: 'lg' }} width="100%" bg={tableBg} color={tableTextColor}>
           <Table variant="simple" minWidth="800px">
             <Thead bg="primary.Purple" borderRadius="lg">
               <Tr>
@@ -213,7 +203,7 @@ const AdminFeedbacks = () => {
                   <Td>{feedback.feedback}</Td>
                   <Td width='250px'>{feedback.time}</Td>
                   <Td>
-                    <Select defaultValue={feedback.status} width="175px">
+                    <Select defaultValue={feedback.status} width="175px" bg={selectBg}>
                       <option value="diproses">Diproses</option>
                       <option value="belum_diproses">Belum diproses</option>
                       <option value="telah_diproses">Telah diproses</option>
@@ -244,6 +234,7 @@ const AdminFeedbacks = () => {
             value={feedbacksPerPage}
             onChange={e => setFeedbacksPerPage(parseInt(e.target.value, 10))}
             ml={2}
+            bg={selectBg}
           >
             <option value="5">5</option>
             <option value="10">10</option>
@@ -254,34 +245,6 @@ const AdminFeedbacks = () => {
     </Box>
   );
 };
-
-const Container = props => (
-  <Box
-    bg="primary.White"
-    py={{ base: '14px', lg: '18px' }}
-    px={{ base: '1.5rem', lg: '5rem' }}
-    overflow="hidden"
-    display="flex"
-    alignItems="center"
-    position="fixed"
-    top="0"
-    left="0"
-    width="100%"
-    boxShadow="0px 0px 5px 0px #00000026"
-    zIndex="5"
-    {...props}
-  />
-);
-
-export const SignOutLink = styled(NavLink)`
-  font-size: 18px;
-  white-space: nowrap;
-  color: var(--chakra-colors-state-Error) !important;
-  @media only screen and (max-width: 900px) {
-    font-size: 14px;
-    line-height: 3rem;
-  }
-`;
 
 const PaginationButton = styled.button`
   background: transparent;

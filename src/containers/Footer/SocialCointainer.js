@@ -6,25 +6,28 @@ import { StyledIconWrapper } from "./styles";
 const SocialContainer = () => {
   const [listOfIcons, setListOfIcons] = useState([]);
   const theme = useColorModeValue("light", "dark");
-  useEffect(() => {
-    const dir =
-      theme === "light"
-        ? importAll(require.context("assets/Beta/icons", false, /\.(svg)$/))
-        : importAll(
-            require.context("assets/Beta/icons/icon-dark", false, /\.(svg)$/),
-          );
-
-    let list = dir;
-    list = list.map((img, idx) => ({
-      image: img,
-      link: ListIcon[idx].url,
-    }));
-    setListOfIcons(list);
-  }, [theme]);
 
   const importAll = (r) => {
     return r.keys().map(r);
   };
+
+  useEffect(() => {
+    let dir = [];
+
+    if (theme === "light") {
+      dir = importAll(require.context("assets/Beta/icons", false, /\.(svg)$/));
+    } else {
+      dir = importAll(require.context("assets/Beta/icons/icon-dark", false, /\.(svg)$/));
+    }
+
+    const list = dir.map((img, idx) => ({
+      image: img.default,
+      link: ListIcon[idx]?.url || "#",
+    }));
+
+    setListOfIcons(list);
+  }, [theme]);
+
   return (
     <StyledIconWrapper>
       {listOfIcons.map((item, id) => (
