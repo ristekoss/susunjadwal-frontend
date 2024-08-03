@@ -18,7 +18,7 @@ const ProgressBar = ({ steps, currentStep }) => {
           <Flex key={index} flex="1" flexDirection="column" align="center" position="relative">
             <Box position="relative" display="flex" alignItems="center" justifyContent="center">
               <Circle
-                size={{ base: "30px", md: "40px" }}
+                size={{ base: "26px", md: "40px" }}
                 bg={index < current ? 'primary.Purple' : '#CEFAFF'}
                 zIndex="10"
                 transition="background-color 0.5s"

@@ -65,7 +65,7 @@ const FeedbackModal = ({ isOpen, onClose }) => {
       <ModalContent
         borderRadius="24px"
         padding={{ base: "0px", md: "24px" }}
-        paddingY={{ base: "24px", md: "48px" }}
+        paddingY={{ base: "16px", md: "48px" }}
         maxWidth="700px"
         width="90%"
         background={theme === "dark" ? "#18181B" : "white"}
@@ -83,7 +83,7 @@ const FeedbackModal = ({ isOpen, onClose }) => {
           <Text fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }} fontWeight="bold" textAlign="center" color={theme === "dark" ? "dark.LightPurple" : "primary.Purple"} marginTop={{ base: '20px', md: '0px' }}>
             Berikan kami Ulasan!
           </Text>
-          <Text fontSize={{ base: '15px', md: 'md' }} fontWeight="light" textAlign="center" color={theme === "dark" ? "#E4E4E7" : "secondary.Gray"} marginBottom={{ base: '-20px', md: '0px' }}>
+          <Text fontSize={{ base: '16px', md: 'md' }} fontWeight="light" textAlign="center" color={theme === "dark" ? "#E4E4E7" : "secondary.Gray"} marginBottom={{ base: '-20px', md: '0px' }}>
             Bagaimana pengalaman Anda dalam menggunakan SusunJadwal?
           </Text>
         </ModalHeader>

@@ -1,5 +1,5 @@
 import { ThemeProvider } from "styled-components";
-import { Route, Switch, Redirect, useLocation } from "react-router";
+import { Route, Switch, Redirect } from "react-router";
 import { useSelector } from "react-redux";
 import { Box } from "@chakra-ui/react";
 import React from "react";
@@ -33,27 +33,18 @@ const ROUTES = [
   { path: "/logout", component: Logout, auth: true },
   { path: "/edit/:scheduleId", component: EditSchedule, auth: true },
   { path: "/ulasan", component: Feedback, auth: true },
-];
-
-const ADMIN_ROUTES = [
   { path: "/admin", component: AdminLogin, auth: false },
   { path: "/feedback-recap", component: AdminFeedbacks, auth: false },
 ];
 
-
 function Routes() {
   const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
   const isMobile = useSelector((state) => state.appState.isMobile);
-  const location = useLocation();
   const paddingTopLargeScreen = isAnnouncement ? "162px" : "120px";
-  const isAdminRoute = ADMIN_ROUTES.some(route => location.pathname.startsWith(route.path));
 
   return (
     <ThemeProvider theme={{ mobile: isMobile, ...theme }}>
       <Box>
-        {isAdminRoute ? (
-          <AdminRoutes />
-        ) : (
           <>
             <Box
               pt={{ base: "120px", lg: paddingTopLargeScreen }}
@@ -93,7 +84,6 @@ function Routes() {
             </Box>
             <Footer />
           </>
-        )}
       </Box>
     </ThemeProvider>
   );
@@ -128,20 +118,6 @@ function PrivateRoute({ component: Component, ...rest }) {
         )
       }
     />
-  );
-}
-
-function AdminRoutes() {
-  return (
-    <div>
-      <Switch>
-        {ADMIN_ROUTES.map((route) => {
-          const Component = route.auth ? PrivateRoute : Route;
-          return <Component key={route.path} {...route} />;
-        })}
-        <Route component={NotFoundPage} />
-      </Switch>
-    </div>
   );
 }
 

@@ -11,7 +11,6 @@ import {
   InputGroup,
   InputRightElement,
   IconButton,
-  useColorModeValue,
   Image,
 } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet';
@@ -53,12 +52,11 @@ const AdminLogin = () => {
 
   return (
     <Box
+      marginTop={-60}
       minH="100vh"
-      d="flex"
+      display="flex"
       alignItems="center"
       justifyContent="center"
-      bg={useColorModeValue('white', 'gray.800')}
-      p={4}
     >
       <Helmet title="Admin Login" />
       <Stack spacing={8} align="center" w="full" maxW="md">
@@ -114,3 +112,4 @@ const AdminLogin = () => {
 };
 
 export default AdminLogin;
+
