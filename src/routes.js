@@ -20,8 +20,8 @@ import { theme } from "styles/StyledTheme";
 import CompleteForm from "containers/CompleteForm";
 import Contributors from "containers/Contributors";
 import Feedback from "containers/Feedback";
-import AdminLogin from "containers/Admin/Login";
-import AdminFeedbacks from "containers/Admin/Feedbacks";
+// import AdminLogin from "containers/Admin/Login";
+// import AdminFeedbacks from "containers/Admin/Feedbacks";
 
 import withAnalytics from "utils/analytics";
 
@@ -33,8 +33,8 @@ const ROUTES = [
   { path: "/logout", component: Logout, auth: true },
   { path: "/edit/:scheduleId", component: EditSchedule, auth: true },
   { path: "/ulasan", component: Feedback, auth: true },
-  { path: "/admin", component: AdminLogin, auth: false },
-  { path: "/feedback-recap", component: AdminFeedbacks, auth: false },
+  // { path: "/admin", component: AdminLogin, auth: false },
+  // { path: "/feedback-recap", component: AdminFeedbacks, auth: false },
 ];
 
 function Routes() {
