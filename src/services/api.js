@@ -106,9 +106,34 @@ export const getAnnouncement = async () =>
   );
 
 export const createReview = async (userId, rating, comment) =>
-  await instance.post(
-    `/review/${userId}`, {
-      rating: rating,
-      comment: comment,
-    }
-  )
+  await instance.post(`/review/${userId}`, {
+    rating: rating,
+    comment: comment,
+  });
+
+export const loginAdmin = async (username, password) =>
+  await instance.post(`/admin/login`, {
+    username: username,
+    password: password,
+  });
+
+export const getReviews = async (token, page, per_page) =>
+  await instance.get(`/admin/reviews/list?page=${page}&per_page=${per_page}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const getReviewOverview = async (token) =>
+  await instance.get(`/admin/reviews-overview`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const updateReviewStatus = async (token, reviewId, status) =>
+  await instance.patch(
+    `/admin/review/status/${reviewId}`,
+    {
+      reviewed: status,
+    },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
