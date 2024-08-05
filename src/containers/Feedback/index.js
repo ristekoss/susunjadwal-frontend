@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import {
   Text,
@@ -10,19 +10,18 @@ import {
   useColorModeValue,
   Image,
   useToast,
-} from '@chakra-ui/react';
-import Helmet from 'react-helmet';
-import { StarIcon } from '@chakra-ui/icons';
-import styled from 'styled-components';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import bauhaus from 'assets/Feedback/Page/bauhaus-feedback-1.png';
-import bauhaus2 from 'assets/Feedback/Page/bauhaus-feedback-2.png';
-import bauhaus3 from 'assets/Feedback/Page/bauhaus-feedback-3.png';
-import bauhaus4 from 'assets/Feedback/Page/bauhaus-feedback-4.png';
-import { createReview } from 'services/api';
-import { makeAtLeastMs } from 'utils/promise';
-
+} from "@chakra-ui/react";
+import Helmet from "react-helmet";
+import { StarIcon } from "@chakra-ui/icons";
+import styled from "styled-components";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import bauhaus from "assets/Feedback/Page/bauhaus-feedback-1.png";
+import bauhaus2 from "assets/Feedback/Page/bauhaus-feedback-2.png";
+import bauhaus3 from "assets/Feedback/Page/bauhaus-feedback-3.png";
+import bauhaus4 from "assets/Feedback/Page/bauhaus-feedback-4.png";
+import { createReview } from "services/api";
+import { makeAtLeastMs } from "utils/promise";
 
 export default function Feedback() {
   const [rating, setRating] = useState(0);
@@ -40,8 +39,7 @@ export default function Feedback() {
     const message = comment;
     const userId = auth.userId;
     try {
-      const response = await makeAtLeastMs(createReview(userId, ratingValue, message), 1000);
-      alert(response);
+      await makeAtLeastMs(createReview(userId, ratingValue, message), 1000);
       setRating(0);
       setComment("");
       toast({
@@ -49,7 +47,7 @@ export default function Feedback() {
         status: "success",
         duration: 2500,
         position: "bottom",
-      })
+      });
     } catch (error) {
       toast({
         title: "Failed to submit feedback",
@@ -58,28 +56,62 @@ export default function Feedback() {
         position: "bottom",
       });
     }
-  }
+  };
 
   return (
     <MainContainer>
-      <Helmet title="Ulasan"/>
-      <Box position="absolute" top="0px" left="0px" width='150px' display={{base: 'none', lg: 'block'}}> 
+      <Helmet title="Ulasan" />
+      <Box
+        position="absolute"
+        top="0px"
+        left="0px"
+        width="150px"
+        display={{ base: "none", lg: "block" }}
+      >
         <Image src={bauhaus} alt="Bauhaus" />
       </Box>
-      <Box position="absolute" top="0px" right="0px" width='150px' display={{base: 'none', lg: 'block'}}>
+      <Box
+        position="absolute"
+        top="0px"
+        right="0px"
+        width="150px"
+        display={{ base: "none", lg: "block" }}
+      >
         <Image src={bauhaus2} alt="Bauhaus" />
       </Box>
-      <Box position="absolute" bottom="0px" left="0px" width='250px' display={{base: 'none', lg: 'block'}}>
+      <Box
+        position="absolute"
+        bottom="0px"
+        left="0px"
+        width="250px"
+        display={{ base: "none", lg: "block" }}
+      >
         <Image src={bauhaus3} alt="Bauhaus" />
       </Box>
-      <Box position="absolute" bottom="0px" right="0px" width='250px' display={{base: 'none', lg: 'block'}}>
+      <Box
+        position="absolute"
+        bottom="0px"
+        right="0px"
+        width="250px"
+        display={{ base: "none", lg: "block" }}
+      >
         <Image src={bauhaus4} alt="Bauhaus" />
       </Box>
       <FeedbackForm>
-        <Text fontSize={{ base: '3xl', md: '4xl'}} fontWeight="bold" textAlign="center" color={theme === "dark" ? "dark.LightPurple" : "primary.Purple"}>
+        <Text
+          fontSize={{ base: "3xl", md: "4xl" }}
+          fontWeight="bold"
+          textAlign="center"
+          color={theme === "dark" ? "dark.LightPurple" : "primary.Purple"}
+        >
           Berikan kami Ulasan!
         </Text>
-        <Text fontSize={{md: 'md', lg: 'xl'}} fontWeight="light" textAlign="center" color={theme === "dark" ? "#E4E4E7" : "secondary.Gray"}>
+        <Text
+          fontSize={{ md: "md", lg: "xl" }}
+          fontWeight="light"
+          textAlign="center"
+          color={theme === "dark" ? "#E4E4E7" : "secondary.Gray"}
+        >
           Bagaimana pengalaman Anda dalam menggunakan SusunJadwal?
         </Text>
         <VStack spacing={4} align="center">
@@ -97,8 +129,8 @@ export default function Feedback() {
               .map((_, i) => (
                 <StarIcon
                   key={i}
-                  boxSize={{ base: 16, md: 20, lg: 24 }} 
-                  padding={{base: 4, md: 6}}
+                  boxSize={{ base: 16, md: 20, lg: 24 }}
+                  padding={{ base: 4, md: 6 }}
                   color={i < rating ? "yellow.300" : "gray.300"}
                   transition="color 0.5s"
                   cursor="pointer"
@@ -126,7 +158,13 @@ export default function Feedback() {
             color={theme === "dark" ? "white" : "black"}
             height="250px"
           />
-          <Box width="100%" fontSize="14px" fontWeight="semibold" textAlign="right" color="primary.Purple">
+          <Box
+            width="100%"
+            fontSize="14px"
+            fontWeight="semibold"
+            textAlign="right"
+            color="primary.Purple"
+          >
             {comment.length}/300
           </Box>
         </VStack>
@@ -144,7 +182,7 @@ export default function Feedback() {
         </Button>
       </FeedbackForm>
     </MainContainer>
-  )
+  );
 }
 
 const MainContainer = styled.div`
@@ -162,8 +200,8 @@ const MainContainer = styled.div`
   }
 `;
 
-const FeedbackForm = styled.div` 
-  padding-top: 56px !important; 
+const FeedbackForm = styled.div`
+  padding-top: 56px !important;
   padding-bottom: 100px !important;
   width: 100%;
   max-width: 700px;
