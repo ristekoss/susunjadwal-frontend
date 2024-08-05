@@ -45,45 +45,45 @@ function Routes() {
   return (
     <ThemeProvider theme={{ mobile: isMobile, ...theme }}>
       <Box>
-          <>
-            <Box
-              pt={{ base: "120px", lg: paddingTopLargeScreen }}
-              mb={{ base: 16, md: "108px" }}
-              px={{ base: 6, lg: "80px" }}
-              overflowX="hidden !important"
-            >
-              <Switch>
-                <Route
-                  path="/"
-                  name="home"
-                  component={withAnalytics(Login)}
-                  exact
-                />
-                <Route
-                  path="/beta"
-                  name="beta"
-                  component={withAnalytics(BetaLanding)}
-                />
-                <Route
-                  path="/beta-form"
-                  name="beta-form"
-                  component={withAnalytics(BetaForm)}
-                />
-                <Route
-                  path="/complete"
-                  name="complete-form"
-                  component={withAnalytics(CompleteForm)}
-                />
-                <Route
-                  path="/kontributor"
-                  name="kontributor"
-                  component={withAnalytics(Contributors)}
-                />
-                <Route component={withAnalytics(RoutesWithNavbar)} />
-              </Switch>
-            </Box>
-            <Footer />
-          </>
+        <>
+          <Box
+            pt={{ base: "120px", lg: paddingTopLargeScreen }}
+            mb={{ base: 16, md: "108px" }}
+            px={{ base: 6, lg: "80px" }}
+            overflowX="hidden !important"
+          >
+            <Switch>
+              <Route
+                path="/"
+                name="home"
+                component={withAnalytics(Login)}
+                exact
+              />
+              <Route
+                path="/beta"
+                name="beta"
+                component={withAnalytics(BetaLanding)}
+              />
+              <Route
+                path="/beta-form"
+                name="beta-form"
+                component={withAnalytics(BetaForm)}
+              />
+              <Route
+                path="/complete"
+                name="complete-form"
+                component={withAnalytics(CompleteForm)}
+              />
+              <Route
+                path="/kontributor"
+                name="kontributor"
+                component={withAnalytics(Contributors)}
+              />
+              <Route component={withAnalytics(RoutesWithNavbar)} />
+            </Switch>
+          </Box>
+          <Footer />
+        </>
       </Box>
     </ThemeProvider>
   );

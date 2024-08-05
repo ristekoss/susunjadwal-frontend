@@ -49,7 +49,7 @@ function Header() {
     return isOpen ? onClose() : onOpen();
   }
 
-  if (["/admin"].includes(pathname)) return null;
+  if (["/admin", "/feedback-recap"].includes(pathname)) return null;
 
   return (
     <Container
@@ -153,13 +153,12 @@ const NavLinks = ({ pathname }) => {
   const theme = useColorModeValue("light", "dark");
   return (
     <NavLinkWrapper>
-      {pathname !== "/feedback-recap" && 
+      {pathname !== "/feedback-recap" &&
         LINKS.map(({ to, label }) => (
           <HeaderLink isCurrent={pathname === to} key={to} to={to} mode={theme}>
             {label}
           </HeaderLink>
-        ))
-      }
+        ))}
       <SignOutLink to="/logout">Sign Out</SignOutLink>
     </NavLinkWrapper>
   );
