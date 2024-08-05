@@ -36,6 +36,7 @@ import { convertPeriodToLiteral, groupScheduleByPeriod } from "utils/schedule";
 import { makeAtLeastMs } from "utils/promise";
 import { SuccessToast, ErrorToast } from "components/Toast";
 import { BauhausSide } from "components/Bauhaus";
+import GoogleCalendarModal from "../ViewSchedule/GoogleCalendarModal";
 
 import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
 import BauhausDesktop from "assets/Beta/bauhaus-lg.svg";
@@ -427,6 +428,8 @@ const ScheduleList = () => {
           </Box>
         </>
       )}
+
+      <GoogleCalendarModal />
     </Container>
   );
 };
