@@ -137,3 +137,6 @@ export const updateReviewStatus = async (token, reviewId, status) =>
       headers: { Authorization: `Bearer ${token}` },
     },
   );
+
+export const validateToken = async () =>
+  await instance.get("/auth/me");

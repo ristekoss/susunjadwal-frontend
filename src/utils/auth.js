@@ -1,4 +1,4 @@
-import { setupAxiosInstance } from "services/api";
+import { setupAxiosInstance, validateToken } from "services/api";
 // import { useMixpanel } from "hooks/useMixpanel";
 
 export function persistAuth(auth) {
@@ -36,4 +36,13 @@ export function loadCompletion() {
 
   const asJson = JSON.parse(persistedCompletion);
   return asJson;
+}
+
+export async function validateAuth() {
+  try{
+    await validateToken();
+  } catch (error) {
+    localStorage.clear();
+    window.location.replace("/");
+  }
 }

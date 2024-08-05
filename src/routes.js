@@ -22,6 +22,7 @@ import Contributors from "containers/Contributors";
 import Feedback from "containers/Feedback";
 import AdminLogin from "containers/Admin/Login";
 import AdminFeedbacks from "containers/Admin/Feedbacks";
+import { validateAuth } from "utils/auth";
 
 import withAnalytics from "utils/analytics";
 
@@ -105,6 +106,7 @@ function RoutesWithNavbar() {
 }
 
 function PrivateRoute({ component: Component, ...rest }) {
+  validateAuth();
   const auth = useSelector((state) => state.auth);
 
   return (
