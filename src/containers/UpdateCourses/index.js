@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import ReactGA from "react-ga";
 import Helmet from "react-helmet";
-// import { useMixpanel } from "hooks/useMixpanel";
+import { useMixpanel } from "hooks/useMixpanel";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -42,22 +42,19 @@ const UpdateCourses = () => {
   const password = watch("password");
 
   useEffect(() => {
-    // TODO: Re-enable mixpanel or change to other analytics
-    // useMixpanel.track("open_update_matkul");
+    useMixpanel.track("open_update_matkul");
   }, []);
 
   useEffect(() => {
     if (username && !isUsernameChanged) {
-      // TODO: Re-enable mixpanel or change to other analytics
-      // useMixpanel.track("update_matkul_fill_username");
+      useMixpanel.track("update_matkul_fill_username");
       setIsUsernameChanged(true);
     }
   }, [username, isUsernameChanged]);
 
   useEffect(() => {
     if (password && !isPasswordChanged) {
-      // TODO: Re-enable mixpanel or change to other analytics
-      // useMixpanel.track("update_matkul_fill_password");
+      useMixpanel.track("update_matkul_fill_password");
       setIsPasswordChanged(true);
     }
   }, [password, isPasswordChanged]);
@@ -136,8 +133,7 @@ const UpdateCourses = () => {
             w={{ sm: "100%", lg: "unset" }}
             bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
             color={theme === "light" ? "white" : "dark.White"}
-            // TODO: Re-enable mixpanel or change to other analytics
-            // onClick={() => useMixpanel.track("update_matkul")}
+            onClick={() => useMixpanel.track("update_matkul")}
           >
             Update Jadwal
           </Button>
