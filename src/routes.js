@@ -20,8 +20,8 @@ import { theme } from "styles/StyledTheme";
 import CompleteForm from "containers/CompleteForm";
 import Contributors from "containers/Contributors";
 import Feedback from "containers/Feedback";
-// import AdminLogin from "containers/Admin/Login";
-// import AdminFeedbacks from "containers/Admin/Feedbacks";
+import AdminLogin from "containers/Admin/Login";
+import AdminFeedbacks from "containers/Admin/Feedbacks";
 
 import withAnalytics from "utils/analytics";
 
@@ -33,8 +33,8 @@ const ROUTES = [
   { path: "/logout", component: Logout, auth: true },
   { path: "/edit/:scheduleId", component: EditSchedule, auth: true },
   { path: "/ulasan", component: Feedback, auth: true },
-  // { path: "/admin", component: AdminLogin, auth: false },
-  // { path: "/feedback-recap", component: AdminFeedbacks, auth: false },
+  { path: "/admin", component: AdminLogin, auth: false },
+  { path: "/feedback-recap", component: AdminFeedbacks, auth: false },
 ];
 
 function Routes() {
@@ -45,45 +45,45 @@ function Routes() {
   return (
     <ThemeProvider theme={{ mobile: isMobile, ...theme }}>
       <Box>
-          <>
-            <Box
-              pt={{ base: "120px", lg: paddingTopLargeScreen }}
-              mb={{ base: 16, md: "108px" }}
-              px={{ base: 6, lg: "80px" }}
-              overflowX="hidden !important"
-            >
-              <Switch>
-                <Route
-                  path="/"
-                  name="home"
-                  component={withAnalytics(Login)}
-                  exact
-                />
-                <Route
-                  path="/beta"
-                  name="beta"
-                  component={withAnalytics(BetaLanding)}
-                />
-                <Route
-                  path="/beta-form"
-                  name="beta-form"
-                  component={withAnalytics(BetaForm)}
-                />
-                <Route
-                  path="/complete"
-                  name="complete-form"
-                  component={withAnalytics(CompleteForm)}
-                />
-                <Route
-                  path="/kontributor"
-                  name="kontributor"
-                  component={withAnalytics(Contributors)}
-                />
-                <Route component={withAnalytics(RoutesWithNavbar)} />
-              </Switch>
-            </Box>
-            <Footer />
-          </>
+        <>
+          <Box
+            pt={{ base: "120px", lg: paddingTopLargeScreen }}
+            mb={{ base: 16, md: "108px" }}
+            px={{ base: 6, lg: "80px" }}
+            overflowX="hidden !important"
+          >
+            <Switch>
+              <Route
+                path="/"
+                name="home"
+                component={withAnalytics(Login)}
+                exact
+              />
+              <Route
+                path="/beta"
+                name="beta"
+                component={withAnalytics(BetaLanding)}
+              />
+              <Route
+                path="/beta-form"
+                name="beta-form"
+                component={withAnalytics(BetaForm)}
+              />
+              <Route
+                path="/complete"
+                name="complete-form"
+                component={withAnalytics(CompleteForm)}
+              />
+              <Route
+                path="/kontributor"
+                name="kontributor"
+                component={withAnalytics(Contributors)}
+              />
+              <Route component={withAnalytics(RoutesWithNavbar)} />
+            </Switch>
+          </Box>
+          <Footer />
+        </>
       </Box>
     </ThemeProvider>
   );
