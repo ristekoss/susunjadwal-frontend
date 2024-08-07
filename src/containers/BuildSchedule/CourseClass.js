@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-// import { useMixpanel } from "hooks/useMixpanel";
+import { useMixpanel } from "hooks/useMixpanel";
 import { useSelector, useDispatch } from "react-redux";
 import { addSchedule, removeSchedule } from "redux/modules/schedules";
 import { useColorModeValue } from "@chakra-ui/react";
@@ -100,8 +100,7 @@ function CourseClass({ course, courseClass }) {
       dispatch(removeSchedule(item));
     } else {
       dispatch(addSchedule(item));
-      // TODO: Re-enable mixpanel or change to other analytics
-      // useMixpanel.track("select_course");
+      useMixpanel.track("select_course");
     }
   };
 

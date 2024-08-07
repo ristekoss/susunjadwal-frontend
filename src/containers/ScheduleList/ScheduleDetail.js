@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-// import { useMixpanel } from "hooks/useMixpanel";
+import { useMixpanel } from "hooks/useMixpanel";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -67,9 +67,7 @@ const ScheduleDetail = ({
   return (
     <>
       <Link
-      // TODO: Re-enable mixpanel or change to other analytics
-        // onClick={() => useMixpanel.track("open_jadwal")}
-        onClick={null}
+        onClick={() => useMixpanel.track("open_jadwal")}
         to={`/jadwal/${schedule.id}`}
       >
         <Card key={`${schedule.name}-${idx}`} mode={theme}>

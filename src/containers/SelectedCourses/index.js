@@ -1,7 +1,7 @@
 import React from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
-// import { useMixpanel } from "hooks/useMixpanel";
+import { useMixpanel } from "hooks/useMixpanel";
 import { withRouter } from "react-router";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -161,8 +161,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
             <Button
               onClick={() => {
                 onClose();
-                // TODO: Re-enable mixpanel or change to other analytics
-                // useMixpanel.track("cancel");
+                useMixpanel.track("cancel");
               }}
               variant="outline"
               borderColor={
@@ -180,8 +179,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
                   ? handleDeleteSchedule()
                   : updateSchedule();
 
-                // TODO: Re-enable mixpanel or change to other analytics
-                // useMixpanel.track("simpan_jadwal");
+                useMixpanel.track("simpan_jadwal");
               }}
               variant="solid"
               bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
@@ -245,8 +243,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
         <Button
           onClick={() => {
-            // TODO: Re-enable mixpanel or change to other analytics
-            // useMixpanel.track("open_simpan_modal");
+            useMixpanel.track("open_simpan_modal");
             onOpen();
           }}
           disabled={isConflict || totalCredits > 24 || schedules.length === 0}

@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-// import { useMixpanel } from "hooks/useMixpanel";
+import { useMixpanel } from "hooks/useMixpanel";
 import React from "react";
 
 import {
@@ -93,9 +93,8 @@ function Header() {
                 type="checkbox"
                 onClick={() => {
                   toggleColorMode();
-                  // TODO: Re-enable mixpanel or change to other analytics
-                  // if (theme === "light") useMixpanel.track("dark_mode");
-                  // else useMixpanel.track("light_mode");
+                  if (theme === "light") useMixpanel.track("dark_mode");
+                  else useMixpanel.track("light_mode");
                 }}
                 checked={theme === "light" ? false : true}
               />

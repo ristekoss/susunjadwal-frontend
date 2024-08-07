@@ -1,5 +1,5 @@
-import { setupAxiosInstance } from "services/api";
-// import { useMixpanel } from "hooks/useMixpanel";
+import { setupAxiosInstance, validateToken } from "services/api";
+import { useMixpanel } from "hooks/useMixpanel";
 
 export function persistAuth(auth) {
   if (!auth) {
@@ -7,8 +7,7 @@ export function persistAuth(auth) {
   } else {
     setupAxiosInstance(auth.token);
     localStorage.setItem("auth", JSON.stringify(auth));
-    // TODO: Re-enable mixpanel or change to other analytics
-    // useMixpanel.track("login_successful");
+    useMixpanel.track("login_successful");
   }
 }
 
@@ -36,4 +35,13 @@ export function loadCompletion() {
 
   const asJson = JSON.parse(persistedCompletion);
   return asJson;
+}
+
+export async function validateAuth() {
+  try{
+    await validateToken();
+  } catch (error) {
+    localStorage.clear();
+    window.location.replace("/");
+  }
 }

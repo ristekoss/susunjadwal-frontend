@@ -1,5 +1,5 @@
 import React from "react";
-// import { useMixpanel } from "hooks/useMixpanel";
+import { useMixpanel } from "hooks/useMixpanel";
 import { Flex } from "@chakra-ui/react";
 import FACULTIES from "utils/faculty-base-additional-info.json";
 import { useForm } from "react-hook-form";
@@ -29,13 +29,11 @@ function SelectMajor({ theme, isMobile, setMajorSelected, show }) {
   }
 
   useEffect(() => {
-    // TODO: Re-enable mixpanel or change to other analytics
-    // if (selectedFaculty) useMixpanel.track("select_faculty");
+    if (selectedFaculty) useMixpanel.track("select_faculty");
   }, [selectedFaculty]);
 
   useEffect(() => {
-    // TODO: Re-enable mixpanel or change to other analytics
-    // if (selectedMajorName) useMixpanel.track("select_prodi");/
+    if (selectedMajorName) useMixpanel.track("select_prodi");
   }, [selectedMajorName]);
 
   return (

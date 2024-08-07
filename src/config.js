@@ -8,8 +8,7 @@ const config = {
     MIXPANEL_PROJECT_TOKEN: process.env.REACT_APP_MIXPANEL_PROJECT_TOKEN,
   },
   production: {
-    // API_BASE_URL: process.env.REACT_APP_AWS_BACKEND_URL,
-    API_BASE_URL: "https://stg.api.susunjadwal.cs.ui.ac.id/susunjadwal/api",
+    API_BASE_URL: process.env.REACT_APP_AWS_BACKEND_URL,
     BASE_URL: "/",
   },
   development: {
