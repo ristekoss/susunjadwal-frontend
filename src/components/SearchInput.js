@@ -7,7 +7,7 @@ const filterMethod = (options, value) => {
     const queryIsNotEmpty = value !== "";
     const isQueryMatch = option.name
       .toLowerCase()
-      .startsWith(value.toLowerCase());
+      .includes(value.toLowerCase());
 
     // When value is not empty & matches the query
     if (queryIsNotEmpty && isQueryMatch) {
