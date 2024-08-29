@@ -9,14 +9,12 @@ export function getDayOfCurrentWeek(day, date = new Date()) {
 }
 
 export const getFirstDateOfNthDayInAMonth = (dayOfTheWeek, month, year) => {
-  let tempDate = new Date();
+  let tempDate = new Date(year, month, 1);
   tempDate.setHours(0, 0, 0, 0);
-  tempDate.setMonth(month);
-  tempDate.setYear(year);
-  tempDate.setDate(1);
 
   let day = tempDate.getDay();
-  let toNextDay = day !== 0 ? dayOfTheWeek - day : 0;
+  let toNextDay = (dayOfTheWeek - day + 7) % 7;
+
   tempDate.setDate(tempDate.getDate() + toNextDay);
 
   return tempDate;
