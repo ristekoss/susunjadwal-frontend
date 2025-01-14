@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import ReactGA from "react-ga";
 import Helmet from "react-helmet";
 import { useMixpanel } from "hooks/useMixpanel";
 import styled from "styled-components";
@@ -14,9 +13,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 
-import { postScrapeSchedule } from "services/api";
-
-import { InfoToast, SuccessToast, ErrorToast } from "components/Toast";
 import { InputPassword, InputText } from "components/Forms";
 import { Bauhaus } from "components/Bauhaus";
 
