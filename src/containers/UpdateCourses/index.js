@@ -126,7 +126,7 @@ const UpdateCourses = () => {
           />
           <Alert />
           <Button
-            disabled={!username || !password}
+            disabled
             mt={8}
             colorScheme="teal"
             isLoading={isSubmitting}
