@@ -60,24 +60,24 @@ const UpdateCourses = () => {
   }, [password, isPasswordChanged]);
 
   const onSubmit = async (values) => {
-    try {
-      InfoToast("Sedang memperbaharui jadwal", isMobile, theme);
-      await postScrapeSchedule(values);
-      setTimeout(() => {
-        toast.closeAll();
-        ReactGA.event({
-          category: "Update Matkul",
-          action: "Updated the courses",
-        });
-        SuccessToast("Jadwal berhasil diperbaharui", isMobile, theme);
-        window.location.replace("/susun");
-      }, 1000);
-    } catch (e) {
-      setTimeout(() => {
-        toast.closeAll();
-        ErrorToast(e.response.data.message, isMobile, theme);
-      }, 1000);
-    }
+    // try {
+    //   InfoToast("Sedang memperbaharui jadwal", isMobile, theme);
+    //   await postScrapeSchedule(values);
+    //   setTimeout(() => {
+    //     toast.closeAll();
+    //     ReactGA.event({
+    //       category: "Update Matkul",
+    //       action: "Updated the courses",
+    //     });
+    //     SuccessToast("Jadwal berhasil diperbaharui", isMobile, theme);
+    //     window.location.replace("/susun");
+    //   }, 1000);
+    // } catch (e) {
+    //   setTimeout(() => {
+    //     toast.closeAll();
+    //     ErrorToast(e.response.data.message, isMobile, theme);
+    //   }, 1000);
+    // }
   };
 
   return (
@@ -126,6 +126,7 @@ const UpdateCourses = () => {
           />
           <Alert />
           <Button
+            disabled={!username || !password}
             mt={8}
             colorScheme="teal"
             isLoading={isSubmitting}
