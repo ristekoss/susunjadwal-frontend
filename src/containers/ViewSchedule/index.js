@@ -46,6 +46,7 @@ import exportToIcsImg from "assets/ExportToIcs.svg";
 import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
+import ics2025Img from "assets/ics2025.svg";
 import { ListMatkulIcon } from "assets/ListMatkulIcon";
 
 import FeedbackModal from "./FeedbackModal";
@@ -57,6 +58,7 @@ function ViewSchedule({ match, history }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const shareModal = useDisclosure();
   const feedbackModal = useDisclosure();
+  const googleCalendarModal = useDisclosure();
   const auth = useSelector((state) => state.auth);
   const { scheduleId } = useParams();
   const dispatch = useDispatch();
@@ -171,9 +173,20 @@ function ViewSchedule({ match, history }) {
     });
   };
 
+  const handleOpenGoogleCalendarModal = () => {
+    ReactGA.event({
+      category: "Integrasi Calendar",
+      action: "Opened Google Calendar Modal",
+    });
+    googleCalendarModal.onOpen();
+  };
+
   return (
     <>
-      <FeedbackModal isOpen={feedbackModal.isOpen} onClose={handleFeedbackModalClose} />
+      <FeedbackModal
+        isOpen={feedbackModal.isOpen}
+        onClose={handleFeedbackModalClose}
+      />
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
@@ -334,20 +347,71 @@ function ViewSchedule({ match, history }) {
               </HeaderContainer>
 
               <ButtonContainer isAuthenticated={Boolean(auth)}>
-                <Link to={`/edit/${scheduleId}`}>
+                <Flex
+                  direction="row"
+                  gap={{ base: "10px", md: "15px" }}
+                  width={{ base: "100%", md: "82%" }}
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <Link to={`/edit/${scheduleId}`}>
+                    <Button
+                      width="full"
+                      mr="0"
+                      intent="primary"
+                      variant="outline"
+                      borderColor={
+                        theme === "light"
+                          ? "primary.Purple"
+                          : "dark.LightPurple"
+                      }
+                      color={
+                        theme === "light" ? "primary.Purple" : "dark.Purple"
+                      }
+                      fontSize={{ base: "16px", md: "18px" }}
+                      minW={{ base: "120px", md: "100px" }}
+                      px={{ base: "32px", md: "auto" }}
+                      py={{ base: "14px", md: "auto" }}
+                    >
+                      {schedule.has_edit_access ? "Edit" : "Copy"}
+                    </Button>
+                  </Link>
+
                   <Button
-                    width={"full"}
-                    mr={{ base: "0rem", lg: "1rem" }}
-                    intent="primary"
-                    variant="outline"
-                    borderColor={
+                    width="full"
+                    flex="1"
+                    mr="0"
+                    size="sm"
+                    px={{ base: "32px", md: "100px" }}
+                    py={{ base: "20px", md: "20px" }}
+                    variant="solid"
+                    bg={
                       theme === "light" ? "primary.Purple" : "dark.LightPurple"
                     }
-                    color={theme === "light" ? "primary.Purple" : "dark.Purple"}
+                    color={theme === "light" ? "white" : "dark.White"}
+                    onClick={handleOpenGoogleCalendarModal}
+                    fontSize={{ base: "14px", md: "18px" }}
+                    minW={{ base: "140px", md: "140px" }}
+                    _hover={{
+                      bg:
+                        theme === "light"
+                          ? "primary.DarkPurple"
+                          : "dark.Purple",
+                    }}
                   >
-                    {schedule.has_edit_access ? "Edit" : "Copy"}
+                    <Text display={{ base: "none", sm: "inline" }}>
+                      Integrasi Kalender
+                    </Text>
+                    <Text display={{ base: "inline", sm: "none" }}>
+                      Integrasi
+                    </Text>
+                    <img
+                      src={ics2025Img}
+                      style={{ marginLeft: "6px", height: "25px" }}
+                      alt="export-to-ics"
+                    />
                   </Button>
-                </Link>
+                </Flex>
               </ButtonContainer>
             </Container>
             <ViewToggleContainer>
@@ -408,7 +472,13 @@ function ViewSchedule({ match, history }) {
           </div>
         </div>
       </MainContainer>
-      <GoogleCalendarModal />
+
+      <GoogleCalendarModal
+        isOpen={googleCalendarModal.isOpen}
+        onClose={googleCalendarModal.onClose}
+        schedule={schedule}
+        generateICalendarFile={generateICalendarFile}
+      />
     </>
   );
 }
@@ -459,33 +529,46 @@ const HeaderContainer = styled.div`
   align-items: center;
   background-color: transparent;
   justify-content: space-between;
-  margin-right: -16px;
+  margin-right: -8px;
 
   @media (min-width: 900px) {
     margin-right: 0px;
+    position: relative;
   }
 `;
 
 const IconContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-right: 1rem;
+  margin-right: 0;
 
   ${(props) =>
     props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
+
+  @media (min-width: 900px) {
+    position: absolute;
+    right: -50px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 `;
 
 const ButtonContainer = styled.div`
   align-items: center;
   margin-top: 24px;
+  display: flex;
+  justify-content: center;
+
   a {
     ${(props) =>
       props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
-    width: 100%;
+    width: auto;
   }
 
   @media (min-width: 900px) {
     margin-top: 0px;
+    margin-left: auto;
+    justify-content: flex-end;
   }
 `;
 
