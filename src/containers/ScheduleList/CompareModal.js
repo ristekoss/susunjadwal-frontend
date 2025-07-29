@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Modal,
@@ -22,6 +22,13 @@ const CompareModal = ({ isOpen, onClose, scheduleId }) => {
   const [error, setError] = useState("");
   const initialRef = useRef(null);
 
+  useEffect(() => {
+    if (!isOpen) {
+      setFriendLink("");
+      setError("");
+    }
+  }, [isOpen]);
+
   const handleCompare = () => {
     if (!friendLink) {
       setError("Link jadwal teman tidak boleh kosong.");
@@ -37,6 +44,7 @@ const CompareModal = ({ isOpen, onClose, scheduleId }) => {
       return;
     }
     history.push(`/jadwal/compare?s1=${scheduleId}&s2=${friendScheduleId}`);
+    onClose();
   };
 
   const handleChange = (e) => {
