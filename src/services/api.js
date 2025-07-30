@@ -83,7 +83,10 @@ export const postScrapeScheduleSSE = async ({ username, password }) => {
     throw new Error("Authentication token is missing. Please log in again.");
   }
 
-  const response = await fetch(`${config.API_BASE_URL}/scrape-siak-ng`, {
+  let apiUrl = `${config.API_BASE_URL}/scrape-siak-ng`;
+  apiUrl = apiUrl.replace(/([^:]\/)\/+/, "$1/");
+
+  const response = await fetch(apiUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
