@@ -84,7 +84,7 @@ export const postScrapeScheduleSSE = async ({ username, password }) => {
   }
 
   let apiUrl = `${config.API_BASE_URL}/scrape-siak-ng`;
-  apiUrl = apiUrl.replace(/([^:]\/)\/+/, "$1/");
+  apiUrl = apiUrl.replace(/([^:])\/{2,}/g, "$1/");
 
   const response = await fetch(apiUrl, {
     method: "POST",
