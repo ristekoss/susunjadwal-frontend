@@ -22,12 +22,14 @@ import Contributors from "containers/Contributors";
 import Feedback from "containers/Feedback";
 import AdminLogin from "containers/Admin/Login";
 import AdminFeedbacks from "containers/Admin/Feedbacks";
+import CompareSchedule from "containers/CompareSchedule";
 import { validateAuth } from "utils/auth";
 
 import withAnalytics from "utils/analytics";
 
 const ROUTES = [
   { path: "/susun", component: BuildSchedule, auth: true },
+  { path: "/jadwal/compare", component: CompareSchedule, auth: true },
   { path: "/jadwal/:scheduleId", component: ViewSchedule, auth: true },
   { path: "/jadwal", component: ScheduleList, auth: true },
   { path: "/update", component: UpdateCourses, auth: true },
