@@ -99,6 +99,13 @@ function BuildSchedule() {
         }
       } catch (e) {
         console.error("Error fetching courses:", e);
+        // If there's an error (e.g., major not found), we should still mark the fetch as done to avoid refetching
+        fetchedMajorId.current = majorId;
+        fetchedMajorSelected.current = majorSelected;
+        hasInitialData.current = true;
+        coursesLoaded.current = true;
+        setCourses(null);
+        setCoursesDetail(null);
       }
 
       setTimeout(() => dispatch(setLoading(false)), 1000);
@@ -123,12 +130,17 @@ function BuildSchedule() {
         fetchCourses(majorId, majorSelected, false);
       }
     }
-  }, [auth.majorId, fetchCourses, restoreSchedulesFromSessionStorage]);
+  }, [
+    auth.majorId,
+    fetchCourses,
+    restoreSchedulesFromSessionStorage,
+    majorSelected,
+  ]);
 
   useEffect(() => {
     if (
       hasInitialData.current &&
-      majorSelected !== fetchedMajorSelected.current
+      majorSelected?.kd_org !== fetchedMajorSelected.current
     ) {
       document.getElementById("input")?.value &&
         (document.getElementById("input").value = "");
