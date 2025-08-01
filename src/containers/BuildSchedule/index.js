@@ -20,6 +20,7 @@ import { getCourses, getCoursesByKd } from "services/api";
 import { clearSchedule } from "redux/modules/schedules";
 import SelectedCourses from "containers/SelectedCourses";
 import { BauhausSide } from "components/Bauhaus";
+import { useSchedulePersistence } from "hooks/useSchedulePersistence"; // Import the custom hook
 import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
@@ -39,6 +40,10 @@ function BuildSchedule() {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
+  const { saveSchedulesToSessionStorage, restoreSchedulesFromSessionStorage } =
+    useSchedulePersistence();
+
   const [majorSelected, setMajorSelected] = useState();
   const [detailData, setDetailData] = useState(null);
   const [courses, setCourses] = useState(null);
@@ -50,8 +55,21 @@ function BuildSchedule() {
   const theme = useColorModeValue("light", "dark");
   const isInitialMount = useRef(true);
 
+  const fetchedMajorId = useRef(null);
+  const fetchedMajorSelected = useRef(null);
+  const hasInitialData = useRef(false);
+  const coursesLoaded = useRef(false);
+
   const fetchCourses = useCallback(
-    async (majorId, majorSelected) => {
+    async (majorId, majorSelected, shouldClearSchedule = false) => {
+      const isSameMajor = fetchedMajorId.current === majorId;
+      const isSameMajorSelected =
+        fetchedMajorSelected.current === majorSelected;
+
+      if (isSameMajor && isSameMajorSelected && hasInitialData.current) {
+        return;
+      }
+
       dispatch(setLoading(true));
 
       try {
@@ -59,7 +77,8 @@ function BuildSchedule() {
           ? await getCoursesByKd(majorSelected.kd_org)
           : await getCourses(majorId);
 
-        if (!majorSelected) {
+        if (shouldClearSchedule && coursesLoaded.current) {
+          saveSchedulesToSessionStorage();
           dispatch(clearSchedule());
         }
 
@@ -67,30 +86,86 @@ function BuildSchedule() {
         setCoursesDetail(data.is_detail);
         setLastUpdated(new Date(data.last_update_at));
         dispatch(reduxSetCourses(data.courses));
+
+        fetchedMajorId.current = majorId;
+        fetchedMajorSelected.current = majorSelected;
+        hasInitialData.current = true;
+        coursesLoaded.current = true;
+
+        if (!shouldClearSchedule && data.courses) {
+          setTimeout(() => {
+            restoreSchedulesFromSessionStorage();
+          }, 100);
+        }
       } catch (e) {
-        /** TODO: handle error */
+        console.error("Error fetching courses:", e);
+        // If there's an error (e.g., major not found), we should still mark the fetch as done to avoid refetching
+        fetchedMajorId.current = majorId;
+        fetchedMajorSelected.current = majorSelected;
+        hasInitialData.current = true;
+        coursesLoaded.current = true;
+        setCourses(null);
+        setCoursesDetail(null);
       }
 
       setTimeout(() => dispatch(setLoading(false)), 1000);
     },
-    [dispatch],
+    [
+      dispatch,
+      saveSchedulesToSessionStorage,
+      restoreSchedulesFromSessionStorage,
+    ],
   );
 
   useEffect(() => {
-    document.getElementById("input").value = "";
-    setValue("");
-    const majorId = auth.majorId;
-    fetchCourses(majorId, majorSelected);
-  }, [auth.majorId, majorSelected, dispatch, fetchCourses, setValue]);
+    if (!hasInitialData.current) {
+      document.getElementById("input")?.value &&
+        (document.getElementById("input").value = "");
+      setValue("");
+      const majorId = auth.majorId;
+      const restored = restoreSchedulesFromSessionStorage();
+      if (!restored) {
+        fetchCourses(majorId, majorSelected, false);
+      } else {
+        fetchCourses(majorId, majorSelected, false);
+      }
+    }
+  }, [
+    auth.majorId,
+    fetchCourses,
+    restoreSchedulesFromSessionStorage,
+    majorSelected,
+  ]);
 
-  // const handleChange = (e) => setValueTemporary(e.target.value);
+  useEffect(() => {
+    if (
+      hasInitialData.current &&
+      majorSelected?.kd_org !== fetchedMajorSelected.current
+    ) {
+      document.getElementById("input")?.value &&
+        (document.getElementById("input").value = "");
+      setValue("");
+      const majorId = auth.majorId;
+
+      fetchCourses(majorId, majorSelected, true);
+    }
+  }, [majorSelected, auth.majorId, fetchCourses]);
+
+  useEffect(() => {
+    const handleFocus = () => {
+      if (hasInitialData.current && courses) {
+        restoreSchedulesFromSessionStorage();
+      }
+    };
+
+    window.addEventListener("focus", handleFocus);
+    return () => window.removeEventListener("focus", handleFocus);
+  }, [courses, restoreSchedulesFromSessionStorage]);
 
   let filteredCourse = courses?.filter((c) => {
     if (value === "") {
-      //if value is empty
       return c;
     } else if (c.name.toLowerCase().includes(value.toLowerCase())) {
-      //returns filtered array
       return c;
     } else {
       return null;

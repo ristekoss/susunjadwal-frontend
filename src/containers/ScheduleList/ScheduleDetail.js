@@ -3,7 +3,18 @@ import { useMixpanel } from "hooks/useMixpanel";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { Button, useColorModeValue } from "@chakra-ui/react";
+import {
+  Button,
+  useColorModeValue,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverBody,
+  Flex,
+  Text,
+  Image,
+} from "@chakra-ui/react";
 import * as htmlToImage from "html-to-image";
 import ReactGA from "react-ga";
 
@@ -18,6 +29,9 @@ import exportToIcsImg from "assets/ExportToIcs.svg";
 import clipboardImg from "assets/Clipboard.svg";
 import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
+import compareSchedule from "assets/compare-schedule.svg";
+import compareBulb from "assets/compare-bulb.svg";
+import compareMobile from "assets/compare-mobile.svg";
 
 const ScheduleDetail = ({
   schedule,
@@ -25,6 +39,7 @@ const ScheduleDetail = ({
   showModal,
   editSchedule,
   showShareModal,
+  showCompareModal,
 }) => {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const theme = useColorModeValue("light", "dark");
@@ -64,6 +79,10 @@ const ScheduleDetail = ({
     showShareModal(id, name, dataUrl);
   };
 
+  const openCompareModal = () => {
+    showCompareModal(schedule.id);
+  };
+
   return (
     <>
       <Link
@@ -85,54 +104,195 @@ const ScheduleDetail = ({
 
             <Link to={null} style={{ display: "flex" }}>
               <CardActionContainer>
-                <IconContainer>
-                  <Icons
-                    Items={[
-                      {
-                        desc: "Download Jadwal",
-                        icon: downloadImg,
-                        alt: "download",
-                        action: () =>
-                          downloadImage(
-                            !schedule.name ? "Untitled" : schedule.name,
-                          ),
-                      },
-                      {
-                        desc: "Ekspor ke .ics (Google Calendar/Apple Calendar)",
-                        icon: exportToIcsImg,
-                        alt: "export-to-ics",
-                        action: () => generateICalendarFile(schedule),
-                      },
-                      {
-                        desc: "Share Jadwal",
-                        icon: clipboardImg,
-                        alt: "copy",
-                        action: () =>
-                          openShareModal(schedule.id, schedule.name),
-                      },
-                      {
-                        desc: "Delete Jadwal",
-                        icon: deleteImg,
-                        alt: "delete",
-                        action: () => showModal(schedule.id),
-                      },
-                    ]}
-                  />
-                </IconContainer>
+                {isMobile ? (
+                  <IconContainer>
+                    <ImageButton
+                      onClick={() =>
+                        downloadImage(
+                          !schedule.name ? "Untitled" : schedule.name,
+                        )
+                      }
+                      data-hover="Download Jadwal"
+                    >
+                      <img src={downloadImg} alt="download" />
+                    </ImageButton>
 
-                <Button
-                  mx="1rem"
-                  intent="primary"
-                  variant="outline"
-                  onClick={() => editSchedule(schedule.id)}
-                  display={isMobile ? "none" : "flex"}
-                  borderColor={
-                    theme === "light" ? "primary.Purple" : "dark.LightPurple"
-                  }
-                  color={theme === "light" ? "primary.Purple" : "dark.Purple"}
-                >
-                  Edit Jadwal
-                </Button>
+                    <Popover trigger="hover">
+                      <PopoverTrigger>
+                        <div
+                          style={{
+                            marginLeft: "1rem",
+                            cursor: "pointer",
+                            color: "#5038BC",
+                          }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            openCompareModal();
+                          }}
+                        >
+                          <img src={compareMobile} alt="compare-schedule" />
+                        </div>
+                      </PopoverTrigger>
+                      <PopoverContent width="250px">
+                        <PopoverArrow bgColor="#5038BC" />
+                        <PopoverBody
+                          bg="#E1E5FE"
+                          color="#5038BC"
+                          border="2px"
+                          borderColor="#5038BC"
+                          borderRadius="8px"
+                        >
+                          <Flex alignItems="center">
+                            <Image
+                              src={compareBulb}
+                              alt="compare-schedule"
+                              boxSize="25px"
+                              mr="10px"
+                            />
+                            <Text fontWeight="bold" fontSize="md">
+                              Bandingkan jadwal dengan teman-mu!
+                            </Text>
+                          </Flex>
+                          <Text mt="10px" fontWeight="medium" fontSize="sm">
+                            Klik tombol share pada jadwal teman-mu, copy link
+                            jadwal tersebut, lalu input linknya di sini! Kamu
+                            bisa dengan mudah membandingkan jadwal dengan
+                            teman-mu!
+                          </Text>
+                        </PopoverBody>
+                      </PopoverContent>
+                    </Popover>
+
+                    <ImageButton
+                      onClick={() => openShareModal(schedule.id, schedule.name)}
+                      data-hover="Share Jadwal"
+                    >
+                      <img src={clipboardImg} alt="copy" />
+                    </ImageButton>
+                    <ImageButton
+                      onClick={() => generateICalendarFile(schedule)}
+                      data-hover="Ekspor ke .ics (Google Calendar/Apple Calendar)"
+                    >
+                      <img src={exportToIcsImg} alt="export-to-ics" />
+                    </ImageButton>
+                    <ImageButton
+                      onClick={() => showModal(schedule.id)}
+                      data-hover="Delete Jadwal"
+                    >
+                      <img src={deleteImg} alt="delete" />
+                    </ImageButton>
+                  </IconContainer>
+                ) : (
+                  <>
+                    <IconContainer>
+                      <Icons
+                        Items={[
+                          {
+                            desc: "Download Jadwal",
+                            icon: downloadImg,
+                            alt: "download",
+                            action: () =>
+                              downloadImage(
+                                !schedule.name ? "Untitled" : schedule.name,
+                              ),
+                          },
+                          {
+                            desc: "Ekspor ke .ics (Google Calendar/Apple Calendar)",
+                            icon: exportToIcsImg,
+                            alt: "export-to-ics",
+                            action: () => generateICalendarFile(schedule),
+                          },
+                          {
+                            desc: "Share Jadwal",
+                            icon: clipboardImg,
+                            alt: "copy",
+                            action: () =>
+                              openShareModal(schedule.id, schedule.name),
+                          },
+                          {
+                            desc: "Delete Jadwal",
+                            icon: deleteImg,
+                            alt: "delete",
+                            action: () => showModal(schedule.id),
+                          },
+                        ]}
+                      />
+                    </IconContainer>
+
+                    <Popover trigger="hover">
+                      <PopoverTrigger>
+                        <Button
+                          mx="1rem"
+                          intent="primary"
+                          variant="outline"
+                          borderColor={
+                            theme === "light"
+                              ? "primary.Purple"
+                              : "dark.LightPurple"
+                          }
+                          color={
+                            theme === "light" ? "primary.Purple" : "dark.Purple"
+                          }
+                          onClick={(e) => {
+                            e.preventDefault();
+                            openCompareModal();
+                          }}
+                        >
+                          Bandingkan Jadwal
+                          <img
+                            src={compareSchedule}
+                            style={{ marginLeft: "6px", height: "25px" }}
+                            alt="compare-schedule"
+                          />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent width="250px">
+                        <PopoverArrow bgColor="#5038BC" />
+                        <PopoverBody
+                          bg="#E1E5FE"
+                          color="#5038BC"
+                          border="2px"
+                          borderColor="#5038BC"
+                          borderRadius="8px"
+                        >
+                          <Flex alignItems="center">
+                            <Image
+                              src={compareBulb}
+                              alt="Compare Schedule"
+                              boxSize="25px"
+                              mr="10px"
+                            />
+                            <Text fontWeight="bold" fontSize="md">
+                              Bandingkan jadwal dengan teman-mu!
+                            </Text>
+                          </Flex>
+                          <Text mt="10px" fontWeight="medium" fontSize="sm">
+                            Klik tombol share pada jadwal teman-mu, copy link
+                            jadwal tersebut, lalu input linknya di sini! Kamu
+                            bisa dengan mudah membandingkan jadwal dengan
+                            teman-mu!
+                          </Text>
+                        </PopoverBody>
+                      </PopoverContent>
+                    </Popover>
+                    <Button
+                      mx="1rem"
+                      intent="primary"
+                      variant="outline"
+                      onClick={() => editSchedule(schedule.id)}
+                      borderColor={
+                        theme === "light"
+                          ? "primary.Purple"
+                          : "dark.LightPurple"
+                      }
+                      color={
+                        theme === "light" ? "primary.Purple" : "dark.Purple"
+                      }
+                    >
+                      Edit Jadwal
+                    </Button>
+                  </>
+                )}
               </CardActionContainer>
             </Link>
           </div>
@@ -217,6 +377,48 @@ const CardActionContainer = styled.div`
 const IconContainer = styled.div`
   display: flex;
   flex-direction: row;
+`;
+
+const ImageButton = styled.div`
+  justify-content: center;
+  margin-left: 1rem;
+  cursor: pointer;
+  display: flex;
+  position: relative;
+  &:before,
+  &:after {
+    visibility: hidden;
+    opacity: 0;
+    z-index: 1;
+    position: absolute;
+  }
+  &:before {
+    content: attr(data-hover);
+    width: max-content;
+    max-width: 210px;
+    min-height: 32px;
+    background-color: #4e4e4e;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 6px;
+    right: 0;
+    top: 130%;
+    font-size: 14px;
+  }
+  &:after {
+    content: "";
+    border-style: solid;
+    border-color: #4e4e4e transparent;
+    border-width: 0 8px 12px;
+    top: 100%;
+    right: 3px;
+  }
+  &:hover&:before,
+  &:hover&:after {
+    opacity: 1;
+    visibility: visible;
+  }
 `;
 
 export default ScheduleDetail;

@@ -1,11 +1,14 @@
 import axios from "axios";
 import config from "config";
 
+let authToken = null;
+
 let instance = axios.create({
   baseURL: config.API_BASE_URL,
 });
 
 export function setupAxiosInstance(token) {
+  authToken = token;
   instance = axios.create({
     baseURL: config.API_BASE_URL,
     headers: { Authorization: `Bearer ${token}` },
@@ -75,6 +78,33 @@ export const postScrapeSchedule = async ({ username, password }) =>
     password: password,
   });
 
+export const postScrapeScheduleSSE = async ({ username, password }) => {
+  if (!authToken) {
+    throw new Error("Authentication token is missing. Please log in again.");
+  }
+
+  let apiUrl = `${config.API_BASE_URL}/scrape-siak-ng`;
+  apiUrl = apiUrl.replace(/([^:])\/{2,}/g, "$1/");
+
+  const response = await fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify({
+      username: username,
+      password: password,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response;
+};
+
 export const postSsoCompletionData = async ({ completionId, npm, kdOrg }) =>
   await instance.post("/auth/completion/", {
     completion_id: completionId,
@@ -138,5 +168,4 @@ export const updateReviewStatus = async (token, reviewId, status) =>
     },
   );
 
-export const validateToken = async () =>
-  await instance.get("/auth/me");
+export const validateToken = async () => await instance.get("/auth/me");

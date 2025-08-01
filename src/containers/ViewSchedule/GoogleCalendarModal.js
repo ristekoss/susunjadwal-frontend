@@ -18,9 +18,7 @@ import styled from "styled-components";
 import GoogleCalendarImg from "assets/GoogleCalendar.png";
 import bauhaus from "assets/Feedback/Modal/bauhaus-feedback-1.png";
 import MulaiImage from "assets/GoogleCalendarModal/mulai.png";
-import Step1Image from "assets/GoogleCalendarModal/step1.png";
 import Step2Image from "assets/GoogleCalendarModal/step2.png";
-import Step3Image from "assets/GoogleCalendarModal/step3.png";
 import Step4Image from "assets/GoogleCalendarModal/step4.png";
 import Step5Image from "assets/GoogleCalendarModal/step5.png";
 import Step6Image from "assets/GoogleCalendarModal/step6.png";
@@ -30,49 +28,51 @@ import ProgressBar from "./ProgressBar";
 
 const steps = [
   {
-    image: Step1Image,
-    title: "Step ke-1",
-    description: "Klik tombol 'Ekspor ke .ics' (letak button ada di sebelah button download)."
-  },
-  {
     image: Step2Image,
-    title: "Step ke-2",
-    description: "File jadwal akademik bertipe .ics akan mulai didownload."
-  },
-  {
-    image: Step3Image,
-    title: "Step ke-3",
-    description: "Kunjungi Google Calendar pada Desktop dengan akun Google kalian."
+    title: "Step ke-1",
+    description: "File jadwal akademik bertipe .ics akan mulai didownload.",
   },
   {
     image: Step4Image,
-    title: "Step ke-4",
-    description: "Klik tombol Settings seperti di gambar."
+    title: "Step ke-2",
+    description:
+      "Kunjungi Google Calender. Klik tombol Settings seperti di gambar.",
   },
   {
     image: Step5Image,
-    title: "Step ke-5",
-    description: "Klik section 'Import & Export'."
+    title: "Step ke-3",
+    description: "Klik section 'Import & Export'.",
   },
   {
     image: Step6Image,
-    title: "Step ke-6",
-    description: "Pada bagian 'Import', klik 'Select file from your computer' dan pilih file jadwal akademik yang telah diunduh."
+    title: "Step ke-4",
+    description:
+      "Pada bagian 'Import', klik 'Select file from your computer' dan pilih file jadwal akademik yang telah diunduh.",
   },
   {
     image: Step7Image,
-    title: "Step ke-7",
-    description: "Lalu, klik tombol 'Import'."
+    title: "Step ke-5",
+    description: "Lalu, klik tombol 'Import'.",
   },
   {
     image: Step8Image,
     title: "Selesai!",
-    description: "Jadwal akademik sudah berhasil dipindahkan ke Google Calendar!"
-  }
+    description:
+      "Jadwal akademik sudah berhasil dipindahkan ke Google Calendar!",
+  },
 ];
 
-const GoogleCalendarModal = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const GoogleCalendarModal = ({
+  isOpen: isOpenProp,
+  onClose: onCloseProp,
+  schedule,
+  generateICalendarFile,
+}) => {
+  const internalModal = useDisclosure();
+  const isOpen = isOpenProp !== undefined ? isOpenProp : internalModal.isOpen;
+  const onOpen = internalModal.onOpen;
+  const onClose = onCloseProp || internalModal.onClose;
+
   const [isWidgetVisible, setIsWidgetVisible] = useState(true);
   const [isClosed, setIsClosed] = useState(false);
   const [step, setStep] = useState(0);
@@ -92,6 +92,7 @@ const GoogleCalendarModal = () => {
     setIsClosed(true);
     onClose();
     setIsWidgetVisible(false);
+    setStep(0);
   };
 
   const handleOpenModal = () => {
@@ -108,16 +109,33 @@ const GoogleCalendarModal = () => {
     setStep((prevStep) => Math.max(prevStep - 1, 0));
   };
 
+  const handleDownloadAndStart = () => {
+    if (schedule && generateICalendarFile) {
+      generateICalendarFile(schedule);
+    }
+    setStep(1); // Langsung ke step 1 setelah download
+  };
+
   return (
     <>
-      {!isClosed && isWidgetVisible && (
-        <GoogleCalendarWidget onClick={handleOpenModal} bg={theme === "dark" ? "primary.LightPurple" : "primary.Purple"} hoverBg={theme === "dark" ? "#402D99" : "#674de0"}>
+      {isOpenProp === undefined && !isClosed && isWidgetVisible && (
+        <GoogleCalendarWidget
+          onClick={handleOpenModal}
+          bg={theme === "dark" ? "primary.LightPurple" : "primary.Purple"}
+          hoverBg={theme === "dark" ? "#402D99" : "#674de0"}
+        >
           <LabelBaru>Baru!</LabelBaru>
           <TextContainer>
             <WidgetText>
-              Integrasikan <Text as="span" color="secondary.Golden">Jadwalmu</Text>
+              Integrasikan{" "}
+              <Text as="span" color="secondary.Golden">
+                Jadwalmu
+              </Text>
               <br />
-              dengan <Text as="span" color="secondary.Golden">Google Calendar</Text>
+              dengan{" "}
+              <Text as="span" color="secondary.Golden">
+                Google Calendar
+              </Text>
             </WidgetText>
           </TextContainer>
           <Image
@@ -126,16 +144,30 @@ const GoogleCalendarModal = () => {
             marginLeft={"4px"}
             alt="Google Calendar"
           />
-          <CloseButton onClick={handleCloseWidget} bg={"#e2e8f0"} color={theme === "dark" ? "#1A202C" : "#333"}>
+          <CloseButton
+            onClick={handleCloseWidget}
+            bg={"#e2e8f0"}
+            color={theme === "dark" ? "#1A202C" : "#333"}
+          >
             <span>✕</span>
           </CloseButton>
         </GoogleCalendarWidget>
       )}
 
-      <Modal isOpen={isOpen} onClose={handleCloseModal} isCentered autoFocus={false}>
+      <Modal
+        isOpen={isOpen}
+        onClose={handleCloseModal}
+        isCentered
+        autoFocus={false}
+      >
         <ModalOverlay />
         <StyledModalContent theme={theme}>
-          <Box position="absolute" top="0" left="0" width={{ base: "36px", md: "40px" }}>
+          <Box
+            position="absolute"
+            top="0"
+            left="0"
+            width={{ base: "36px", md: "40px" }}
+          >
             <Image src={bauhaus} alt="Bauhaus" />
           </Box>
           <HeaderContent position="absolute" top="0" right="0">
@@ -160,26 +192,91 @@ const GoogleCalendarModal = () => {
           <ModalBody>
             {step === 0 ? (
               <ModalBodyContent>
-                <Text fontSize={{ base: "xl", md: "3xl", lg: "4xl" }} fontWeight="bold" textAlign="center" color={theme === "dark" ? "white" : "black"} marginTop={{ base: "20px", md: "0px" }}>
-                  Integrasikan <Text as="span" color={theme === 'dark' ? "primary.LightPurple" : "primary.Purple"}>Jadwalmu</Text> dengan Google Calendar
+                <Text
+                  fontSize={{ base: "xl", md: "3xl", lg: "4xl" }}
+                  fontWeight="bold"
+                  textAlign="center"
+                  color={theme === "dark" ? "white" : "black"}
+                  marginTop={{ base: "20px", md: "0px" }}
+                >
+                  Integrasikan{" "}
+                  <Text
+                    as="span"
+                    color={
+                      theme === "dark"
+                        ? "primary.LightPurple"
+                        : "primary.Purple"
+                    }
+                  >
+                    Jadwalmu
+                  </Text>{" "}
+                  dengan Google Calendar
                 </Text>
                 <ImageContainer padding={"30px"}>
                   <StyledImage src={MulaiImage} alt="Mulai" />
                 </ImageContainer>
+                <Text
+                  fontSize={{ base: "md", md: "lg" }}
+                  textAlign="center"
+                  fontWeight="medium"
+                  color={theme === "dark" ? "white" : "black"}
+                  marginTop="4"
+                >
+                  Ekspor jadwal kamu ke .ics dengan klik Download.
+                </Text>
               </ModalBodyContent>
             ) : (
               <ModalBodyContent>
-                <Text fontSize={{ base: "xl", md: "3xl", lg: "4xl" }} fontWeight="bold" textAlign="center" color={theme === "dark" ? "white" : "black"} marginTop={{ base: "20px", md: "0px" }}>
-                  Integrasikan <Text as="span" color={theme === 'dark' ? "primary.LightPurple" : "primary.Purple"}>Jadwalmu</Text> dengan Google Calendar
+                <Text
+                  fontSize={{ base: "xl", md: "3xl", lg: "4xl" }}
+                  fontWeight="bold"
+                  textAlign="center"
+                  color={theme === "dark" ? "white" : "black"}
+                  marginTop={{ base: "20px", md: "0px" }}
+                >
+                  Integrasikan{" "}
+                  <Text
+                    as="span"
+                    color={
+                      theme === "dark"
+                        ? "primary.LightPurple"
+                        : "primary.Purple"
+                    }
+                  >
+                    Jadwalmu
+                  </Text>{" "}
+                  dengan Google Calendar
                 </Text>
-                <ImageContainer padding={step <= 3 ? "30px" : step >= 4 ? "30px 30px 0 30px" : "0"}>
-                  <StyledImage src={steps[step - 1].image} alt={`Step ${step}`} size={step === steps.length ? "70%" : "100%"} />
+                <ImageContainer
+                  padding={
+                    step <= 3 ? "30px" : step >= 4 ? "30px 30px 0 30px" : "0"
+                  }
+                >
+                  <StyledImage
+                    src={steps[step - 1].image}
+                    alt={`Step ${step}`}
+                    size={step === steps.length ? "70%" : "100%"}
+                  />
                 </ImageContainer>
-                <ProgressBar steps={steps.map(step => step.title)} currentStep={step} />
-                <Text fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" marginTop="4" textAlign='left' color={theme === "dark" ? "white" : "black"}>
+                <ProgressBar
+                  steps={steps.map((step) => step.title)}
+                  currentStep={step}
+                />
+                <Text
+                  fontSize={{ base: "xl", md: "2xl" }}
+                  fontWeight="bold"
+                  marginTop="4"
+                  textAlign="left"
+                  color={theme === "dark" ? "white" : "black"}
+                >
                   {steps[step - 1].title}
                 </Text>
-                <Text fontSize={{ base: 'sm', md: 'md' }} textAlign='left' fontWeight='semibold' color={theme === "dark" ? "white" : "black"}>
+                <Text
+                  fontSize={{ base: "sm", md: "md" }}
+                  textAlign="left"
+                  fontWeight="semibold"
+                  color={theme === "dark" ? "white" : "black"}
+                >
                   {steps[step - 1].description}
                 </Text>
               </ModalBodyContent>
@@ -187,19 +284,74 @@ const GoogleCalendarModal = () => {
           </ModalBody>
           <ModalFooter>
             {step === 0 ? (
-              <Button colorScheme="purple" width="100%" padding={{ base: "12px", md: "24px" }} borderRadius="12px" fontSize={{ base: "sm", md: "lg" }} onClick={handleNextStep}>
-                Mulai
+              <Button
+                colorScheme="purple"
+                width="100%"
+                padding={{ base: "12px", md: "24px" }}
+                borderRadius="12px"
+                fontSize={{ base: "sm", md: "lg" }}
+                onClick={handleDownloadAndStart}
+              >
+                Download
               </Button>
             ) : step === steps.length ? (
-              <Button colorScheme="purple" width="100%" padding={{ base: "12px", md: "24px" }} borderRadius="12px" fontSize={{ base: "sm", md: "lg" }} onClick={handleCloseModal}>
-                Selesai
-              </Button>
-            ) : (
-              <Box width="100%" display="flex" justifyContent="space-between" gap={2}>
-                <Button bgColor='#C9CEFC' color='primary.LightPurple' _hover={{ bgColor: '#E1E5FE' }} width='full' padding={{ base: "12px", md: "24px" }} borderRadius="8px" fontSize={{ base: "sm", md: "lg" }} onClick={handlePrevStep} isDisabled={step === 1}>
+              <Box
+                width="100%"
+                display="flex"
+                justifyContent="space-between"
+                gap={2}
+              >
+                <Button
+                  bgColor="#C9CEFC"
+                  color="primary.LightPurple"
+                  _hover={{ bgColor: "#E1E5FE" }}
+                  width="full"
+                  padding={{ base: "12px", md: "24px" }}
+                  borderRadius="8px"
+                  fontSize={{ base: "sm", md: "lg" }}
+                  onClick={handlePrevStep}
+                >
                   Sebelumnya
                 </Button>
-                <Button colorScheme="purple" width='full' padding={{ base: "12px", md: "24px" }} borderRadius="8px" fontSize={{ base: "sm", md: "lg" }} onClick={handleNextStep}>
+                <Button
+                  colorScheme="purple"
+                  width="full"
+                  padding={{ base: "12px", md: "24px" }}
+                  borderRadius="8px"
+                  fontSize={{ base: "sm", md: "lg" }}
+                  onClick={handleCloseModal}
+                >
+                  Selesai
+                </Button>
+              </Box>
+            ) : (
+              <Box
+                width="100%"
+                display="flex"
+                justifyContent="space-between"
+                gap={2}
+              >
+                <Button
+                  bgColor="#C9CEFC"
+                  color="primary.LightPurple"
+                  _hover={{ bgColor: "#E1E5FE" }}
+                  width="full"
+                  padding={{ base: "12px", md: "24px" }}
+                  borderRadius="8px"
+                  fontSize={{ base: "sm", md: "lg" }}
+                  onClick={handlePrevStep}
+                  isDisabled={step === 1}
+                >
+                  Sebelumnya
+                </Button>
+                <Button
+                  colorScheme="purple"
+                  width="full"
+                  padding={{ base: "12px", md: "24px" }}
+                  borderRadius="8px"
+                  fontSize={{ base: "sm", md: "lg" }}
+                  onClick={handleNextStep}
+                >
                   Selanjutnya
                 </Button>
               </Box>
@@ -218,7 +370,7 @@ const GoogleCalendarWidget = styled(Box)`
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: ${props => props.bg};
+  background-color: ${(props) => props.bg};
   color: white;
   padding: 10px;
   border-radius: 8px;
@@ -228,7 +380,7 @@ const GoogleCalendarWidget = styled(Box)`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
   &:hover {
-    background-color: ${props => props.hoverBg};
+    background-color: ${(props) => props.hoverBg};
   }
 `;
 
@@ -236,7 +388,7 @@ const LabelBaru = styled(Box)`
   position: absolute;
   top: -15px;
   left: 0px;
-  background-color: #FFD668;
+  background-color: #ffd668;
   color: #000;
   padding: 2px 8px;
   border-radius: 20px;
@@ -260,8 +412,8 @@ const CloseButton = styled(Box)`
   position: absolute;
   top: -12px;
   right: -12px;
-  background-color: ${props => props.bg};
-  color: ${props => props.color};
+  background-color: ${(props) => props.bg};
+  color: ${(props) => props.color};
   font-weight: bold;
   border-radius: 50%;
   cursor: pointer;
@@ -278,11 +430,11 @@ const ImageContainer = styled(Box)`
   align-items: center;
   justify-content: center;
   margin-top: 20px;
-  background-color: #CEFAFF;
+  background-color: #cefaff;
   height: auto;
   border-radius: 12px;
   overflow: hidden;
-  padding: ${props => props.padding || "30px"};
+  padding: ${(props) => props.padding || "30px"};
 
   @media (max-width: 768px) {
     padding: 20px;
@@ -290,8 +442,8 @@ const ImageContainer = styled(Box)`
 `;
 
 const StyledImage = styled(Image)`
-  width: ${props => props.size};
-  height: ${props => props.height || "auto"};
+  width: ${(props) => props.size};
+  height: ${(props) => props.height || "auto"};
   object-fit: cover;
   @media (max-width: 768px) {
     scale: 1.2;
@@ -308,8 +460,8 @@ const StyledModalContent = styled(ModalContent)`
   margin: 0 32px 0 32px;
   position: relative;
   overflow: hidden;
-  background: ${props => (props.theme === "dark" ? "#18181B" : "white")};
-  color: ${props => (props.theme === "dark" ? "white" : "black")};
+  background: ${(props) => (props.theme === "dark" ? "#18181B" : "white")};
+  color: ${(props) => (props.theme === "dark" ? "white" : "black")};
 
   @media (max-width: 768px) {
     padding: 0px;
