@@ -25,15 +25,16 @@ import HackDarkLogo from "assets/Beta/HackPlus-dark.svg";
 import MapPoint from "assets/Beta/MapPoint.svg";
 import MapPointDark from "assets/Beta/MapPoint-dark.svg";
 
-import RistekLogoLight from "assets/Logo/RistekLogo-light.svg";
-import RistekLogoDark from "assets/Logo/RistekLogo-dark.svg";
+import RistekLogoLight from "assets/Logo/RistekLogo-light-2025.svg";
+import RistekLogoDark from "assets/Logo/RistekLogo-dark-2025.svg";
 
 import SocialContainer from "./SocialCointainer";
 
 const Footer = () => {
   const location = useLocation();
   const theme = useColorModeValue("light", "dark");
-  if (["/susun", "/admin", "/feedback-recap"].includes(location.pathname)) return null;
+  if (["/susun", "/admin", "/feedback-recap"].includes(location.pathname))
+    return null;
 
   return (
     <StyledFooterContainer mode={theme}>
