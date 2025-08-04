@@ -33,9 +33,12 @@ import SocialContainer from "./SocialCointainer";
 const Footer = () => {
   const location = useLocation();
   const theme = useColorModeValue("light", "dark");
-  if (["/susun", "/admin", "/feedback-recap"].includes(location.pathname))
+  if (
+    ["/susun", "/admin", "/feedback-recap"].includes(location.pathname) ||
+    location.pathname.startsWith("/edit/")
+  ) {
     return null;
-
+  }
   return (
     <StyledFooterContainer mode={theme}>
       <Flex
