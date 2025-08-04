@@ -205,7 +205,6 @@ function BuildSchedule() {
         )}
         <div
           style={{
-            display: courses === null ? "none" : "block",
             marginTop: !isCoursesDetail && majorSelected ? "20px" : "0",
           }}
         >
