@@ -71,6 +71,14 @@ function BuildSchedule() {
       }
 
       dispatch(setLoading(true));
+      useMixpanel.track("loading_impression", {
+        eventName: "loading_impression",
+        eventAction: "impression",
+        eventCategory: "state",
+        screenName: "Buat Jadwal",
+        screenOwner: "desktop_web",
+        eventLabel: "/susun::loading-state-shown",
+      });
 
       try {
         const { data } = majorSelected
@@ -173,13 +181,34 @@ function BuildSchedule() {
   });
 
   useEffect(() => {
-    useMixpanel.track("open_buat_jadwal");
+    useMixpanel.track("susun_page_impression", {
+      eventName: "susun_page_impression",
+      eventAction: "impression",
+      eventCategory: "page",
+      screenName: "Buat Jadwal",
+      screenOwner: "desktop_web",
+      eventLabel: "/susun::page-loaded",
+    });
   }, []);
 
   useEffect(() => {
     if (isInitialMount.current) isInitialMount.current = false;
     else useMixpanel.track("search_course");
   }, [value]);
+
+  useEffect(() => {
+    if (!isCoursesDetail && majorSelected) {
+      useMixpanel.track("empty_state_impression", {
+        eventName: "empty_state_impression",
+        eventAction: "impression",
+        eventCategory: "state",
+        fieldName: `fakultas: ${majorSelected.study_program}, prodi: ${majorSelected.educational_program}`,
+        screenName: "Buat Jadwal",
+        screenOwner: "desktop_web",
+        eventLabel: "/susun::empty-state-shown",
+      });
+    }
+  }, [isCoursesDetail, majorSelected]);
 
   return (
     <Container>

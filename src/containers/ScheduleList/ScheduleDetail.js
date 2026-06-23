@@ -75,11 +75,31 @@ const ScheduleDetail = ({
   };
 
   const openShareModal = async (id, name) => {
+    useMixpanel.track("share_jadwal_icon_click", {
+      eventName: "share_jadwal_icon_click",
+      eventAction: "click",
+      eventCategory: "button",
+      ctaTitle: "Share Jadwal",
+      fieldName: `jadwal_id: ${id}`,
+      screenName: "Daftar Jadwal",
+      screenOwner: "desktop_web",
+      eventLabel: "/susun::share-jadwal-clicked",
+    });
     const dataUrl = await htmlToImage.toPng(refs.current);
     showShareModal(id, name, dataUrl);
   };
 
   const openCompareModal = () => {
+    useMixpanel.track("bandingkan_jadwal_button_click", {
+      eventName: "bandingkan_jadwal_button_click",
+      eventAction: "click",
+      eventCategory: "button",
+      ctaTitle: "Bandingkan Jadwal",
+      fieldName: `jadwal_id: ${schedule.id}`,
+      screenName: "Daftar Jadwal",
+      screenOwner: "desktop_web",
+      eventLabel: "/susun::bandingkan-jadwal-clicked",
+    });
     showCompareModal(schedule.id);
   };
 
@@ -279,7 +299,19 @@ const ScheduleDetail = ({
                       mx="1rem"
                       intent="primary"
                       variant="outline"
-                      onClick={() => editSchedule(schedule.id)}
+                      onClick={() => {
+                        useMixpanel.track("edit_jadwal_button_click", {
+                          eventName: "edit_jadwal_button_click",
+                          eventAction: "click",
+                          eventCategory: "button",
+                          ctaTitle: "Edit Jadwal",
+                          fieldName: `jadwal_id: ${schedule.id}`,
+                          screenName: "Daftar Jadwal",
+                          screenOwner: "desktop_web",
+                          eventLabel: "/susun::edit-jadwal-clicked",
+                        });
+                        editSchedule(schedule.id);
+                      }}
                       borderColor={
                         theme === "light"
                           ? "primary.Purple"

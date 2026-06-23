@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useMixpanel } from "hooks/useMixpanel";
 import {
   Modal,
   ModalOverlay,
@@ -19,8 +20,8 @@ import {
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { StarIcon } from "@chakra-ui/icons";
-import bauhaus from 'assets/Feedback/Modal/bauhaus-feedback-1.png';
-import bauhaus2 from 'assets/Feedback/Modal/bauhaus-feedback-2.svg';
+import bauhaus from "assets/Feedback/Modal/bauhaus-feedback-1.png";
+import bauhaus2 from "assets/Feedback/Modal/bauhaus-feedback-2.svg";
 import { makeAtLeastMs } from "utils/promise";
 import { createReview } from "services/api";
 
@@ -38,9 +39,20 @@ const FeedbackModal = ({ isOpen, onClose }) => {
   const handleSubmit = async () => {
     const userId = auth.userId;
 
+    useMixpanel.track("feedback_submit_click", {
+      eventName: "feedback_submit_click",
+      eventAction: "click",
+      eventCategory: "button",
+      ctaTitle: "Submit Feedback",
+      fieldName: `rating: ${rating}`,
+      screenName: "Buat Jadwal",
+      screenOwner: "desktop_web",
+      eventLabel: "/susun::feedback-submitted",
+    });
+
     try {
       await makeAtLeastMs(createReview(userId, rating, comment), 1000);
-    
+
       onClose();
       toast({
         title: "Thank you for your feedback!",
@@ -48,8 +60,7 @@ const FeedbackModal = ({ isOpen, onClose }) => {
         duration: 2500,
         position: "bottom",
       });
-    }
-    catch (error) {
+    } catch (error) {
       toast({
         title: "Failed to submit feedback",
         status: "error",
@@ -73,17 +84,39 @@ const FeedbackModal = ({ isOpen, onClose }) => {
         position="relative"
         overflow="hidden"
       >
-        <Box position="absolute" top="0" left="0" width={{ base: '35px', md: '50px' }}>
+        <Box
+          position="absolute"
+          top="0"
+          left="0"
+          width={{ base: "35px", md: "50px" }}
+        >
           <Image src={bauhaus} alt="Bauhaus" />
         </Box>
-        <Box position="absolute" bottom="0" right="0" width={{ base: '35px', md: '50px' }}>
+        <Box
+          position="absolute"
+          bottom="0"
+          right="0"
+          width={{ base: "35px", md: "50px" }}
+        >
           <Image src={bauhaus2} alt="Bauhaus" />
         </Box>
         <ModalHeader>
-          <Text fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }} fontWeight="bold" textAlign="center" color={theme === "dark" ? "dark.LightPurple" : "primary.Purple"} marginTop={{ base: '20px', md: '0px' }}>
+          <Text
+            fontSize={{ base: "2xl", md: "3xl", lg: "4xl" }}
+            fontWeight="bold"
+            textAlign="center"
+            color={theme === "dark" ? "dark.LightPurple" : "primary.Purple"}
+            marginTop={{ base: "20px", md: "0px" }}
+          >
             Berikan kami Ulasan!
           </Text>
-          <Text fontSize={{ base: '16px', md: 'md' }} fontWeight="light" textAlign="center" color={theme === "dark" ? "#E4E4E7" : "secondary.Gray"} marginBottom={{ base: '-20px', md: '0px' }}>
+          <Text
+            fontSize={{ base: "16px", md: "md" }}
+            fontWeight="light"
+            textAlign="center"
+            color={theme === "dark" ? "#E4E4E7" : "secondary.Gray"}
+            marginBottom={{ base: "-20px", md: "0px" }}
+          >
             Bagaimana pengalaman Anda dalam menggunakan SusunJadwal?
           </Text>
         </ModalHeader>
@@ -126,15 +159,21 @@ const FeedbackModal = ({ isOpen, onClose }) => {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               maxLength={300}
-              size={'md'}
-              fontSize={{ base: '16px', md: 'md' }}
+              size={"md"}
+              fontSize={{ base: "16px", md: "md" }}
               borderRadius="12px"
               borderColor={theme === "dark" ? "gray.600" : "gray.300"}
               background={theme === "dark" ? "#27272A" : "white"}
               color={theme === "dark" ? "white" : "black"}
-              height={{ base: '150px', md: '200px', lg: '250px' }}
+              height={{ base: "150px", md: "200px", lg: "250px" }}
             />
-            <Box width="100%" fontSize={{ base: '12px', md: '14px' }} fontWeight="semibold" textAlign="right" color="primary.Purple">
+            <Box
+              width="100%"
+              fontSize={{ base: "12px", md: "14px" }}
+              fontWeight="semibold"
+              textAlign="right"
+              color="primary.Purple"
+            >
               {comment.length}/300
             </Box>
           </VStack>
@@ -144,9 +183,9 @@ const FeedbackModal = ({ isOpen, onClose }) => {
             colorScheme="purple"
             onClick={handleSubmit}
             width="100%"
-            padding={{ base: '12px', md: '24px' }}
+            padding={{ base: "12px", md: "24px" }}
             borderRadius="12px"
-            fontSize={{ base: 'sm', md: 'lg' }}
+            fontSize={{ base: "sm", md: "lg" }}
             disabled={rating === 0}
           >
             Submit
