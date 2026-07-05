@@ -52,6 +52,8 @@ import { ListMatkulIcon } from "assets/ListMatkulIcon";
 import FeedbackModal from "./FeedbackModal";
 import GoogleCalendarModal from "./GoogleCalendarModal";
 
+import { IoMdReturnLeft } from "react-icons/io";
+
 function ViewSchedule({ match, history }) {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const theme = useColorModeValue("light", "dark");
@@ -290,30 +292,41 @@ function ViewSchedule({ match, history }) {
           <>
             <Container>
               <HeaderContainer>
-                {schedule.has_edit_access ? (
-                  <ScheduleNameEditable>
-                    <ControlledInput
-                      style={{ color: theme === "light" ? "aqua" : "orange" }}
-                      name={decodeHtmlEntity(schedule.name)}
-                      slug={match.params.scheduleId}
-                      rename={onRename}
+                <Flex align="center" gap="8px">
+                  <Link to="/jadwal">
+                    <IoMdReturnLeft
+                      style={{
+                        // icon size v
+                        fontSize: "1.5rem",
+                        marginBottom: "1.5rem",
+                        cursor: "pointer",
+                      }}
                     />
-                    <p>
-                      Dibuat pada{" "}
-                      {createdAt?.getDate() +
-                        "/" +
-                        (createdAt?.getMonth() + 1) +
-                        "/" +
-                        createdAt?.getFullYear()}{" "}
-                      • {totalCredits} SKS
-                    </p>
-                  </ScheduleNameEditable>
-                ) : (
-                  <ScheduleName mode={theme}>
-                    {decodeHtmlEntity(schedule.name)}
-                  </ScheduleName>
-                )}
-
+                  </Link>
+                  {schedule.has_edit_access ? (
+                    <ScheduleNameEditable>
+                      <ControlledInput
+                        style={{ color: theme === "light" ? "aqua" : "orange" }}
+                        name={decodeHtmlEntity(schedule.name)}
+                        slug={match.params.scheduleId}
+                        rename={onRename}
+                      />
+                      <p>
+                        Dibuat pada{" "}
+                        {createdAt?.getDate() +
+                          "/" +
+                          (createdAt?.getMonth() + 1) +
+                          "/" +
+                          createdAt?.getFullYear()}{" "}
+                        • {totalCredits} SKS
+                      </p>
+                    </ScheduleNameEditable>
+                  ) : (
+                    <ScheduleName mode={theme}>
+                      {decodeHtmlEntity(schedule.name)}
+                    </ScheduleName>
+                  )}
+                </Flex>
                 <IconContainer isAuthenticated={Boolean(auth)}>
                   <Icons
                     Items={[
