@@ -29,9 +29,14 @@ import exportToIcsImg from "assets/ExportToIcs.svg";
 import clipboardImg from "assets/Clipboard.svg";
 import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
-import compareSchedule from "assets/compare-schedule.svg";
+import compareSchedule from "assets/compare-schedule-white.svg";
 import compareBulb from "assets/compare-bulb.svg";
 import compareMobile from "assets/compare-mobile.svg";
+
+import ics2026Img from "assets/ics2026.svg";
+import pencilIcon from "assets/pencil-icon.svg";
+import { useDisclosure } from "@chakra-ui/react";
+import GoogleCalendarModal from "../ViewSchedule/GoogleCalendarModal";
 
 const ScheduleDetail = ({
   schedule,
@@ -44,6 +49,7 @@ const ScheduleDetail = ({
   const isMobile = useSelector((state) => state.appState.isMobile);
   const theme = useColorModeValue("light", "dark");
   const { generateICalendarFile } = useDownloadCalendar(theme);
+  const googleCalendarModal = useDisclosure();
   let formattedSchedule = {};
   let totalCredits = 0;
 
@@ -81,6 +87,16 @@ const ScheduleDetail = ({
 
   const openCompareModal = () => {
     showCompareModal(schedule.id);
+  };
+
+  const handleOpenGoogleCalendarModal = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    ReactGA.event({
+      category: "Integrasi Calendar",
+      action: "Opened Google Calendar Modal",
+    });
+    googleCalendarModal.onOpen();
   };
 
   return (
@@ -224,24 +240,27 @@ const ScheduleDetail = ({
                         <Button
                           mx="1rem"
                           intent="primary"
-                          variant="outline"
+                          variant="solid"
                           borderColor={
                             theme === "light"
                               ? "primary.Purple"
                               : "dark.LightPurple"
                           }
-                          color={
-                            theme === "light" ? "primary.Purple" : "dark.Purple"
-                          }
+                          color={theme === "light" ? "white" : "dark.White"}
                           onClick={(e) => {
                             e.preventDefault();
                             openCompareModal();
+                          }}
+                          style={{
+                            fontWeight: 500,
+                            height: "64px",
+                            width: "253px",
                           }}
                         >
                           Bandingkan Jadwal
                           <img
                             src={compareSchedule}
-                            style={{ marginLeft: "6px", height: "25px" }}
+                            style={{ marginLeft: "16px", height: "25px" }}
                             alt="compare-schedule"
                           />
                         </Button>
@@ -276,9 +295,54 @@ const ScheduleDetail = ({
                       </PopoverContent>
                     </Popover>
                     <Button
+                      width="235px"
+                      height="64px"
+                      flex="1"
+                      mr="0"
+                      size="sm"
+                      px={{ base: "32px", md: "100px" }}
+                      py={{ base: "20px", md: "20px" }}
+                      variant="solid"
+                      bg={
+                        theme === "light"
+                          ? "secondary.Purple"
+                          : "dark.LightPurple"
+                      }
+                      color={
+                        theme === "light"
+                          ? "secondary.GalacticPurple"
+                          : "dark.White"
+                      }
+                      onClick={handleOpenGoogleCalendarModal}
+                      fontSize={{ base: "14px", md: "16px" }}
+                      fontWeight={{ base: "medium", md: "medium" }}
+                      minW={{ base: "140px", md: "140px" }}
+                      _hover={{
+                        bg:
+                          theme === "light"
+                            ? "primary.DarkPurple"
+                            : "dark.Purple",
+                      }}
+                    >
+                      <Text display={{ base: "none", sm: "inline" }}>
+                        Integrasi Kalender
+                      </Text>
+                      <Text display={{ base: "inline", sm: "none" }}>
+                        Integrasi
+                      </Text>
+                      <img
+                        src={ics2026Img}
+                        style={{ marginLeft: "16px", height: "25px" }}
+                        alt="export-to-ics"
+                      />
+                    </Button>
+                    <Button
                       mx="1rem"
+                      height="64px"
+                      width="122px"
                       intent="primary"
                       variant="outline"
+                      fontWeight="medium"
                       onClick={() => editSchedule(schedule.id)}
                       borderColor={
                         theme === "light"
@@ -289,7 +353,12 @@ const ScheduleDetail = ({
                         theme === "light" ? "primary.Purple" : "dark.Purple"
                       }
                     >
-                      Edit Jadwal
+                      Edit
+                      <img
+                        src={pencilIcon}
+                        style={{ marginLeft: "16px", height: "25px" }}
+                        alt="edit schedule"
+                      />
                     </Button>
                   </>
                 )}
@@ -320,6 +389,13 @@ const ScheduleDetail = ({
           />
         </Card>
       </Link>
+
+      <GoogleCalendarModal
+        isOpen={googleCalendarModal.isOpen}
+        onClose={googleCalendarModal.onClose}
+        schedule={schedule}
+        generateICalendarFile={generateICalendarFile}
+      />
     </>
   );
 };

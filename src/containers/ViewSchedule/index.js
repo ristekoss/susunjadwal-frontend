@@ -20,6 +20,11 @@ import {
   Flex,
   Image,
   useColorModeValue,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverBody,
 } from "@chakra-ui/react";
 import { CalendarIcon } from "@heroicons/react/solid";
 
@@ -46,13 +51,17 @@ import exportToIcsImg from "assets/ExportToIcs.svg";
 import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
-import ics2025Img from "assets/ics2025.svg";
+import ics2026Img from "assets/ics2026.svg";
 import { ListMatkulIcon } from "assets/ListMatkulIcon";
 
 import FeedbackModal from "./FeedbackModal";
 import GoogleCalendarModal from "./GoogleCalendarModal";
 
-import { IoMdReturnLeft } from "react-icons/io";
+import CompareModal from "../ScheduleList/CompareModal";
+import compareSchedule from "assets/compare-schedule-white.svg";
+import compareBulb from "assets/compare-bulb.svg";
+import pencilIcon from "assets/pencil-icon.svg";
+import { RiArrowLeftLongLine } from "react-icons/ri";
 
 function ViewSchedule({ match, history }) {
   const isMobile = useSelector((state) => state.appState.isMobile);
@@ -72,6 +81,7 @@ function ViewSchedule({ match, history }) {
   const [imageURL, setImageURL] = useState(null);
 
   const location = useLocation();
+  const compareModal = useDisclosure();
 
   let formattedSchedule = {};
   let totalCredits = 0;
@@ -292,16 +302,34 @@ function ViewSchedule({ match, history }) {
           <>
             <Container>
               <HeaderContainer>
-                <Flex align="center" gap="8px">
-                  <Link to="/jadwal">
-                    <IoMdReturnLeft
+                <Flex direction="column" align="left" gap="8px">
+                  <Link
+                    to="/jadwal"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                    }}
+                  >
+                    <RiArrowLeftLongLine
+                      color="#5038BC"
                       style={{
                         // icon size v
-                        fontSize: "1.5rem",
-                        marginBottom: "1.5rem",
+                        fontSize: "2rem",
                         cursor: "pointer",
                       }}
                     />
+                    <Text
+                      fontSize="24px"
+                      fontWeight="medium"
+                      color={
+                        theme === "light"
+                          ? "secondary.GalacticPurple"
+                          : "dark.White"
+                      }
+                    >
+                      Daftar Jadwal
+                    </Text>
                   </Link>
                   {schedule.has_edit_access ? (
                     <ScheduleNameEditable>
@@ -367,9 +395,141 @@ function ViewSchedule({ match, history }) {
                   justifyContent="center"
                   alignItems="center"
                 >
+                  {/* <Link to={"/jadwal/compare"}>
+                      <Button
+                        width="full"
+                        flex="1"
+                        mr="0"
+                        size="sm"
+                        px={{ base: "32px", md: "32px" }}
+                        py={{ base: "20px", md: "20px" }}
+                        intent="primary"
+                        variant="solid"
+                        bg={
+                          theme === "light" ? "primary.Purple" : "dark.LightPurple"
+                        }
+                        color={theme === "light" ? "white" : "dark.White"}
+                        fontSize={{ base:"14px", md:"18px"}}
+                        minW={{ base: "120px", md:"120px"}}
+                        _hover={{
+                          bg:
+                            theme === "light"
+                              ? "primary.DarkPurple"
+                              : "dark.Purple",
+                        }}
+                      >
+                        <Text display={{ base:"none", sm:"inline"}}>
+                          Bandingkan Jadwal
+                        </Text>
+                        <GoArrowSwitch style={{ marginLeft: "0.5rem"}}/>
+                      </Button>
+                  </Link> */}
+
+                  <Popover trigger="hover">
+                    <PopoverTrigger>
+                      <Button
+                        minWidth="253px"
+                        height="64px"
+                        intent="primary"
+                        variant="solid"
+                        borderColor={
+                          theme === "light"
+                            ? "primary.Purple"
+                            : "dark.LightPurple"
+                        }
+                        color={theme === "light" ? "white" : "dark.White"}
+                        fontWeight="medium"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          compareModal.onOpen();
+                        }}
+                        gap="16px"
+                        paddingLeft="24px"
+                        paddingRight="24px"
+                      >
+                        Bandingkan Jadwal
+                        <img
+                          src={compareSchedule}
+                          style={{ width: "28px", height: "28px" }}
+                          alt="compare-schedule"
+                        />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent width="250px">
+                      <PopoverArrow bgColor="#5038BC" />
+                      <PopoverBody
+                        bg="#E1E5FE"
+                        color="#5038BC"
+                        border="2px"
+                        borderColor="#5038BC"
+                        borderRadius="8px"
+                      >
+                        <Flex alignItems="center">
+                          <Image
+                            src={compareBulb}
+                            alt="Compare Schedule"
+                            boxSize="25px"
+                            mr="10px"
+                          />
+                          <Text fontWeight="bold" fontSize="md">
+                            Bandingkan jadwal dengan teman-mu!
+                          </Text>
+                        </Flex>
+                        <Text mt="10px" fontWeight="medium" fontSize="sm">
+                          Klik tombol share pada jadwal teman-mu, copy link
+                          jadwal tersebut, lalu input linknya di sini! Kamu bisa
+                          dengan mudah membandingkan jadwal dengan teman-mu!
+                        </Text>
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
+
+                  <Button
+                    height="64px"
+                    flex="1"
+                    mr="0"
+                    size="sm"
+                    px={{ base: "32px", md: "100px" }}
+                    py={{ base: "20px", md: "20px" }}
+                    variant="solid"
+                    bg={
+                      theme === "light"
+                        ? "secondary.Purple"
+                        : "dark.LightPurple"
+                    }
+                    color={
+                      theme === "light"
+                        ? "secondary.GalacticPurple"
+                        : "dark.White"
+                    }
+                    onClick={handleOpenGoogleCalendarModal}
+                    fontSize={{ base: "14px", md: "18px" }}
+                    fontWeight="medium"
+                    minW={{ base: "140px", md: "140px" }}
+                    _hover={{
+                      bg:
+                        theme === "light"
+                          ? "primary.DarkPurple"
+                          : "dark.Purple",
+                    }}
+                  >
+                    <Text display={{ base: "none", sm: "inline" }}>
+                      Integrasi Kalender
+                    </Text>
+                    <Text display={{ base: "inline", sm: "none" }}>
+                      Integrasi
+                    </Text>
+                    <img
+                      src={ics2026Img}
+                      style={{ marginLeft: "16px", height: "28px" }}
+                      alt="export-to-ics"
+                    />
+                  </Button>
+
                   <Link to={`/edit/${scheduleId}`}>
                     <Button
-                      width="full"
+                      height="64px"
+                      fontWeight="medium"
                       mr="0"
                       intent="primary"
                       variant="outline"
@@ -387,43 +547,13 @@ function ViewSchedule({ match, history }) {
                       py={{ base: "14px", md: "auto" }}
                     >
                       {schedule.has_edit_access ? "Edit" : "Copy"}
+                      <img
+                        src={pencilIcon}
+                        style={{ marginLeft: "16px", height: "28px" }}
+                        alt="edit schedule"
+                      />
                     </Button>
                   </Link>
-
-                  <Button
-                    width="full"
-                    flex="1"
-                    mr="0"
-                    size="sm"
-                    px={{ base: "32px", md: "100px" }}
-                    py={{ base: "20px", md: "20px" }}
-                    variant="solid"
-                    bg={
-                      theme === "light" ? "primary.Purple" : "dark.LightPurple"
-                    }
-                    color={theme === "light" ? "white" : "dark.White"}
-                    onClick={handleOpenGoogleCalendarModal}
-                    fontSize={{ base: "14px", md: "18px" }}
-                    minW={{ base: "140px", md: "140px" }}
-                    _hover={{
-                      bg:
-                        theme === "light"
-                          ? "primary.DarkPurple"
-                          : "dark.Purple",
-                    }}
-                  >
-                    <Text display={{ base: "none", sm: "inline" }}>
-                      Integrasi Kalender
-                    </Text>
-                    <Text display={{ base: "inline", sm: "none" }}>
-                      Integrasi
-                    </Text>
-                    <img
-                      src={ics2025Img}
-                      style={{ marginLeft: "6px", height: "25px" }}
-                      alt="export-to-ics"
-                    />
-                  </Button>
                 </Flex>
               </ButtonContainer>
             </Container>
@@ -491,6 +621,12 @@ function ViewSchedule({ match, history }) {
         onClose={googleCalendarModal.onClose}
         schedule={schedule}
         generateICalendarFile={generateICalendarFile}
+      />
+
+      <CompareModal
+        isOpen={compareModal.isOpen}
+        onClose={compareModal.onClose}
+        scheduleId={schedule?.id}
       />
     </>
   );

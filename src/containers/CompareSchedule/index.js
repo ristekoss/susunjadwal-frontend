@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
 import {
@@ -21,6 +21,8 @@ import { makeAtLeastMs } from "utils/promise";
 import { decodeHtmlEntity } from "utils/string";
 
 import compareSchedule from "assets/compare-schedule.svg";
+
+import { IoMdReturnLeft } from "react-icons/io";
 
 function CompareSchedule() {
   const isMobile = useSelector((state) => state.appState.isMobile);
@@ -77,20 +79,32 @@ function CompareSchedule() {
         {schedule1 && schedule2 && (
           <Container>
             <HeaderContainer>
-              <div>
-                <ScheduleName mode={theme}>
-                  {decodeHtmlEntity(schedule1.name) || "Untitled"}
-                </ScheduleName>
-                <Text fontSize={{ base: "12px", md: "14px" }} mt="4px">
-                  Dibuat pada{" "}
-                  {createdAt1?.toLocaleDateString("id-ID", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}{" "}
-                  • {totalCredits1} SKS
-                </Text>
-              </div>
+              <Flex align="center" gap="8px">
+                <Link to={`/jadwal/${schedule1.id}`}>
+                  <IoMdReturnLeft
+                    style={{
+                      // icon size v
+                      fontSize: "1.5rem",
+                      marginBottom: "1.5rem",
+                      cursor: "pointer",
+                    }}
+                  />
+                </Link>
+                <div>
+                  <ScheduleName mode={theme}>
+                    {decodeHtmlEntity(schedule1.name) || "Untitled"}
+                  </ScheduleName>
+                  <Text fontSize={{ base: "12px", md: "14px" }} mt="4px">
+                    Dibuat pada{" "}
+                    {createdAt1?.toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}{" "}
+                    • {totalCredits1} SKS
+                  </Text>
+                </div>
+              </Flex>
             </HeaderContainer>
 
             <ButtonContainer>
