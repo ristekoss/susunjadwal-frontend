@@ -368,8 +368,8 @@ export default GoogleCalendarModal;
 const GoogleCalendarWidget = styled(Box)`
   z-index: 1000;
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 100px;
+  right: 30px;
   background-color: ${(props) => props.bg};
   color: white;
   padding: 10px;
