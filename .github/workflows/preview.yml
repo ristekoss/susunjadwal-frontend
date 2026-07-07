@@ -22,4 +22,4 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.PROJECT_ID }}
           VERCEL_TOKEN: ${{ secrets.WEBDEV_VERCEL_TOKEN }}
-        run: npx vercel deploy --yes --token "$VERCEL_TOKEN"
+        run: npx vercel deploy --yes --token "$VERCEL_TOKEN" --build-env CI=false
