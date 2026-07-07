@@ -6,15 +6,18 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v2
-      - uses: ngduc/vercel-deploy-action@master
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
-          vercel-cli: vercel
-          vercel-token: ${{ secrets.WEBDEV_VERCEL_TOKEN }}
-          vercel-args: "--prod"
-          vercel-org-id: ${{ secrets.ORG_ID}}
-          vercel-project-id: ${{ secrets.PROJECT_ID}}
-          working-directory: ./
+          node-version: 22
+
+      - name: Deploy to Vercel
         env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
+          VERCEL_ORG_ID: ${{ secrets.ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.WEBDEV_VERCEL_TOKEN }}
+        run: npx vercel deploy --prod --yes --token "$VERCEL_TOKEN"
