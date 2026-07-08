@@ -24,7 +24,7 @@ import { useSchedulePersistence } from "hooks/useSchedulePersistence"; // Import
 import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
-import SearchInput from "../../components/SearchInput";
+import SearchInput, { filterMethod } from "../../components/SearchInput";
 
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";
@@ -170,15 +170,7 @@ function BuildSchedule() {
     return () => window.removeEventListener("focus", handleFocus);
   }, [courses, restoreSchedulesFromSessionStorage]);
 
-  let filteredCourse = courses?.filter((c) => {
-    if (value === "") {
-      return c;
-    } else if (c.name.toLowerCase().includes(value.toLowerCase())) {
-      return c;
-    } else {
-      return null;
-    }
-  });
+  let filteredCourse = !value ? courses : filterMethod(courses, value);
 
   useEffect(() => {
     useMixpanel.track("susun_page_impression", {
