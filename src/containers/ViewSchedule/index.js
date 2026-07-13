@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useMixpanel } from "hooks/useMixpanel";
 import { useParams, useLocation, Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
@@ -110,6 +111,14 @@ function ViewSchedule({ match, history }) {
     fetchSchedule();
     if (location.state?.feedbackPopup) {
       feedbackModal.onOpen();
+      useMixpanel.track("feedback_impression", {
+        eventName: "feedback_impression",
+        eventAction: "impression",
+        eventCategory: "modal",
+        screenName: "Buat Jadwal",
+        screenOwner: "desktop_web",
+        eventLabel: "/susun::feedback-modal-shown",
+      });
     }
   }, [match, dispatch]);
 

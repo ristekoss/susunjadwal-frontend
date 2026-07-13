@@ -1,9 +1,8 @@
 import React from "react";
 import { Button } from "@chakra-ui/react";
 import { useHistory, useLocation } from "react-router-dom";
-import { MdOutlineQuestionMark } from "react-icons/md";
 
-const HIDDEN_PATHS = ["/admin", "/feedback-recap"];
+const HIDDEN_PATHS = ["/admin", "/feedback-recap", "/panduan"];
 
 const FloatingHelpButton = () => {
   const history = useHistory();
@@ -25,11 +24,9 @@ const FloatingHelpButton = () => {
       bottom={{ base: "20px", lg: "28px" }}
       right={{ base: "20px", lg: "28px" }}
       zIndex={1000}
-      width="56px"
-      height="56px"
-      minW="56px"
       borderRadius="full"
-      p={0}
+      px={5}
+      py={3}
       bg="primary.Purple"
       color="primary.White"
       boxShadow="0 6px 18px rgba(80, 56, 188, 0.35)"
@@ -44,7 +41,7 @@ const FloatingHelpButton = () => {
       }}
       transition="all 0.2s ease"
     >
-      <MdOutlineQuestionMark size={26} />
+      💡Panduan
     </Button>
   );
 };

@@ -154,7 +154,26 @@ const NavLinks = ({ pathname }) => {
     <NavLinkWrapper>
       {pathname !== "/feedback-recap" &&
         LINKS.map(({ to, label }) => (
-          <HeaderLink isCurrent={pathname === to} key={to} to={to} mode={theme}>
+          <HeaderLink
+            isCurrent={pathname === to}
+            key={to}
+            to={to}
+            mode={theme}
+            onClick={
+              to === "/jadwal"
+                ? () =>
+                    useMixpanel.track("navbar_daftar_jadwal_click", {
+                      eventName: "navbar_daftar_jadwal_click",
+                      eventAction: "click",
+                      eventCategory: "navigation",
+                      ctaTitle: "Daftar Jadwal",
+                      screenName: pathname,
+                      screenOwner: "desktop_web",
+                      eventLabel: "/susun::navbar-daftar-jadwal-clicked",
+                    })
+                : undefined
+            }
+          >
             {label}
           </HeaderLink>
         ))}

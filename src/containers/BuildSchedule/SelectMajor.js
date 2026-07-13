@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useMixpanel } from "hooks/useMixpanel";
 import { Flex } from "@chakra-ui/react";
 import FACULTIES from "utils/faculty-base-additional-info.json";
 import { useForm } from "react-hook-form";
 import { CustomSelect } from "components/CustomSelect";
-import { useEffect } from "react";
 
 function SelectMajor({ theme, isMobile, setMajorSelected, show }) {
   const { register, watch } = useForm();
 
   const selectedFaculty = watch("fakultas");
   const selectedMajorName = watch("program_studi");
+
+  const prevFacultyRef = useRef("Pilih Fakultas");
+  const prevProdiRef = useRef("Pilih Program Studi");
 
   const selectedMajor =
     selectedFaculty &&
@@ -29,11 +31,37 @@ function SelectMajor({ theme, isMobile, setMajorSelected, show }) {
   }
 
   useEffect(() => {
-    if (selectedFaculty) useMixpanel.track("select_faculty");
+    if (selectedFaculty) {
+      useMixpanel.track("fakultas_dropdown_change", {
+        eventName: "fakultas_dropdown_change",
+        eventAction: "change",
+        eventCategory: "dropdown",
+        fieldName: "fakultas",
+        prevValue: prevFacultyRef.current,
+        newValue: selectedFaculty,
+        screenName: "Buat Jadwal",
+        screenOwner: "desktop_web",
+        eventLabel: "/susun::dropdown-fakultas-selected",
+      });
+      prevFacultyRef.current = selectedFaculty;
+    }
   }, [selectedFaculty]);
 
   useEffect(() => {
-    if (selectedMajorName) useMixpanel.track("select_prodi");
+    if (selectedMajorName) {
+      useMixpanel.track("prodi_dropdown_change", {
+        eventName: "prodi_dropdown_change",
+        eventAction: "change",
+        eventCategory: "dropdown",
+        fieldName: "prodi",
+        prevValue: prevProdiRef.current,
+        newValue: selectedMajorName,
+        screenName: "Buat Jadwal",
+        screenOwner: "desktop_web",
+        eventLabel: "/susun::dropdown-prodi-selected",
+      });
+      prevProdiRef.current = selectedMajorName;
+    }
   }, [selectedMajorName]);
 
   return (

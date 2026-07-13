@@ -13,11 +13,14 @@ import {
 import Helmet from "react-helmet";
 import { MdOutlineSearch, MdExpandMore, MdExpandLess } from "react-icons/md";
 import styled from "styled-components";
+import { RiArrowLeftLongLine } from "react-icons/ri";
 
 import { BauhausSide } from "components/Bauhaus";
 import { FAQ_LIST } from "./faqData";
 
 import rubyFind from "assets/ruby-find.png";
+
+import { useHistory } from "react-router-dom";
 
 const UserGuide = () => {
   const theme = useColorModeValue("light", "dark");
@@ -53,8 +56,32 @@ const UserGuide = () => {
     });
   };
 
+  const history = useHistory();
+
   return (
     <MainContainer>
+      <Text
+        as="button"
+        onClick={() => history.goBack()}
+        display="flex"
+        alignItems="center"
+        gap="12px"
+        fontSize="1.5rem"
+        border="none"
+        bg="transparent"
+        cursor="pointer"
+      >
+        <RiArrowLeftLongLine
+          color="#5038BC"
+          style={{
+            fontSize: "2rem",
+          }}
+        />
+        <Text color="#5038BC" fontWeight="medium">
+          Kembali
+        </Text>
+      </Text>
+
       <Helmet title="Susun Jadwal User Guide" />
       <BauhausSide />
 

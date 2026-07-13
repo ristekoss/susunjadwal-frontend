@@ -24,7 +24,7 @@ import { useSchedulePersistence } from "hooks/useSchedulePersistence"; // Import
 import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
-import SearchInput from "../../components/SearchInput";
+import SearchInput, { filterMethod } from "../../components/SearchInput";
 
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";
@@ -71,6 +71,14 @@ function BuildSchedule() {
       }
 
       dispatch(setLoading(true));
+      useMixpanel.track("loading_impression", {
+        eventName: "loading_impression",
+        eventAction: "impression",
+        eventCategory: "state",
+        screenName: "Buat Jadwal",
+        screenOwner: "desktop_web",
+        eventLabel: "/susun::loading-state-shown",
+      });
 
       try {
         const { data } = majorSelected
@@ -162,24 +170,37 @@ function BuildSchedule() {
     return () => window.removeEventListener("focus", handleFocus);
   }, [courses, restoreSchedulesFromSessionStorage]);
 
-  let filteredCourse = courses?.filter((c) => {
-    if (value === "") {
-      return c;
-    } else if (c.name.toLowerCase().includes(value.toLowerCase())) {
-      return c;
-    } else {
-      return null;
-    }
-  });
+  let filteredCourse = !value ? courses : filterMethod(courses, value);
 
   useEffect(() => {
-    useMixpanel.track("open_buat_jadwal");
+    useMixpanel.track("susun_page_impression", {
+      eventName: "susun_page_impression",
+      eventAction: "impression",
+      eventCategory: "page",
+      screenName: "Buat Jadwal",
+      screenOwner: "desktop_web",
+      eventLabel: "/susun::page-loaded",
+    });
   }, []);
 
   useEffect(() => {
     if (isInitialMount.current) isInitialMount.current = false;
     else useMixpanel.track("search_course");
   }, [value]);
+
+  useEffect(() => {
+    if (!isCoursesDetail && majorSelected) {
+      useMixpanel.track("empty_state_impression", {
+        eventName: "empty_state_impression",
+        eventAction: "impression",
+        eventCategory: "state",
+        fieldName: `fakultas: ${majorSelected.study_program}, prodi: ${majorSelected.educational_program}`,
+        screenName: "Buat Jadwal",
+        screenOwner: "desktop_web",
+        eventLabel: "/susun::empty-state-shown",
+      });
+    }
+  }, [isCoursesDetail, majorSelected]);
 
   return (
     <Container>
