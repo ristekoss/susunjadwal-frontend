@@ -34,6 +34,7 @@ import compareMobile from "assets/compare-mobile.svg";
 
 import ics2026Img from "assets/ics2026.svg";
 import pencilIcon from "assets/pencil-icon.svg";
+import pencilIconDark from "assets/pencilIconDark.svg";
 import { useDisclosure } from "@chakra-ui/react";
 import GoogleCalendarModal from "../ViewSchedule/GoogleCalendarModal";
 
@@ -324,15 +325,11 @@ const ScheduleDetail = ({
                       px={{ base: "32px", md: "100px" }}
                       py={{ base: "20px", md: "20px" }}
                       variant="solid"
-                      bg={
-                        theme === "light"
-                          ? "secondary.Purple"
-                          : "dark.LightPurple"
-                      }
+                      bg="secondary.Purple"
                       color={
                         theme === "light"
                           ? "secondary.GalacticPurple"
-                          : "dark.White"
+                          : "primary.Purple"
                       }
                       onClick={handleOpenGoogleCalendarModal}
                       fontSize={{ base: "14px", md: "16px" }}
@@ -380,15 +377,17 @@ const ScheduleDetail = ({
                       borderColor={
                         theme === "light"
                           ? "primary.Purple"
-                          : "dark.LightPurple"
+                          : "secondary.Purple"
                       }
                       color={
-                        theme === "light" ? "primary.Purple" : "dark.Purple"
+                        theme === "light"
+                          ? "primary.Purple"
+                          : "secondary.Purple"
                       }
                     >
                       Edit
                       <img
-                        src={pencilIcon}
+                        src={theme === "light" ? pencilIcon : pencilIconDark}
                         style={{ marginLeft: "16px", height: "25px" }}
                         alt="edit schedule"
                       />

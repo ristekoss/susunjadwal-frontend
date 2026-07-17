@@ -386,6 +386,7 @@ function BuildSchedule() {
                 <>
                   <CategoryHeading
                     $color={theme === "light" ? "#5038BC" : "#917DEC"}
+                    $mode={theme}
                   >
                     Kelas Internal
                   </CategoryHeading>
@@ -401,6 +402,7 @@ function BuildSchedule() {
                 <>
                   <CategoryHeading
                     $color={theme === "light" ? "#5038BC" : "#917DEC"}
+                    $mode={theme}
                   >
                     Kelas Eksternal
                   </CategoryHeading>
@@ -545,4 +547,7 @@ const CategoryHeading = styled.h2`
   margin-top: 24px;
   margin-bottom: 12px;
   color: ${({ $color }) => $color || "#5038BC"};
+  padding-bottom: 8px
+  border-bottom: 1px solid ${({ $mode }) =>
+    $mode === "light" ? "#b1b1b1" : "white"};
 `;

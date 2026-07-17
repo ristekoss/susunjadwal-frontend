@@ -130,7 +130,7 @@ const UserGuide = () => {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Cari Kata Kunci"
-            bg="primary.White"
+            bg={theme === "light" ? "primary.White" : "dark.Black"}
             borderColor="primary.DarkPurple"
             borderWidth="1px"
             borderRadius="8px 0 0 8px"
@@ -295,7 +295,7 @@ const FaqStack = styled.div`
 const FaqRow = styled.div`
   border-radius: 12px;
   overflow: hidden;
-  background: ${({ mode }) => (mode === "light" ? "#FFFFFF" : "#1c1c1c")};
+  background: ${({ mode }) => (mode === "light" ? "#FFFFFF" : "#2c2c2c")};
   box-shadow: ${({ mode }) =>
     mode === "light"
       ? "0px 1px 2px 0px rgba(0, 0, 0, 0.06)"
@@ -328,9 +328,7 @@ const FaqHeader = styled.div`
 const FaqBody = styled.div`
   padding: 16px 20px 20px 20px;
   background: ${({ mode }) =>
-    mode === "light"
-      ? "rgba(201, 206, 252, 0.18)"
-      : "rgba(145, 125, 236, 0.10)"};
+    mode === "light" ? "rgba(201, 206, 252, 0.18)" : "rgba(8, 8, 8, 0.38)"};
   display: flex;
   flex-direction: column;
   gap: 10px;

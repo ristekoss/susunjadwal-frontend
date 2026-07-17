@@ -15,8 +15,10 @@ import MapPoint from "assets/Beta/MapPoint.svg";
 import MapPointDark from "assets/Beta/MapPoint-dark.svg";
 
 // import RistekLogoLight from "assets/Logo/RistekLogo-light-2025.svg";
-import RistekLogoDark from "assets/Logo/RistekLogo-dark-2025.svg";
-import RistekLogoLight from "assets/Logo/RistekLogo-2026.svg";
+// import RistekLogoDark from "assets/Logo/RistekLogo-dark-2025.svg";
+// import RistekLogoLight from "assets/Logo/RistekLogo-2026.svg";
+import RistekLogoDark from "assets/Logo/RistekLogo-2026.svg";
+import RistekLogoLight from "assets/Logo/RistekLogoLight-2026.svg";
 
 import SocialContainer from "./SocialCointainer";
 
@@ -37,7 +39,7 @@ const Footer = () => {
         textAlign={{ base: "center", lg: "left" }}
       >
         <Image
-          src={theme === "light" ? RistekLogoLight : RistekLogoDark}
+          src={theme === "light" ? RistekLogoDark : RistekLogoLight}
           alt=""
           objectFit="contain"
           mx={{ base: "auto", lg: 0 }}
@@ -80,9 +82,7 @@ const Footer = () => {
           <StyledSpanWrapper>
             <a
               style={{
-                borderLeftWidth: "1px",
-                paddingLeft: "10rem",
-                marginLeft: "1rem",
+                paddingLeft: "1rem",
               }}
               target="_blank"
               rel="noopener noreferrer"

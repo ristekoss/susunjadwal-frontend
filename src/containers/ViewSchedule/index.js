@@ -61,6 +61,7 @@ import CompareModal from "../ScheduleList/CompareModal";
 import compareSchedule from "assets/compare-schedule-white.svg";
 import compareBulb from "assets/compare-bulb.svg";
 import pencilIcon from "assets/pencil-icon.svg";
+import pencilIconDark from "assets/pencilIconDark.svg";
 import { RiArrowLeftLongLine } from "react-icons/ri";
 
 function ViewSchedule({ match, history }) {
@@ -494,15 +495,11 @@ function ViewSchedule({ match, history }) {
                     px={{ base: "32px", md: "100px" }}
                     py={{ base: "20px", md: "20px" }}
                     variant="solid"
-                    bg={
-                      theme === "light"
-                        ? "secondary.Purple"
-                        : "dark.LightPurple"
-                    }
+                    bg="secondary.Purple"
                     color={
                       theme === "light"
                         ? "secondary.GalacticPurple"
-                        : "dark.White"
+                        : "primary.Purple"
                     }
                     onClick={handleOpenGoogleCalendarModal}
                     fontSize={{ base: "14px", md: "18px" }}
@@ -538,10 +535,12 @@ function ViewSchedule({ match, history }) {
                       borderColor={
                         theme === "light"
                           ? "primary.Purple"
-                          : "dark.LightPurple"
+                          : "secondary.Purple"
                       }
                       color={
-                        theme === "light" ? "primary.Purple" : "dark.Purple"
+                        theme === "light"
+                          ? "primary.Purple"
+                          : "secondary.Purple"
                       }
                       fontSize={{ base: "16px", md: "18px" }}
                       minW={{ base: "120px", md: "100px" }}
@@ -550,7 +549,7 @@ function ViewSchedule({ match, history }) {
                     >
                       {schedule.has_edit_access ? "Edit" : "Copy"}
                       <img
-                        src={pencilIcon}
+                        src={theme === "light" ? pencilIcon : pencilIconDark}
                         style={{ marginLeft: "16px", height: "28px" }}
                         alt="edit schedule"
                       />
