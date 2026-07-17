@@ -33,7 +33,8 @@ const UpdateCourses = () => {
     handleSubmit,
     register,
     watch,
-    formState: { errors, isSubmitting },
+    // eslint-disable-next-line no-unused-vars
+    formState: { errors, isSubmitting: _isSubmitting },
   } = useForm();
 
   const [isUsernameChanged, setIsUsernameChanged] = useState(false);

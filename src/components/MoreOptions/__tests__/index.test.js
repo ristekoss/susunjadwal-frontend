@@ -1,9 +1,13 @@
 import React from "react";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import MoreOptions from "components/MoreOptions/MoreOptions";
-import useDownloadCalendar from "hooks/useDownloadCalendar";
 
-const { generateICalendarFile } = useDownloadCalendar();
+const generateICalendarFile = jest.fn();
+
+jest.mock("hooks/useDownloadCalendar", () => ({
+  __esModule: true,
+  default: () => ({ generateICalendarFile }),
+}));
 
 const mockMoreOptionsProps = {
   items: [

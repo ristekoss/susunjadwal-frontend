@@ -108,7 +108,7 @@ const DetailsModal = ({
                 <Container>
                   <img
                     src={theme === "light" ? jamMatkulImg : jamMatkulImgDark}
-                    alt="Jam Matkul Image"
+                    alt="Jam Matkul"
                   />
                   <Content>
                     <p className="header">Jam Matkul</p>
@@ -120,7 +120,7 @@ const DetailsModal = ({
                 <Container>
                   <img
                     src={theme === "light" ? ruangKelasImg : ruangKelasImgDark}
-                    alt="Ruang Kelas Image"
+                    alt="Ruang Kelas"
                   />
                   <Content>
                     <p className="header">Ruang Kelas</p>
@@ -130,7 +130,7 @@ const DetailsModal = ({
                 <Container>
                   <img
                     src={theme === "light" ? namaDosenImg : namaDosenImgDark}
-                    alt="Nama Dosen Image"
+                    alt="Nama Dosen"
                   />
                   <Content>
                     <p className="header">Nama Dosen</p>
@@ -204,7 +204,7 @@ const DetailsModal = ({
                 <Container>
                   <img
                     src={theme === "light" ? jamMatkulImg : jamMatkulImgDark}
-                    alt="Jam Matkul Image"
+                    alt="Jam Matkul"
                   />
                   <Content>
                     <p className="header">Jam Matkul</p>
@@ -216,7 +216,7 @@ const DetailsModal = ({
                 <Container>
                   <img
                     src={theme === "light" ? ruangKelasImg : ruangKelasImgDark}
-                    alt="Ruang Kelas Image"
+                    alt="Ruang Kelas"
                   />
                   <Content>
                     <p className="header">Ruang Kelas</p>
@@ -226,7 +226,7 @@ const DetailsModal = ({
                 <Container>
                   <img
                     src={theme === "light" ? namaDosenImg : namaDosenImgDark}
-                    alt="Nama Dosen Image"
+                    alt="Nama Dosen"
                   />
                   <Content>
                     <p className="header">Nama Dosen</p>

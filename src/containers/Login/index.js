@@ -49,7 +49,7 @@ import {
 
 import { FlexBox } from "containers/BetaLanding/styles";
 
-import RistekLogo from "assets/Logo/RistekLogo-light-2025.svg";
+import RistekLogo from "assets/Logo/RistekLogo-2026.svg";
 import ChevronDown from "assets/Beta/chevron-down.svg";
 import ChevronUp from "assets/Beta/chevron-up.svg";
 
@@ -60,7 +60,8 @@ function getServiceUrl() {
 function Login({ history, location }) {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const theme = useColorModeValue("light", "dark");
+  // eslint-disable-next-line no-unused-vars
+  const _theme = useColorModeValue("light", "dark");
 
   useEffect(() => {
     async function authenticate(ticket, serviceUrl) {
@@ -208,7 +209,7 @@ function Login({ history, location }) {
         <Announcement />
 
         <CTAButtonDesktop height="55px" onClick={redirectToSSOLogin}>
-          <img src={makara} style={{ marginRight: "0.5rem" }}></img>
+          <img src={makara} style={{ marginRight: "0.5rem" }} alt="" />
           Rencanakan SIAKWAR Sekarang
         </CTAButtonDesktop>
 
@@ -217,7 +218,7 @@ function Login({ history, location }) {
           width="319px"
           onClick={redirectToSSOLogin}
         >
-          <img src={makara} style={{ marginRight: "0.5rem" }}></img>
+          <img src={makara} style={{ marginRight: "0.5rem" }} alt="" />
           Masuk Dengan SSO
         </CTAButtonMobile>
 
@@ -386,7 +387,7 @@ function Login({ history, location }) {
             _active={{ background: "#5038bc2c" }}
             fontSize={{ base: "14px", md: "18px" }}
           >
-            <img src={link} style={{ marginRight: "0.5rem" }}></img>
+            <img src={link} style={{ marginRight: "0.5rem" }} alt="" />
             https://github.com/ristekoss
           </Button>
         </a>
@@ -416,6 +417,7 @@ function Login({ history, location }) {
       </FlexBox>
 
       <Fade in={Visible}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a href="#">
           <AssetChevronUp
             src={ChevronUp}

@@ -1,11 +1,4 @@
-import {
-  Box,
-  Flex,
-  Image,
-  Text,
-  useColorModeValue,
-  Center,
-} from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useColorModeValue } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import React from "react";
 import {
@@ -16,17 +9,16 @@ import {
   StyledPartnerTitle,
   StyledSpanWrapper,
 } from "./styles";
-import GojekLogo from "assets/Beta/gojek.svg";
-import GotoLogo from "assets/Beta/Goto.svg";
-import GojekDarkLogo from "assets/Beta/Gojek-dark.svg";
-import GotoDarkLogo from "assets/Beta/Goto-dark.svg";
 import HackLogo from "assets/Beta/HackPlus.svg";
 import HackDarkLogo from "assets/Beta/HackPlus-dark.svg";
 import MapPoint from "assets/Beta/MapPoint.svg";
 import MapPointDark from "assets/Beta/MapPoint-dark.svg";
 
-import RistekLogoLight from "assets/Logo/RistekLogo-light-2025.svg";
-import RistekLogoDark from "assets/Logo/RistekLogo-dark-2025.svg";
+// import RistekLogoLight from "assets/Logo/RistekLogo-light-2025.svg";
+// import RistekLogoDark from "assets/Logo/RistekLogo-dark-2025.svg";
+// import RistekLogoLight from "assets/Logo/RistekLogo-2026.svg";
+import RistekLogoDark from "assets/Logo/RistekLogo-2026.svg";
+import RistekLogoLight from "assets/Logo/RistekLogoLight-2026.svg";
 
 import SocialContainer from "./SocialCointainer";
 
@@ -47,7 +39,7 @@ const Footer = () => {
         textAlign={{ base: "center", lg: "left" }}
       >
         <Image
-          src={theme === "light" ? RistekLogoLight : RistekLogoDark}
+          src={theme === "light" ? RistekLogoDark : RistekLogoLight}
           alt=""
           objectFit="contain"
           mx={{ base: "auto", lg: 0 }}
@@ -62,7 +54,7 @@ const Footer = () => {
               src={theme === "light" ? MapPoint : MapPointDark}
               alt="MapPoint"
             />
-            Universitas Indonesia, Depok
+            <Text color="purple.500">Universitas Indonesia, Depok</Text>
           </StyledLocation>
           <Text
             fontWeight="normal"
@@ -82,48 +74,15 @@ const Footer = () => {
             color={theme === "light" ? "secondary.MineShaft" : "dark.White"}
           >
             <p style={{ fontWeight: 600 }}>Contact us (Email): </p>
-            team@ristek.cs.ui.ac.id
+            <p style={{ color: "#F6339A" }}>business@ristek.cs.ui.ac.id</p>
           </Text>
         </StyledFooterDesc>
 
         <StyledPartner>
           <StyledSpanWrapper>
-            <div>
-              <StyledPartnerTitle mode={theme}>
-                Official Learning Partner
-              </StyledPartnerTitle>
-              <Center>
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://www.gojek.com/en-id/"
-                >
-                  <Image
-                    objectFit="contain"
-                    w={{ base: "24", lg: "28" }}
-                    mr="13px"
-                    src={theme === "light" ? GojekLogo : GojekDarkLogo}
-                    alt="logo Gojek"
-                  />
-                </a>
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://www.gotocompany.com/"
-                >
-                  <Image
-                    w={{ base: "20", lg: "24" }}
-                    src={theme === "light" ? GotoLogo : GotoDarkLogo}
-                    alt="logo GoTo"
-                  />
-                </a>
-              </Center>
-            </div>
             <a
               style={{
-                borderLeftWidth: "1px",
                 paddingLeft: "1rem",
-                marginLeft: "1rem",
               }}
               target="_blank"
               rel="noopener noreferrer"

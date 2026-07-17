@@ -45,6 +45,8 @@ export const colors = {
     Golden: "#FFD668",
     Cerise: "#C424A3",
     MineShaft: "#333333",
+    Purple: "#C9CEFC",
+    GalacticPurple: "#45349F",
   },
   dark: {
     Purple: "#917DEC",

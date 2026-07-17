@@ -24,6 +24,7 @@ import { useSchedulePersistence } from "hooks/useSchedulePersistence"; // Import
 import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
+import PreviewSchedule from "./PreviewSchedule";
 import SearchInput, { filterMethod } from "../../components/SearchInput";
 
 import searchImg from "assets/Search.svg";
@@ -172,6 +173,21 @@ function BuildSchedule() {
 
   let filteredCourse = !value ? courses : filterMethod(courses, value);
 
+  const groupedCourses =
+    filteredCourse && filteredCourse.length > 0
+      ? filteredCourse.reduce(
+          (acc, course) => {
+            if (course.category === "Kelas Internal") {
+              acc.internal.push(course);
+            } else {
+              acc.external.push(course);
+            }
+            return acc;
+          },
+          { internal: [], external: [] },
+        )
+      : null;
+
   useEffect(() => {
     useMixpanel.track("susun_page_impression", {
       eventName: "susun_page_impression",
@@ -208,6 +224,7 @@ function BuildSchedule() {
       <Helmet title="Buat Jadwal" />
 
       <CoursePickerContainer isMobile={isMobile} mode={theme}>
+        {isMobile && <PreviewSchedule />}
         <h1>Buat Jadwal</h1>
 
         {lastUpdated && courses && (
@@ -364,14 +381,46 @@ function BuildSchedule() {
               </Text>
             </Center>
           ) : (
-            filteredCourse.map((course, idx) => (
-              <Course key={`${course.name}-${idx}`} course={course} />
-            ))
+            <>
+              {groupedCourses && groupedCourses.internal.length > 0 && (
+                <>
+                  <CategoryHeading
+                    $color={theme === "light" ? "#5038BC" : "#917DEC"}
+                    $mode={theme}
+                  >
+                    Kelas Internal
+                  </CategoryHeading>
+                  {groupedCourses.internal.map((course, idx) => (
+                    <Course
+                      key={`internal-${course.name}-${idx}`}
+                      course={course}
+                    />
+                  ))}
+                </>
+              )}
+              {groupedCourses && groupedCourses.external.length > 0 && (
+                <>
+                  <CategoryHeading
+                    $color={theme === "light" ? "#5038BC" : "#917DEC"}
+                    $mode={theme}
+                  >
+                    Kelas Eksternal
+                  </CategoryHeading>
+                  {groupedCourses.external.map((course, idx) => (
+                    <Course
+                      key={`external-${course.name}-${idx}`}
+                      course={course}
+                    />
+                  ))}
+                </>
+              )}
+            </>
           ))}
       </CoursePickerContainer>
 
       {!isMobile && (
         <SelectedCoursesContainer isAnnouncement={isAnnouncement} mode={theme}>
+          <PreviewSchedule />
           <SelectedCourses />
         </SelectedCoursesContainer>
       )}
@@ -437,7 +486,7 @@ export const InfoContent = styled.div`
 `;
 
 export const CoursePickerContainer = styled.div`
-  width: ${({ isMobile }) => (isMobile ? "100%" : "75%;")};
+  width: ${({ isMobile }) => (isMobile ? "100%" : "70%;")};
   color: #333333;
 
   h1 {
@@ -485,9 +534,20 @@ export const SelectedCoursesContainer = styled.div`
   overflow-y: auto;
   position: fixed;
   height: 100vh;
-  width: 25%;
+  width: 30%;
   right: 0;
   top: 0;
 
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
+`;
+
+const CategoryHeading = styled.h2`
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  color: ${({ $color }) => $color || "#5038BC"};
+  padding-bottom: 8px
+  border-bottom: 1px solid ${({ $mode }) =>
+    $mode === "light" ? "#b1b1b1" : "white"};
 `;
