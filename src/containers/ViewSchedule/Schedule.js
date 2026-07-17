@@ -261,7 +261,7 @@ function Schedule({
 
               {schedule &&
                 schedule.schedule_items.map(
-                  ({ day, start, end, room, name, course_name }, idx) =>
+                  ({ day, start, end, room: _room, name, course_name }, idx) =>
                     DAYS.slice(0, 3).includes(day) && (
                       <ScheduleItem
                         key={`${schedule.name}-${idx}`}
@@ -298,7 +298,7 @@ function Schedule({
 
             <PageButtonContainer mode={theme}>
               <PageButton onClick={() => executeScroll(pageTwo)} mode={theme}>
-                <img src={caret} style={{ height: "28px" }}></img>
+                <img src={caret} style={{ height: "28px" }} alt="" />
               </PageButton>
             </PageButtonContainer>
           </MobileScheduleContainer>
@@ -310,7 +310,8 @@ function Schedule({
                 <img
                   src={caret}
                   style={{ height: "28px", transform: "rotate(180deg)" }}
-                ></img>
+                  alt=""
+                />
               </PageButton>
             </PageButtonContainer>
 
@@ -338,7 +339,7 @@ function Schedule({
 
               {schedule &&
                 schedule.schedule_items.map(
-                  ({ day, start, end, room, name, course_name }, idx) =>
+                  ({ day, start, end, room: _room, name, course_name }, idx) =>
                     DAYS.slice(3, 6).includes(day) && (
                       <ScheduleItem
                         key={`${schedule.name}-${idx}`}

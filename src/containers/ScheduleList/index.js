@@ -191,7 +191,7 @@ const ScheduleList = () => {
   const copyImage = () => {
     copyImageToClipboard(imageURL)
       .then(() => showAlertCopy("Gambar"))
-      .catch((e) => showErrorCopy());
+      .catch((_e) => showErrorCopy());
   };
 
   return (

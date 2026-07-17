@@ -60,10 +60,11 @@ function CompareSchedule() {
     }
   }, [location.search, dispatch]);
 
-  const [formattedSchedule1, totalCredits1] = schedule1
+  const [, totalCredits1] = schedule1
     ? getFormattedSchedule(schedule1)
     : [{}, 0];
-  const [, totalCredits2] = schedule2
+  // eslint-disable-next-line no-unused-vars
+  const [, _totalCredits2] = schedule2
     ? getFormattedSchedule(schedule2)
     : [{}, 0];
   const createdAt1 = schedule1 ? new Date(schedule1.created_at) : null;

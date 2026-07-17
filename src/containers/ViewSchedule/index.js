@@ -120,7 +120,7 @@ function ViewSchedule({ match, history }) {
         eventLabel: "/susun::feedback-modal-shown",
       });
     }
-  }, [match, dispatch]);
+  }, [match, dispatch, feedbackModal]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const scheduleName = schedule && schedule.name;
 
@@ -183,7 +183,7 @@ function ViewSchedule({ match, history }) {
   const copyImage = () => {
     copyImageToClipboard(imageURL)
       .then(() => showAlertCopy("Gambar"))
-      .catch((e) => showErrorCopy());
+      .catch((_e) => showErrorCopy());
   };
 
   const handleFeedbackModalClose = () => {

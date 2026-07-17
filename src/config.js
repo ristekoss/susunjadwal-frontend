@@ -19,7 +19,9 @@ const config = {
   },
 };
 
-export default {
+const appConfig = {
   ...config.base,
   ...config[process.env.NODE_ENV || "development"],
 };
+
+export default appConfig;

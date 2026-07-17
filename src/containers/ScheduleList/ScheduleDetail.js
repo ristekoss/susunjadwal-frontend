@@ -51,10 +51,12 @@ const ScheduleDetail = ({
   const { generateICalendarFile } = useDownloadCalendar(theme);
   const googleCalendarModal = useDisclosure();
   let formattedSchedule = {};
-  let totalCredits = 0;
+  // eslint-disable-next-line no-unused-vars
+  let _totalCredits = 0;
 
   if (schedule) {
-    [formattedSchedule, totalCredits] = getFormattedSchedule(schedule);
+    // eslint-disable-next-line no-unused-vars
+    [formattedSchedule, _totalCredits] = getFormattedSchedule(schedule);
   }
 
   const convertDate = (date) => {

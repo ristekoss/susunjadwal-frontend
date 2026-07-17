@@ -141,7 +141,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
   });
 
   const listConflicts = listScheduleConflicts(schedules);
-  const conflicts = listConflicts.map((conflict, idx) => {
+  const conflicts = listConflicts.map((conflict, _idx) => {
     return (
       <li>
         {conflict[0]} dengan {conflict[1]}
