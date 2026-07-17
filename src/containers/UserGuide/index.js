@@ -6,7 +6,6 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Image,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -84,17 +83,7 @@ const UserGuide = () => {
 
       <Helmet title="Susun Jadwal User Guide" />
       <BauhausSide />
-
-      <Box
-        position="absolute"
-        top="100px"
-        left="-20px"
-        width={{ base: "100px", lg: "240px" }}
-        display={{ base: "none", lg: "block" }}
-        zIndex={3}
-      >
-        <Image src={rubyFind} alt="Ruby mascot" objectFit="contain" />
-      </Box>
+      <RubyDecor src={rubyFind} alt="Ruby mascot" />
 
       <Box textAlign="center" mt={{ base: "1rem", lg: "2rem" }} mb="2rem">
         <Text
@@ -268,11 +257,31 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 70vh;
+  --content-max-width: 820px;
+`;
+
+const RubyDecor = styled.img`
+  position: absolute;
+  top: clamp(1.5rem, 9vh, 12rem);
+  left: calc(50% - (var(--content-max-width) / 2) - clamp(10rem, 16vw, 20rem));
+  width: clamp(8.75rem, 16vw, 16rem);
+  height: auto;
+  z-index: 0;
+  pointer-events: none;
+
+  @media (min-width: 1201px) and (max-width: 1360px) {
+    left: max(1rem, calc(50% - (var(--content-max-width) / 2) - 9.5rem));
+    width: clamp(8rem, 10vw, 10rem);
+  }
+
+  @media (max-width: 1200px) {
+    display: none;
+  }
 `;
 
 const SearchWrapper = styled(Flex).attrs({ align: "stretch" })`
   width: 100%;
-  max-width: 820px;
+  max-width: var(--content-max-width);
   margin: 0 auto 2.5rem auto;
   display: flex;
   flex-direction: row;
@@ -287,7 +296,7 @@ const FaqStack = styled.div`
   display: flex;
   flex-direction: column;
   gap: 14px;
-  max-width: 820px;
+  max-width: var(--content-max-width);
   margin: 0 auto;
   width: 100%;
 `;
