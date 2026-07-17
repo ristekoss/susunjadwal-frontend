@@ -25,7 +25,6 @@ import getFormattedSchedule from "utils/schedule";
 import useDownloadCalendar from "hooks/useDownloadCalendar";
 import { decodeHtmlEntity } from "utils/string";
 
-import exportToIcsImg from "assets/ExportToIcs.svg";
 import clipboardImg from "assets/Clipboard.svg";
 import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
@@ -125,8 +124,22 @@ const ScheduleDetail = ({
         onClick={() => useMixpanel.track("open_jadwal")}
         to={`/jadwal/${schedule.id}`}
       >
-        <Card key={`${schedule.name}-${idx}`} mode={theme}>
-          <div className="headerInfo">
+        <Card key={`${schedule.name}-${idx}`} mode={theme} isMobile={isMobile}>
+          {isMobile && (
+            <SchedulePreview
+              startHour={7}
+              endHour={21}
+              schedule={schedule}
+              pxPerMinute={0.7}
+              width="100%"
+              showRoom
+              isTop
+            />
+          )}
+          <div
+            className="headerInfo"
+            style={isMobile ? { borderRadius: "0 0 8px 8px" } : {}}
+          >
             <div>
               <div
                 style={{ display: "flex", gap: "13px", alignItems: "center" }}
@@ -206,12 +219,6 @@ const ScheduleDetail = ({
                       <img src={clipboardImg} alt="copy" />
                     </ImageButton>
                     <ImageButton
-                      onClick={() => generateICalendarFile(schedule)}
-                      data-hover="Ekspor ke .ics (Google Calendar/Apple Calendar)"
-                    >
-                      <img src={exportToIcsImg} alt="export-to-ics" />
-                    </ImageButton>
-                    <ImageButton
                       onClick={() => showModal(schedule.id)}
                       data-hover="Delete Jadwal"
                     >
@@ -231,12 +238,6 @@ const ScheduleDetail = ({
                               downloadImage(
                                 !schedule.name ? "Untitled" : schedule.name,
                               ),
-                          },
-                          {
-                            desc: "Ekspor ke .ics (Google Calendar/Apple Calendar)",
-                            icon: exportToIcsImg,
-                            alt: "export-to-ics",
-                            action: () => generateICalendarFile(schedule),
                           },
                           {
                             desc: "Share Jadwal",
@@ -411,14 +412,16 @@ const ScheduleDetail = ({
               />
             </div>
           </div>
-          <SchedulePreview
-            startHour={7}
-            endHour={21}
-            schedule={schedule}
-            pxPerMinute={isMobile ? 0.7 : 0.9}
-            width="100%"
-            showRoom
-          />
+          {!isMobile && (
+            <SchedulePreview
+              startHour={7}
+              endHour={21}
+              schedule={schedule}
+              pxPerMinute={0.9}
+              width="100%"
+              showRoom
+            />
+          )}
         </Card>
       </Link>
 

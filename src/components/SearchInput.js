@@ -5,24 +5,16 @@ import styled from "styled-components";
 export const filterMethod = (courses, query) => {
   if (!query || !query.trim()) return [];
 
-  // Cleanup query and create a fuzzy regex pattern
-  const cleanQuery = query.toLowerCase().replace(/[^a-z0-9]/g, "");
-  const fuzzyRegex = new RegExp(cleanQuery.split("").join(".*"), "i");
+  const lowerQuery = query.toLowerCase().trim();
 
   return courses.filter((course) => {
-    // Check full course name
-    const cleanCourseName = course.name.toLowerCase().replace(/[^a-z0-9]/g, "");
-    if (fuzzyRegex.test(cleanCourseName)) return true;
+    if (course.name.toLowerCase().includes(lowerQuery)) return true;
 
-    // Check api for short names in the classes array
-    const hasShortNameMatch = (course.classes || []).some((cls) => {
-      const cleanClassShortName = cls.name
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, "");
-      return fuzzyRegex.test(cleanClassShortName);
-    });
+    const hasClassNameMatch = (course.classes || []).some((cls) =>
+      cls.name.toLowerCase().includes(lowerQuery),
+    );
 
-    return hasShortNameMatch;
+    return hasClassNameMatch;
   });
 };
 

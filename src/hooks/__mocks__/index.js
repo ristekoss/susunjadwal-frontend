@@ -257,6 +257,148 @@ export const mockFormattedSchedule = {
   },
 };
 
+export const mockCoursesResponse = {
+  courses: [
+    {
+      category: "Kelas Internal",
+      name: "Analisis Numerik",
+      credit: 3,
+      term: "1",
+      classes: [
+        {
+          name: "Analisis Numerik A",
+          schedule_items: [
+            {
+              day: "Senin",
+              start: "08.00",
+              end: "09.40",
+              room: "A2.06 (Ged Baru)",
+            },
+            {
+              day: "Rabu",
+              start: "10.00",
+              end: "10.50",
+              room: "A2.06 (Ged Baru)",
+            },
+          ],
+          lecturer: [
+            "Prof. Drs. T. Basaruddin, M.Sc., Ph.D.",
+            "Raja Oktovin Parhasian Damanik, S.Kom., M.Sc.",
+          ],
+        },
+      ],
+    },
+    {
+      name: "Basis Data",
+      credit: 4,
+      term: "1",
+      classes: [
+        {
+          name: "Basis Data A",
+          schedule_items: [
+            {
+              day: "Selasa",
+              start: "10.00",
+              end: "11.40",
+              room: "A1.07 (Ged Baru)",
+            },
+            {
+              day: "Kamis",
+              start: "10.00",
+              end: "11.40",
+              room: "A1.07 (Ged Baru)",
+            },
+          ],
+          lecturer: ["Mei Silviana Saputri, S.Kom., M.Kom."],
+        },
+      ],
+    },
+    {
+      name: "Dasar-Dasar Pemrograman 1",
+      credit: 4,
+      term: "1",
+      classes: [
+        {
+          name: "DDP 1 A",
+          schedule_items: [
+            {
+              day: "Selasa",
+              start: "08.00",
+              end: "09.40",
+              room: "2.2304",
+            },
+            {
+              day: "Kamis",
+              start: "08.00",
+              end: "09.40",
+              room: "2.2304",
+            },
+            {
+              day: "Jumat",
+              start: "14.00",
+              end: "15.40",
+              room: "Lab.1101/1103",
+            },
+          ],
+          lecturer: ["Drs. Lim Yohanes Stefanus, M.Math, Ph.D."],
+        },
+      ],
+    },
+    {
+      name: "Desain & Analisis Algoritma",
+      credit: 4,
+      term: "1",
+      classes: [
+        {
+          name: "DAA A",
+          schedule_items: [
+            {
+              day: "Senin",
+              start: "13.00",
+              end: "14.40",
+              room: "A2.06 (Ged Baru)",
+            },
+            {
+              day: "Rabu",
+              start: "08.00",
+              end: "09.40",
+              room: "A2.06 (Ged Baru)",
+            },
+          ],
+          lecturer: ["Theresia Veronika Rampisela, S.Si., M.Kom."],
+        },
+      ],
+    },
+    {
+      name: "Jaringan Komputer",
+      credit: 4,
+      term: "1",
+      classes: [
+        {
+          name: "Jaringan Komputer B",
+          schedule_items: [
+            {
+              day: "Rabu",
+              start: "15.00",
+              end: "16.40",
+              room: "A2.06 (Ged Baru)",
+            },
+            {
+              day: "Jumat",
+              start: "10.00",
+              end: "11.40",
+              room: "A2.06 (Ged Baru)",
+            },
+          ],
+          lecturer: ["Muhammad Hafizhuddin Hilman, S.Kom., M.Kom."],
+        },
+      ],
+    },
+  ],
+  is_detail: true,
+  last_update_at: "2021-10-07T14:01:18Z",
+};
+
 export const mockFormattedScheduleToEvent = [
   {
     start: [2021, 10, 4, 8, 0],

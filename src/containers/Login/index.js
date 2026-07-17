@@ -49,7 +49,7 @@ import {
 
 import { FlexBox } from "containers/BetaLanding/styles";
 
-import RistekLogo from "assets/Logo/RistekLogo-light-2025.svg";
+import RistekLogo from "assets/Logo/RistekLogo-2026.svg";
 import ChevronDown from "assets/Beta/chevron-down.svg";
 import ChevronUp from "assets/Beta/chevron-up.svg";
 

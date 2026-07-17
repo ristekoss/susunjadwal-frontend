@@ -19,6 +19,7 @@ function SchedulePreview({
   showLabel,
   showHeader,
   showRoom,
+  isTop,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -71,6 +72,7 @@ function SchedulePreview({
       width={width}
       showLabel={showLabel}
       mode={theme}
+      isTop={isTop}
     >
       <DetailsModal
         isOpen={isOpen}
@@ -206,7 +208,7 @@ const Container = styled.div`
   grid-template-rows: repeat(990, ${({ pxPerMinute }) => pxPerMinute}px);
   width: ${({ width }) => width};
   background-color:${({ mode }) => (mode === "light" ? "#FFFFFF" : "#292929")}
-  border-radius: 0 0 8px 8px;
+  border-radius: ${({ isTop }) => (isTop ? "8px 8px 0 0" : "0 0 8px 8px")};
 `;
 
 const TimeLabel = styled.div`

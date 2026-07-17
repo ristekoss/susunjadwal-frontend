@@ -48,7 +48,6 @@ import copyImg from "assets/Copy.svg";
 import alertDarkImg from "assets/Alert-dark.svg";
 import linkDarkImg from "assets/Link-dark.svg";
 import copyDarkImg from "assets/Copy-dark.svg";
-import exportToIcsImg from "assets/ExportToIcs.svg";
 import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
@@ -372,12 +371,6 @@ function ViewSchedule({ match, history }) {
                         icon: downloadImg,
                         alt: "download",
                         action: downloadImage,
-                      },
-                      {
-                        desc: "Ekspor ke .ics (Google Calendar/Apple Calendar)",
-                        icon: exportToIcsImg,
-                        alt: "export-to-ics",
-                        action: () => generateICalendarFile(schedule),
                       },
                       {
                         desc: "Share Jadwal",
@@ -705,7 +698,7 @@ const IconContainer = styled.div`
 
   @media (min-width: 900px) {
     position: absolute;
-    right: -50px;
+    right: -120px;
     top: 50%;
     transform: translateY(-50%);
   }

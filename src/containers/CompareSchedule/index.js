@@ -22,7 +22,7 @@ import { decodeHtmlEntity } from "utils/string";
 
 import compareSchedule from "assets/compare-schedule.svg";
 
-import { IoMdReturnLeft } from "react-icons/io";
+import { RiArrowLeftLongLine } from "react-icons/ri";
 
 function CompareSchedule() {
   const isMobile = useSelector((state) => state.appState.isMobile);
@@ -79,16 +79,33 @@ function CompareSchedule() {
         {schedule1 && schedule2 && (
           <Container>
             <HeaderContainer>
-              <Flex align="center" gap="8px">
-                <Link to={`/jadwal/${schedule1.id}`}>
-                  <IoMdReturnLeft
+              <Flex direction="column" align="left" gap="8px">
+                <Link
+                  to="/jadwal"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <RiArrowLeftLongLine
+                    color="#5038BC"
                     style={{
-                      // icon size v
-                      fontSize: "1.5rem",
-                      marginBottom: "1.5rem",
+                      fontSize: "2rem",
                       cursor: "pointer",
                     }}
                   />
+                  <Text
+                    fontSize="24px"
+                    fontWeight="medium"
+                    color={
+                      theme === "light"
+                        ? "secondary.GalacticPurple"
+                        : "dark.White"
+                    }
+                  >
+                    Daftar Jadwal
+                  </Text>
                 </Link>
                 <div>
                   <ScheduleName mode={theme}>
