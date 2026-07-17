@@ -52,6 +52,7 @@ import searchImgDark from "assets/Search-dark.svg";
 import arrowImg from "assets/Arrow.svg";
 import notFoundImg from "assets/NotFound.svg";
 import notFoundDarkImg from "assets/NotFound-dark.svg";
+import CompareModal from "./CompareModal";
 
 const ScheduleList = () => {
   const dispatch = useDispatch();
@@ -60,6 +61,7 @@ const ScheduleList = () => {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const shareModal = useDisclosure();
+  const compareModal = useDisclosure();
   const theme = useColorModeValue("light", "dark");
 
   const [selectedId, setSelectedId] = useState("");
@@ -181,6 +183,11 @@ const ScheduleList = () => {
     shareModal.onOpen();
   };
 
+  const showCompareModal = (id) => {
+    setSelectedId(id);
+    compareModal.onOpen();
+  };
+
   const copyImage = () => {
     copyImageToClipboard(imageURL)
       .then(() => showAlertCopy("Gambar"))
@@ -283,6 +290,12 @@ const ScheduleList = () => {
         </ModalContent>
       </Modal>
 
+      <CompareModal
+        isOpen={compareModal.isOpen}
+        onClose={compareModal.onClose}
+        scheduleId={selectedId}
+      />
+
       <Helmet
         title="Daftar Jadwal"
         meta={[{ name: "description", content: "Description of Jadwal" }]}
@@ -362,6 +375,7 @@ const ScheduleList = () => {
                         showModal={showDialogDelete}
                         editSchedule={handleClickEditJadwal}
                         showShareModal={showDialogShare}
+                        showCompareModal={showCompareModal}
                       />
                     ))}
                   </>
