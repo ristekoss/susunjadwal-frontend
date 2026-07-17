@@ -20,10 +20,12 @@ import { getCourses, getCoursesByKd } from "services/api";
 import { clearSchedule } from "redux/modules/schedules";
 import SelectedCourses from "containers/SelectedCourses";
 import { BauhausSide } from "components/Bauhaus";
+import { useSchedulePersistence } from "hooks/useSchedulePersistence"; // Import the custom hook
 import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
-import SearchInput from "../../components/SearchInput";
+import PreviewSchedule from "./PreviewSchedule";
+import SearchInput, { filterMethod } from "../../components/SearchInput";
 
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";
@@ -39,6 +41,10 @@ function BuildSchedule() {
   const isMobile = useSelector((state) => state.appState.isMobile);
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
+  const { saveSchedulesToSessionStorage, restoreSchedulesFromSessionStorage } =
+    useSchedulePersistence();
+
   const [majorSelected, setMajorSelected] = useState();
   const [detailData, setDetailData] = useState(null);
   const [courses, setCourses] = useState(null);
@@ -50,16 +56,38 @@ function BuildSchedule() {
   const theme = useColorModeValue("light", "dark");
   const isInitialMount = useRef(true);
 
+  const fetchedMajorId = useRef(null);
+  const fetchedMajorSelected = useRef(null);
+  const hasInitialData = useRef(false);
+  const coursesLoaded = useRef(false);
+
   const fetchCourses = useCallback(
-    async (majorId, majorSelected) => {
+    async (majorId, majorSelected, shouldClearSchedule = false) => {
+      const isSameMajor = fetchedMajorId.current === majorId;
+      const isSameMajorSelected =
+        fetchedMajorSelected.current === majorSelected;
+
+      if (isSameMajor && isSameMajorSelected && hasInitialData.current) {
+        return;
+      }
+
       dispatch(setLoading(true));
+      useMixpanel.track("loading_impression", {
+        eventName: "loading_impression",
+        eventAction: "impression",
+        eventCategory: "state",
+        screenName: "Buat Jadwal",
+        screenOwner: "desktop_web",
+        eventLabel: "/susun::loading-state-shown",
+      });
 
       try {
         const { data } = majorSelected
           ? await getCoursesByKd(majorSelected.kd_org)
           : await getCourses(majorId);
 
-        if (!majorSelected) {
+        if (shouldClearSchedule && coursesLoaded.current) {
+          saveSchedulesToSessionStorage();
           dispatch(clearSchedule());
         }
 
@@ -67,38 +95,108 @@ function BuildSchedule() {
         setCoursesDetail(data.is_detail);
         setLastUpdated(new Date(data.last_update_at));
         dispatch(reduxSetCourses(data.courses));
+
+        fetchedMajorId.current = majorId;
+        fetchedMajorSelected.current = majorSelected;
+        hasInitialData.current = true;
+        coursesLoaded.current = true;
+
+        if (!shouldClearSchedule && data.courses) {
+          setTimeout(() => {
+            restoreSchedulesFromSessionStorage();
+          }, 100);
+        }
       } catch (e) {
-        /** TODO: handle error */
+        console.error("Error fetching courses:", e);
+        // If there's an error (e.g., major not found), we should still mark the fetch as done to avoid refetching
+        fetchedMajorId.current = majorId;
+        fetchedMajorSelected.current = majorSelected;
+        hasInitialData.current = true;
+        coursesLoaded.current = true;
+        setCourses(null);
+        setCoursesDetail(null);
       }
 
       setTimeout(() => dispatch(setLoading(false)), 1000);
     },
-    [dispatch],
+    [
+      dispatch,
+      saveSchedulesToSessionStorage,
+      restoreSchedulesFromSessionStorage,
+    ],
   );
 
   useEffect(() => {
-    document.getElementById("input").value = "";
-    setValue("");
-    const majorId = auth.majorId;
-    fetchCourses(majorId, majorSelected);
-  }, [auth.majorId, majorSelected, dispatch, fetchCourses, setValue]);
-
-  // const handleChange = (e) => setValueTemporary(e.target.value);
-
-  let filteredCourse = courses?.filter((c) => {
-    if (value === "") {
-      //if value is empty
-      return c;
-    } else if (c.name.toLowerCase().includes(value.toLowerCase())) {
-      //returns filtered array
-      return c;
-    } else {
-      return null;
+    if (!hasInitialData.current) {
+      document.getElementById("input")?.value &&
+        (document.getElementById("input").value = "");
+      setValue("");
+      const majorId = auth.majorId;
+      const restored = restoreSchedulesFromSessionStorage();
+      if (!restored) {
+        fetchCourses(majorId, majorSelected, false);
+      } else {
+        fetchCourses(majorId, majorSelected, false);
+      }
     }
-  });
+  }, [
+    auth.majorId,
+    fetchCourses,
+    restoreSchedulesFromSessionStorage,
+    majorSelected,
+  ]);
 
   useEffect(() => {
-    useMixpanel.track("open_buat_jadwal");
+    if (
+      hasInitialData.current &&
+      majorSelected?.kd_org !== fetchedMajorSelected.current
+    ) {
+      document.getElementById("input")?.value &&
+        (document.getElementById("input").value = "");
+      setValue("");
+      const majorId = auth.majorId;
+
+      fetchCourses(majorId, majorSelected, true);
+    }
+  }, [majorSelected, auth.majorId, fetchCourses]);
+
+  useEffect(() => {
+    const handleFocus = () => {
+      if (hasInitialData.current && courses) {
+        restoreSchedulesFromSessionStorage();
+      }
+    };
+
+    window.addEventListener("focus", handleFocus);
+    return () => window.removeEventListener("focus", handleFocus);
+  }, [courses, restoreSchedulesFromSessionStorage]);
+
+  let filteredCourse = !value ? courses : filterMethod(courses, value);
+
+  const groupedCourses =
+    filteredCourse && filteredCourse.length > 0
+      ? filteredCourse.reduce(
+          (acc, course) => {
+            if (course.category === "Kelas Internal") {
+              acc.internal.push(course);
+            } else {
+              acc.external.push(course);
+            }
+            return acc;
+          },
+          { internal: [], external: [] },
+        )
+      : null;
+
+  useEffect(() => {
+    useMixpanel.track("susun_page_impression", {
+      eventName: "susun_page_impression",
+      eventAction: "impression",
+      eventCategory: "page",
+      screenName: "Buat Jadwal",
+      screenOwner: "desktop_web",
+      eventLabel: "/susun::page-loaded",
+    });
   }, []);
 
   useEffect(() => {
@@ -106,12 +204,27 @@ function BuildSchedule() {
     else useMixpanel.track("search_course");
   }, [value]);
 
+  useEffect(() => {
+    if (!isCoursesDetail && majorSelected) {
+      useMixpanel.track("empty_state_impression", {
+        eventName: "empty_state_impression",
+        eventAction: "impression",
+        eventCategory: "state",
+        fieldName: `fakultas: ${majorSelected.study_program}, prodi: ${majorSelected.educational_program}`,
+        screenName: "Buat Jadwal",
+        screenOwner: "desktop_web",
+        eventLabel: "/susun::empty-state-shown",
+      });
+    }
+  }, [isCoursesDetail, majorSelected]);
+
   return (
     <Container>
       <BauhausSide />
       <Helmet title="Buat Jadwal" />
 
       <CoursePickerContainer isMobile={isMobile} mode={theme}>
+        {isMobile && <PreviewSchedule />}
         <h1>Buat Jadwal</h1>
 
         {lastUpdated && courses && (
@@ -130,7 +243,6 @@ function BuildSchedule() {
         )}
         <div
           style={{
-            display: courses === null ? "none" : "block",
             marginTop: !isCoursesDetail && majorSelected ? "20px" : "0",
           }}
         >
@@ -269,14 +381,46 @@ function BuildSchedule() {
               </Text>
             </Center>
           ) : (
-            filteredCourse.map((course, idx) => (
-              <Course key={`${course.name}-${idx}`} course={course} />
-            ))
+            <>
+              {groupedCourses && groupedCourses.internal.length > 0 && (
+                <>
+                  <CategoryHeading
+                    $color={theme === "light" ? "#5038BC" : "#917DEC"}
+                    $mode={theme}
+                  >
+                    Kelas Internal
+                  </CategoryHeading>
+                  {groupedCourses.internal.map((course, idx) => (
+                    <Course
+                      key={`internal-${course.name}-${idx}`}
+                      course={course}
+                    />
+                  ))}
+                </>
+              )}
+              {groupedCourses && groupedCourses.external.length > 0 && (
+                <>
+                  <CategoryHeading
+                    $color={theme === "light" ? "#5038BC" : "#917DEC"}
+                    $mode={theme}
+                  >
+                    Kelas Eksternal
+                  </CategoryHeading>
+                  {groupedCourses.external.map((course, idx) => (
+                    <Course
+                      key={`external-${course.name}-${idx}`}
+                      course={course}
+                    />
+                  ))}
+                </>
+              )}
+            </>
           ))}
       </CoursePickerContainer>
 
       {!isMobile && (
         <SelectedCoursesContainer isAnnouncement={isAnnouncement} mode={theme}>
+          <PreviewSchedule />
           <SelectedCourses />
         </SelectedCoursesContainer>
       )}
@@ -342,7 +486,7 @@ export const InfoContent = styled.div`
 `;
 
 export const CoursePickerContainer = styled.div`
-  width: ${({ isMobile }) => (isMobile ? "100%" : "75%;")};
+  width: ${({ isMobile }) => (isMobile ? "100%" : "70%;")};
   color: #333333;
 
   h1 {
@@ -390,9 +534,20 @@ export const SelectedCoursesContainer = styled.div`
   overflow-y: auto;
   position: fixed;
   height: 100vh;
-  width: 25%;
+  width: 30%;
   right: 0;
   top: 0;
 
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
+`;
+
+const CategoryHeading = styled.h2`
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  color: ${({ $color }) => $color || "#5038BC"};
+  padding-bottom: 8px
+  border-bottom: 1px solid ${({ $mode }) =>
+    $mode === "light" ? "#b1b1b1" : "white"};
 `;

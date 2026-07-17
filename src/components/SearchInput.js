@@ -2,19 +2,19 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Input, Box } from "@chakra-ui/react";
 import styled from "styled-components";
 
-const filterMethod = (options, value) => {
-  return options?.filter((option) => {
-    const queryIsNotEmpty = value !== "";
-    const isQueryMatch = option.name
-      .toLowerCase()
-      .startsWith(value.toLowerCase());
+export const filterMethod = (courses, query) => {
+  if (!query || !query.trim()) return [];
 
-    // When value is not empty & matches the query
-    if (queryIsNotEmpty && isQueryMatch) {
-      return option;
-    }
+  const lowerQuery = query.toLowerCase().trim();
 
-    return null;
+  return courses.filter((course) => {
+    if (course.name.toLowerCase().includes(lowerQuery)) return true;
+
+    const hasClassNameMatch = (course.classes || []).some((cls) =>
+      cls.name.toLowerCase().includes(lowerQuery),
+    );
+
+    return hasClassNameMatch;
   });
 };
 
@@ -31,11 +31,11 @@ function SearchInput({
 
   const onChangeHandler = useCallback(
     (value) => {
-      let matches = [];
-      matches = customFilter(options, value);
+      let matches = customFilter(options, value);
       setSuggestions(matches);
+      setValue(value);
     },
-    [options, customFilter],
+    [options, customFilter, setValue],
   );
 
   useEffect(() => {
@@ -74,21 +74,17 @@ function SearchInput({
           if (e.key === "Enter") {
             setValue(e.target.value);
             setShowSuggestions(false);
-          } else {
-            setShowSuggestions(true);
           }
         }}
       />
 
-      {suggestions && suggestions.length > 0 ? (
+      {showSuggestions && suggestions && suggestions.length > 0 ? (
         <SuggestionsBox
           style={{
-            visibility: showSuggestions ? "visible" : "hidden",
             background: theme === "light" ? "#E4E4E4" : "#1D1D1D",
             color: theme === "light" ? "#000000" : "#FFFFFFCC",
             top: isMobile ? "45px" : "58px",
             fontSize: isMobile && "14px",
-            width: isMobile && document.getElementById("input").offsetWidth,
           }}
         >
           {suggestions &&

@@ -19,21 +19,26 @@ import UpdateCourses from "containers/UpdateCourses";
 import { theme } from "styles/StyledTheme";
 import CompleteForm from "containers/CompleteForm";
 import Contributors from "containers/Contributors";
+import UserGuide from "containers/UserGuide";
 import Feedback from "containers/Feedback";
 import AdminLogin from "containers/Admin/Login";
 import AdminFeedbacks from "containers/Admin/Feedbacks";
+import CompareSchedule from "containers/CompareSchedule";
+import FloatingHelpButton from "components/FloatingHelpButton";
 import { validateAuth } from "utils/auth";
 
 import withAnalytics from "utils/analytics";
 
 const ROUTES = [
   { path: "/susun", component: BuildSchedule, auth: true },
+  { path: "/jadwal/compare", component: CompareSchedule, auth: true },
   { path: "/jadwal/:scheduleId", component: ViewSchedule, auth: true },
   { path: "/jadwal", component: ScheduleList, auth: true },
   { path: "/update", component: UpdateCourses, auth: true },
   { path: "/logout", component: Logout, auth: true },
   { path: "/edit/:scheduleId", component: EditSchedule, auth: true },
   { path: "/ulasan", component: Feedback, auth: true },
+  { path: "/panduan", component: UserGuide, auth: false },
   { path: "/admin", component: AdminLogin, auth: false },
   { path: "/feedback-recap", component: AdminFeedbacks, auth: false },
 ];
@@ -84,6 +89,7 @@ function Routes() {
             </Switch>
           </Box>
           <Footer />
+          <FloatingHelpButton />
         </>
       </Box>
     </ThemeProvider>

@@ -100,7 +100,16 @@ function CourseClass({ course, courseClass }) {
       dispatch(removeSchedule(item));
     } else {
       dispatch(addSchedule(item));
-      useMixpanel.track("select_course");
+      useMixpanel.track("course_pick_click", {
+        eventName: "course_pick_click",
+        eventAction: "click",
+        eventCategory: "course_selection",
+        fieldName: `matkul_name: ${course.name}`,
+        fieldValue: `kelas: ${courseClass.name}`,
+        screenName: "Buat Jadwal",
+        screenOwner: "desktop_web",
+        eventLabel: "/susun::course-picked",
+      });
     }
   };
 

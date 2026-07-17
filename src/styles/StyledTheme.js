@@ -14,6 +14,8 @@ export const theme = {
     secondaryMineShaft: "#333333",
     secondaryCerise: "#C424A3",
     secondaryGolden: "#FFD668",
+    secondaryPurple: "#C9CEFC",
+    secondaryGalacticPurple: "#45349F",
     stateSuccess: "#27AE60",
     stateWarn: "#F7B500",
     stateError: "#EB5757",

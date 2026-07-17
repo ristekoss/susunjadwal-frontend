@@ -23,7 +23,7 @@ import {
 import { FAQS } from "./data";
 
 import BauhausMobile from "assets/Beta/bauhaus-sm.svg";
-import RistekBetaLogo from "assets/Logo/RistekLogo-light.svg";
+import RistekBetaLogo from "assets/Logo/RistekLogo-light-2025.svg";
 import SunjadBetaLogo from "assets/Beta/Sunjad_Beta.svg";
 import BetaAssetA from "assets/Beta/beta-landing-asset-1.svg";
 import BetaAssetB from "assets/Beta/beta-landing-asset-2.svg";
