@@ -69,12 +69,12 @@ const CourseClassDesktop = (props) => {
       <CourseClassItem flex={1}>
         <Radio active={props.isActive} />
       </CourseClassItem>
-      <CourseClassItem flex={3}>{props.name}</CourseClassItem>
+      <CourseClassItem flex={2}>{props.name}</CourseClassItem>
       <CourseClassItem flex={3}>
         <ul>{classSchedules}</ul>
       </CourseClassItem>
-      <CourseClassItem flex={1}>{rooms}</CourseClassItem>
-      <CourseClassItem flex={4}>
+      <CourseClassItem flex={3}>{rooms}</CourseClassItem>
+      <CourseClassItem flex={3}>
         <ul>{lecturers()}</ul>
       </CourseClassItem>
     </CourseClassContainer>

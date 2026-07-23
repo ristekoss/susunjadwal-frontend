@@ -3,6 +3,7 @@ import styled, { createGlobalStyle } from "styled-components";
 import { useColorModeValue } from "@chakra-ui/react";
 import SelectedCourses from "containers/SelectedCourses";
 import backImg from "assets/Beta/xmark.svg";
+// import PreviewSchedule from "components/PreviewSchedule";
 
 const HideBodyOverflow = createGlobalStyle`
   body {

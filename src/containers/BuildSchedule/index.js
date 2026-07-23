@@ -24,7 +24,7 @@ import { useSchedulePersistence } from "hooks/useSchedulePersistence"; // Import
 import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
-import PreviewSchedule from "./PreviewSchedule";
+import PreviewSchedule from "components/PreviewSchedule";
 import SearchInput, { filterMethod } from "../../components/SearchInput";
 
 import searchImg from "assets/Search.svg";
@@ -179,12 +179,14 @@ function BuildSchedule() {
           (acc, course) => {
             if (course.category === "Kelas Internal") {
               acc.internal.push(course);
-            } else {
+            } else if (course.category === "Kelas External") {
               acc.external.push(course);
+            } else {
+              acc.bersama.push(course);
             }
             return acc;
           },
-          { internal: [], external: [] },
+          { internal: [], external: [], bersama: [] },
         )
       : null;
 
@@ -414,13 +416,28 @@ function BuildSchedule() {
                   ))}
                 </>
               )}
+              {groupedCourses && groupedCourses.bersama.length > 0 && (
+                <>
+                  <CategoryHeading
+                    $color={theme === "light" ? "#5038BC" : "#917DEC"}
+                    $mode={theme}
+                  >
+                    Kelas Bersama
+                  </CategoryHeading>
+                  {groupedCourses.bersama.map((course, idx) => (
+                    <Course
+                      key={`bersama-${course.name}-${idx}`}
+                      course={course}
+                    />
+                  ))}
+                </>
+              )}
             </>
           ))}
       </CoursePickerContainer>
 
       {!isMobile && (
         <SelectedCoursesContainer isAnnouncement={isAnnouncement} mode={theme}>
-          <PreviewSchedule />
           <SelectedCourses />
         </SelectedCoursesContainer>
       )}
