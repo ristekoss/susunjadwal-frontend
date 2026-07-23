@@ -311,7 +311,12 @@ function ViewSchedule({ match, history }) {
           <>
             <Container>
               <HeaderContainer>
-                <Flex direction="column" align="left" gap="8px">
+                <Flex
+                  direction="column"
+                  align="left"
+                  gap={{ base: "4px", md: "8px" }}
+                  maxW={{ base: "calc(100% - 110px)", md: "100%" }}
+                >
                   <Link
                     to="/jadwal"
                     style={{
@@ -321,15 +326,14 @@ function ViewSchedule({ match, history }) {
                     }}
                   >
                     <RiArrowLeftLongLine
-                      color="#5038BC"
+                      color={theme === "light" ? "#5038BC" : "#917DEC"}
                       style={{
-                        // icon size v
-                        fontSize: "2rem",
+                        fontSize: isMobile ? "1.25rem" : "2rem",
                         cursor: "pointer",
                       }}
                     />
                     <Text
-                      fontSize="24px"
+                      fontSize={{ base: "16px", sm: "18px", md: "24px" }}
                       fontWeight="medium"
                       color={
                         theme === "light"
@@ -343,7 +347,6 @@ function ViewSchedule({ match, history }) {
                   {schedule.has_edit_access ? (
                     <ScheduleNameEditable>
                       <ControlledInput
-                        style={{ color: theme === "light" ? "aqua" : "orange" }}
                         name={decodeHtmlEntity(schedule.name)}
                         slug={match.params.scheduleId}
                         rename={onRename}
@@ -389,52 +392,28 @@ function ViewSchedule({ match, history }) {
                   />
                 </IconContainer>
               </HeaderContainer>
-
               <ButtonContainer isAuthenticated={Boolean(auth)}>
                 <Flex
                   direction="row"
-                  gap={{ base: "10px", md: "15px" }}
-                  width={{ base: "100%", md: "82%" }}
-                  justifyContent="center"
+                  gap={{ base: "4px", sm: "8px", md: "15px" }}
+                  width="100%"
+                  justifyContent={{ base: "space-between", md: "flex-end" }}
                   alignItems="center"
                 >
-                  {/* <Link to={"/jadwal/compare"}>
-                      <Button
-                        width="full"
-                        flex="1"
-                        mr="0"
-                        size="sm"
-                        px={{ base: "32px", md: "32px" }}
-                        py={{ base: "20px", md: "20px" }}
-                        intent="primary"
-                        variant="solid"
-                        bg={
-                          theme === "light" ? "primary.Purple" : "dark.LightPurple"
-                        }
-                        color={theme === "light" ? "white" : "dark.White"}
-                        fontSize={{ base:"14px", md:"18px"}}
-                        minW={{ base: "120px", md:"120px"}}
-                        _hover={{
-                          bg:
-                            theme === "light"
-                              ? "primary.DarkPurple"
-                              : "dark.Purple",
-                        }}
-                      >
-                        <Text display={{ base:"none", sm:"inline"}}>
-                          Bandingkan Jadwal
-                        </Text>
-                        <GoArrowSwitch style={{ marginLeft: "0.5rem"}}/>
-                      </Button>
-                  </Link> */}
-
                   <Popover trigger="hover">
                     <PopoverTrigger>
                       <Button
-                        minWidth="253px"
-                        height="64px"
+                        height={{ base: "38px", sm: "48px", md: "64px" }}
+                        flex={{ base: "1 1 0px", md: "initial" }}
+                        minW="0"
+                        maxW="100%"
                         intent="primary"
                         variant="solid"
+                        bg={
+                          theme === "light"
+                            ? "primary.Purple"
+                            : "dark.LightPurple"
+                        }
                         borderColor={
                           theme === "light"
                             ? "primary.Purple"
@@ -442,18 +421,39 @@ function ViewSchedule({ match, history }) {
                         }
                         color={theme === "light" ? "white" : "dark.White"}
                         fontWeight="medium"
+                        fontSize={{
+                          base: "10px",
+                          sm: "12px",
+                          md: "15px",
+                          lg: "18px",
+                        }}
                         onClick={(e) => {
                           e.preventDefault();
                           compareModal.onOpen();
                         }}
-                        gap="16px"
-                        paddingLeft="24px"
-                        paddingRight="24px"
+                        gap={{ base: "3px", sm: "6px", md: "12px" }}
+                        px={{ base: "4px", sm: "10px", md: "20px" }}
+                        _hover={{
+                          bg:
+                            theme === "light"
+                              ? "primary.DarkPurple"
+                              : "dark.Purple",
+                        }}
                       >
-                        Bandingkan Jadwal
-                        <img
+                        <Text
+                          as="span"
+                          fontSize="inherit"
+                          fontWeight="inherit"
+                          whiteSpace="nowrap"
+                          overflow="hidden"
+                          textOverflow="ellipsis"
+                        >
+                          Bandingkan Jadwal
+                        </Text>
+                        <Image
                           src={compareSchedule}
-                          style={{ width: "28px", height: "28px" }}
+                          boxSize={{ base: "14px", sm: "18px", md: "26px" }}
+                          flexShrink={0}
                           alt="compare-schedule"
                         />
                       </Button>
@@ -488,12 +488,14 @@ function ViewSchedule({ match, history }) {
                   </Popover>
 
                   <Button
-                    height="64px"
-                    flex="1"
+                    height={{ base: "38px", sm: "48px", md: "64px" }}
+                    flex={{ base: "1 1 0px", md: "initial" }}
+                    minW="0"
+                    maxW="100%"
                     mr="0"
                     size="sm"
-                    px={{ base: "32px", md: "100px" }}
-                    py={{ base: "20px", md: "20px" }}
+                    px={{ base: "4px", sm: "10px", md: "20px" }}
+                    py={{ base: "4px", md: "20px" }}
                     variant="solid"
                     bg="secondary.Purple"
                     color={
@@ -502,9 +504,14 @@ function ViewSchedule({ match, history }) {
                         : "primary.Purple"
                     }
                     onClick={handleOpenGoogleCalendarModal}
-                    fontSize={{ base: "14px", md: "18px" }}
+                    fontSize={{
+                      base: "10px",
+                      sm: "12px",
+                      md: "15px",
+                      lg: "18px",
+                    }}
                     fontWeight="medium"
-                    minW={{ base: "140px", md: "140px" }}
+                    gap={{ base: "3px", sm: "6px", md: "12px" }}
                     _hover={{
                       bg:
                         theme === "light"
@@ -512,22 +519,35 @@ function ViewSchedule({ match, history }) {
                           : "dark.Purple",
                     }}
                   >
-                    <Text display={{ base: "none", sm: "inline" }}>
+                    <Text
+                      as="span"
+                      fontSize="inherit"
+                      fontWeight="inherit"
+                      whiteSpace="nowrap"
+                      overflow="hidden"
+                      textOverflow="ellipsis"
+                    >
                       Integrasi Kalender
                     </Text>
-                    <Text display={{ base: "inline", sm: "none" }}>
-                      Integrasi
-                    </Text>
-                    <img
+                    <Image
                       src={ics2026Img}
-                      style={{ marginLeft: "16px", height: "28px" }}
+                      boxSize={{ base: "14px", sm: "18px", md: "26px" }}
+                      flexShrink={0}
                       alt="export-to-ics"
                     />
                   </Button>
 
-                  <Link to={`/edit/${scheduleId}`}>
+                  <Link
+                    to={`/edit/${scheduleId}`}
+                    style={{
+                      flex: isMobile ? "1 1 0px" : "initial",
+                      minWidth: 0,
+                      display: "flex",
+                    }}
+                  >
                     <Button
-                      height="64px"
+                      width="100%"
+                      height={{ base: "38px", sm: "48px", md: "64px" }}
                       fontWeight="medium"
                       mr="0"
                       intent="primary"
@@ -542,15 +562,31 @@ function ViewSchedule({ match, history }) {
                           ? "primary.Purple"
                           : "secondary.Purple"
                       }
-                      fontSize={{ base: "16px", md: "18px" }}
-                      minW={{ base: "120px", md: "100px" }}
-                      px={{ base: "32px", md: "auto" }}
-                      py={{ base: "14px", md: "auto" }}
+                      fontSize={{
+                        base: "10px",
+                        sm: "12px",
+                        md: "15px",
+                        lg: "18px",
+                      }}
+                      minW="0"
+                      px={{ base: "4px", sm: "10px", md: "20px" }}
+                      py={{ base: "4px", md: "14px" }}
+                      gap={{ base: "3px", sm: "6px", md: "12px" }}
                     >
-                      {schedule.has_edit_access ? "Edit" : "Copy"}
-                      <img
+                      <Text
+                        as="span"
+                        fontSize="inherit"
+                        fontWeight="inherit"
+                        whiteSpace="nowrap"
+                        overflow="hidden"
+                        textOverflow="ellipsis"
+                      >
+                        {schedule.has_edit_access ? "Edit" : "Copy"}
+                      </Text>
+                      <Image
                         src={theme === "light" ? pencilIcon : pencilIconDark}
-                        style={{ marginLeft: "16px", height: "28px" }}
+                        boxSize={{ base: "14px", sm: "18px", md: "26px" }}
+                        flexShrink={0}
                         alt="edit schedule"
                       />
                     </Button>
@@ -705,19 +741,20 @@ const IconContainer = styled.div`
 
 const ButtonContainer = styled.div`
   align-items: center;
-  margin-top: 24px;
+  margin-top: 16px;
   display: flex;
   justify-content: center;
+  width: 100%;
 
   a {
     ${(props) =>
       props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
-    width: auto;
   }
 
   @media (min-width: 900px) {
     margin-top: 0px;
     margin-left: auto;
+    width: auto;
     justify-content: flex-end;
   }
 `;
@@ -737,11 +774,19 @@ const ScheduleNameEditable = styled.div`
 `;
 
 const ScheduleName = styled.div`
-  font-size: 32px;
+  font-size: 20px;
+  font-weight: bold;
   color: ${(props) =>
     props.mode === "light"
       ? props.theme.color.secondaryMineShaft
       : props.theme.color.darkWhite};
+
+  @media (min-width: 600px) {
+    font-size: 26px;
+  }
+  @media (min-width: 900px) {
+    font-size: 32px;
+  }
 `;
 
 const ViewToggleContainer = styled.div`
@@ -750,10 +795,11 @@ const ViewToggleContainer = styled.div`
   cursor: pointer;
   border-radius: 1em;
   justify-content: center;
-  padding: 24px 24px 28px;
+  padding: 16px 24px 20px;
 
   @media (min-width: 900px) {
-    padding: 40px 80px ;
+    padding: 40px 80px;
+  }
 `;
 
 const ViewListContainer = styled.div`
