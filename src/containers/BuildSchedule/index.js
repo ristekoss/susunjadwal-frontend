@@ -179,12 +179,14 @@ function BuildSchedule() {
           (acc, course) => {
             if (course.category === "Kelas Internal") {
               acc.internal.push(course);
-            } else {
+            } else if (course.category === "Kelas External") {
               acc.external.push(course);
+            } else {
+              acc.bersama.push(course);
             }
             return acc;
           },
-          { internal: [], external: [] },
+          { internal: [], external: [], bersama: [] },
         )
       : null;
 
@@ -409,6 +411,22 @@ function BuildSchedule() {
                   {groupedCourses.external.map((course, idx) => (
                     <Course
                       key={`external-${course.name}-${idx}`}
+                      course={course}
+                    />
+                  ))}
+                </>
+              )}
+              {groupedCourses && groupedCourses.bersama.length > 0 && (
+                <>
+                  <CategoryHeading
+                    $color={theme === "light" ? "#5038BC" : "#917DEC"}
+                    $mode={theme}
+                  >
+                    Kelas Bersama
+                  </CategoryHeading>
+                  {groupedCourses.bersama.map((course, idx) => (
+                    <Course
+                      key={`bersama-${course.name}-${idx}`}
                       course={course}
                     />
                   ))}
