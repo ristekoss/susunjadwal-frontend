@@ -3,6 +3,7 @@ import styled, { createGlobalStyle } from "styled-components";
 import { useColorModeValue } from "@chakra-ui/react";
 import SelectedCourses from "containers/SelectedCourses";
 import backImg from "assets/Beta/xmark.svg";
+import PreviewSchedule from "./PreviewSchedule";
 
 const HideBodyOverflow = createGlobalStyle`
   body {
@@ -20,6 +21,7 @@ function Detail({ closeDetail, isEditing = false, scheduleId }) {
     <Container mode={theme}>
       <HideBodyOverflow />
       <ImageButton src={backImg} onClick={performCloseDetail} />
+      <PreviewSchedule />
       <SelectedCourses isEditing={isEditing} scheduleId={scheduleId} />
     </Container>
   );

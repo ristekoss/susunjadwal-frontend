@@ -16,7 +16,6 @@ import { Helmet } from "react-helmet";
 import Course from "../BuildSchedule/Course";
 import Detail from "../BuildSchedule/Detail";
 import Checkout from "../BuildSchedule/Checkout";
-import PreviewSchedule from "../BuildSchedule/PreviewSchedule";
 import SearchInput from "../../components/SearchInput";
 import SelectMajor from "../BuildSchedule/SelectMajor";
 import {
@@ -125,7 +124,7 @@ const EditSchedule = ({ match }) => {
 
       <Container>
         <CoursePickerContainer isMobile={isMobile} mode={theme}>
-          {isMobile && <PreviewSchedule />}
+          {isMobile}
           <h1>Edit Jadwal</h1>
 
           {lastUpdated && courses && (
@@ -292,7 +291,6 @@ const EditSchedule = ({ match }) => {
             isAnnouncement={isAnnouncement}
             mode={theme}
           >
-            <PreviewSchedule />
             <SelectedCourses scheduleId={scheduleId} isEditing />
           </SelectedCoursesContainer>
         )}

@@ -1,12 +1,14 @@
 import React from "react";
 import { Button } from "@chakra-ui/react";
 import { useHistory, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const HIDDEN_PATHS = ["/admin", "/feedback-recap", "/panduan"];
 
 const FloatingHelpButton = () => {
   const history = useHistory();
   const { pathname } = useLocation();
+  const isMobile = useSelector((state) => state.appState.isMobile);
 
   if (HIDDEN_PATHS.some((p) => pathname.startsWith(p))) {
     return null;
@@ -16,12 +18,17 @@ const FloatingHelpButton = () => {
     history.push("/panduan");
   };
 
+  const isEditPage = pathname.startsWith("/edit");
+
   return (
     <Button
       aria-label="Buka Panduan Pengguna"
       onClick={handleClick}
       position="fixed"
-      bottom={{ base: "20px", lg: "28px" }}
+      bottom={{
+        base: isMobile && isEditPage ? "90px" : "20px",
+        lg: "28px",
+      }}
       right={{ base: "20px", lg: "28px" }}
       zIndex={1000}
       borderRadius="full"
