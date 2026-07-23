@@ -26,12 +26,13 @@ const FloatingHelpButton = () => {
   };
 
   const isEditPage = pathname.startsWith("/edit");
+  const isSusunPage = pathname.startsWith("/susun");
 
   return (
     <Box
       position="fixed"
       bottom={{
-        base: isMobile && isEditPage ? "90px" : "20px",
+        base: isMobile && (isEditPage || isSusunPage) ? "90px" : "20px",
         lg: "28px",
       }}
       right={{ base: "20px", lg: "28px" }}

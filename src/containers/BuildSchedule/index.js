@@ -24,7 +24,7 @@ import { useSchedulePersistence } from "hooks/useSchedulePersistence"; // Import
 import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
-import PreviewSchedule from "./PreviewSchedule";
+import PreviewSchedule from "components/PreviewSchedule";
 import SearchInput, { filterMethod } from "../../components/SearchInput";
 
 import searchImg from "assets/Search.svg";
@@ -438,7 +438,6 @@ function BuildSchedule() {
 
       {!isMobile && (
         <SelectedCoursesContainer isAnnouncement={isAnnouncement} mode={theme}>
-          <PreviewSchedule />
           <SelectedCourses />
         </SelectedCoursesContainer>
       )}
