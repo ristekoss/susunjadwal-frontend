@@ -3,7 +3,6 @@ import ReactGA from "react-ga";
 import styled from "styled-components";
 import { useMixpanel } from "hooks/useMixpanel";
 import { withRouter } from "react-router";
-
 import { useSelector, useDispatch } from "react-redux";
 
 import {
@@ -25,6 +24,7 @@ import { deleteSchedule } from "services/api";
 import { makeAtLeastMs } from "utils/promise";
 
 import { isScheduleConflict, listScheduleConflicts } from "./utils";
+import PreviewSchedule from "components/PreviewSchedule";
 
 import TrashIcon from "assets/Trash.svg";
 
@@ -199,6 +199,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
       </Modal>
 
       <Container mode={theme}>
+        <PreviewSchedule />
         <h3>Kelas Pilihan</h3>
 
         <TableHeader mode={theme}>
@@ -243,7 +244,6 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
             <p>Jumlah SKS yang diambil melebihi batas maksimum (24 SKS).</p>
           </MessageContainer>
         )}
-
         <Button
           onClick={() => {
             useMixpanel.track("simpan_jadwal_navigation_button_click", {
