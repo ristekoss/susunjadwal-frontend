@@ -395,6 +395,7 @@ function ViewSchedule({ match, history }) {
               <ButtonContainer isAuthenticated={Boolean(auth)}>
                 <Flex
                   direction="row"
+                  flexWrap="wrap"
                   gap={{ base: "4px", sm: "8px", md: "15px" }}
                   width="100%"
                   justifyContent={{ base: "space-between", md: "flex-end" }}
@@ -404,7 +405,7 @@ function ViewSchedule({ match, history }) {
                     <PopoverTrigger>
                       <Button
                         height={{ base: "38px", sm: "48px", md: "64px" }}
-                        flex={{ base: "1 1 0px", md: "initial" }}
+                        flex={{ base: "1 1 100%", md: "initial" }}
                         minW="0"
                         maxW="100%"
                         intent="primary"
