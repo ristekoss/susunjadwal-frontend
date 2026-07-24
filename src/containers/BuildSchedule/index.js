@@ -24,7 +24,6 @@ import { useSchedulePersistence } from "hooks/useSchedulePersistence"; // Import
 import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
-import PreviewSchedule from "components/PreviewSchedule";
 import SearchInput, { filterMethod } from "../../components/SearchInput";
 
 import searchImg from "assets/Search.svg";
@@ -226,7 +225,7 @@ function BuildSchedule() {
       <Helmet title="Buat Jadwal" />
 
       <CoursePickerContainer isMobile={isMobile} mode={theme}>
-        {isMobile && <PreviewSchedule />}
+        {isMobile}
         <h1>Buat Jadwal</h1>
 
         {lastUpdated && courses && (
