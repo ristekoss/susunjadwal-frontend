@@ -120,7 +120,7 @@ function ViewSchedule({ match, history }) {
         eventLabel: "/susun::feedback-modal-shown",
       });
     }
-  }, [match, dispatch, feedbackModal]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [scheduleId, dispatch]);
 
   const scheduleName = schedule && schedule.name;
 
