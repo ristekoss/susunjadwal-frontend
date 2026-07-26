@@ -398,14 +398,14 @@ function ViewSchedule({ match, history }) {
                   flexWrap="wrap"
                   gap={{ base: "4px", sm: "8px", md: "15px" }}
                   width="100%"
-                  justifyContent={{ base: "space-between", md: "flex-end" }}
+                  justifyContent={{ base: "space-between", xl: "flex-end" }}
                   alignItems="center"
                 >
                   <Popover trigger="hover">
                     <PopoverTrigger>
                       <Button
                         height={{ base: "38px", sm: "48px", md: "64px" }}
-                        flex={{ base: "1 1 100%", md: "initial" }}
+                        flex={{ base: "1 1 100%", xl: "initial" }}
                         minW="0"
                         maxW="100%"
                         intent="primary"
@@ -490,7 +490,7 @@ function ViewSchedule({ match, history }) {
 
                   <Button
                     height={{ base: "38px", sm: "48px", md: "64px" }}
-                    flex={{ base: "1 1 0px", md: "initial" }}
+                    flex={{ base: "1 1 0px", xl: "initial" }}
                     minW="0"
                     maxW="100%"
                     mr="0"
@@ -540,8 +540,8 @@ function ViewSchedule({ match, history }) {
 
                   <Link
                     to={`/edit/${scheduleId}`}
+                    className="edit-schedule-link"
                     style={{
-                      flex: isMobile ? "1 1 0px" : "initial",
                       minWidth: 0,
                       display: "flex",
                     }}
@@ -699,7 +699,7 @@ const MainContainer = styled.div`
 const Container = styled.div`
   padding: 24px 24px 0px;
 
-  @media (min-width: 900px) {
+  @media (min-width: 1100px) {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -716,9 +716,11 @@ const HeaderContainer = styled.div`
   align-items: center;
   background-color: transparent;
   justify-content: space-between;
+  width: 100%;
   margin-right: -8px;
 
-  @media (min-width: 900px) {
+  @media (min-width: 1100px) {
+    width: auto;
     margin-right: 0px;
     position: relative;
   }
@@ -732,7 +734,7 @@ const IconContainer = styled.div`
   ${(props) =>
     props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
 
-  @media (min-width: 900px) {
+  @media (min-width: 1100px) {
     position: absolute;
     right: -120px;
     top: 50%;
@@ -752,7 +754,14 @@ const ButtonContainer = styled.div`
       props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
   }
 
-  @media (min-width: 900px) {
+  a.edit-schedule-link {
+    flex: 1 1 0px;
+    @media (min-width: 1100px) {
+      flex: initial;
+    }
+  }
+
+  @media (min-width: 1100px) {
     margin-top: 0px;
     margin-left: auto;
     width: auto;
