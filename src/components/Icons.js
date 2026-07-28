@@ -4,9 +4,13 @@ import styled from "styled-components";
 const Icons = ({ Items }) => {
   return (
     <>
-      {Items.map((item) => {
+      {Items.map((item, idx) => {
         return (
-          <ImageButton onClick={item.action} data-hover={item.desc}>
+          <ImageButton
+            key={item.desc || idx}
+            onClick={item.action}
+            data-hover={item.desc}
+          >
             <img src={item.icon} alt={item.alt} />
           </ImageButton>
         );
@@ -17,10 +21,27 @@ const Icons = ({ Items }) => {
 
 const ImageButton = styled.div`
   justify-content: center;
-  margin-left: 1rem;
+  align-items: center;
+  margin-left: 0.5rem;
   cursor: pointer;
   display: flex;
   position: relative;
+  padding: 4px;
+
+  @media (min-width: 600px) {
+    margin-left: 1rem;
+    padding: 0;
+  }
+
+  img {
+    width: 22px;
+    height: 22px;
+    @media (min-width: 600px) {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
   &:before,
   &:after {
     visibility: hidden;

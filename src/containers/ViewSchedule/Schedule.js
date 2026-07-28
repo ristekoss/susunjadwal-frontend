@@ -21,6 +21,7 @@ function Schedule({
   showLabel,
   showHeader,
   showRoom,
+  forceDesktopLayout,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -85,7 +86,7 @@ function Schedule({
   return (
     <>
       {/* Desktop View */}
-      {!isMobile && (
+      {(!isMobile || forceDesktopLayout) && (
         <Container
           pxPerMinute={pxPerMinute}
           width={width}
@@ -112,6 +113,7 @@ function Schedule({
               row={minuteToRow(idx)}
               showLabel={showLabel}
               mode={theme}
+              $forceDesktop={forceDesktopLayout}
             />
           ))}
           {showLabel &&
@@ -129,6 +131,7 @@ function Schedule({
                   end={displayToMinute(end)}
                   day={dayToColumn(day)}
                   mode={theme}
+                  $forceDesktop={forceDesktopLayout}
                   onClick={() =>
                     handleClickedCourse(schedule.schedule_items[idx])
                   }
@@ -195,7 +198,7 @@ function Schedule({
       )}
 
       {/* Mobile View */}
-      {isMobile && (
+      {isMobile && !forceDesktopLayout && (
         <MobileContainer>
           <DetailsModal
             isOpen={isOpen}
@@ -258,7 +261,7 @@ function Schedule({
 
               {schedule &&
                 schedule.schedule_items.map(
-                  ({ day, start, end, room, name, course_name }, idx) =>
+                  ({ day, start, end, room: _room, name, course_name }, idx) =>
                     DAYS.slice(0, 3).includes(day) && (
                       <ScheduleItem
                         key={`${schedule.name}-${idx}`}
@@ -295,7 +298,7 @@ function Schedule({
 
             <PageButtonContainer mode={theme}>
               <PageButton onClick={() => executeScroll(pageTwo)} mode={theme}>
-                <img src={caret} style={{ height: "28px" }}></img>
+                <img src={caret} style={{ height: "28px" }} alt="" />
               </PageButton>
             </PageButtonContainer>
           </MobileScheduleContainer>
@@ -307,7 +310,8 @@ function Schedule({
                 <img
                   src={caret}
                   style={{ height: "28px", transform: "rotate(180deg)" }}
-                ></img>
+                  alt=""
+                />
               </PageButton>
             </PageButtonContainer>
 
@@ -335,7 +339,7 @@ function Schedule({
 
               {schedule &&
                 schedule.schedule_items.map(
-                  ({ day, start, end, room, name, course_name }, idx) =>
+                  ({ day, start, end, room: _room, name, course_name }, idx) =>
                     DAYS.slice(3, 6).includes(day) && (
                       <ScheduleItem
                         key={`${schedule.name}-${idx}`}
@@ -455,8 +459,12 @@ const TimeLabel = styled.div`
 `;
 
 const TimeMarker = styled.div`
-  grid-area: ${({ row }) => row} / 1 /
-    ${({ row }) => row + 60 + 1} / 4
+  grid-area: ${({ row, showLabel, $forceDesktop }) =>
+    $forceDesktop
+      ? `${row} / ${showLabel ? "2" : "1"} / ${row + 60 + 1} / ${
+          showLabel ? "8" : "7"
+        }`
+      : `${row} / 1 / ${row + 60 + 1} / 4`};
   border: 0.95px solid ${({ mode }) =>
     mode === "light" ? "#E5E5E5" : "#363636"} 
   z-index: 0;
@@ -490,9 +498,12 @@ const ScheduleItem = styled.div`
     background-color: ${({ mode }) =>
       mode === "light" ? "#5038bc" : "#674DE0"} 
     color: white;
-    grid-area: ${({ start }) => start} / ${({ day }) =>
-  day - (day <= 4 ? 1 : 4)} / ${({ end }) => end} /
-        ${({ day }) => day - (day <= 4 ? 0 : 3)};
+    grid-area: ${({ start, day, end, $forceDesktop }) =>
+      $forceDesktop
+        ? `${start} / ${day} / ${end} / ${day + 1}`
+        : `${start} / ${day - (day <= 4 ? 1 : 4)} / ${end} / ${
+            day - (day <= 4 ? 0 : 3)
+          }`};
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;

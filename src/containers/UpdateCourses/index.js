@@ -33,7 +33,8 @@ const UpdateCourses = () => {
     handleSubmit,
     register,
     watch,
-    formState: { errors, isSubmitting },
+    // eslint-disable-next-line no-unused-vars
+    formState: { errors, isSubmitting: _isSubmitting },
   } = useForm();
 
   const [isUsernameChanged, setIsUsernameChanged] = useState(false);
@@ -72,11 +73,24 @@ const UpdateCourses = () => {
     }
   }, [logs]);
 
+  const trackProgress = (status) => {
+    useMixpanel.track("update_jadwal_progress", {
+      eventName: "update_jadwal_progress",
+      eventAction: "progress",
+      eventCategory: "process",
+      fieldName: `status: ${status}`,
+      screenName: "Update Jadwal",
+      screenOwner: "desktop_web",
+      eventLabel: "/susun::update-jadwal-progress",
+    });
+  };
+
   const onSubmit = async (values) => {
     setIsUpdating(true);
     setLogs([]);
     setUpdateProgress(0);
     setUpdateStatus("updating");
+    trackProgress("in_progress");
     let streamDidError = false;
 
     try {
@@ -163,8 +177,10 @@ const UpdateCourses = () => {
                 } else if (message.includes("successfully saved")) {
                   setUpdateProgress(100);
                   setUpdateStatus("success");
+                  trackProgress("success");
                 } else if (data.type === "error") {
                   setUpdateStatus("error");
+                  trackProgress("failed");
                 }
               }
             } catch (e) {

@@ -3,7 +3,6 @@ import ReactGA from "react-ga";
 import styled from "styled-components";
 import { useMixpanel } from "hooks/useMixpanel";
 import { withRouter } from "react-router";
-
 import { useSelector, useDispatch } from "react-redux";
 
 import {
@@ -25,9 +24,9 @@ import { deleteSchedule } from "services/api";
 import { makeAtLeastMs } from "utils/promise";
 
 import { isScheduleConflict, listScheduleConflicts } from "./utils";
+import PreviewSchedule from "components/PreviewSchedule";
 
 import TrashIcon from "assets/Trash.svg";
-import { RistekAds } from "@ristek-kit/ads";
 
 function transformSchedules(schedules) {
   return schedules
@@ -64,7 +63,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
       });
       history.push({
         pathname: `/jadwal/${scheduleId}`,
-        state: { feedbackPopup: true }
+        state: { feedbackPopup: true },
       });
     } catch (e) {
       /** TODO: handle error */
@@ -86,7 +85,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
       dispatch(clearSchedule());
       history.push({
         pathname: `/jadwal/${data.user_schedule.id}`,
-        state: { feedbackPopup: true }
+        state: { feedbackPopup: true },
       });
     } catch (e) {
       /** TODO: handle error */
@@ -142,7 +141,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
   });
 
   const listConflicts = listScheduleConflicts(schedules);
-  const conflicts = listConflicts.map((conflict, idx) => {
+  const conflicts = listConflicts.map((conflict, _idx) => {
     return (
       <li>
         {conflict[0]} dengan {conflict[1]}
@@ -179,7 +178,15 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
                   ? handleDeleteSchedule()
                   : updateSchedule();
 
-                useMixpanel.track("simpan_jadwal");
+                useMixpanel.track("simpan_jadwal_confirmation_button_click", {
+                  eventName: "simpan_jadwal_confirmation_button_click",
+                  eventAction: "click",
+                  eventCategory: "button",
+                  ctaTitle: "Konfirmasi Simpan",
+                  screenName: "Save Confirmation Modal",
+                  screenOwner: "desktop_web",
+                  eventLabel: "/susun::jadwal-saved-confirmed",
+                });
               }}
               variant="solid"
               bg={theme === "light" ? "primary.Purple" : "dark.LightPurple"}
@@ -191,11 +198,8 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         </ModalContent>
       </Modal>
 
-      <div style={{ marginBottom: 24 }}>
-        <RistekAds />
-      </div>
-
       <Container mode={theme}>
+        <PreviewSchedule />
         <h3>Kelas Pilihan</h3>
 
         <TableHeader mode={theme}>
@@ -240,10 +244,17 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
             <p>Jumlah SKS yang diambil melebihi batas maksimum (24 SKS).</p>
           </MessageContainer>
         )}
-
         <Button
           onClick={() => {
-            useMixpanel.track("open_simpan_modal");
+            useMixpanel.track("simpan_jadwal_navigation_button_click", {
+              eventName: "simpan_jadwal_navigation_button_click",
+              eventAction: "click",
+              eventCategory: "button",
+              ctaTitle: "Simpan Jadwal",
+              screenName: "Buat Jadwal",
+              screenOwner: "desktop_web",
+              eventLabel: "/susun::simpan-jadwal-nav-clicked",
+            });
             onOpen();
           }}
           disabled={isConflict || totalCredits > 24 || schedules.length === 0}

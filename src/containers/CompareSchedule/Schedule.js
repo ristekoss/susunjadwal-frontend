@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import caret from "assets/caret.svg";
 import { useSelector } from "react-redux";
@@ -34,10 +34,15 @@ function Schedule({
     return `${pad(hour)}.${pad(minute % 60)}`;
   };
 
-  const displayToMinute = (display) => {
-    const [hour, minute] = display.split(".").map((part) => parseInt(part, 10));
-    return (hour - startHour + 2) * 60 + minute - (showHeader ? 0 : 30);
-  };
+  const displayToMinute = useCallback(
+    (display) => {
+      const [hour, minute] = display
+        .split(".")
+        .map((part) => parseInt(part, 10));
+      return (hour - startHour + 2) * 60 + minute - (showHeader ? 0 : 30);
+    },
+    [startHour, showHeader],
+  );
 
   const minuteToRow = (minute) => (minute + 1) * 60 - (showHeader ? 0 : 30);
   const dayToColumn = (day) => DAYS.indexOf(day) + 1 + (showLabel ? 1 : 0);
@@ -112,7 +117,7 @@ function Schedule({
       }
     }
     setProcessedSchedules({ s1: s1Items, s2: s2Items });
-  }, [schedule1, schedule2]);
+  }, [schedule1, schedule2, displayToMinute]);
 
   return (
     <>

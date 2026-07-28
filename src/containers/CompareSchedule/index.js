@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
 import {
@@ -21,6 +21,8 @@ import { makeAtLeastMs } from "utils/promise";
 import { decodeHtmlEntity } from "utils/string";
 
 import compareSchedule from "assets/compare-schedule.svg";
+
+import { RiArrowLeftLongLine } from "react-icons/ri";
 
 function CompareSchedule() {
   const isMobile = useSelector((state) => state.appState.isMobile);
@@ -58,10 +60,11 @@ function CompareSchedule() {
     }
   }, [location.search, dispatch]);
 
-  const [formattedSchedule1, totalCredits1] = schedule1
+  const [, totalCredits1] = schedule1
     ? getFormattedSchedule(schedule1)
     : [{}, 0];
-  const [, totalCredits2] = schedule2
+  // eslint-disable-next-line no-unused-vars
+  const [, _totalCredits2] = schedule2
     ? getFormattedSchedule(schedule2)
     : [{}, 0];
   const createdAt1 = schedule1 ? new Date(schedule1.created_at) : null;
@@ -77,20 +80,49 @@ function CompareSchedule() {
         {schedule1 && schedule2 && (
           <Container>
             <HeaderContainer>
-              <div>
-                <ScheduleName mode={theme}>
-                  {decodeHtmlEntity(schedule1.name) || "Untitled"}
-                </ScheduleName>
-                <Text fontSize={{ base: "12px", md: "14px" }} mt="4px">
-                  Dibuat pada{" "}
-                  {createdAt1?.toLocaleDateString("id-ID", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}{" "}
-                  • {totalCredits1} SKS
-                </Text>
-              </div>
+              <Flex direction="column" align="left" gap="8px">
+                <Link
+                  to="/jadwal"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <RiArrowLeftLongLine
+                    color="#5038BC"
+                    style={{
+                      fontSize: "2rem",
+                      cursor: "pointer",
+                    }}
+                  />
+                  <Text
+                    fontSize="24px"
+                    fontWeight="medium"
+                    color={
+                      theme === "light"
+                        ? "secondary.GalacticPurple"
+                        : "dark.White"
+                    }
+                  >
+                    Daftar Jadwal
+                  </Text>
+                </Link>
+                <div>
+                  <ScheduleName mode={theme}>
+                    {decodeHtmlEntity(schedule1.name) || "Untitled"}
+                  </ScheduleName>
+                  <Text fontSize={{ base: "12px", md: "14px" }} mt="4px">
+                    Dibuat pada{" "}
+                    {createdAt1?.toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}{" "}
+                    • {totalCredits1} SKS
+                  </Text>
+                </div>
+              </Flex>
             </HeaderContainer>
 
             <ButtonContainer>

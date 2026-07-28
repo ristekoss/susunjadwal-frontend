@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useMixpanel } from "hooks/useMixpanel";
 import { useParams, useLocation, Link } from "react-router-dom";
 import styled from "styled-components";
 import Helmet from "react-helmet";
@@ -20,6 +21,11 @@ import {
   Flex,
   Image,
   useColorModeValue,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverBody,
 } from "@chakra-ui/react";
 import { CalendarIcon } from "@heroicons/react/solid";
 
@@ -42,15 +48,21 @@ import copyImg from "assets/Copy.svg";
 import alertDarkImg from "assets/Alert-dark.svg";
 import linkDarkImg from "assets/Link-dark.svg";
 import copyDarkImg from "assets/Copy-dark.svg";
-import exportToIcsImg from "assets/ExportToIcs.svg";
 import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
 import clipboardImg from "assets/Clipboard.svg";
-import ics2025Img from "assets/ics2025.svg";
+import ics2026Img from "assets/ics2026.svg";
 import { ListMatkulIcon } from "assets/ListMatkulIcon";
 
 import FeedbackModal from "./FeedbackModal";
 import GoogleCalendarModal from "./GoogleCalendarModal";
+
+import CompareModal from "../ScheduleList/CompareModal";
+import compareSchedule from "assets/compare-schedule-white.svg";
+import compareBulb from "assets/compare-bulb.svg";
+import pencilIcon from "assets/pencil-icon.svg";
+import pencilIconDark from "assets/pencilIconDark.svg";
+import { RiArrowLeftLongLine } from "react-icons/ri";
 
 function ViewSchedule({ match, history }) {
   const isMobile = useSelector((state) => state.appState.isMobile);
@@ -70,6 +82,7 @@ function ViewSchedule({ match, history }) {
   const [imageURL, setImageURL] = useState(null);
 
   const location = useLocation();
+  const compareModal = useDisclosure();
 
   let formattedSchedule = {};
   let totalCredits = 0;
@@ -98,8 +111,16 @@ function ViewSchedule({ match, history }) {
     fetchSchedule();
     if (location.state?.feedbackPopup) {
       feedbackModal.onOpen();
+      useMixpanel.track("feedback_impression", {
+        eventName: "feedback_impression",
+        eventAction: "impression",
+        eventCategory: "modal",
+        screenName: "Buat Jadwal",
+        screenOwner: "desktop_web",
+        eventLabel: "/susun::feedback-modal-shown",
+      });
     }
-  }, [match, dispatch]);
+  }, [scheduleId, dispatch]);
 
   const scheduleName = schedule && schedule.name;
 
@@ -162,7 +183,7 @@ function ViewSchedule({ match, history }) {
   const copyImage = () => {
     copyImageToClipboard(imageURL)
       .then(() => showAlertCopy("Gambar"))
-      .catch((e) => showErrorCopy());
+      .catch((_e) => showErrorCopy());
   };
 
   const handleFeedbackModalClose = () => {
@@ -290,30 +311,62 @@ function ViewSchedule({ match, history }) {
           <>
             <Container>
               <HeaderContainer>
-                {schedule.has_edit_access ? (
-                  <ScheduleNameEditable>
-                    <ControlledInput
-                      style={{ color: theme === "light" ? "aqua" : "orange" }}
-                      name={decodeHtmlEntity(schedule.name)}
-                      slug={match.params.scheduleId}
-                      rename={onRename}
+                <Flex
+                  direction="column"
+                  align="left"
+                  gap={{ base: "4px", md: "8px" }}
+                  maxW={{ base: "calc(100% - 110px)", md: "100%" }}
+                >
+                  <Link
+                    to="/jadwal"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                    }}
+                  >
+                    <RiArrowLeftLongLine
+                      color={theme === "light" ? "#5038BC" : "#917DEC"}
+                      style={{
+                        fontSize: isMobile ? "1.25rem" : "2rem",
+                        cursor: "pointer",
+                      }}
                     />
-                    <p>
-                      Dibuat pada{" "}
-                      {createdAt?.getDate() +
-                        "/" +
-                        (createdAt?.getMonth() + 1) +
-                        "/" +
-                        createdAt?.getFullYear()}{" "}
-                      • {totalCredits} SKS
-                    </p>
-                  </ScheduleNameEditable>
-                ) : (
-                  <ScheduleName mode={theme}>
-                    {decodeHtmlEntity(schedule.name)}
-                  </ScheduleName>
-                )}
-
+                    <Text
+                      fontSize={{ base: "16px", sm: "18px", md: "24px" }}
+                      fontWeight="medium"
+                      color={
+                        theme === "light"
+                          ? "secondary.GalacticPurple"
+                          : "dark.White"
+                      }
+                    >
+                      Daftar Jadwal
+                    </Text>
+                  </Link>
+                  {schedule.has_edit_access ? (
+                    <ScheduleNameEditable>
+                      <ControlledInput
+                        name={decodeHtmlEntity(schedule.name)}
+                        slug={match.params.scheduleId}
+                        rename={onRename}
+                      />
+                      <p>
+                        Dibuat pada{" "}
+                        {createdAt?.getDate() +
+                          "/" +
+                          (createdAt?.getMonth() + 1) +
+                          "/" +
+                          createdAt?.getFullYear()}{" "}
+                        • {totalCredits} SKS
+                      </p>
+                    </ScheduleNameEditable>
+                  ) : (
+                    <ScheduleName mode={theme}>
+                      {decodeHtmlEntity(schedule.name)}
+                    </ScheduleName>
+                  )}
+                </Flex>
                 <IconContainer isAuthenticated={Boolean(auth)}>
                   <Icons
                     Items={[
@@ -322,12 +375,6 @@ function ViewSchedule({ match, history }) {
                         icon: downloadImg,
                         alt: "download",
                         action: downloadImage,
-                      },
-                      {
-                        desc: "Ekspor ke .ics (Google Calendar/Apple Calendar)",
-                        icon: exportToIcsImg,
-                        alt: "export-to-ics",
-                        action: () => generateICalendarFile(schedule),
                       },
                       {
                         desc: "Share Jadwal",
@@ -345,53 +392,127 @@ function ViewSchedule({ match, history }) {
                   />
                 </IconContainer>
               </HeaderContainer>
-
               <ButtonContainer isAuthenticated={Boolean(auth)}>
                 <Flex
                   direction="row"
-                  gap={{ base: "10px", md: "15px" }}
-                  width={{ base: "100%", md: "82%" }}
-                  justifyContent="center"
+                  flexWrap="wrap"
+                  gap={{ base: "4px", sm: "8px", md: "15px" }}
+                  width="100%"
+                  justifyContent={{ base: "space-between", xl: "flex-end" }}
                   alignItems="center"
                 >
-                  <Link to={`/edit/${scheduleId}`}>
-                    <Button
-                      width="full"
-                      mr="0"
-                      intent="primary"
-                      variant="outline"
-                      borderColor={
-                        theme === "light"
-                          ? "primary.Purple"
-                          : "dark.LightPurple"
-                      }
-                      color={
-                        theme === "light" ? "primary.Purple" : "dark.Purple"
-                      }
-                      fontSize={{ base: "16px", md: "18px" }}
-                      minW={{ base: "120px", md: "100px" }}
-                      px={{ base: "32px", md: "auto" }}
-                      py={{ base: "14px", md: "auto" }}
-                    >
-                      {schedule.has_edit_access ? "Edit" : "Copy"}
-                    </Button>
-                  </Link>
+                  <Popover trigger="hover">
+                    <PopoverTrigger>
+                      <Button
+                        height={{ base: "38px", sm: "48px", md: "64px" }}
+                        flex={{ base: "1 1 100%", xl: "initial" }}
+                        minW="0"
+                        maxW="100%"
+                        intent="primary"
+                        variant="solid"
+                        bg={
+                          theme === "light"
+                            ? "primary.Purple"
+                            : "dark.LightPurple"
+                        }
+                        borderColor={
+                          theme === "light"
+                            ? "primary.Purple"
+                            : "dark.LightPurple"
+                        }
+                        color={theme === "light" ? "white" : "dark.White"}
+                        fontWeight="medium"
+                        fontSize={{
+                          base: "10px",
+                          sm: "12px",
+                          md: "15px",
+                          lg: "18px",
+                        }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          compareModal.onOpen();
+                        }}
+                        gap={{ base: "3px", sm: "6px", md: "12px" }}
+                        px={{ base: "4px", sm: "10px", md: "20px" }}
+                        _hover={{
+                          bg:
+                            theme === "light"
+                              ? "primary.DarkPurple"
+                              : "dark.Purple",
+                        }}
+                      >
+                        <Text
+                          as="span"
+                          fontSize="inherit"
+                          fontWeight="inherit"
+                          whiteSpace="nowrap"
+                          overflow="hidden"
+                          textOverflow="ellipsis"
+                        >
+                          Bandingkan Jadwal
+                        </Text>
+                        <Image
+                          src={compareSchedule}
+                          boxSize={{ base: "14px", sm: "18px", md: "26px" }}
+                          flexShrink={0}
+                          alt="compare-schedule"
+                        />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent width="250px">
+                      <PopoverArrow bgColor="#5038BC" />
+                      <PopoverBody
+                        bg="#E1E5FE"
+                        color="#5038BC"
+                        border="2px"
+                        borderColor="#5038BC"
+                        borderRadius="8px"
+                      >
+                        <Flex alignItems="center">
+                          <Image
+                            src={compareBulb}
+                            alt="Compare Schedule"
+                            boxSize="25px"
+                            mr="10px"
+                          />
+                          <Text fontWeight="bold" fontSize="md">
+                            Bandingkan jadwal dengan teman-mu!
+                          </Text>
+                        </Flex>
+                        <Text mt="10px" fontWeight="medium" fontSize="sm">
+                          Klik tombol share pada jadwal teman-mu, copy link
+                          jadwal tersebut, lalu input linknya di sini! Kamu bisa
+                          dengan mudah membandingkan jadwal dengan teman-mu!
+                        </Text>
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
 
                   <Button
-                    width="full"
-                    flex="1"
+                    height={{ base: "38px", sm: "48px", md: "64px" }}
+                    flex={{ base: "1 1 0px", xl: "initial" }}
+                    minW="0"
+                    maxW="100%"
                     mr="0"
                     size="sm"
-                    px={{ base: "32px", md: "100px" }}
-                    py={{ base: "20px", md: "20px" }}
+                    px={{ base: "4px", sm: "10px", md: "20px" }}
+                    py={{ base: "4px", md: "20px" }}
                     variant="solid"
-                    bg={
-                      theme === "light" ? "primary.Purple" : "dark.LightPurple"
+                    bg="secondary.Purple"
+                    color={
+                      theme === "light"
+                        ? "secondary.GalacticPurple"
+                        : "primary.Purple"
                     }
-                    color={theme === "light" ? "white" : "dark.White"}
                     onClick={handleOpenGoogleCalendarModal}
-                    fontSize={{ base: "14px", md: "18px" }}
-                    minW={{ base: "140px", md: "140px" }}
+                    fontSize={{
+                      base: "10px",
+                      sm: "12px",
+                      md: "15px",
+                      lg: "18px",
+                    }}
+                    fontWeight="medium"
+                    gap={{ base: "3px", sm: "6px", md: "12px" }}
                     _hover={{
                       bg:
                         theme === "light"
@@ -399,18 +520,78 @@ function ViewSchedule({ match, history }) {
                           : "dark.Purple",
                     }}
                   >
-                    <Text display={{ base: "none", sm: "inline" }}>
+                    <Text
+                      as="span"
+                      fontSize="inherit"
+                      fontWeight="inherit"
+                      whiteSpace="nowrap"
+                      overflow="hidden"
+                      textOverflow="ellipsis"
+                    >
                       Integrasi Kalender
                     </Text>
-                    <Text display={{ base: "inline", sm: "none" }}>
-                      Integrasi
-                    </Text>
-                    <img
-                      src={ics2025Img}
-                      style={{ marginLeft: "6px", height: "25px" }}
+                    <Image
+                      src={ics2026Img}
+                      boxSize={{ base: "14px", sm: "18px", md: "26px" }}
+                      flexShrink={0}
                       alt="export-to-ics"
                     />
                   </Button>
+
+                  <Link
+                    to={`/edit/${scheduleId}`}
+                    className="edit-schedule-link"
+                    style={{
+                      minWidth: 0,
+                      display: "flex",
+                    }}
+                  >
+                    <Button
+                      width="100%"
+                      height={{ base: "38px", sm: "48px", md: "64px" }}
+                      fontWeight="medium"
+                      mr="0"
+                      intent="primary"
+                      variant="outline"
+                      borderColor={
+                        theme === "light"
+                          ? "primary.Purple"
+                          : "secondary.Purple"
+                      }
+                      color={
+                        theme === "light"
+                          ? "primary.Purple"
+                          : "secondary.Purple"
+                      }
+                      fontSize={{
+                        base: "10px",
+                        sm: "12px",
+                        md: "15px",
+                        lg: "18px",
+                      }}
+                      minW="0"
+                      px={{ base: "4px", sm: "10px", md: "20px" }}
+                      py={{ base: "4px", md: "14px" }}
+                      gap={{ base: "3px", sm: "6px", md: "12px" }}
+                    >
+                      <Text
+                        as="span"
+                        fontSize="inherit"
+                        fontWeight="inherit"
+                        whiteSpace="nowrap"
+                        overflow="hidden"
+                        textOverflow="ellipsis"
+                      >
+                        {schedule.has_edit_access ? "Edit" : "Copy"}
+                      </Text>
+                      <Image
+                        src={theme === "light" ? pencilIcon : pencilIconDark}
+                        boxSize={{ base: "14px", sm: "18px", md: "26px" }}
+                        flexShrink={0}
+                        alt="edit schedule"
+                      />
+                    </Button>
+                  </Link>
                 </Flex>
               </ButtonContainer>
             </Container>
@@ -479,6 +660,12 @@ function ViewSchedule({ match, history }) {
         schedule={schedule}
         generateICalendarFile={generateICalendarFile}
       />
+
+      <CompareModal
+        isOpen={compareModal.isOpen}
+        onClose={compareModal.onClose}
+        scheduleId={schedule?.id}
+      />
     </>
   );
 }
@@ -512,7 +699,7 @@ const MainContainer = styled.div`
 const Container = styled.div`
   padding: 24px 24px 0px;
 
-  @media (min-width: 900px) {
+  @media (min-width: 1100px) {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -529,9 +716,11 @@ const HeaderContainer = styled.div`
   align-items: center;
   background-color: transparent;
   justify-content: space-between;
+  width: 100%;
   margin-right: -8px;
 
-  @media (min-width: 900px) {
+  @media (min-width: 1100px) {
+    width: auto;
     margin-right: 0px;
     position: relative;
   }
@@ -545,9 +734,9 @@ const IconContainer = styled.div`
   ${(props) =>
     props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
 
-  @media (min-width: 900px) {
+  @media (min-width: 1100px) {
     position: absolute;
-    right: -50px;
+    right: -120px;
     top: 50%;
     transform: translateY(-50%);
   }
@@ -555,19 +744,27 @@ const IconContainer = styled.div`
 
 const ButtonContainer = styled.div`
   align-items: center;
-  margin-top: 24px;
+  margin-top: 16px;
   display: flex;
   justify-content: center;
+  width: 100%;
 
   a {
     ${(props) =>
       props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
-    width: auto;
   }
 
-  @media (min-width: 900px) {
+  a.edit-schedule-link {
+    flex: 1 1 0px;
+    @media (min-width: 1100px) {
+      flex: initial;
+    }
+  }
+
+  @media (min-width: 1100px) {
     margin-top: 0px;
     margin-left: auto;
+    width: auto;
     justify-content: flex-end;
   }
 `;
@@ -587,11 +784,19 @@ const ScheduleNameEditable = styled.div`
 `;
 
 const ScheduleName = styled.div`
-  font-size: 32px;
+  font-size: 20px;
+  font-weight: bold;
   color: ${(props) =>
     props.mode === "light"
       ? props.theme.color.secondaryMineShaft
       : props.theme.color.darkWhite};
+
+  @media (min-width: 600px) {
+    font-size: 26px;
+  }
+  @media (min-width: 900px) {
+    font-size: 32px;
+  }
 `;
 
 const ViewToggleContainer = styled.div`
@@ -600,10 +805,11 @@ const ViewToggleContainer = styled.div`
   cursor: pointer;
   border-radius: 1em;
   justify-content: center;
-  padding: 24px 24px 28px;
+  padding: 16px 24px 20px;
 
   @media (min-width: 900px) {
-    padding: 40px 80px ;
+    padding: 40px 80px;
+  }
 `;
 
 const ViewListContainer = styled.div`

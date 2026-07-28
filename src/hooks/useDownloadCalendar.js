@@ -32,7 +32,10 @@ const useDownloadCalendar = () => {
         }
 
         setData(value);
-        const dlurl = `data:text/calendar;charset=utf-8,${value}`;
+        const blob = new Blob([value], {
+          type: "text/calendar;charset=utf-8;",
+        });
+        const dlurl = URL.createObjectURL(blob);
         download(dlurl, `${schedule.name || "Untitled"} - SusunJadwal.ics`);
         return value;
       },

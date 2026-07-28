@@ -25,13 +25,18 @@ import getFormattedSchedule from "utils/schedule";
 import useDownloadCalendar from "hooks/useDownloadCalendar";
 import { decodeHtmlEntity } from "utils/string";
 
-import exportToIcsImg from "assets/ExportToIcs.svg";
 import clipboardImg from "assets/Clipboard.svg";
 import downloadImg from "assets/Download.svg";
 import deleteImg from "assets/Delete.svg";
-import compareSchedule from "assets/compare-schedule.svg";
+import compareSchedule from "assets/compare-schedule-white.svg";
 import compareBulb from "assets/compare-bulb.svg";
 import compareMobile from "assets/compare-mobile.svg";
+
+import ics2026Img from "assets/ics2026.svg";
+import pencilIcon from "assets/pencil-icon.svg";
+import pencilIconDark from "assets/pencilIconDark.svg";
+import { useDisclosure } from "@chakra-ui/react";
+import GoogleCalendarModal from "../ViewSchedule/GoogleCalendarModal";
 
 const ScheduleDetail = ({
   schedule,
@@ -44,11 +49,14 @@ const ScheduleDetail = ({
   const isMobile = useSelector((state) => state.appState.isMobile);
   const theme = useColorModeValue("light", "dark");
   const { generateICalendarFile } = useDownloadCalendar(theme);
+  const googleCalendarModal = useDisclosure();
   let formattedSchedule = {};
-  let totalCredits = 0;
+  // eslint-disable-next-line no-unused-vars
+  let _totalCredits = 0;
 
   if (schedule) {
-    [formattedSchedule, totalCredits] = getFormattedSchedule(schedule);
+    // eslint-disable-next-line no-unused-vars
+    [formattedSchedule, _totalCredits] = getFormattedSchedule(schedule);
   }
 
   const convertDate = (date) => {
@@ -75,12 +83,42 @@ const ScheduleDetail = ({
   };
 
   const openShareModal = async (id, name) => {
+    useMixpanel.track("share_jadwal_icon_click", {
+      eventName: "share_jadwal_icon_click",
+      eventAction: "click",
+      eventCategory: "button",
+      ctaTitle: "Share Jadwal",
+      fieldName: `jadwal_id: ${id}`,
+      screenName: "Daftar Jadwal",
+      screenOwner: "desktop_web",
+      eventLabel: "/susun::share-jadwal-clicked",
+    });
     const dataUrl = await htmlToImage.toPng(refs.current);
     showShareModal(id, name, dataUrl);
   };
 
   const openCompareModal = () => {
+    useMixpanel.track("bandingkan_jadwal_button_click", {
+      eventName: "bandingkan_jadwal_button_click",
+      eventAction: "click",
+      eventCategory: "button",
+      ctaTitle: "Bandingkan Jadwal",
+      fieldName: `jadwal_id: ${schedule.id}`,
+      screenName: "Daftar Jadwal",
+      screenOwner: "desktop_web",
+      eventLabel: "/susun::bandingkan-jadwal-clicked",
+    });
     showCompareModal(schedule.id);
+  };
+
+  const handleOpenGoogleCalendarModal = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    ReactGA.event({
+      category: "Integrasi Calendar",
+      action: "Opened Google Calendar Modal",
+    });
+    googleCalendarModal.onOpen();
   };
 
   return (
@@ -89,8 +127,22 @@ const ScheduleDetail = ({
         onClick={() => useMixpanel.track("open_jadwal")}
         to={`/jadwal/${schedule.id}`}
       >
-        <Card key={`${schedule.name}-${idx}`} mode={theme}>
-          <div className="headerInfo">
+        <Card key={`${schedule.name}-${idx}`} mode={theme} isMobile={isMobile}>
+          {isMobile && (
+            <SchedulePreview
+              startHour={7}
+              endHour={21}
+              schedule={schedule}
+              pxPerMinute={0.7}
+              width="100%"
+              showRoom
+              isTop
+            />
+          )}
+          <div
+            className="headerInfo"
+            style={isMobile ? { borderRadius: "0 0 8px 8px" } : {}}
+          >
             <div>
               <div
                 style={{ display: "flex", gap: "13px", alignItems: "center" }}
@@ -170,12 +222,6 @@ const ScheduleDetail = ({
                       <img src={clipboardImg} alt="copy" />
                     </ImageButton>
                     <ImageButton
-                      onClick={() => generateICalendarFile(schedule)}
-                      data-hover="Ekspor ke .ics (Google Calendar/Apple Calendar)"
-                    >
-                      <img src={exportToIcsImg} alt="export-to-ics" />
-                    </ImageButton>
-                    <ImageButton
                       onClick={() => showModal(schedule.id)}
                       data-hover="Delete Jadwal"
                     >
@@ -195,12 +241,6 @@ const ScheduleDetail = ({
                               downloadImage(
                                 !schedule.name ? "Untitled" : schedule.name,
                               ),
-                          },
-                          {
-                            desc: "Ekspor ke .ics (Google Calendar/Apple Calendar)",
-                            icon: exportToIcsImg,
-                            alt: "export-to-ics",
-                            action: () => generateICalendarFile(schedule),
                           },
                           {
                             desc: "Share Jadwal",
@@ -224,24 +264,27 @@ const ScheduleDetail = ({
                         <Button
                           mx="1rem"
                           intent="primary"
-                          variant="outline"
+                          variant="solid"
                           borderColor={
                             theme === "light"
                               ? "primary.Purple"
                               : "dark.LightPurple"
                           }
-                          color={
-                            theme === "light" ? "primary.Purple" : "dark.Purple"
-                          }
+                          color={theme === "light" ? "white" : "dark.White"}
                           onClick={(e) => {
                             e.preventDefault();
                             openCompareModal();
+                          }}
+                          style={{
+                            fontWeight: 500,
+                            height: "64px",
+                            width: "253px",
                           }}
                         >
                           Bandingkan Jadwal
                           <img
                             src={compareSchedule}
-                            style={{ marginLeft: "6px", height: "25px" }}
+                            style={{ marginLeft: "16px", height: "25px" }}
                             alt="compare-schedule"
                           />
                         </Button>
@@ -276,20 +319,80 @@ const ScheduleDetail = ({
                       </PopoverContent>
                     </Popover>
                     <Button
+                      width="235px"
+                      height="64px"
+                      flex="1"
+                      mr="0"
+                      size="sm"
+                      px={{ base: "32px", md: "100px" }}
+                      py={{ base: "20px", md: "20px" }}
+                      variant="solid"
+                      bg="secondary.Purple"
+                      color={
+                        theme === "light"
+                          ? "secondary.GalacticPurple"
+                          : "primary.Purple"
+                      }
+                      onClick={handleOpenGoogleCalendarModal}
+                      fontSize={{ base: "14px", md: "16px" }}
+                      fontWeight={{ base: "medium", md: "medium" }}
+                      minW={{ base: "140px", md: "140px" }}
+                      _hover={{
+                        bg:
+                          theme === "light"
+                            ? "primary.DarkPurple"
+                            : "dark.Purple",
+                      }}
+                    >
+                      <Text display={{ base: "none", sm: "inline" }}>
+                        Integrasi Kalender
+                      </Text>
+                      <Text display={{ base: "inline", sm: "none" }}>
+                        Integrasi
+                      </Text>
+                      <img
+                        src={ics2026Img}
+                        style={{ marginLeft: "16px", height: "25px" }}
+                        alt="export-to-ics"
+                      />
+                    </Button>
+                    <Button
                       mx="1rem"
+                      height="64px"
+                      width="122px"
                       intent="primary"
                       variant="outline"
-                      onClick={() => editSchedule(schedule.id)}
+                      fontWeight="medium"
+                      onClick={() => {
+                        useMixpanel.track("edit_jadwal_button_click", {
+                          eventName: "edit_jadwal_button_click",
+                          eventAction: "click",
+                          eventCategory: "button",
+                          ctaTitle: "Edit Jadwal",
+                          fieldName: `jadwal_id: ${schedule.id}`,
+                          screenName: "Daftar Jadwal",
+                          screenOwner: "desktop_web",
+                          eventLabel: "/susun::edit-jadwal-clicked",
+                        });
+                        editSchedule(schedule.id);
+                      }}
                       borderColor={
                         theme === "light"
                           ? "primary.Purple"
-                          : "dark.LightPurple"
+                          : "secondary.Purple"
                       }
                       color={
-                        theme === "light" ? "primary.Purple" : "dark.Purple"
+                        theme === "light"
+                          ? "primary.Purple"
+                          : "secondary.Purple"
                       }
                     >
-                      Edit Jadwal
+                      Edit
+                      <img
+                        src={theme === "light" ? pencilIcon : pencilIconDark}
+                        style={{ marginLeft: "16px", height: "25px" }}
+                        alt="edit schedule"
+                      />
                     </Button>
                   </>
                 )}
@@ -310,16 +413,25 @@ const ScheduleDetail = ({
               />
             </div>
           </div>
-          <SchedulePreview
-            startHour={7}
-            endHour={21}
-            schedule={schedule}
-            pxPerMinute={isMobile ? 0.7 : 0.9}
-            width="100%"
-            showRoom
-          />
+          {!isMobile && (
+            <SchedulePreview
+              startHour={7}
+              endHour={21}
+              schedule={schedule}
+              pxPerMinute={0.9}
+              width="100%"
+              showRoom
+            />
+          )}
         </Card>
       </Link>
+
+      <GoogleCalendarModal
+        isOpen={googleCalendarModal.isOpen}
+        onClose={googleCalendarModal.onClose}
+        schedule={schedule}
+        generateICalendarFile={generateICalendarFile}
+      />
     </>
   );
 };

@@ -124,6 +124,7 @@ const EditSchedule = ({ match }) => {
 
       <Container>
         <CoursePickerContainer isMobile={isMobile} mode={theme}>
+          {isMobile}
           <h1>Edit Jadwal</h1>
 
           {lastUpdated && courses && (
