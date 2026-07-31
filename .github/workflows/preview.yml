@@ -1,4 +1,4 @@
-name: Deploy to Vercel
+name: Deploy Preview to Vercel
 
 on:
   push:
@@ -8,8 +8,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
+
     steps:
       - uses: actions/checkout@v4
 
@@ -17,9 +19,27 @@ jobs:
         with:
           node-version: 22
 
-      - name: Deploy to Vercel
+      - name: Deploy preview to Vercel
+        id: deploy
         env:
           VERCEL_ORG_ID: ${{ secrets.ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.PROJECT_ID }}
           VERCEL_TOKEN: ${{ secrets.WEBDEV_VERCEL_TOKEN }}
-        run: npx vercel deploy --yes --token "$VERCEL_TOKEN" --build-env CI=false
+        run: |
+          DEPLOYMENT_URL=$(npx vercel deploy \
+            --yes \
+            --token "$VERCEL_TOKEN" \
+            --build-env CI=false)
+
+          echo "Deployment URL: $DEPLOYMENT_URL"
+          echo "deployment_url=$DEPLOYMENT_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Assign staging alias
+        if: github.ref_name == 'staging'
+        env:
+          VERCEL_TOKEN: ${{ secrets.WEBDEV_VERCEL_TOKEN }}
+        run: |
+          npx vercel alias set \
+            "${{ steps.deploy.outputs.deployment_url }}" \
+            susunjadwal-frontend-stg.vercel.app \
+            --token "$VERCEL_TOKEN"
