@@ -178,7 +178,7 @@ function BuildSchedule() {
           (acc, course) => {
             if (course.category === "Kelas Internal") {
               acc.internal.push(course);
-            } else if (course.category === "Kelas External") {
+            } else if (course.category === "Kelas Eksternal") {
               acc.external.push(course);
             } else {
               acc.bersama.push(course);
