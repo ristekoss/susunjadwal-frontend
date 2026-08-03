@@ -729,16 +729,15 @@ const HeaderContainer = styled.div`
 const IconContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-right: 0;
+  gap: 4px
+  justify-content: center;
+  align-items: center;
 
   ${(props) =>
     props.isAuthenticated ? "visibility: visible;" : "visibility: hidden;"}
 
   @media (min-width: 1100px) {
-    position: absolute;
-    right: -120px;
-    top: 50%;
-    transform: translateY(-50%);
+    margin-right: 20px;
   }
 `;
 
