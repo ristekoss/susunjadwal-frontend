@@ -9,6 +9,12 @@ import {
   InputLeftElement,
   Center,
   Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  useDisclosure,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -51,9 +57,19 @@ function BuildSchedule() {
   const [isCoursesDetail, setCoursesDetail] = useState(null);
   const [value, setValue] = useState("");
   const [showSelectMajor, setShowSelectMajor] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const theme = useColorModeValue("light", "dark");
   const isInitialMount = useRef(true);
+
+  const handleCloseModal = useCallback(() => {
+    try {
+      localStorage.setItem("buildScheduleModalDismissed", "true");
+    } catch (error) {
+      console.warn("Could not persist modal dismissal state:", error);
+    }
+    onClose();
+  }, [onClose]);
 
   const fetchedMajorId = useRef(null);
   const fetchedMajorSelected = useRef(null);
@@ -138,9 +154,18 @@ function BuildSchedule() {
         fetchCourses(majorId, majorSelected, false);
       }
     }
+
+    const modalDismissed =
+      typeof window !== "undefined" &&
+      localStorage.getItem("buildScheduleModalDismissed") === "true";
+
+    if (!modalDismissed) {
+      onOpen();
+    }
   }, [
     auth.majorId,
     fetchCourses,
+    onOpen,
     restoreSchedulesFromSessionStorage,
     majorSelected,
   ]);
@@ -456,6 +481,43 @@ function BuildSchedule() {
           isConflict={detailData && detailData.isConflict}
         />
       )}
+
+      <Modal isOpen={isOpen} onClose={handleCloseModal} isCentered>
+        <ModalOverlay />
+        <ModalContent
+          mx={{ base: "1.5rem", md: "0" }}
+          w={{ base: "100%", sm: "700px" }}
+        >
+          <ModalCloseButton />
+          <ModalBody
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              padding: "40px 32px",
+              gap: "12px",
+            }}
+          >
+            <Text fontSize="2xl" fontWeight="bold">
+              Perubahan pada Sistem Jadwal
+            </Text>
+            <Text fontSize="md" maxW="400px">
+              Selama masa peralihan SIAK-SCLM, sinkronisasi jadwal belum
+              sepenuhnya berjalan dengan jadwal yang akurat. Silakan cek kembali
+              jadwalmu setelah sistem kembali normal.
+            </Text>
+            <Button
+              onClick={handleCloseModal}
+              w="100%"
+              h="48px"
+              _hover={{ opacity: 0.9 }}
+            >
+              Mengerti
+            </Button>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Container>
   );
 }
