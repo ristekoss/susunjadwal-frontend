@@ -6,7 +6,7 @@ import { Box, Text, Button } from "@chakra-ui/react";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 import { postBetaTesterData } from "services/api";
-import FACULTIES from "utils/faculty-base-additional-info.json";
+import FACULTIES from "utils/faculty-base-additional-info.updated.json";
 
 import { Bauhaus } from "components/Bauhaus";
 import { InfoToast, SuccessToast } from "components/Toast";
