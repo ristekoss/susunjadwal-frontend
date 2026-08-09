@@ -281,324 +281,9 @@
       "educational_program": "S3 (Doctoral Program)"
     },
     {
-      "kd_org": "01.00.21.01",
-      "study_program": "Ilmu Lingkungan",
-      "educational_program": "S3 (Doctoral Program)"
-    },
-    {
-      "kd_org": "01.00.51.01",
-      "study_program": "Jantung dan Pembuluh Darah",
-      "educational_program": "Spesialis 1"
-    },
-    {
-      "kd_org": "01.00.52.01",
-      "study_program": "Ilmu Kesehatan Anak",
-      "educational_program": "Spesialis 1"
-    },
-    {
-      "kd_org": "01.00.53.01",
-      "study_program": "Onkologi Radiasi",
-      "educational_program": "Spesialis 1"
-    },
-    {
-      "kd_org": "01.01.21.01",
-      "study_program": "Ilmu Lingkungan",
-      "educational_program": "S2 (Graduate Program)"
-    },
-    {
-      "kd_org": "01.02.15.01",
-      "study_program": "Industri Kreatif",
-      "educational_program": "S2 Terapan"
-    },
-    {
-      "kd_org": "01.02.21.01",
-      "study_program": "Kajian Ketahanan Nasional",
-      "educational_program": "S2 (Graduate Program)"
-    },
-    {
-      "kd_org": "01.03.21.01",
-      "study_program": "Kajian Pengembangan Perkotaan",
-      "educational_program": "S2 (Graduate Program)"
-    },
-    {
-      "kd_org": "02.00.21.01",
-      "study_program": "Kajian Stratejik dan Global",
-      "educational_program": "S3 (Doctoral Program)"
-    },
-    {
-      "kd_org": "02.01.21.01",
-      "study_program": "Manajemen Bencana",
-      "educational_program": "S2 (Graduate Program)"
-    },
-    {
-      "kd_org": "02.02.21.01",
-      "study_program": "Kajian Gender",
-      "educational_program": "S2 (Graduate Program)"
-    },
-    {
-      "kd_org": "02.03.21.01",
-      "study_program": "Kajian Wilayah Jepang",
-      "educational_program": "S2 (Graduate Program)"
-    },
-    {
-      "kd_org": "02.04.10.01",
-      "study_program": "Gizi",
-      "educational_program": "S1 Paralel"
-    },
-    {
-      "kd_org": "03.02.21.01",
-      "study_program": "Kajian Ilmu Kepolisian",
-      "educational_program": "S2 (Graduate Program)"
-    },
-    {
-      "kd_org": "03.03.21.01",
-      "study_program": "Kajian Wilayah Timur Tengah dan Islam",
-      "educational_program": "S2 (Graduate Program)"
-    },
-    {
-      "kd_org": "04.02.21.01",
-      "study_program": "Kajian Terorisme",
-      "educational_program": "S2 (Graduate Program)"
-    },
-    {
-      "kd_org": "04.03.21.01",
-      "study_program": "Kajian Wilayah Eropa",
-      "educational_program": "S2 (Graduate Program)"
-    },
-    {
-      "kd_org": "04.04.09.01",
-      "study_program": "Sosiologi",
-      "educational_program": "S1 Paralel"
-    },
-    {
-      "kd_org": "04.06.09.01",
-      "study_program": "Ilmu Kesejahteraan Sosial",
-      "educational_program": "S1 Paralel"
-    },
-    {
-      "kd_org": "04.06.10.01",
-      "study_program": "Keselamatan dan Kesehatan Kerja",
-      "educational_program": "S1 Paralel"
-    },
-    {
-      "kd_org": "04.08.09.01",
-      "study_program": "Ilmu Hubungan Internasional",
-      "educational_program": "S1 Paralel"
-    },
-    {
-      "kd_org": "05.03.21.01",
-      "study_program": "Kajian Wilayah Amerika",
-      "educational_program": "S2 (Graduate Program)"
-    },
-    {
-      "kd_org": "05.07.09.01",
-      "study_program": "Antropologi Sosial",
-      "educational_program": "S1 Paralel"
-    },
-    {
-      "kd_org": "05.08.09.01",
-      "study_program": "Ilmu Hubungan Internasional",
-      "educational_program": "S1 Ekstensi"
-    },
-    {
-      "kd_org": "06.03.07.01",
-      "study_program": "Kajian Informasi",
-      "educational_program": "S3 (Doctoral Program)"
-    },
-    {
-      "kd_org": "06.04.03.01",
-      "study_program": "Biologi",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "06.05.09.01",
-      "study_program": "Kriminologi",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "06.06.03.01",
-      "study_program": "Ilmu Geografi",
-      "educational_program": "S3 (Doctoral Program)"
-    },
-    {
-      "kd_org": "06.07.09.01",
-      "study_program": "Antropologi Sosial",
-      "educational_program": "S1 Ekstensi"
-    },
-    {
-      "kd_org": "06.08.09.01",
-      "study_program": "Hubungan Internasional",
-      "educational_program": "S3 (Doctoral Program)"
-    },
-    {
-      "kd_org": "07.00.10.01",
-      "study_program": "Kesehatan Masyarakat",
-      "educational_program": "S1 Paralel"
-    },
-    {
-      "kd_org": "07.00.17.01",
-      "study_program": "Ilmu Farmasi",
-      "educational_program": "S3 Kls Internasional"
-    },
-    {
-      "kd_org": "07.01.03.01",
-      "study_program": "Ilmu Aktuaria",
-      "educational_program": "S1 Paralel"
-    },
-    {
-      "kd_org": "07.03.03.01",
-      "study_program": "Kimia",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "07.08.09.01",
-      "study_program": "Ilmu Hubungan Internasional",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "08.00.10.01",
-      "study_program": "Kesehatan Lingkungan",
-      "educational_program": "S1 Paralel"
-    },
-    {
-      "kd_org": "08.01.03.01",
-      "study_program": "Matematika",
-      "educational_program": "S3 (Doctoral Program)"
-    },
-    {
-      "kd_org": "08.01.09.01",
-      "study_program": "Ilmu Komunikasi",
-      "educational_program": "S2 Kls Internasional"
-    },
-    {
-      "kd_org": "08.02.06.01",
-      "study_program": "Magister Manajemen",
-      "educational_program": "S2 Kls Internasional"
-    },
-    {
-      "kd_org": "08.06.04.01",
-      "study_program": "Teknik Bioproses",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "08.08.09.01",
-      "study_program": "Ilmu Hubungan Internasional",
-      "educational_program": "S2 Kls Internasional"
-    },
-    {
-      "kd_org": "09.00.08.01",
-      "study_program": "Pendidikan Profesi Psikologi",
-      "educational_program": "Profesi (Profession Program)"
-    },
-    {
-      "kd_org": "09.02.04.01",
-      "study_program": "Teknik Perkapalan",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "09.06.04.01",
-      "study_program": "Teknik Bioproses",
-      "educational_program": "S1 Paralel"
-    },
-    {
-      "kd_org": "10.01.04.01",
-      "study_program": "Teknik Lingkungan",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "10.01.06.01",
-      "study_program": "Ilmu Ekonomi Islam",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "10.05.04.01",
-      "study_program": "Arsitektur Interior",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "10.06.04.01",
-      "study_program": "Teknik Bioproses",
-      "educational_program": "S2 (Graduate Program)"
-    },
-    {
-      "kd_org": "11.00.13.01",
-      "study_program": "Spesialis Keperawatan Onkologi",
-      "educational_program": "Spesialis 1"
-    },
-    {
-      "kd_org": "11.01.06.01",
-      "study_program": "Bisnis Islam",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "12.00.13.01",
-      "study_program": "Ilmu Keperawatan",
-      "educational_program": "S1 Paralel"
-    },
-    {
-      "kd_org": "12.00.18.01",
-      "study_program": "Kebijakan Publik dan Governansi",
-      "educational_program": "S2 (Graduate Program)"
-    },
-    {
-      "kd_org": "12.02.03.01",
-      "study_program": "Fisikawan Medik",
-      "educational_program": "Profesi (Profession Program)"
-    },
-    {
-      "kd_org": "13.00.13.01",
-      "study_program": "Ilmu Keperawatan",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "13.00.18.01",
-      "study_program": "Ilmu Administrasi Fiskal",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "13.02.03.01",
-      "study_program": "Fisika",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "14.00.13.01",
-      "study_program": "Ilmu Keperawatan",
-      "educational_program": "S2 Kls Internasional"
-    },
-    {
-      "kd_org": "14.00.18.01",
-      "study_program": "Ilmu Administrasi Negara",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "14.03.04.01",
-      "study_program": "Teknik Biomedik",
-      "educational_program": "S1 Paralel"
-    },
-    {
-      "kd_org": "15.00.13.01",
-      "study_program": "Ilmu Keperawatan",
-      "educational_program": "S3 Kls Internasional"
-    },
-    {
-      "kd_org": "15.00.18.01",
-      "study_program": "Ilmu Administrasi Niaga",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
-      "kd_org": "15.03.04.01",
-      "study_program": "Teknik Komputer",
-      "educational_program": "S1 Kls Internasional"
-    },
-    {
       "kd_org": "16.00.02.01",
       "study_program": "Pendidikan Dokter Gigi",
       "educational_program": "Profesi Kls Internasional"
-    },
-    {
-      "kd_org": "33.00.07.01",
-      "study_program": "Sastra Arab",
-      "educational_program": "S1 Kls Internasional"
     },
     {
       "kd_org": "57.00.01.01",
@@ -913,6 +598,41 @@
       "kd_org": "05.03.03.01",
       "study_program": "Ilmu Kimia",
       "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "06.04.03.01",
+      "study_program": "Biologi",
+      "educational_program": "S1 Kls Internasional"
+    },
+    {
+      "kd_org": "06.06.03.01",
+      "study_program": "Ilmu Geografi",
+      "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "07.01.03.01",
+      "study_program": "Ilmu Aktuaria",
+      "educational_program": "S1 Paralel"
+    },
+    {
+      "kd_org": "07.03.03.01",
+      "study_program": "Kimia",
+      "educational_program": "S1 Kls Internasional"
+    },
+    {
+      "kd_org": "08.01.03.01",
+      "study_program": "Matematika",
+      "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "12.02.03.01",
+      "study_program": "Fisikawan Medik",
+      "educational_program": "Profesi (Profession Program)"
+    },
+    {
+      "kd_org": "13.02.03.01",
+      "study_program": "Fisika",
+      "educational_program": "S1 Kls Internasional"
     }
   ],
   "TEKNIK": [
@@ -1225,6 +945,46 @@
       "kd_org": "06.01.04.01",
       "study_program": "Teknik Sipil",
       "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "08.06.04.01",
+      "study_program": "Teknik Bioproses",
+      "educational_program": "S1 Kls Internasional"
+    },
+    {
+      "kd_org": "09.02.04.01",
+      "study_program": "Teknik Perkapalan",
+      "educational_program": "S1 Kls Internasional"
+    },
+    {
+      "kd_org": "09.06.04.01",
+      "study_program": "Teknik Bioproses",
+      "educational_program": "S1 Paralel"
+    },
+    {
+      "kd_org": "10.01.04.01",
+      "study_program": "Teknik Lingkungan",
+      "educational_program": "S1 Kls Internasional"
+    },
+    {
+      "kd_org": "10.05.04.01",
+      "study_program": "Arsitektur Interior",
+      "educational_program": "S1 Kls Internasional"
+    },
+    {
+      "kd_org": "10.06.04.01",
+      "study_program": "Teknik Bioproses",
+      "educational_program": "S2 (Graduate Program)"
+    },
+    {
+      "kd_org": "14.03.04.01",
+      "study_program": "Teknik Biomedik",
+      "educational_program": "S1 Paralel"
+    },
+    {
+      "kd_org": "15.03.04.01",
+      "study_program": "Teknik Komputer",
+      "educational_program": "S1 Kls Internasional"
     }
   ],
   "HUKUM": [
@@ -1394,6 +1154,21 @@
       "kd_org": "06.02.06.01",
       "study_program": "Ilmu Manajemen",
       "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "08.02.06.01",
+      "study_program": "Magister Manajemen",
+      "educational_program": "S2 Kls Internasional"
+    },
+    {
+      "kd_org": "10.01.06.01",
+      "study_program": "Ilmu Ekonomi Islam",
+      "educational_program": "S1 Kls Internasional"
+    },
+    {
+      "kd_org": "11.01.06.01",
+      "study_program": "Bisnis Islam",
+      "educational_program": "S1 Kls Internasional"
     }
   ],
   "ILMU PENGETAHUAN BUDAYA": [
@@ -1656,6 +1431,16 @@
       "kd_org": "02.05.07.01",
       "study_program": "Ilmu Susastra",
       "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "06.03.07.01",
+      "study_program": "Kajian Informasi",
+      "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "33.00.07.01",
+      "study_program": "Sastra Arab",
+      "educational_program": "S1 Kls Internasional"
     }
   ],
   "PSIKOLOGI": [
@@ -1698,6 +1483,11 @@
       "kd_org": "05.00.08.01",
       "study_program": "Psikologi",
       "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "09.00.08.01",
+      "study_program": "Pendidikan Profesi Psikologi",
+      "educational_program": "Profesi (Profession Program)"
     }
   ],
   "ILMU SOSIAL & ILMU POLITIK": [
@@ -1925,6 +1715,61 @@
       "kd_org": "03.04.09.01",
       "study_program": "Sosiologi",
       "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "04.04.09.01",
+      "study_program": "Sosiologi",
+      "educational_program": "S1 Paralel"
+    },
+    {
+      "kd_org": "04.06.09.01",
+      "study_program": "Ilmu Kesejahteraan Sosial",
+      "educational_program": "S1 Paralel"
+    },
+    {
+      "kd_org": "04.08.09.01",
+      "study_program": "Ilmu Hubungan Internasional",
+      "educational_program": "S1 Paralel"
+    },
+    {
+      "kd_org": "05.07.09.01",
+      "study_program": "Antropologi Sosial",
+      "educational_program": "S1 Paralel"
+    },
+    {
+      "kd_org": "05.08.09.01",
+      "study_program": "Ilmu Hubungan Internasional",
+      "educational_program": "S1 Ekstensi"
+    },
+    {
+      "kd_org": "06.05.09.01",
+      "study_program": "Kriminologi",
+      "educational_program": "S1 Kls Internasional"
+    },
+    {
+      "kd_org": "06.07.09.01",
+      "study_program": "Antropologi Sosial",
+      "educational_program": "S1 Ekstensi"
+    },
+    {
+      "kd_org": "06.08.09.01",
+      "study_program": "Hubungan Internasional",
+      "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "07.08.09.01",
+      "study_program": "Ilmu Hubungan Internasional",
+      "educational_program": "S1 Kls Internasional"
+    },
+    {
+      "kd_org": "08.01.09.01",
+      "study_program": "Ilmu Komunikasi",
+      "educational_program": "S2 Kls Internasional"
+    },
+    {
+      "kd_org": "08.08.09.01",
+      "study_program": "Ilmu Hubungan Internasional",
+      "educational_program": "S2 Kls Internasional"
     }
   ],
   "KESEHATAN MASYARAKAT": [
@@ -2017,6 +1862,26 @@
       "kd_org": "05.00.10.01",
       "study_program": "Ilmu Kesehatan Masyarakat",
       "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "02.04.10.01",
+      "study_program": "Gizi",
+      "educational_program": "S1 Paralel"
+    },
+    {
+      "kd_org": "04.06.10.01",
+      "study_program": "Keselamatan dan Kesehatan Kerja",
+      "educational_program": "S1 Paralel"
+    },
+    {
+      "kd_org": "07.00.10.01",
+      "study_program": "Kesehatan Masyarakat",
+      "educational_program": "S1 Paralel"
+    },
+    {
+      "kd_org": "08.00.10.01",
+      "study_program": "Kesehatan Lingkungan",
+      "educational_program": "S1 Paralel"
     }
   ],
   "ILMU KOMPUTER": [
@@ -2121,6 +1986,31 @@
       "kd_org": "09.00.13.01",
       "study_program": "Ilmu Keperawatan",
       "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "11.00.13.01",
+      "study_program": "Spesialis Keperawatan Onkologi",
+      "educational_program": "Spesialis 1"
+    },
+    {
+      "kd_org": "12.00.13.01",
+      "study_program": "Ilmu Keperawatan",
+      "educational_program": "S1 Paralel"
+    },
+    {
+      "kd_org": "13.00.13.01",
+      "study_program": "Ilmu Keperawatan",
+      "educational_program": "S1 Kls Internasional"
+    },
+    {
+      "kd_org": "14.00.13.01",
+      "study_program": "Ilmu Keperawatan",
+      "educational_program": "S2 Kls Internasional"
+    },
+    {
+      "kd_org": "15.00.13.01",
+      "study_program": "Ilmu Keperawatan",
+      "educational_program": "S3 Kls Internasional"
     }
   ],
   "PASCASARJANA (not active)": [
@@ -2280,6 +2170,11 @@
       "kd_org": "06.01.15.01",
       "study_program": "Terapi Okupasi",
       "educational_program": "D4 (Diploma IV)"
+    },
+    {
+      "kd_org": "01.02.15.01",
+      "study_program": "Industri Kreatif",
+      "educational_program": "S2 Terapan"
     }
   ],
   "PEROLEHAN KREDIT": [
@@ -2334,6 +2229,11 @@
       "kd_org": "06.00.17.01",
       "study_program": "Ilmu Farmasi",
       "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "07.00.17.01",
+      "study_program": "Ilmu Farmasi",
+      "educational_program": "S3 Kls Internasional"
     }
   ],
   "ILMU ADMINISTRASI": [
@@ -2391,6 +2291,26 @@
       "kd_org": "11.00.18.01",
       "study_program": "Ilmu Administrasi",
       "educational_program": "S3 (Doctoral Program)"
+    },
+    {
+      "kd_org": "12.00.18.01",
+      "study_program": "Kebijakan Publik dan Governansi",
+      "educational_program": "S2 (Graduate Program)"
+    },
+    {
+      "kd_org": "13.00.18.01",
+      "study_program": "Ilmu Administrasi Fiskal",
+      "educational_program": "S1 Kls Internasional"
+    },
+    {
+      "kd_org": "14.00.18.01",
+      "study_program": "Ilmu Administrasi Negara",
+      "educational_program": "S1 Kls Internasional"
+    },
+    {
+      "kd_org": "15.00.18.01",
+      "study_program": "Ilmu Administrasi Niaga",
+      "educational_program": "S1 Kls Internasional"
     }
   ],
   "ILMU LINGKUNGAN": [
