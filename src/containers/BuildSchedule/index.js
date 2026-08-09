@@ -40,6 +40,8 @@ import notFoundDarkImg from "assets/NotFound-dark.svg";
 import SelectMajor from "./SelectMajor";
 import settingsImg from "assets/Settings.svg";
 import settingsDarkImg from "assets/Settings-dark.svg";
+import SIAKNGSLCM from "assets/SIAKNG-SLCM.svg";
+import SIAKNGSLCMDark from "assets/SIAKNG-SLCM-Dark.svg";
 
 function BuildSchedule() {
   const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
@@ -499,10 +501,17 @@ function BuildSchedule() {
               gap: "12px",
             }}
           >
+            <Image
+              alt=""
+              src={theme === "light" ? SIAKNGSLCM : SIAKNGSLCMDark}
+              w={{ base: "50%", md: "auto" }}
+              h="auto"
+              maxW="100%"
+            />
             <Text fontSize="2xl" fontWeight="bold">
               Perubahan pada Sistem Jadwal
             </Text>
-            <Text fontSize="md" maxW="400px">
+            <Text fontSize={{ base: "sm", md: "md" }} maxW="400px">
               Selama masa peralihan SIAK-SCLM, sinkronisasi jadwal belum
               sepenuhnya berjalan dengan jadwal yang akurat. Silakan cek kembali
               jadwalmu setelah sistem kembali normal.
