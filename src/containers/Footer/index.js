@@ -74,7 +74,7 @@ const Footer = () => {
             color={theme === "light" ? "secondary.MineShaft" : "dark.White"}
           >
             <p style={{ fontWeight: 600 }}>Contact us (Email): </p>
-            <p style={{ color: "#F6339A" }}>business@ristek.cs.ui.ac.id</p>
+            <p style={{ color: "#F6339A" }}>help@ristek.cs.ui.ac.id</p>
           </Text>
         </StyledFooterDesc>
 
