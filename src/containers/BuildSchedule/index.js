@@ -512,9 +512,9 @@ function BuildSchedule() {
               Perubahan pada Sistem Jadwal
             </Text>
             <Text fontSize={{ base: "sm", md: "md" }} maxW="400px">
-              Selama masa peralihan SIAK-SCLM, sinkronisasi jadwal belum
-              sepenuhnya berjalan dengan jadwal yang akurat. Silakan cek kembali
-              jadwalmu setelah sistem kembali normal.
+              Dikarenakan sedang dalam masa transisi SIAK-SLCM, update matkul
+              belum dapat dilakukan. Silakan cek kembali setelah sistem kembali
+              normal.
             </Text>
             <Button
               onClick={handleCloseModal}
