@@ -34,7 +34,9 @@ function Schedule({
   };
 
   const displayToMinute = (display) => {
-    var [hour, minute] = display.split(".").map((part) => parseInt(part, 10));
+    var [hour, minute] = display
+      .split(/[:.]/)
+      .map((part) => parseInt(part, 10));
     return (hour - startHour + 2) * 60 + minute - (showHeader ? 0 : 30);
   };
 

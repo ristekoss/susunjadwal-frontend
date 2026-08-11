@@ -22,7 +22,9 @@ export const useSchedulePersistence = () => {
       !hasRestoredSchedules.current
     ) {
       prevSchedules.current.forEach((schedule) => {
-        const key = `${schedule.parentName}-${schedule.name}-${schedule.term}-${schedule.schedule_items[0].room}`;
+        const key = `${schedule.parentName}-${schedule.name}-${schedule.term}-${
+          schedule.schedule_items?.[0]?.room ?? ""
+        }`;
 
         if (courses[key] !== undefined) {
           dispatch({
