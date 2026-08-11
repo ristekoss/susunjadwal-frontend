@@ -14,7 +14,9 @@ export default function reducer(state = {}, { type, payload }) {
 
       payload.forEach((course) => {
         course.classes.forEach((class_) => {
-          const key = `${course.name}-${class_.name}-${course.term}-${class_.schedule_items[0].room}`;
+          const room = class_.schedule_items?.[0]?.room;
+          if (room == null) return;
+          const key = `${course.name}-${class_.name}-${course.term}-${room}`;
           result[key] = !!state[key];
         });
       });

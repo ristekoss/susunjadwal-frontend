@@ -109,8 +109,10 @@ function BuildSchedule() {
         }
 
         setCourses(data.courses);
-        setCoursesDetail(data.is_detail);
-        setLastUpdated(new Date(data.last_update_at));
+        setCoursesDetail(data.courses?.length > 0);
+        setLastUpdated(
+          data.last_update_at ? new Date(data.last_update_at) : null,
+        );
         dispatch(reduxSetCourses(data.courses));
 
         fetchedMajorId.current = majorId;

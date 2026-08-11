@@ -258,6 +258,8 @@ export const mockFormattedSchedule = {
 };
 
 export const mockCoursesResponse = {
+  period: "2021-1",
+  course_count: 5,
   courses: [
     {
       category: "Kelas Internal",
@@ -395,8 +397,6 @@ export const mockCoursesResponse = {
       ],
     },
   ],
-  is_detail: true,
-  last_update_at: "2021-10-07T14:01:18Z",
 };
 
 export const mockFormattedScheduleToEvent = [

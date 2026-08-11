@@ -1,11 +1,13 @@
+import { timeToMinutes } from "utils/schedule";
+
 function checkIfTwoScheduleConflict(schedule1, schedule2) {
   for (const item1 of schedule1.schedule_items) {
-    const start = parseFloat(item1.start);
-    const end = parseFloat(item1.end);
+    const start = timeToMinutes(item1.start);
+    const end = timeToMinutes(item1.end);
 
     for (const item2 of schedule2.schedule_items) {
-      const anotherStart = parseFloat(item2.start);
-      const anotherEnd = parseFloat(item2.end);
+      const anotherStart = timeToMinutes(item2.start);
+      const anotherEnd = timeToMinutes(item2.end);
 
       const valid = end <= anotherStart || anotherEnd <= start;
       if (!valid && item1.day === item2.day) {

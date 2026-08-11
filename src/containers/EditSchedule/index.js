@@ -87,8 +87,10 @@ const EditSchedule = ({ match }) => {
         dispatch(clearSchedule());
       }
       setCourses(data.courses);
-      setCoursesDetail(data.is_detail);
-      setLastUpdated(new Date(data.last_update_at));
+      setCoursesDetail(data.courses?.length > 0);
+      setLastUpdated(
+        data.last_update_at ? new Date(data.last_update_at) : null,
+      );
       if (data.courses) {
         dispatch(reduxSetCourses(data.courses));
       }
