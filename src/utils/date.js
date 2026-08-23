@@ -13,7 +13,7 @@ export const getFirstDateOfNthDayInAMonth = (dayOfTheWeek, month, year) => {
   tempDate.setHours(0, 0, 0, 0);
 
   let day = tempDate.getDay();
-  let toNextDay = (dayOfTheWeek - day + 7) % 7;
+  let toNextDay = day !== 0 ? dayOfTheWeek - day : 0;
   tempDate.setDate(tempDate.getDate() + toNextDay);
 
   return tempDate;
