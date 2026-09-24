@@ -52,6 +52,11 @@ function BuildSchedule() {
   const { saveSchedulesToSessionStorage, restoreSchedulesFromSessionStorage } =
     useSchedulePersistence();
 
+  const saveSchedulesRef = useRef(saveSchedulesToSessionStorage);
+  useEffect(() => {
+    saveSchedulesRef.current = saveSchedulesToSessionStorage;
+  }, [saveSchedulesToSessionStorage]);
+
   const [majorSelected, setMajorSelected] = useState();
   const [detailData, setDetailData] = useState(null);
   const [courses, setCourses] = useState(null);
@@ -104,7 +109,7 @@ function BuildSchedule() {
           : await getCourses(majorId);
 
         if (shouldClearSchedule && coursesLoaded.current) {
-          saveSchedulesToSessionStorage();
+          saveSchedulesRef.current();
           dispatch(clearSchedule());
         }
 
@@ -138,11 +143,7 @@ function BuildSchedule() {
 
       setTimeout(() => dispatch(setLoading(false)), 1000);
     },
-    [
-      dispatch,
-      saveSchedulesToSessionStorage,
-      restoreSchedulesFromSessionStorage,
-    ],
+    [dispatch, restoreSchedulesFromSessionStorage],
   );
 
   useEffect(() => {
@@ -177,7 +178,7 @@ function BuildSchedule() {
   useEffect(() => {
     if (
       hasInitialData.current &&
-      majorSelected?.kd_org !== fetchedMajorSelected.current
+      majorSelected?.kd_org !== fetchedMajorSelected.current?.kd_org
     ) {
       document.getElementById("input")?.value &&
         (document.getElementById("input").value = "");
