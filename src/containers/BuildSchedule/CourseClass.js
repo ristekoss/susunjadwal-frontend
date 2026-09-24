@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useMixpanel } from "hooks/useMixpanel";
 import { useSelector, useDispatch } from "react-redux";
 import { addSchedule, removeSchedule } from "redux/modules/schedules";
 import { useColorModeValue } from "@chakra-ui/react";
 import checkmark from "assets/Beta/checkmark.svg";
+import DeleteCourseModal, {
+  DONT_SHOW_DELETE_MODAL_KEY,
+} from "components/DeleteCourseModal";
 
 const CourseClassMobile = (props) => {
   const theme = useColorModeValue("light", "dark");
@@ -87,17 +90,28 @@ function CourseClass({ course, courseClass }) {
   const isActive = useSelector((state) => state.courses[key]);
   const isMobile = useSelector((state) => state.appState.isMobile);
   const dispatch = useDispatch();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const item = {
+    ...courseClass,
+    credit: course.credit,
+    parentName: course.name,
+    term: course.term,
+  };
 
   const handleChange = () => {
-    const item = {
-      ...courseClass,
-      credit: course.credit,
-      parentName: course.name,
-      term: course.term,
-    };
-
     if (isActive) {
-      dispatch(removeSchedule(item));
+      try {
+        const dontShow =
+          localStorage.getItem(DONT_SHOW_DELETE_MODAL_KEY) === "true";
+        if (dontShow) {
+          dispatch(removeSchedule(item));
+          return;
+        }
+      } catch (e) {
+        // fallback to modal
+      }
+      setShowDeleteModal(true);
     } else {
       dispatch(addSchedule(item));
       useMixpanel.track("course_pick_click", {
@@ -115,7 +129,19 @@ function CourseClass({ course, courseClass }) {
 
   const Component = isMobile ? CourseClassMobile : CourseClassDesktop;
   const componentProps = { ...courseClass, handleChange, isActive };
-  return <Component {...componentProps} />;
+  return (
+    <>
+      <DeleteCourseModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        course={item}
+        onConfirm={() => {
+          dispatch(removeSchedule(item));
+        }}
+      />
+      <Component {...componentProps} />
+    </>
+  );
 }
 
 const CourseClassContainer = styled.div`

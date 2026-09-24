@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
 import { useMixpanel } from "hooks/useMixpanel";
@@ -25,6 +25,9 @@ import { makeAtLeastMs } from "utils/promise";
 
 import { isScheduleConflict, listScheduleConflicts } from "./utils";
 import PreviewSchedule from "components/PreviewSchedule";
+import DeleteCourseModal, {
+  DONT_SHOW_DELETE_MODAL_KEY,
+} from "components/DeleteCourseModal";
 
 import TrashIcon from "assets/Trash.svg";
 
@@ -45,10 +48,25 @@ function transformSchedules(schedules) {
 function SelectedCourses({ history, scheduleId, isEditing }) {
   const schedules = useSelector((state) => state.schedules);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [courseToDelete, setCourseToDelete] = useState(null);
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const theme = useColorModeValue("light", "dark");
   const totalCredits = schedules.reduce((prev, { credit }) => prev + credit, 0);
+
+  const handleDeleteCourseClick = (schedule) => {
+    try {
+      const dontShow =
+        localStorage.getItem(DONT_SHOW_DELETE_MODAL_KEY) === "true";
+      if (dontShow) {
+        dispatch(removeSchedule(schedule));
+        return;
+      }
+    } catch (e) {
+      // fallback to modal
+    }
+    setCourseToDelete(schedule);
+  };
 
   async function saveSchedule() {
     dispatch(setLoading(true));
@@ -133,7 +151,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         <div className="small-1 columns text-right">
           <DeleteButton
             inverted={isCurrentScheduleConflict}
-            onClick={() => dispatch(removeSchedule(schedule))}
+            onClick={() => handleDeleteCourseClick(schedule)}
           />
         </div>
       </TableContentRow>
@@ -151,6 +169,16 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
   return (
     <>
+      <DeleteCourseModal
+        isOpen={Boolean(courseToDelete)}
+        onClose={() => setCourseToDelete(null)}
+        course={courseToDelete}
+        onConfirm={() => {
+          if (courseToDelete) {
+            dispatch(removeSchedule(courseToDelete));
+          }
+        }}
+      />
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent bg={theme === "light" ? "white" : "dark.LightBlack"}>
