@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "redux/modules/appState";
 import {
@@ -23,9 +23,21 @@ import {
   InfoContent,
   CoursePickerContainer,
   SelectedCoursesContainer,
+  CategoryHeading,
 } from "../BuildSchedule";
 
 import { setCourses as reduxSetCourses } from "redux/modules/courses";
+import CourseFilterPanel, {
+  FilterPopupContainer,
+  FilterTriggerButton,
+} from "../BuildSchedule/CourseFilters";
+import {
+  DEFAULT_COURSE_FILTERS,
+  applyClientSideCourseFilters,
+  buildCourseFilterFetchSignature,
+  buildCourseFilterParams,
+  countActiveFilters,
+} from "utils/courseFilters";
 
 import { addSchedule, clearSchedule } from "redux/modules/schedules";
 import { generateScheduledCourseListFromSchedule } from "./utils";
@@ -55,6 +67,31 @@ const EditSchedule = ({ match }) => {
   const [isCoursesDetail, setCoursesDetail] = useState(null);
   const [value, setValue] = useState("");
   const [showSelectMajor, setShowSelectMajor] = useState(false);
+  const [filters, setFilters] = useState(DEFAULT_COURSE_FILTERS);
+  const [debouncedFilters, setDebouncedFilters] = useState(
+    DEFAULT_COURSE_FILTERS,
+  );
+  const [debouncedValue, setDebouncedValue] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const filtersRef = useRef(filters);
+  const lastFilterSignatureRef = useRef(null);
+  const hasLoadedScheduleRef = useRef(false);
+  const [filterResultCount, setFilterResultCount] = useState(null);
+  const filterCountRequestId = useRef(0);
+
+  useEffect(() => {
+    filtersRef.current = filters;
+  }, [filters]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedFilters(filters), 500);
+    return () => clearTimeout(timer);
+  }, [filters]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), 600);
+    return () => clearTimeout(timer);
+  }, [value]);
 
   useEffect(() => {
     async function fetchSchedule() {
@@ -71,16 +108,18 @@ const EditSchedule = ({ match }) => {
       });
       dispatch(setLoading(false));
     }
-    if (!!courses) {
+
+    if (!!courses && !hasLoadedScheduleRef.current) {
+      hasLoadedScheduleRef.current = true;
       fetchSchedule();
     }
   }, [match, dispatch, courses, auth.majorId]);
 
   const fetchCourses = useCallback(
-    async (majorId, majorSelected) => {
+    async (majorId, majorSelected, filterParams = null) => {
       dispatch(setLoading(true));
       const { data } = majorSelected
-        ? await getCoursesByKd(majorSelected.kd_org)
+        ? await getCoursesByKd(majorSelected.kd_org, filterParams || undefined)
         : await getCourses(majorId);
 
       if (!majorSelected) {
@@ -104,20 +143,82 @@ const EditSchedule = ({ match }) => {
     document.getElementById("input").value = "";
     setValue("");
     const majorId = auth.majorId;
-    fetchCourses(majorId, majorSelected);
+    const filterParams = buildCourseFilterParams(filtersRef.current, "");
+    lastFilterSignatureRef.current = buildCourseFilterFetchSignature(
+      majorId,
+      majorSelected,
+      filterParams,
+    );
+    fetchCourses(majorId, majorSelected, filterParams);
   }, [auth.majorId, dispatch, fetchCourses, setValue, majorSelected]);
 
-  const filteredCourse = courses?.filter((c) => {
-    if (value === "") {
-      //if value is empty
-      return c;
-    } else if (c.name.toLowerCase().includes(value.toLowerCase())) {
-      //returns filtered array
-      return c;
-    } else {
-      return null;
-    }
-  });
+  useEffect(() => {
+    if (!courses || !majorSelected) return;
+    const keyword = debouncedFilters.fuzzy ? debouncedValue : "";
+    const filterParams = buildCourseFilterParams(debouncedFilters, keyword);
+    const signature = buildCourseFilterFetchSignature(
+      auth.majorId,
+      majorSelected,
+      filterParams,
+    );
+    if (signature === lastFilterSignatureRef.current) return;
+    lastFilterSignatureRef.current = signature;
+    fetchCourses(auth.majorId, majorSelected, filterParams);
+  }, [
+    debouncedFilters,
+    debouncedValue,
+    courses,
+    majorSelected,
+    auth.majorId,
+    fetchCourses,
+  ]);
+
+  const handleFilterDraftChange = useCallback(
+    async (draft) => {
+      if (!courses) {
+        setFilterResultCount(null);
+        return;
+      }
+      const filtered = applyClientSideCourseFilters(courses, draft);
+      setFilterResultCount(filtered ? filtered.length : 0);
+    },
+    [courses],
+  );
+
+  const clientFilteredCourses = applyClientSideCourseFilters(
+    courses,
+    debouncedFilters,
+  );
+
+  const serverSearchActive = debouncedFilters.fuzzy && !!value.trim();
+  const filteredCourse = serverSearchActive
+    ? clientFilteredCourses
+    : clientFilteredCourses?.filter((c) => {
+        if (value === "") {
+          return c;
+        } else if (c.name.toLowerCase().includes(value.toLowerCase())) {
+          return c;
+        } else {
+          return null;
+        }
+      });
+
+  const groupedCourses =
+    filteredCourse && filteredCourse.length > 0
+      ? filteredCourse.reduce(
+          (acc, course) => {
+            if (course.category === "Kelas Internal") {
+              acc.internal.push(course);
+            } else if (course.category === "Kelas Eksternal") {
+              acc.external.push(course);
+            } else {
+              acc.bersama.push(course);
+            }
+            return acc;
+          },
+          { internal: [], external: [], bersama: [] },
+        )
+      : null;
 
   return (
     <>
@@ -160,61 +261,100 @@ const EditSchedule = ({ match }) => {
                 position: "relative",
               }}
             >
-              <InputGroup h={isMobile ? "44px" : "57px"} mb="26px">
-                <InputLeftElement
-                  h="full"
-                  pl={isMobile ? "14px" : "20px"}
-                  pointerEvents="none"
-                  children={
-                    <Image
-                      alt=""
-                      src={theme === "light" ? searchImg : searchImgDark}
-                    />
-                  }
-                />
-                <SearchInput
-                  isMobile={isMobile}
-                  placeholder="Cari Mata Kuliah"
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "26px",
+                }}
+              >
+                <FilterTriggerButton
+                  count={countActiveFilters(filters)}
+                  onClick={() => setShowFilters(!showFilters)}
                   theme={theme}
-                  options={courses}
-                  setValue={setValue}
+                  isMobile={isMobile}
+                  disabled={!majorSelected}
+                  title={
+                    majorSelected
+                      ? "Filter kelas"
+                      : "Pilih Program Studi terlebih dahulu"
+                  }
                 />
-
-                <Button
-                  w="95px"
-                  h="full"
-                  borderLeftRadius="0"
-                  bg={
-                    theme === "light" ? "primary.Purple" : "primary.LightPurple"
-                  }
-                  onMouseDown={() =>
-                    setValue(document.getElementById("input").value)
-                  }
-                  fontSize={isMobile && "14px"}
-                  px={isMobile && "4px"}
-                  display={isMobile && "none"}
-                >
-                  <Center>
-                    Cari
-                    <Image alt="" src={arrowImg} ml="9px" />
-                  </Center>
-                </Button>
-                <Button
-                  variant="outline"
-                  marginLeft="10px"
-                  height="44px"
-                  width="44px"
-                  p="0"
-                  display={isMobile ? "flex" : "none"}
-                  onClick={() => setShowSelectMajor(!showSelectMajor)}
-                  borderColor={theme === "dark" && "primary.LightPurple"}
-                >
-                  <Image
-                    alt="Show"
-                    src={theme === "light" ? settingsImg : settingsDarkImg}
+                <InputGroup h={isMobile ? "44px" : "57px"} style={{ flex: 1 }}>
+                  <InputLeftElement
+                    h="full"
+                    pl={isMobile ? "14px" : "20px"}
+                    pointerEvents="none"
+                    children={
+                      <Image
+                        alt=""
+                        src={theme === "light" ? searchImg : searchImgDark}
+                      />
+                    }
                   />
-                </Button>
-              </InputGroup>
+                  <SearchInput
+                    isMobile={isMobile}
+                    placeholder="Cari Mata Kuliah"
+                    theme={theme}
+                    options={courses}
+                    setValue={setValue}
+                  />
+
+                  <Button
+                    w="95px"
+                    h="full"
+                    borderLeftRadius="0"
+                    bg={
+                      theme === "light"
+                        ? "primary.Purple"
+                        : "primary.LightPurple"
+                    }
+                    onMouseDown={() =>
+                      setValue(document.getElementById("input").value)
+                    }
+                    fontSize={isMobile && "14px"}
+                    px={isMobile && "4px"}
+                    display={isMobile && "none"}
+                  >
+                    <Center>
+                      Cari
+                      <Image alt="" src={arrowImg} ml="9px" />
+                    </Center>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    marginLeft="10px"
+                    height="44px"
+                    width="44px"
+                    p="0"
+                    display={isMobile ? "flex" : "none"}
+                    onClick={() => setShowSelectMajor(!showSelectMajor)}
+                    borderColor={theme === "dark" && "primary.LightPurple"}
+                  >
+                    <Image
+                      alt="Show"
+                      src={theme === "light" ? settingsImg : settingsDarkImg}
+                    />
+                  </Button>
+                </InputGroup>
+              </div>
+
+              {showFilters && (
+                <FilterPopupContainer isMobile={isMobile}>
+                  <CourseFilterPanel
+                    appliedFilters={filters}
+                    onApply={(nextFilters) => {
+                      setFilters(nextFilters);
+                      setShowFilters(false);
+                    }}
+                    onClose={() => setShowFilters(false)}
+                    onDraftChange={handleFilterDraftChange}
+                    resultCount={filterResultCount}
+                    theme={theme}
+                    isMobile={isMobile}
+                  />
+                </FilterPopupContainer>
+              )}
             </div>
           </div>
 
@@ -283,9 +423,56 @@ const EditSchedule = ({ match }) => {
                 </Text>
               </Center>
             ) : (
-              filteredCourse.map((course, idx) => (
-                <Course key={`${course.name}-${idx}`} course={course} />
-              ))
+              <>
+                {groupedCourses && groupedCourses.internal.length > 0 && (
+                  <>
+                    <CategoryHeading
+                      $color={theme === "light" ? "#5038BC" : "#917DEC"}
+                      $mode={theme}
+                    >
+                      Kelas Internal
+                    </CategoryHeading>
+                    {groupedCourses.internal.map((course, idx) => (
+                      <Course
+                        key={`internal-${course.name}-${idx}`}
+                        course={course}
+                      />
+                    ))}
+                  </>
+                )}
+                {groupedCourses && groupedCourses.external.length > 0 && (
+                  <>
+                    <CategoryHeading
+                      $color={theme === "light" ? "#5038BC" : "#917DEC"}
+                      $mode={theme}
+                    >
+                      Kelas Eksternal
+                    </CategoryHeading>
+                    {groupedCourses.external.map((course, idx) => (
+                      <Course
+                        key={`external-${course.name}-${idx}`}
+                        course={course}
+                      />
+                    ))}
+                  </>
+                )}
+                {groupedCourses && groupedCourses.bersama.length > 0 && (
+                  <>
+                    <CategoryHeading
+                      $color={theme === "light" ? "#5038BC" : "#917DEC"}
+                      $mode={theme}
+                    >
+                      Kelas Bersama
+                    </CategoryHeading>
+                    {groupedCourses.bersama.map((course, idx) => (
+                      <Course
+                        key={`bersama-${course.name}-${idx}`}
+                        course={course}
+                      />
+                    ))}
+                  </>
+                )}
+              </>
             ))}
         </CoursePickerContainer>
         {!isMobile && (

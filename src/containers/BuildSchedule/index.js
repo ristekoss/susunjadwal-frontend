@@ -31,6 +31,17 @@ import Checkout from "./Checkout";
 import Course from "./Course";
 import Detail from "./Detail";
 import SearchInput, { filterMethod } from "../../components/SearchInput";
+import CourseFilterPanel, {
+  FilterPopupContainer,
+  FilterTriggerButton,
+} from "./CourseFilters";
+import {
+  DEFAULT_COURSE_FILTERS,
+  applyClientSideCourseFilters,
+  buildCourseFilterFetchSignature,
+  buildCourseFilterParams,
+  countActiveFilters,
+} from "utils/courseFilters";
 
 import searchImg from "assets/Search.svg";
 import searchImgDark from "assets/Search-dark.svg";
@@ -64,10 +75,28 @@ function BuildSchedule() {
   const [isCoursesDetail, setCoursesDetail] = useState(null);
   const [value, setValue] = useState("");
   const [showSelectMajor, setShowSelectMajor] = useState(false);
+  const [filters, setFilters] = useState(DEFAULT_COURSE_FILTERS);
+  const [debouncedFilters, setDebouncedFilters] = useState(
+    DEFAULT_COURSE_FILTERS,
+  );
+  const [debouncedValue, setDebouncedValue] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const theme = useColorModeValue("light", "dark");
   const isInitialMount = useRef(true);
+
+  // Debounce filter changes (buat fuzzy matching ala jocim)
+  // biar gak spam API tiap kali ngetik/klik
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedFilters(filters), 500);
+    return () => clearTimeout(timer);
+  }, [filters]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), 600);
+    return () => clearTimeout(timer);
+  }, [value]);
 
   const handleCloseModal = useCallback(() => {
     try {
@@ -82,16 +111,36 @@ function BuildSchedule() {
   const fetchedMajorSelected = useRef(null);
   const hasInitialData = useRef(false);
   const coursesLoaded = useRef(false);
+  const lastFetchSignature = useRef(null);
+  const [filterResultCount, setFilterResultCount] = useState(null);
+  const filterCountRequestId = useRef(0);
 
   const fetchCourses = useCallback(
-    async (majorId, majorSelected, shouldClearSchedule = false) => {
+    async (
+      majorId,
+      majorSelected,
+      shouldClearSchedule = false,
+      filterParams = null,
+    ) => {
+      const fetchSignature = buildCourseFilterFetchSignature(
+        majorId,
+        majorSelected,
+        filterParams,
+      );
       const isSameMajor = fetchedMajorId.current === majorId;
       const isSameMajorSelected =
         fetchedMajorSelected.current === majorSelected;
 
-      if (isSameMajor && isSameMajorSelected && hasInitialData.current) {
+      if (
+        isSameMajor &&
+        isSameMajorSelected &&
+        hasInitialData.current &&
+        lastFetchSignature.current === fetchSignature
+      ) {
         return;
       }
+
+      lastFetchSignature.current = fetchSignature;
 
       dispatch(setLoading(true));
       useMixpanel.track("loading_impression", {
@@ -105,7 +154,10 @@ function BuildSchedule() {
 
       try {
         const { data } = majorSelected
-          ? await getCoursesByKd(majorSelected.kd_org)
+          ? await getCoursesByKd(
+              majorSelected.kd_org,
+              filterParams || undefined,
+            )
           : await getCourses(majorId);
 
         if (shouldClearSchedule && coursesLoaded.current) {
@@ -125,14 +177,14 @@ function BuildSchedule() {
         hasInitialData.current = true;
         coursesLoaded.current = true;
 
-        if (!shouldClearSchedule && data.courses) {
+        if (!shouldClearSchedule && !filterParams && data.courses) {
           setTimeout(() => {
             restoreSchedulesFromSessionStorage();
           }, 100);
         }
       } catch (e) {
         console.error("Error fetching courses:", e);
-        // If there's an error (e.g., major not found), we should still mark the fetch as done to avoid refetching
+        // we kita should still mark the fetch as done selesai to avoid menghindari refetching
         fetchedMajorId.current = majorId;
         fetchedMajorSelected.current = majorSelected;
         hasInitialData.current = true;
@@ -144,6 +196,19 @@ function BuildSchedule() {
       setTimeout(() => dispatch(setLoading(false)), 1000);
     },
     [dispatch, restoreSchedulesFromSessionStorage],
+  );
+
+  // ini buat "Terapkan Filter (N hasil)".
+  const handleFilterDraftChange = useCallback(
+    async (draft) => {
+      if (!courses) {
+        setFilterResultCount(null);
+        return;
+      }
+      const filtered = applyClientSideCourseFilters(courses, draft);
+      setFilterResultCount(filtered ? filtered.length : 0);
+    },
+    [courses],
   );
 
   useEffect(() => {
@@ -175,19 +240,32 @@ function BuildSchedule() {
     majorSelected,
   ]);
 
+  // Refetch when the selected major (kd_org) changes, resetting the search
+  // or when the server-side filters change. Picking a class/schedule does NOT
+  // trigger this effect, so the search/filter stays open with its state kept.
   useEffect(() => {
-    if (
-      hasInitialData.current &&
-      majorSelected?.kd_org !== fetchedMajorSelected.current?.kd_org
-    ) {
+    if (!hasInitialData.current || !majorSelected) return;
+
+    const isMajorChange =
+      majorSelected?.kd_org !== fetchedMajorSelected.current?.kd_org;
+
+    if (isMajorChange) {
       document.getElementById("input")?.value &&
         (document.getElementById("input").value = "");
       setValue("");
-      const majorId = auth.majorId;
-
-      fetchCourses(majorId, majorSelected, true);
     }
-  }, [majorSelected, auth.majorId, fetchCourses]);
+
+    const keyword = debouncedFilters.fuzzy ? debouncedValue : "";
+    const filterParams = buildCourseFilterParams(debouncedFilters, keyword);
+
+    fetchCourses(auth.majorId, majorSelected, isMajorChange, filterParams);
+  }, [
+    debouncedFilters,
+    debouncedValue,
+    majorSelected,
+    auth.majorId,
+    fetchCourses,
+  ]);
 
   useEffect(() => {
     const handleFocus = () => {
@@ -200,7 +278,20 @@ function BuildSchedule() {
     return () => window.removeEventListener("focus", handleFocus);
   }, [courses, restoreSchedulesFromSessionStorage]);
 
-  let filteredCourse = !value ? courses : filterMethod(courses, value);
+  // Apply filters secara client-side juga, jadi listnya bakal selalu
+  // sesuai, walaupun backendnya salah / miss parsing
+  const clientFilteredCourses = applyClientSideCourseFilters(
+    courses,
+    debouncedFilters,
+  );
+
+  // kalau fuzzy server side dinyalain, bakal kirim keyword ke backend
+  // kalau nggak ya client-side
+  const serverSearchActive = debouncedFilters.fuzzy && !!value.trim();
+  let filteredCourse =
+    !value || serverSearchActive
+      ? clientFilteredCourses
+      : filterMethod(clientFilteredCourses, value);
 
   const groupedCourses =
     filteredCourse && filteredCourse.length > 0
@@ -288,61 +379,98 @@ function BuildSchedule() {
               position: "relative",
             }}
           >
-            <InputGroup h={isMobile ? "44px" : "57px"} mb="26px">
-              <InputLeftElement
-                h="full"
-                pl={isMobile ? "14px" : "20px"}
-                pointerEvents="none"
-                children={
-                  <Image
-                    alt=""
-                    src={theme === "light" ? searchImg : searchImgDark}
-                  />
-                }
-              />
-              <SearchInput
-                isMobile={isMobile}
-                placeholder="Cari Mata Kuliah"
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "26px",
+              }}
+            >
+              <FilterTriggerButton
+                count={countActiveFilters(filters)}
+                onClick={() => setShowFilters(!showFilters)}
                 theme={theme}
-                options={courses}
-                setValue={setValue}
+                isMobile={isMobile}
+                disabled={!majorSelected}
+                title={
+                  majorSelected
+                    ? "Filter kelas"
+                    : "Pilih Program Studi terlebih dahulu"
+                }
               />
-
-              <Button
-                w="95px"
-                h="full"
-                borderLeftRadius="0"
-                bg={
-                  theme === "light" ? "primary.Purple" : "primary.LightPurple"
-                }
-                onMouseDown={() =>
-                  setValue(document.getElementById("input").value)
-                }
-                fontSize={isMobile && "14px"}
-                px={isMobile && "4px"}
-                display={isMobile && "none"}
-              >
-                <Center>
-                  Cari
-                  <Image alt="" src={arrowImg} ml="9px" />
-                </Center>
-              </Button>
-              <Button
-                variant="outline"
-                marginLeft="10px"
-                height="44px"
-                width="44px"
-                p="0"
-                display={isMobile ? "flex" : "none"}
-                onClick={() => setShowSelectMajor(!showSelectMajor)}
-                borderColor={theme === "dark" && "primary.LightPurple"}
-              >
-                <Image
-                  alt="Show"
-                  src={theme === "light" ? settingsImg : settingsDarkImg}
+              <InputGroup h={isMobile ? "44px" : "57px"} style={{ flex: 1 }}>
+                <InputLeftElement
+                  h="full"
+                  pl={isMobile ? "14px" : "20px"}
+                  pointerEvents="none"
+                  children={
+                    <Image
+                      alt=""
+                      src={theme === "light" ? searchImg : searchImgDark}
+                    />
+                  }
                 />
-              </Button>
-            </InputGroup>
+                <SearchInput
+                  isMobile={isMobile}
+                  placeholder="Cari Mata Kuliah"
+                  theme={theme}
+                  options={courses}
+                  setValue={setValue}
+                />
+
+                <Button
+                  w="95px"
+                  h="full"
+                  borderLeftRadius="0"
+                  bg={
+                    theme === "light" ? "primary.Purple" : "primary.LightPurple"
+                  }
+                  onMouseDown={() =>
+                    setValue(document.getElementById("input").value)
+                  }
+                  fontSize={isMobile && "14px"}
+                  px={isMobile && "4px"}
+                  display={isMobile && "none"}
+                >
+                  <Center>
+                    Cari
+                    <Image alt="" src={arrowImg} ml="9px" />
+                  </Center>
+                </Button>
+                <Button
+                  variant="outline"
+                  marginLeft="10px"
+                  height="44px"
+                  width="44px"
+                  p="0"
+                  display={isMobile ? "flex" : "none"}
+                  onClick={() => setShowSelectMajor(!showSelectMajor)}
+                  borderColor={theme === "dark" && "primary.LightPurple"}
+                >
+                  <Image
+                    alt="Show"
+                    src={theme === "light" ? settingsImg : settingsDarkImg}
+                  />
+                </Button>
+              </InputGroup>
+            </div>
+
+            {showFilters && (
+              <FilterPopupContainer isMobile={isMobile}>
+                <CourseFilterPanel
+                  appliedFilters={filters}
+                  onApply={(nextFilters) => {
+                    setFilters(nextFilters);
+                    setShowFilters(false);
+                  }}
+                  onClose={() => setShowFilters(false)}
+                  onDraftChange={handleFilterDraftChange}
+                  resultCount={filterResultCount}
+                  theme={theme}
+                  isMobile={isMobile}
+                />
+              </FilterPopupContainer>
+            )}
           </div>
         </div>
 
@@ -631,7 +759,7 @@ export const SelectedCoursesContainer = styled.div`
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
 `;
 
-const CategoryHeading = styled.h2`
+export const CategoryHeading = styled.h2`
   font-size: 20px;
   font-weight: bold;
   margin-top: 24px;

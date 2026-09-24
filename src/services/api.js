@@ -19,8 +19,8 @@ export function getCourses(majorId) {
   return instance.get(`/majors/${majorId}/courses`);
 }
 
-export function getCoursesByKd(kd_org) {
-  return instance.get(`/majors/${kd_org}/courses_by_kd`);
+export function getCoursesByKd(kd_org, params) {
+  return instance.get(`/majors/${kd_org}/courses_by_kd`, { params });
 }
 
 export function postSaveSchedule(userId, scheduleItems) {
