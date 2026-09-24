@@ -244,7 +244,7 @@ function BuildSchedule() {
   // or when the server-side filters change. Picking a class/schedule does NOT
   // trigger this effect, so the search/filter stays open with its state kept.
   useEffect(() => {
-    if (!hasInitialData.current || !majorSelected) return;
+    if (!hasInitialData.current) return;
 
     const isMajorChange =
       majorSelected?.kd_org !== fetchedMajorSelected.current?.kd_org;
@@ -297,9 +297,12 @@ function BuildSchedule() {
     filteredCourse && filteredCourse.length > 0
       ? filteredCourse.reduce(
           (acc, course) => {
-            if (course.category === "Kelas Internal") {
+            const cat = course.category
+              ? String(course.category).toLowerCase().trim()
+              : "";
+            if (cat.includes("internal")) {
               acc.internal.push(course);
-            } else if (course.category === "Kelas Eksternal") {
+            } else if (cat.includes("eksternal") || cat.includes("external")) {
               acc.external.push(course);
             } else {
               acc.bersama.push(course);
@@ -391,12 +394,7 @@ function BuildSchedule() {
                 onClick={() => setShowFilters(!showFilters)}
                 theme={theme}
                 isMobile={isMobile}
-                disabled={!majorSelected}
-                title={
-                  majorSelected
-                    ? "Filter kelas"
-                    : "Pilih Program Studi terlebih dahulu"
-                }
+                title="Filter kelas"
               />
               <InputGroup h={isMobile ? "44px" : "57px"} style={{ flex: 1 }}>
                 <InputLeftElement

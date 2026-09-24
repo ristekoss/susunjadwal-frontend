@@ -153,7 +153,7 @@ const EditSchedule = ({ match }) => {
   }, [auth.majorId, dispatch, fetchCourses, setValue, majorSelected]);
 
   useEffect(() => {
-    if (!courses || !majorSelected) return;
+    if (!courses) return;
     const keyword = debouncedFilters.fuzzy ? debouncedValue : "";
     const filterParams = buildCourseFilterParams(debouncedFilters, keyword);
     const signature = buildCourseFilterFetchSignature(
@@ -207,9 +207,12 @@ const EditSchedule = ({ match }) => {
     filteredCourse && filteredCourse.length > 0
       ? filteredCourse.reduce(
           (acc, course) => {
-            if (course.category === "Kelas Internal") {
+            const cat = course.category
+              ? String(course.category).toLowerCase().trim()
+              : "";
+            if (cat.includes("internal")) {
               acc.internal.push(course);
-            } else if (course.category === "Kelas Eksternal") {
+            } else if (cat.includes("eksternal") || cat.includes("external")) {
               acc.external.push(course);
             } else {
               acc.bersama.push(course);
@@ -273,12 +276,7 @@ const EditSchedule = ({ match }) => {
                   onClick={() => setShowFilters(!showFilters)}
                   theme={theme}
                   isMobile={isMobile}
-                  disabled={!majorSelected}
-                  title={
-                    majorSelected
-                      ? "Filter kelas"
-                      : "Pilih Program Studi terlebih dahulu"
-                  }
+                  title="Filter kelas"
                 />
                 <InputGroup h={isMobile ? "44px" : "57px"} style={{ flex: 1 }}>
                   <InputLeftElement

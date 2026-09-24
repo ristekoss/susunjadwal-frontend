@@ -123,15 +123,31 @@ const parseTimeToMinutes = (time) => {
 };
 
 /**
+ * Normalizes course category string from backend to consistent value:
+ * "Kelas Internal", "Kelas Eksternal", "Kelas Bersama"
+ */
+export const normalizeCourseCategory = (category) => {
+  if (!category) return "Kelas Bersama";
+  const cat = String(category).trim().toLowerCase();
+  if (cat.includes("internal")) return "Kelas Internal";
+  if (cat.includes("eksternal") || cat.includes("external"))
+    return "Kelas Eksternal";
+  if (cat.includes("bersama")) return "Kelas Bersama";
+  return category;
+};
+
+/**
  * Client-side mirror of the server-side filters, applied to the fetched
  * courses as a safety net in case the backend ignores/miss-parses the query
- * params (e.g. array serialization). With a compliant backend this is a
- * no-op since the server already returns only matching courses.
+ * params (e.g. array serialization).
+ *
+ * When class-level filters (days, time) are active, it also filters the
+ * `classes` array inside each course so that only matching classes are displayed.
  */
 export const applyClientSideCourseFilters = (courses, filters) => {
   if (!courses || !filters) return courses;
 
-  const categories = filters.categories ?? [];
+  const categories = (filters.categories ?? []).map(normalizeCourseCategory);
   const days = filters.days ?? [];
   const startTime = parseTimeToMinutes(filters.startTime);
   const endTime = parseTimeToMinutes(filters.endTime);
@@ -139,19 +155,47 @@ export const applyClientSideCourseFilters = (courses, filters) => {
   const hasSks = !Number.isNaN(sksNumber) && sksNumber > 0;
   const sksOp = filters.sksOp || "eq";
 
-  if (
-    !categories.length &&
-    !days.length &&
-    startTime == null &&
-    endTime == null &&
-    !hasSks
-  ) {
+  const hasClassFilters =
+    days.length > 0 || startTime != null || endTime != null;
+
+  if (!categories.length && !hasClassFilters && !hasSks) {
     return courses;
   }
 
-  return courses.filter((course) => {
-    if (categories.length && !categories.includes(course.category)) {
-      return false;
+  const matchesDay = (cls) => {
+    if (!days.length) return true;
+    const items = cls.schedule_items ?? [];
+    if (!items.length) return false;
+    if (filters.strictDays) {
+      return items.every((item) => days.includes(item.day));
+    }
+    return items.some((item) => days.includes(item.day));
+  };
+
+  const matchesTime = (cls) => {
+    if (startTime == null && endTime == null) return true;
+    const items = cls.schedule_items ?? [];
+    if (!items.length) return false;
+    const itemMatches = (item) => {
+      const start = parseTimeToMinutes(item.start);
+      const end = parseTimeToMinutes(item.end) ?? start;
+      if (start == null) return false;
+      if (startTime != null && start < startTime) return false;
+      if (endTime != null && end > endTime) return false;
+      return true;
+    };
+    if (filters.strictTime) {
+      return items.every(itemMatches);
+    }
+    return items.some(itemMatches);
+  };
+
+  const result = [];
+
+  for (const course of courses) {
+    const courseCategory = normalizeCourseCategory(course.category);
+    if (categories.length && !categories.includes(courseCategory)) {
+      continue;
     }
 
     if (hasSks) {
@@ -162,49 +206,29 @@ export const applyClientSideCourseFilters = (courses, filters) => {
           : sksOp === "gt"
           ? credit > sksNumber
           : credit === sksNumber;
-      if (!matches) return false;
+      if (!matches) continue;
     }
 
-    if (days.length || startTime != null || endTime != null) {
+    if (hasClassFilters) {
       const classes = course.classes ?? [];
-      if (!classes.length) return false;
+      if (!classes.length) continue;
 
-      const matchesDay = (cls) => {
-        if (!days.length) return true;
-        const items = cls.schedule_items ?? [];
-        if (!items.length) return false;
-        if (filters.strictDays) {
-          return items.every((item) => days.includes(item.day));
-        }
-        return items.some((item) => days.includes(item.day));
-      };
-
-      const matchesTime = (cls) => {
-        if (startTime == null && endTime == null) return true;
-        const items = cls.schedule_items ?? [];
-        if (!items.length) return false;
-        const itemMatches = (item) => {
-          const start = parseTimeToMinutes(item.start);
-          const end = parseTimeToMinutes(item.end) ?? start;
-          if (start == null) return false;
-          if (startTime != null && start < startTime) return false;
-          if (endTime != null && end > endTime) return false;
-          return true;
-        };
-        if (filters.strictTime) {
-          return items.every(itemMatches);
-        }
-        return items.some(itemMatches);
-      };
-
-      const hasMatchingClass = classes.some(
+      const matchingClasses = classes.filter(
         (cls) => matchesDay(cls) && matchesTime(cls),
       );
-      if (!hasMatchingClass) return false;
-    }
 
-    return true;
-  });
+      if (!matchingClasses.length) continue;
+
+      result.push({
+        ...course,
+        classes: matchingClasses,
+      });
+    } else {
+      result.push(course);
+    }
+  }
+
+  return result;
 };
 
 /**
