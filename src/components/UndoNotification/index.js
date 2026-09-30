@@ -1,6 +1,8 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+import { useSelector } from "react-redux";
 import { useColorModeValue } from "@chakra-ui/react";
+import { useUndoAction, UNDO_DISMISS_MS } from "hooks/useUndoAction";
 
 function UndoNotification({ lastAction, onUndo }) {
   const theme = useColorModeValue("light", "dark");
@@ -16,7 +18,7 @@ function UndoNotification({ lastAction, onUndo }) {
     type === "add" ? "berhasil ditambahkan" : "berhasil dihapus";
 
   return (
-    <Container mode={theme} data-testid="undo-notification">
+    <Container key={lastAction.id} mode={theme} data-testid="undo-notification">
       <TopBar mode={theme} />
       <ContentWrapper>
         <MessageText mode={theme}>
@@ -56,11 +58,41 @@ const Container = styled.div`
       : "0px 0.5px 2px 0px rgba(0, 0, 0, 0.25)"};
 `;
 
+const topBarCountdownLight = keyframes`
+  from {
+    transform: scaleX(1);
+    background-color: #644be0;
+  }
+  to {
+    transform: scaleX(0);
+    background-color: #b7acf2;
+  }
+`;
+
+const topBarCountdownDark = keyframes`
+  from {
+    transform: scaleX(1);
+    background-color: #7368ec;
+  }
+  to {
+    transform: scaleX(0);
+    background-color: #4a4390;
+  }
+`;
+
 const TopBar = styled.div`
   height: 4px;
   width: 100%;
   border-radius: 30px 30px 30px 30px;
   background-color: ${({ mode }) => (mode === "light" ? "#644BE0" : "#7368EC")};
+  transform-origin: left center;
+  animation: ${({ mode }) =>
+      mode === "light" ? topBarCountdownLight : topBarCountdownDark}
+    ${UNDO_DISMISS_MS}ms linear forwards;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 `;
 
 const ContentWrapper = styled.div`
@@ -125,6 +157,29 @@ const UndoButton = styled.button`
         ? "rgba(80, 56, 188, 0.16)"
         : "rgba(115, 104, 236, 0.25)"};
   }
+`;
+
+export function FloatingUndoNotification() {
+  const isMobile = useSelector((state) => state.appState.isMobile);
+  const { lastAction, undo } = useUndoAction();
+
+  if (!isMobile || !lastAction) {
+    return null;
+  }
+
+  return (
+    <FloatingWrapper>
+      <UndoNotification lastAction={lastAction} onUndo={undo} />
+    </FloatingWrapper>
+  );
+}
+
+const FloatingWrapper = styled.div`
+  position: fixed;
+  bottom: 84px;
+  left: 1rem;
+  right: 1rem;
+  z-index: 10;
 `;
 
 export default UndoNotification;

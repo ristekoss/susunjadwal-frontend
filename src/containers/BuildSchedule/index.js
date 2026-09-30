@@ -9,12 +9,7 @@ import {
   InputLeftElement,
   Center,
   Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
   useDisclosure,
-  ModalCloseButton,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -35,6 +30,7 @@ import CourseFilterPanel, {
   FilterPopupContainer,
   FilterTriggerButton,
 } from "./CourseFilters";
+import { FloatingUndoNotification } from "components/UndoNotification";
 import {
   DEFAULT_COURSE_FILTERS,
   applyClientSideCourseFilters,
@@ -51,8 +47,6 @@ import notFoundDarkImg from "assets/NotFound-dark.svg";
 import SelectMajor from "./SelectMajor";
 import settingsImg from "assets/Settings.svg";
 import settingsDarkImg from "assets/Settings-dark.svg";
-import SIAKNGSLCM from "assets/SIAKNG-SLCM.svg";
-import SIAKNGSLCMDark from "assets/SIAKNG-SLCM-Dark.svg";
 
 function BuildSchedule() {
   const isAnnouncement = useSelector((state) => state.appState.isAnnouncement);
@@ -113,7 +107,6 @@ function BuildSchedule() {
   const coursesLoaded = useRef(false);
   const lastFetchSignature = useRef(null);
   const [filterResultCount, setFilterResultCount] = useState(null);
-  const filterCountRequestId = useRef(0);
 
   const fetchCourses = useCallback(
     async (
@@ -597,6 +590,8 @@ function BuildSchedule() {
         </SelectedCoursesContainer>
       )}
 
+      <FloatingUndoNotification />
+
       <Checkout
         isMobile={isMobile}
         onClickDetail={(isConflict) =>
@@ -612,50 +607,6 @@ function BuildSchedule() {
           isConflict={detailData && detailData.isConflict}
         />
       )}
-
-      <Modal isOpen={isOpen} onClose={handleCloseModal} isCentered>
-        <ModalOverlay />
-        <ModalContent
-          mx={{ base: "1.5rem", md: "0" }}
-          w={{ base: "100%", sm: "700px" }}
-        >
-          <ModalCloseButton />
-          <ModalBody
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-              padding: "40px 32px",
-              gap: "12px",
-            }}
-          >
-            <Image
-              alt=""
-              src={theme === "light" ? SIAKNGSLCM : SIAKNGSLCMDark}
-              w={{ base: "50%", md: "auto" }}
-              h="auto"
-              maxW="100%"
-            />
-            <Text fontSize="2xl" fontWeight="bold">
-              Perubahan pada Sistem Jadwal
-            </Text>
-            <Text fontSize={{ base: "sm", md: "md" }} maxW="400px">
-              Dikarenakan sedang dalam masa transisi SIAK-SLCM, update matkul
-              belum dapat dilakukan. Silakan cek kembali setelah sistem kembali
-              normal.
-            </Text>
-            <Button
-              onClick={handleCloseModal}
-              w="100%"
-              h="48px"
-              _hover={{ opacity: 0.9 }}
-            >
-              Mengerti
-            </Button>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
     </Container>
   );
 }

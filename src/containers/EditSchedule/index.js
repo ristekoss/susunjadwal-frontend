@@ -31,6 +31,7 @@ import CourseFilterPanel, {
   FilterPopupContainer,
   FilterTriggerButton,
 } from "../BuildSchedule/CourseFilters";
+import { FloatingUndoNotification } from "components/UndoNotification";
 import {
   DEFAULT_COURSE_FILTERS,
   applyClientSideCourseFilters,
@@ -41,6 +42,7 @@ import {
 
 import { addSchedule, clearSchedule } from "redux/modules/schedules";
 import { generateScheduledCourseListFromSchedule } from "./utils";
+import { useSchedulePersistence } from "hooks/useSchedulePersistence";
 import SelectedCourses from "containers/SelectedCourses";
 import { getSchedule, getCourses, getCoursesByKd } from "services/api";
 import { BauhausSide } from "components/Bauhaus";
@@ -76,8 +78,11 @@ const EditSchedule = ({ match }) => {
   const filtersRef = useRef(filters);
   const lastFilterSignatureRef = useRef(null);
   const hasLoadedScheduleRef = useRef(false);
+  const { restoreSchedulesFromSessionStorage } = useSchedulePersistence({
+    page: "edit",
+    scheduleId,
+  });
   const [filterResultCount, setFilterResultCount] = useState(null);
-  const filterCountRequestId = useRef(0);
 
   useEffect(() => {
     filtersRef.current = filters;
@@ -111,9 +116,18 @@ const EditSchedule = ({ match }) => {
 
     if (!!courses && !hasLoadedScheduleRef.current) {
       hasLoadedScheduleRef.current = true;
+      if (restoreSchedulesFromSessionStorage()) {
+        return;
+      }
       fetchSchedule();
     }
-  }, [match, dispatch, courses, auth.majorId]);
+  }, [
+    match,
+    dispatch,
+    courses,
+    auth.majorId,
+    restoreSchedulesFromSessionStorage,
+  ]);
 
   const fetchCourses = useCallback(
     async (majorId, majorSelected, filterParams = null) => {
@@ -481,6 +495,8 @@ const EditSchedule = ({ match }) => {
             <SelectedCourses scheduleId={scheduleId} isEditing />
           </SelectedCoursesContainer>
         )}
+
+        <FloatingUndoNotification />
 
         <Checkout
           isMobile={isMobile}

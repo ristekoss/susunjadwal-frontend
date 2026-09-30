@@ -18,6 +18,7 @@ import {
 
 import { removeSchedule, clearSchedule } from "redux/modules/schedules";
 import { setLoading } from "redux/modules/appState";
+import { clearDraftFromStorage } from "hooks/useSchedulePersistence";
 import { putUpdateSchedule } from "services/api";
 import { postSaveSchedule } from "services/api";
 import { deleteSchedule } from "services/api";
@@ -28,6 +29,8 @@ import PreviewSchedule from "components/PreviewSchedule";
 import DeleteCourseModal, {
   DONT_SHOW_DELETE_MODAL_KEY,
 } from "components/DeleteCourseModal";
+import UndoNotification from "components/UndoNotification";
+import { useUndoAction } from "hooks/useUndoAction";
 
 import TrashIcon from "assets/Trash.svg";
 
@@ -49,6 +52,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
   const schedules = useSelector((state) => state.schedules);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [courseToDelete, setCourseToDelete] = useState(null);
+  const { lastAction, undo } = useUndoAction();
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const theme = useColorModeValue("light", "dark");
@@ -75,6 +79,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         data: { id: scheduleId },
       } = await postSaveSchedule(auth.userId, transformSchedules(schedules));
       dispatch(clearSchedule());
+      clearDraftFromStorage("build");
       ReactGA.event({
         category: "Simpan Jadwal",
         action: "Created/edited a schedule",
@@ -101,6 +106,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         1000,
       );
       dispatch(clearSchedule());
+      clearDraftFromStorage("edit", scheduleId);
       history.push({
         pathname: `/jadwal/${data.user_schedule.id}`,
         state: { feedbackPopup: true },
@@ -115,6 +121,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     dispatch(setLoading(true));
     await makeAtLeastMs(deleteSchedule(auth.userId, scheduleId), 1000);
     dispatch(clearSchedule());
+    clearDraftFromStorage("edit", scheduleId);
     history.push("/jadwal");
     setTimeout(() => dispatch(setLoading(false)), 1000);
   };
@@ -228,6 +235,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
       <Container mode={theme}>
         <PreviewSchedule />
+        <UndoNotification lastAction={lastAction} onUndo={undo} />
         <h3>Kelas Pilihan</h3>
 
         <TableHeader mode={theme}>
