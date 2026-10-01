@@ -13,11 +13,8 @@ import Logout from "./containers/Logout";
 import ScheduleList from "./containers/ScheduleList";
 import EditSchedule from "./containers/EditSchedule";
 import Footer from "containers/Footer";
-import BetaForm from "containers/BetaForm";
-import BetaLanding from "containers/BetaLanding";
 import UpdateCourses from "containers/UpdateCourses";
 import { theme } from "styles/StyledTheme";
-import CompleteForm from "containers/CompleteForm";
 import Contributors from "containers/Contributors";
 import UserGuide from "containers/UserGuide";
 import Feedback from "containers/Feedback";
@@ -65,7 +62,7 @@ function Routes() {
                 component={withAnalytics(Login)}
                 exact
               />
-              <Route
+              {/* <Route
                 path="/beta"
                 name="beta"
                 component={withAnalytics(BetaLanding)}
@@ -79,7 +76,7 @@ function Routes() {
                 path="/complete"
                 name="complete-form"
                 component={withAnalytics(CompleteForm)}
-              />
+              /> */}
               <Route
                 path="/kontributor"
                 name="kontributor"
