@@ -18,7 +18,7 @@ const formatScheduleFromCourse = (courses, schedule) => {
   const courseList = courses.courses;
   courseList.forEach((course) => {
     const { classes } = course;
-    classes.forEach((classItem) => {
+    (classes || []).forEach((classItem) => {
       const classKey = `${course.name}-${classItem.name}`;
       if (classKey in scheduleMap && !(classKey in added)) {
         added[classKey] = 1;

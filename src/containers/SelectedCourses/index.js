@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactGA from "react-ga";
 import styled from "styled-components";
 import { useMixpanel } from "hooks/useMixpanel";
@@ -18,6 +18,7 @@ import {
 
 import { removeSchedule, clearSchedule } from "redux/modules/schedules";
 import { setLoading } from "redux/modules/appState";
+import { clearDraftFromStorage } from "hooks/useSchedulePersistence";
 import { putUpdateSchedule } from "services/api";
 import { postSaveSchedule } from "services/api";
 import { deleteSchedule } from "services/api";
@@ -25,6 +26,11 @@ import { makeAtLeastMs } from "utils/promise";
 
 import { isScheduleConflict, listScheduleConflicts } from "./utils";
 import PreviewSchedule from "components/PreviewSchedule";
+import DeleteCourseModal, {
+  DONT_SHOW_DELETE_MODAL_KEY,
+} from "components/DeleteCourseModal";
+import UndoNotification from "components/UndoNotification";
+import { useUndoAction } from "hooks/useUndoAction";
 
 import TrashIcon from "assets/Trash.svg";
 
@@ -45,10 +51,26 @@ function transformSchedules(schedules) {
 function SelectedCourses({ history, scheduleId, isEditing }) {
   const schedules = useSelector((state) => state.schedules);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [courseToDelete, setCourseToDelete] = useState(null);
+  const { lastAction, undo } = useUndoAction();
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const theme = useColorModeValue("light", "dark");
   const totalCredits = schedules.reduce((prev, { credit }) => prev + credit, 0);
+
+  const handleDeleteCourseClick = (schedule) => {
+    try {
+      const dontShow =
+        localStorage.getItem(DONT_SHOW_DELETE_MODAL_KEY) === "true";
+      if (dontShow) {
+        dispatch(removeSchedule(schedule));
+        return;
+      }
+    } catch (e) {
+      // fallback to modal
+    }
+    setCourseToDelete(schedule);
+  };
 
   async function saveSchedule() {
     dispatch(setLoading(true));
@@ -57,6 +79,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         data: { id: scheduleId },
       } = await postSaveSchedule(auth.userId, transformSchedules(schedules));
       dispatch(clearSchedule());
+      clearDraftFromStorage("build");
       ReactGA.event({
         category: "Simpan Jadwal",
         action: "Created/edited a schedule",
@@ -83,6 +106,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         1000,
       );
       dispatch(clearSchedule());
+      clearDraftFromStorage("edit", scheduleId);
       history.push({
         pathname: `/jadwal/${data.user_schedule.id}`,
         state: { feedbackPopup: true },
@@ -97,6 +121,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
     dispatch(setLoading(true));
     await makeAtLeastMs(deleteSchedule(auth.userId, scheduleId), 1000);
     dispatch(clearSchedule());
+    clearDraftFromStorage("edit", scheduleId);
     history.push("/jadwal");
     setTimeout(() => dispatch(setLoading(false)), 1000);
   };
@@ -133,7 +158,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
         <div className="small-1 columns text-right">
           <DeleteButton
             inverted={isCurrentScheduleConflict}
-            onClick={() => dispatch(removeSchedule(schedule))}
+            onClick={() => handleDeleteCourseClick(schedule)}
           />
         </div>
       </TableContentRow>
@@ -151,6 +176,16 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
   return (
     <>
+      <DeleteCourseModal
+        isOpen={Boolean(courseToDelete)}
+        onClose={() => setCourseToDelete(null)}
+        course={courseToDelete}
+        onConfirm={() => {
+          if (courseToDelete) {
+            dispatch(removeSchedule(courseToDelete));
+          }
+        }}
+      />
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent bg={theme === "light" ? "white" : "dark.LightBlack"}>
@@ -200,6 +235,7 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
       <Container mode={theme}>
         <PreviewSchedule />
+        <UndoNotification lastAction={lastAction} onUndo={undo} />
         <h3>Kelas Pilihan</h3>
 
         <TableHeader mode={theme}>

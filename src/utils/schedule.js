@@ -5,6 +5,15 @@ import {
   getFirstDateOfNthDayInAMonth,
 } from "utils/date";
 
+// Convert "HH:MM" or "HH.MM" time string to total minutes since midnight (based on SLCM response)
+export const timeToMinutes = (display) => {
+  if (display == null) return 0;
+  const parts = String(display).split(/[:.]/);
+  const hour = parseInt(parts[0], 10) || 0;
+  const minute = parseInt(parts[1], 10) || 0;
+  return hour * 60 + minute;
+};
+
 const getFormattedSchedule = (schedule) => {
   const formattedSchedule = {};
   let totalCredits = 0;
@@ -71,12 +80,14 @@ export const parseFormattedScheduleToEvent = (schedule) => {
       const month = calendarDate.getMonth() + 1;
       const day = calendarDate.getDate();
 
-      const [startHour, startMinute] = item.start.split(".").map((item) => {
-        return parseInt(item, 10);
-      });
-      const [endHour, endMinute] = item.end.split(".").map((item) => {
-        return parseInt(item, 10);
-      });
+      const [startHour, startMinute] = [
+        Math.floor(timeToMinutes(item.start) / 60),
+        timeToMinutes(item.start) % 60,
+      ];
+      const [endHour, endMinute] = [
+        Math.floor(timeToMinutes(item.end) / 60),
+        timeToMinutes(item.end) % 60,
+      ];
 
       const data = {
         start: [year, month, day, startHour, startMinute],

@@ -8,13 +8,14 @@ import CountUp from "react-countup";
 
 import { persistAuth, persistCompletion } from "utils/auth";
 import { setLoading } from "redux/modules/appState";
-import { redirectToSSOLogin } from "services/sso";
+import { redirectToSSOLogin, redirectToSSOPasswordUpdate } from "services/sso";
 import { makeAtLeastMs } from "utils/promise";
 import { postAuthTicket } from "services/api";
 import { setAuth } from "redux/modules/auth";
 
 import { Illustration } from "components/Illustration";
 import Announcement from "components/Announcement";
+import SsoPasswordReminderModal from "components/SsoPasswordReminderModal";
 
 import makara from "assets/Beta/makara.svg";
 import link from "assets/Beta/link.svg";
@@ -117,6 +118,30 @@ function Login({ history, location }) {
 
   const [Visible, setVisible] = useState(false);
   const [Stick, setToStick] = useState(false);
+  const [isSsoPasswordReminderOpen, setIsSsoPasswordReminderOpen] =
+    useState(false);
+
+  const handleRencanakanClick = () => {
+    useMixpanel.track("rencanakan_siakwar_click", {
+      eventName: "rencanakan_siakwar_click",
+      eventAction: "click",
+      eventCategory: "Login",
+      screenName: "/susun",
+      screenOwner: "desktop_web",
+      eventLabel: "/susun::rencanakan-siakwar-click",
+    });
+    setIsSsoPasswordReminderOpen(true);
+  };
+
+  const handleSsoSignIn = () => {
+    setIsSsoPasswordReminderOpen(false);
+    redirectToSSOLogin();
+  };
+
+  const handleSsoPasswordUpdate = () => {
+    setIsSsoPasswordReminderOpen(false);
+    redirectToSSOPasswordUpdate();
+  };
 
   useEffect(() => {
     window.addEventListener("scroll", listenToScroll);
@@ -208,7 +233,7 @@ function Login({ history, location }) {
 
         <Announcement />
 
-        <CTAButtonDesktop height="55px" onClick={redirectToSSOLogin}>
+        <CTAButtonDesktop height="55px" onClick={handleRencanakanClick}>
           <img src={makara} style={{ marginRight: "0.5rem" }} alt="" />
           Rencanakan SIAKWAR Sekarang
         </CTAButtonDesktop>
@@ -216,11 +241,18 @@ function Login({ history, location }) {
         <CTAButtonMobile
           height={{ base: "44px", md: "55px" }}
           width="319px"
-          onClick={redirectToSSOLogin}
+          onClick={handleRencanakanClick}
         >
           <img src={makara} style={{ marginRight: "0.5rem" }} alt="" />
           Masuk Dengan SSO
         </CTAButtonMobile>
+
+        <SsoPasswordReminderModal
+          isOpen={isSsoPasswordReminderOpen}
+          onClose={() => setIsSsoPasswordReminderOpen(false)}
+          onSignIn={handleSsoSignIn}
+          onUpdatePassword={handleSsoPasswordUpdate}
+        />
 
         <a href="#content">
           <AssetChevronDown src={ChevronDown} alt="chevron-down" />

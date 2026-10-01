@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { Button } from "@chakra-ui/react";
 import { addSchedule } from "redux/modules/schedules";
+import { timeToMinutes } from "utils/schedule";
 
 const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
@@ -27,7 +28,7 @@ function Agenda({ visible, onClose }) {
     const endCheck = timeChecker.test(end);
 
     const timeValidCheck =
-      startCheck && endCheck && parseFloat(start) < parseFloat(end);
+      startCheck && endCheck && timeToMinutes(start) < timeToMinutes(end);
     const roomCheck = room !== "" && room !== null;
 
     return {
@@ -36,7 +37,7 @@ function Agenda({ visible, onClose }) {
       startCheck,
       endCheck,
       roomCheck,
-      timeValidCheck
+      timeValidCheck,
     };
   }
 
@@ -44,7 +45,7 @@ function Agenda({ visible, onClose }) {
     const check = verifyAgenda();
     const valid = Object.keys(check).reduce(
       (flag, key) => flag && check[key],
-      true
+      true,
     );
 
     if (valid) {
@@ -53,8 +54,8 @@ function Agenda({ visible, onClose }) {
           parentName: `__agenda-${name}`,
           name,
           credit: 0,
-          schedule_items: [{ start, end, room, day }]
-        })
+          schedule_items: [{ start, end, room, day }],
+        }),
       );
       onClose();
     } else {
@@ -71,13 +72,13 @@ function Agenda({ visible, onClose }) {
           placeholder="Nama Agenda"
           value={name}
           maxLength={20}
-          onChange={evt => setName(evt.target.value)}
+          onChange={(evt) => setName(evt.target.value)}
         />
         {agendaValid && !agendaValid.nameCheck && (
           <ErrorLine>Nama agenda tidak boleh kosong</ErrorLine>
         )}
 
-        <select value={day} onChange={evt => setDay(evt.target.value)}>
+        <select value={day} onChange={(evt) => setDay(evt.target.value)}>
           <option value="Senin">Senin</option>
           <option value="Selasa">Selasa</option>
           <option value="Rabu">Rabu</option>
@@ -93,7 +94,7 @@ function Agenda({ visible, onClose }) {
           type="text"
           placeholder="Jam Mulai, format: HH.MM"
           value={start}
-          onChange={evt => setStart(evt.target.value)}
+          onChange={(evt) => setStart(evt.target.value)}
           pattern="\d\d.\d\d"
         />
         {agendaValid && !agendaValid.startCheck && (
@@ -111,7 +112,7 @@ function Agenda({ visible, onClose }) {
           type="text"
           placeholder="Jam Selesai, format: HH.MM"
           value={end}
-          onChange={evt => setEnd(evt.target.value)}
+          onChange={(evt) => setEnd(evt.target.value)}
         />
         {agendaValid && !agendaValid.endCheck && (
           <ErrorLine>
@@ -127,7 +128,7 @@ function Agenda({ visible, onClose }) {
           type="text"
           placeholder="Ruangan"
           value={room}
-          onChange={evt => setRoom(evt.target.value)}
+          onChange={(evt) => setRoom(evt.target.value)}
         />
         {agendaValid && !agendaValid.roomCheck && (
           <ErrorLine>Ruangan tidak boleh kosong</ErrorLine>

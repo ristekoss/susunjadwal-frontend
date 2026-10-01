@@ -6,6 +6,7 @@ export const ADD_SCHEDULE = "ADD_SCHEDULE";
 export const REMOVE_SCHEDULE = "REMOVE_SCHEDULE";
 export const CLEAR_SCHEDULE = "CLEAR_SCHEDULE";
 export const SET_COURSES = "SET_COURSES";
+export const SET_SCHEDULES = "SET_SCHEDULES";
 
 export default function reducer(state = {}, { type, payload }) {
   switch (type) {
@@ -14,7 +15,9 @@ export default function reducer(state = {}, { type, payload }) {
 
       payload.forEach((course) => {
         course.classes.forEach((class_) => {
-          const key = `${course.name}-${class_.name}-${course.term}-${class_.schedule_items[0].room}`;
+          const room = class_.schedule_items?.[0]?.room;
+          if (room == null) return;
+          const key = `${course.name}-${class_.name}-${course.term}-${room}`;
           result[key] = !!state[key];
         });
       });
@@ -31,6 +34,21 @@ export default function reducer(state = {}, { type, payload }) {
         }
       });
       return nextState;
+    case SET_SCHEDULES: {
+      const resetState = {};
+      const activeKeys = new Set(
+        payload.map(
+          (item) =>
+            `${item.parentName}-${item.name}-${item.term}-${
+              item.schedule_items?.[0]?.room ?? ""
+            }`,
+        ),
+      );
+      Object.keys(state).forEach((key) => {
+        resetState[key] = activeKeys.has(key);
+      });
+      return resetState;
+    }
     case CLEAR_SCHEDULE:
       return {};
     default:

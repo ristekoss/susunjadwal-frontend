@@ -8,7 +8,7 @@ import ReactGA from "react-ga";
 
 import { setAuth } from "redux/modules/auth";
 import { makeAtLeastMs } from "utils/promise";
-import FACULTIES from "utils/faculty-base-additional-info.json";
+import FACULTIES from "utils/faculty-base-additional-info.updated.json";
 import { setLoading } from "redux/modules/appState";
 import { postSsoCompletionData } from "services/api";
 import { persistAuth, loadCompletion, persistCompletion } from "utils/auth";

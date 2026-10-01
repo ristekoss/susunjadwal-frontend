@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useMixpanel } from "hooks/useMixpanel";
 import { Flex } from "@chakra-ui/react";
-import FACULTIES from "utils/faculty-base-additional-info.json";
+import FACULTIES from "utils/faculty-base-additional-info.updated.json";
 import { useForm } from "react-hook-form";
 import { CustomSelect } from "components/CustomSelect";
 
