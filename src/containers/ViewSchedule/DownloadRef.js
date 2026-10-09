@@ -18,8 +18,13 @@ function DownloadRef({
   showHeader,
   showRoom,
   formattedSchedule,
+  layout = "visualisasi-daftar",
+  colorMap = {},
 }) {
   const theme = useColorModeValue("light", "dark");
+  const showCalendar =
+    layout === "visualisasi" || layout === "visualisasi-daftar";
+  const showList = layout === "daftar" || layout === "visualisasi-daftar";
   const rowToDisplay = (minute) => {
     const hour = Math.floor(minute / 60) + startHour;
     return `${pad(hour)}.${pad(minute % 60)}`;
@@ -58,127 +63,167 @@ function DownloadRef({
   );
 
   return (
-    <MainContainer>
+    <MainContainer id="download-schedule" mode={theme}>
       {/* Calendar View */}
-      <Container
-        pxPerMinute={pxPerMinute}
-        width={width}
-        showLabel={showLabel}
-        mode={theme}
-      >
-        {showHeader && renderHeader()}
+      {showCalendar && (
+        <Container
+          pxPerMinute={pxPerMinute}
+          width={width}
+          showLabel={showLabel}
+          mode={theme}
+        >
+          {showHeader && renderHeader()}
 
-        {TIME_MARKERS.map((_, idx) => (
-          <TimeMarker
-            key={idx}
-            row={minuteToRow(idx)}
-            showLabel={showLabel}
-            mode={theme}
-          />
-        ))}
-
-        {showLabel &&
-          TIME_MARKERS.map((marker, idx) => (
-            <TimeLabel key={idx} row={minuteToRow(idx)} mode={theme}>
-              {marker}
-            </TimeLabel>
+          {TIME_MARKERS.map((_, idx) => (
+            <TimeMarker
+              key={idx}
+              row={minuteToRow(idx)}
+              showLabel={showLabel}
+              mode={theme}
+            />
           ))}
 
-        {schedule &&
-          schedule.schedule_items.map(
-            ({ day, start, end, room, name, course_name }, idx) => (
-              <ScheduleItem
-                key={`${schedule.name}-${idx}`}
-                start={displayToMinute(start)}
-                end={displayToMinute(end)}
-                day={dayToColumn(day)}
-                mode={theme}
-              >
-                {/* Desktop mode */}
-                <>
-                  {displayToMinute(end) - displayToMinute(start) >= 50 ? (
-                    <div className="wrapper">
-                      <div className="header">
-                        <span>
-                          {start} - {end}
-                        </span>
-                        {showRoom && <span className="room">{room}</span>}
-                      </div>
-                      {String(name).includes(course_name) || !course_name ? (
-                        <p className="details-desktop">{name}</p>
+          {showLabel &&
+            TIME_MARKERS.map((marker, idx) => (
+              <TimeLabel key={idx} row={minuteToRow(idx)} mode={theme}>
+                {marker}
+              </TimeLabel>
+            ))}
+
+          {schedule &&
+            schedule.schedule_items.map(
+              ({ day, start, end, room, name, course_name }, idx) => {
+                const itemColor =
+                  (colorMap && (colorMap[course_name] || colorMap[name])) ||
+                  schedule.schedule_items[idx].color;
+                return (
+                  <ScheduleItem
+                    key={`${schedule.name}-${idx}`}
+                    start={displayToMinute(start)}
+                    end={displayToMinute(end)}
+                    day={dayToColumn(day)}
+                    color={itemColor}
+                    mode={theme}
+                  >
+                    {/* Desktop mode */}
+                    <>
+                      {displayToMinute(end) - displayToMinute(start) >= 50 ? (
+                        <div className="wrapper">
+                          <div className="header">
+                            <span>
+                              {start} - {end}
+                            </span>
+                            {showRoom && <span className="room">{room}</span>}
+                          </div>
+                          {String(name).includes(course_name) ||
+                          !course_name ? (
+                            <p className="details-desktop">{name}</p>
+                          ) : (
+                            <p className="details-desktop">
+                              <span
+                                style={{
+                                  color: "#F7B500",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {name}
+                              </span>
+                              {" - " + course_name}
+                            </p>
+                          )}
+                        </div>
                       ) : (
-                        <p className="details-desktop">
-                          <span
-                            style={{
-                              color: "#F7B500",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {name}
-                          </span>
-                          {" - " + course_name}
-                        </p>
+                        // Special condition for class with duration less than 50 minutes
+                        <div className="wrapper">
+                          {String(name).includes(course_name) ||
+                          !course_name ? (
+                            <p className="details-desktop">
+                              <span style={{ fontWeight: "normal" }}>
+                                {room}
+                              </span>
+                              {" - " + name}
+                            </p>
+                          ) : (
+                            <p className="details-desktop">
+                              <span
+                                style={{
+                                  color: "#F7B500",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {name}
+                              </span>
+                              {" - " + course_name}
+                            </p>
+                          )}
+                        </div>
                       )}
-                    </div>
-                  ) : (
-                    // Special condition for class with duration less than 50 minutes
-                    <div className="wrapper">
-                      {String(name).includes(course_name) || !course_name ? (
-                        <p className="details-desktop">
-                          <span style={{ fontWeight: "normal" }}>{room}</span>
-                          {" - " + name}
-                        </p>
-                      ) : (
-                        <p className="details-desktop">
-                          <span
-                            style={{
-                              color: "#F7B500",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {name}
-                          </span>
-                          {" - " + course_name}
-                        </p>
-                      )}
-                    </div>
-                  )}
-                </>
-              </ScheduleItem>
-            ),
-          )}
-      </Container>
+                    </>
+                  </ScheduleItem>
+                );
+              },
+            )}
+        </Container>
+      )}
 
       {/* List View */}
-      <ClassTableContainer mode={theme}>
-        <ClassHeaderContainer mode={theme}>
-          <div style={{ padding: "0px 8px 0px 32px" }}>Nama Kelas</div>
-          <div>Waktu</div>
-          <div>Ruang</div>
-          <div>Dosen</div>
-          <div>SKS</div>
-        </ClassHeaderContainer>
+      {showList && (
+        <ClassTableContainer mode={theme}>
+          <ClassHeaderContainer mode={theme}>
+            <div style={{ padding: "0px 8px 0px 32px" }}>Nama Kelas</div>
+            <div>Waktu</div>
+            <div>Ruang</div>
+            <div>Dosen</div>
+            <div>SKS</div>
+          </ClassHeaderContainer>
 
-        {Object.keys(formattedSchedule).map((scheduleName) => (
-          <ClassItemContainer mode={theme}>
-            <div style={{ padding: "0px 8px 0px 32px" }}>
-              {formattedSchedule[scheduleName].name}
-            </div>
-            <div>
-              {formattedSchedule[scheduleName].time.map((dayItem) => (
-                <div>{`${dayItem.day}, ${dayItem.start} - ${dayItem.end}`}</div>
-              ))}
-            </div>
-            <div>
-              {formattedSchedule[scheduleName].time.map((dayItem) => (
-                <div>{dayItem.room}</div>
-              ))}
-            </div>
-            <div>{formattedSchedule[scheduleName].lecturer}</div>
-            <div>{formattedSchedule[scheduleName].sks}</div>
-          </ClassItemContainer>
-        ))}
-      </ClassTableContainer>
+          {Object.keys(formattedSchedule).map((scheduleName) => {
+            const courseColor =
+              (colorMap && colorMap[formattedSchedule[scheduleName].name]) ||
+              "#5038BC";
+            return (
+              <ClassItemContainer key={scheduleName} mode={theme}>
+                <div
+                  style={{
+                    padding: "0px 8px 0px 32px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    justifyContent: "flex-start",
+                    textAlign: "left",
+                  }}
+                >
+                  <span
+                    style={{
+                      display: "inline-block",
+                      width: "12px",
+                      height: "12px",
+                      borderRadius: "3px",
+                      backgroundColor: courseColor,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <span>{formattedSchedule[scheduleName].name}</span>
+                </div>
+                <div>
+                  {formattedSchedule[scheduleName].time.map((dayItem, idx) => (
+                    <div
+                      key={idx}
+                    >{`${dayItem.day}, ${dayItem.start} - ${dayItem.end}`}</div>
+                  ))}
+                </div>
+                <div>
+                  {formattedSchedule[scheduleName].time.map((dayItem, idx) => (
+                    <div key={idx}>{dayItem.room}</div>
+                  ))}
+                </div>
+                <div>{formattedSchedule[scheduleName].lecturer}</div>
+                <div>{formattedSchedule[scheduleName].sks}</div>
+              </ClassItemContainer>
+            );
+          })}
+        </ClassTableContainer>
+      )}
     </MainContainer>
   );
 }
@@ -189,6 +234,9 @@ const getFirstColumnWidth = ({ showLabel }) => (showLabel ? "auto" : "");
 const MainContainer = styled.div`
   display: block;
   min-width: 1440px;
+  background-color: ${({ mode }) => (mode === "light" ? "#FFFFFF" : "#2C2C2C")};
+  padding: 16px;
+  box-sizing: border-box;
 `;
 
 const Container = styled.div`
@@ -239,7 +287,8 @@ const Header = styled.div`
 const ScheduleItem = styled.div`
 z-index: 1;
 width: 95%;
-background-color: ${({ mode }) => (mode === "light" ? "#5038bc" : "#674DE0")} 
+background-color: ${({ color, mode }) =>
+  color || (mode === "light" ? "#5038bc" : "#674DE0")}; 
 color: white;
 grid-area: ${({ start }) => start} / ${({ day }) => day} / ${({ end }) => end} /
     ${({ day }) => day + 1};
@@ -318,9 +367,9 @@ const ClassHeaderContainer = styled.div`
 
   background-color: ${(props) =>
     props.mode === "light"
-      ? props.theme.color.primaryPurple
-      : props.theme.color.darkLightPurple};
-  color: ${(props) => props.theme.color.primaryWhite};
+      ? props.theme?.color?.primaryPurple || "#5038BC"
+      : props.theme?.color?.darkLightPurple || "#674DE0"};
+  color: ${(props) => props.theme?.color?.primaryWhite || "#FFFFFF"};
 
   padding-top: 0.25em;
   padding-bottom: 0.25em;
@@ -332,16 +381,15 @@ const ClassHeaderContainer = styled.div`
     flex: 1;
     text-align: center;
   }
-
-  }
 `;
 
-const ClassItemContainer = styled.tr`
+const ClassItemContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   color: ${(props) => (props.mode === "light" ? "black" : "#D0D0D0")};
-  border-top: 1.5px solid ${(props) => props.theme.color.secondaryMineShaft};
+  border-top: 1.5px solid
+    ${(props) => props.theme?.color?.secondaryMineShaft || "#333333"};
   div {
     flex: 1;
     text-align: center;
@@ -354,29 +402,29 @@ const ClassTableContainer = styled.div`
   border-top: 1px solid
     ${(props) =>
       props.mode === "light"
-        ? props.theme.color.primaryMineShaft
-        : props.theme.color.darkBlack};
+        ? props.theme?.color?.primaryMineShaft || "#333333"
+        : props.theme?.color?.darkBlack || "#121212"};
   border-bottom: 1px solid
     ${(props) =>
       props.mode === "light"
-        ? props.theme.color.primaryMineShaft
-        : props.theme.color.darkBlack};
+        ? props.theme?.color?.primaryMineShaft || "#333333"
+        : props.theme?.color?.darkBlack || "#121212"};
   box-sizing: border-box;
   margin-bottom: 24px;
 
   hyphens: auto;
 
-  tr:nth-child(even) {
+  > div:nth-child(even) {
     background: ${(props) =>
       props.mode === "light"
-        ? props.theme.color.primaryAlabaster
-        : props.theme.color.darkLightBlack};
+        ? props.theme?.color?.primaryAlabaster || "#F9F9F9"
+        : props.theme?.color?.darkLightBlack || "#333333"};
   }
-  tr:nth-child(odd) {
+  > div:nth-child(odd) {
     background: ${(props) =>
       props.mode === "light"
-        ? props.theme.color.primaryWhite
-        : props.theme.color.darkLightBlack};
+        ? props.theme?.color?.primaryWhite || "#FFFFFF"
+        : props.theme?.color?.darkLightBlack || "#333333"};
   }
 `;
 

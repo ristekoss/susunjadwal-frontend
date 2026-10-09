@@ -16,6 +16,7 @@
     "framer-motion": "^4",
     "html-to-image": "^1.9.0",
     "ics": "^2.31.0",
+    "jspdf": "^2.5.2",
     "mixpanel-browser": "^2.48.1",
     "query-string": "^6.8.1",
     "react": "^16.8.6",

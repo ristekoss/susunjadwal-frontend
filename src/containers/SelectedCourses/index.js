@@ -31,8 +31,10 @@ import DeleteCourseModal, {
 } from "components/DeleteCourseModal";
 import UndoNotification from "components/UndoNotification";
 import { useUndoAction } from "hooks/useUndoAction";
+import CustomizeJadwalModal from "components/CustomizeJadwalModal";
 
 import TrashIcon from "assets/Trash.svg";
+import colorPaletteIcon from "assets/color-palette.svg";
 
 function transformSchedules(schedules) {
   return schedules
@@ -50,7 +52,9 @@ function transformSchedules(schedules) {
 
 function SelectedCourses({ history, scheduleId, isEditing }) {
   const schedules = useSelector((state) => state.schedules);
+  const isMobile = useSelector((state) => state.appState.isMobile);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const customizeDisclosure = useDisclosure();
   const [courseToDelete, setCourseToDelete] = useState(null);
   const { lastAction, undo } = useUndoAction();
   const auth = useSelector((state) => state.auth);
@@ -235,6 +239,28 @@ function SelectedCourses({ history, scheduleId, isEditing }) {
 
       <Container mode={theme}>
         <PreviewSchedule />
+        <CustomizeJadwalSection mode={theme}>
+          {!isMobile && (
+            <CustomizeHelpText mode={theme}>
+              Kamu juga bisa menambah jadwal pribadi atau aktivitas lain yang
+              belum ada di Susun Jadwal melalui “Customize Jadwal”.
+            </CustomizeHelpText>
+          )}
+          <CustomizeButton
+            type="button"
+            mode={theme}
+            onClick={customizeDisclosure.onOpen}
+          >
+            <span>Customize Jadwal</span>
+            <img src={colorPaletteIcon} alt="palette" width="24" height="24" />
+          </CustomizeButton>
+        </CustomizeJadwalSection>
+
+        <CustomizeJadwalModal
+          isOpen={customizeDisclosure.isOpen}
+          onClose={customizeDisclosure.onClose}
+        />
+
         <UndoNotification lastAction={lastAction} onUndo={undo} />
         <h3>Kelas Pilihan</h3>
 
@@ -516,5 +542,46 @@ const MessageContainer = styled.div`
   @media (min-width: 900px) {
     margin: 18px -5px 0px;
     font-size: 14px;
+  }
+`;
+
+const CustomizeJadwalSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 16px;
+  margin-bottom: 24px;
+`;
+
+const CustomizeHelpText = styled.p`
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: ${({ mode }) => (mode === "light" ? "#6B7280" : "#E5E5E5")};
+  margin: 0;
+`;
+
+const CustomizeButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 8px;
+  background-color: #c9cefc;
+  color: #45349f;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #b8befa;
   }
 `;

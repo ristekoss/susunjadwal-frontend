@@ -33,6 +33,7 @@ import Schedule from "./Schedule";
 import ScheduleList from "./ScheduleList";
 import ControlledInput from "./ControlledInput";
 import DownloadRef from "./DownloadRef";
+import DownloadJadwalModal from "components/DownloadJadwalModal";
 import { SuccessToast, ErrorToast } from "components/Toast";
 import Icons from "components/Icons";
 import { getSchedule, postRenameSchedule, deleteSchedule } from "services/api";
@@ -71,6 +72,7 @@ function ViewSchedule({ match, history }) {
   const shareModal = useDisclosure();
   const feedbackModal = useDisclosure();
   const googleCalendarModal = useDisclosure();
+  const downloadModal = useDisclosure();
   const auth = useSelector((state) => state.auth);
   const { scheduleId } = useParams();
   const dispatch = useDispatch();
@@ -160,18 +162,13 @@ function ViewSchedule({ match, history }) {
 
   const refs = useRef(null);
 
-  const downloadImage = async () => {
+  const downloadImage = () => {
+    useMixpanel.track("download_jadwal");
     ReactGA.event({
       category: "Download Jadwal Image",
       action: "Downloaded a schedule's image",
     });
-
-    const dataUrl = await htmlToImage.toPng(refs.current);
-    const link = document.createElement("a");
-
-    link.download = !scheduleName ? "Untitled.png" : scheduleName + ".png";
-    link.href = dataUrl;
-    link.click();
+    downloadModal.onOpen();
   };
 
   const openShareModal = async () => {
@@ -659,6 +656,14 @@ function ViewSchedule({ match, history }) {
         onClose={googleCalendarModal.onClose}
         schedule={schedule}
         generateICalendarFile={generateICalendarFile}
+      />
+
+      <DownloadJadwalModal
+        isOpen={downloadModal.isOpen}
+        onClose={downloadModal.onClose}
+        schedule={schedule}
+        formattedSchedule={formattedSchedule}
+        scheduleName={schedule?.name}
       />
 
       <CompareModal

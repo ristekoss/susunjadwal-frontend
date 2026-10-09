@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useColorModeValue } from "@chakra-ui/react";
 import { isScheduleConflict } from "containers/SelectedCourses/utils";
+import colorPaletteIcon from "assets/color-palette.svg";
 
 function Checkout({ onClickDetail }) {
   const schedules = useSelector((state) => state.schedules);
@@ -10,8 +11,20 @@ function Checkout({ onClickDetail }) {
   const theme = useColorModeValue("light", "dark");
   const totalCredits = schedules.reduce((prev, { credit }) => prev + credit, 0);
 
-  if (!isMobile || schedules.length === 0) {
+  if (!isMobile) {
     return null;
+  }
+
+  if (schedules.length === 0) {
+    return (
+      <FloatingMobileCustomize
+        onClick={() => onClickDetail(false)}
+        mode={theme}
+      >
+        <span>Customize Jadwal</span>
+        <img src={colorPaletteIcon} alt="palette" width="20" height="20" />
+      </FloatingMobileCustomize>
+    );
   }
 
   const conflict = schedules.find((schedule) =>
@@ -88,6 +101,33 @@ const CheckoutContainer = styled.div`
   p {
     font-size: 12px;
     margin-bottom: 0px;
+  }
+`;
+
+const FloatingMobileCustomize = styled.button`
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  width: calc(100% - 2rem);
+  height: 48px;
+  border-radius: 8px;
+  background-color: #c9cefc;
+  color: #45349f;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #b8befa;
   }
 `;
 

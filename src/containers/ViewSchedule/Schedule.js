@@ -22,6 +22,7 @@ function Schedule({
   showHeader,
   showRoom,
   forceDesktopLayout,
+  colorMap,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -126,75 +127,83 @@ function Schedule({
             ))}
           {schedule &&
             schedule.schedule_items.map(
-              ({ day, start, end, room, name, course_name }, idx) => (
-                <ScheduleItem
-                  key={`${schedule.name}-${idx}`}
-                  start={displayToMinute(start)}
-                  end={displayToMinute(end)}
-                  day={dayToColumn(day)}
-                  mode={theme}
-                  $forceDesktop={forceDesktopLayout}
-                  onClick={() =>
-                    handleClickedCourse(schedule.schedule_items[idx])
-                  }
-                >
-                  <>
-                    {displayToMinute(end) - displayToMinute(start) >= 50 ? (
-                      <div className="wrapper">
-                        <div className="header">
-                          <span>
-                            {start} - {end}
-                          </span>
-                          {showRoom && <span className="room">{room}</span>}
+              ({ day, start, end, room, name, course_name }, idx) => {
+                const itemColor =
+                  (colorMap && (colorMap[course_name] || colorMap[name])) ||
+                  schedule.schedule_items[idx].color;
+                return (
+                  <ScheduleItem
+                    key={`${schedule.name}-${idx}`}
+                    start={displayToMinute(start)}
+                    end={displayToMinute(end)}
+                    day={dayToColumn(day)}
+                    color={itemColor}
+                    mode={theme}
+                    $forceDesktop={forceDesktopLayout}
+                    onClick={() =>
+                      handleClickedCourse(schedule.schedule_items[idx])
+                    }
+                  >
+                    <>
+                      {displayToMinute(end) - displayToMinute(start) >= 50 ? (
+                        <div className="wrapper">
+                          <div className="header">
+                            <span>
+                              {start} - {end}
+                            </span>
+                            {showRoom && <span className="room">{room}</span>}
+                          </div>
+                          {String(name).includes(course_name) ||
+                          !course_name ? (
+                            <p className="details-desktop">{name}</p>
+                          ) : (
+                            <p className="details-desktop">
+                              <span
+                                style={{
+                                  color: "#F7B500",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {name}
+                              </span>
+                              {" - " + course_name}
+                            </p>
+                          )}
                         </div>
-                        {String(name).includes(course_name) || !course_name ? (
-                          <p className="details-desktop">{name}</p>
-                        ) : (
-                          <p className="details-desktop">
-                            <span
-                              style={{
-                                color: "#F7B500",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              {name}
-                            </span>
-                            {" - " + course_name}
-                          </p>
-                        )}
-                      </div>
-                    ) : (
-                      // Special condition for class with duration less than 50 minutes
-                      <div className="wrapper">
-                        {String(name).includes(course_name) || !course_name ? (
-                          <p className="details-desktop">
-                            <span style={{ fontWeight: "normal" }}>
-                              {start} - {end}
-                            </span>
-                            {" - " + name}
-                          </p>
-                        ) : (
-                          <p className="details-desktop">
-                            <span style={{ fontWeight: "normal" }}>
-                              {start} - {end}
-                            </span>
-                            {" - "}
-                            <span
-                              style={{
-                                color: "#F7B500",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              {name}
-                            </span>
-                            {" - " + course_name}
-                          </p>
-                        )}
-                      </div>
-                    )}
-                  </>
-                </ScheduleItem>
-              ),
+                      ) : (
+                        // Special condition for class with duration less than 50 minutes
+                        <div className="wrapper">
+                          {String(name).includes(course_name) ||
+                          !course_name ? (
+                            <p className="details-desktop">
+                              <span style={{ fontWeight: "normal" }}>
+                                {start} - {end}
+                              </span>
+                              {" - " + name}
+                            </p>
+                          ) : (
+                            <p className="details-desktop">
+                              <span style={{ fontWeight: "normal" }}>
+                                {start} - {end}
+                              </span>
+                              {" - "}
+                              <span
+                                style={{
+                                  color: "#F7B500",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {name}
+                              </span>
+                              {" - " + course_name}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </>
+                  </ScheduleItem>
+                );
+              },
             )}
         </Container>
       )}
@@ -263,13 +272,21 @@ function Schedule({
 
               {schedule &&
                 schedule.schedule_items.map(
-                  ({ day, start, end, room: _room, name, course_name }, idx) =>
-                    DAYS.slice(0, 3).includes(day) && (
+                  (
+                    { day, start, end, room: _room, name, course_name },
+                    idx,
+                  ) => {
+                    if (!DAYS.slice(0, 3).includes(day)) return null;
+                    const itemColor =
+                      (colorMap && (colorMap[course_name] || colorMap[name])) ||
+                      schedule.schedule_items[idx].color;
+                    return (
                       <ScheduleItem
                         key={`${schedule.name}-${idx}`}
                         start={displayToMinute(start)}
                         end={displayToMinute(end)}
                         day={dayToColumn(day)}
+                        color={itemColor}
                         mode={theme}
                         onClick={() =>
                           handleClickedCourse(schedule.schedule_items[idx])
@@ -294,7 +311,8 @@ function Schedule({
                           )}
                         </div>
                       </ScheduleItem>
-                    ),
+                    );
+                  },
                 )}
             </MobileSchedulePage>
 
@@ -341,13 +359,21 @@ function Schedule({
 
               {schedule &&
                 schedule.schedule_items.map(
-                  ({ day, start, end, room: _room, name, course_name }, idx) =>
-                    DAYS.slice(3, 6).includes(day) && (
+                  (
+                    { day, start, end, room: _room, name, course_name },
+                    idx,
+                  ) => {
+                    if (!DAYS.slice(3, 6).includes(day)) return null;
+                    const itemColor =
+                      (colorMap && (colorMap[course_name] || colorMap[name])) ||
+                      schedule.schedule_items[idx].color;
+                    return (
                       <ScheduleItem
                         key={`${schedule.name}-${idx}`}
                         start={displayToMinute(start)}
                         end={displayToMinute(end)}
                         day={dayToColumn(day)}
+                        color={itemColor}
                         mode={theme}
                         onClick={() =>
                           handleClickedCourse(schedule.schedule_items[idx])
@@ -372,7 +398,8 @@ function Schedule({
                           )}
                         </div>
                       </ScheduleItem>
-                    ),
+                    );
+                  },
                 )}
             </MobileSchedulePage>
 
@@ -497,8 +524,8 @@ const Header = styled.div`
 const ScheduleItem = styled.div`
     z-index: 1;
     width: 95%;
-    background-color: ${({ mode }) =>
-      mode === "light" ? "#5038bc" : "#674DE0"} 
+    background-color: ${({ color, mode }) =>
+      color || (mode === "light" ? "#5038bc" : "#674DE0")}; 
     color: white;
     grid-area: ${({ start, day, end, $forceDesktop }) =>
       $forceDesktop
@@ -518,8 +545,9 @@ const ScheduleItem = styled.div`
     margin-left: 8px;
     margin-right: 8px;
     &:hover{
-      background-color: ${({ mode }) =>
-        mode === "light" ? "#674DE0" : "#5038bc"} 
+      background-color: ${({ color, mode }) =>
+        color ? color : mode === "light" ? "#674DE0" : "#5038bc"};
+      filter: brightness(0.92);
     }
 
     .wrapper {
